@@ -134,6 +134,7 @@ copy /Y "$(TargetPath)" "C:\Program Files\Guild Wars 2\bin64\$(TargetFileName)"<
   <ItemGroup>
     <ClCompile Include="ArcdpsDataStructures.cpp" />
     <ClCompile Include="Boon.cpp" />
+    <ClCompile Include="BuffIds.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Tracker.cpp" />
@@ -141,6 +142,7 @@ copy /Y "$(TargetPath)" "C:\Program Files\Guild Wars 2\bin64\$(TargetFileName)"<
   <ItemGroup>
     <ClInclude Include="ArcdpsDataStructures.h" />
     <ClInclude Include="Boon.h" />
+    <ClInclude Include="BuffIds.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Tracker.h" />

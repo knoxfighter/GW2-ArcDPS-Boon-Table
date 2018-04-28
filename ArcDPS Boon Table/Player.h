@@ -4,6 +4,7 @@
 #include <list>
 #include <mutex>
 #include "Boon.h"
+#include "BuffIds.h"
 
 class Player
 {

@@ -31,6 +31,7 @@ Player::~Player()
 void Player::applyBoon(uint16_t new_id, int32_t new_duration)
 {
 	if (new_duration == 0) return;
+	if (!isTrackedBoon(new_id)) return;
 
 	std::lock_guard<std::mutex> lock(boons_mtx);
 
@@ -45,6 +46,7 @@ void Player::applyBoon(uint16_t new_id, int32_t new_duration)
 void Player::removeBoon(uint16_t new_id, int32_t new_duration)
 {
 	if (new_duration == 0) return;
+	if (!isTrackedBoon(new_id)) return;
 
 	std::lock_guard<std::mutex> lock(boons_mtx);
 
