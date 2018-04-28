@@ -2,6 +2,11 @@
 
 
 
+bool Boon::operator==(uint16_t other_id)
+{
+	return id == other_id;
+}
+
 Boon::Boon()
 {
 	id = 0;
