@@ -101,14 +101,17 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
 /* combat callback -- may be called asynchronously. return ignored */
 /* one participant will be party/squad, or minion of. no spawn statechange events. despawn statechange only on marked boss npcs */
-uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname) {
+uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname)
+{
 	Player* current_player = nullptr;
 
 	/* ev is null. dst will only be valid on tracking add. skillname will also be null */
-	if (!ev) {
+	if (!ev)
+	{
 
 		/* notify tracking change */
-		if (!src->elite) {
+		if (!src->elite)
+		{
 
 			/* add */
 			if (src->prof)
@@ -124,7 +127,8 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname) {
 		}
 
 		/* notify target change */
-		else if (src->elite == 1) {
+		else if (src->elite == 1)
+		{
 			
 		}
 	}
@@ -135,7 +139,20 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname) {
 		/* statechange */
 		if (ev->is_statechange)
 		{
-			
+			if (ev->is_statechange == CBTS_ENTERCOMBAT)
+			{
+				if (current_player = tracker.getPlayer(src))
+				{
+					current_player->combatEnter(ev->time);
+				}
+			}
+			else if (ev->is_statechange == CBTS_EXITCOMBAT)
+			{
+				if (current_player = tracker.getPlayer(src))
+				{
+					current_player->combatExit(ev->time);
+				}
+			}
 		}
 
 		/* activation */
@@ -147,7 +164,10 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname) {
 		/* buff remove */
 		else if (ev->is_buffremove)
 		{
-			if (current_player = tracker.getPlayer(dst)) current_player->removeBoon(ev->skillid, ev->value);
+			if (current_player = tracker.getPlayer(dst))
+			{
+				current_player->removeBoon(ev->skillid, ev->value);
+			}
 		}
 
 		/* buff */
@@ -163,7 +183,10 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname) {
 			/* application */
 			else
 			{
-				if(current_player = tracker.getPlayer(dst)) current_player->applyBoon(ev->skillid, ev->value);
+				if (current_player = tracker.getPlayer(dst))
+				{
+					current_player->applyBoon(ev->skillid, ev->value);
+				}
 			}
 		}
 

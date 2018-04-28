@@ -11,14 +11,16 @@ Player::Player()
 {
 	id = 0;
 	name = "";
-//	boons = std::list<Boon>();
+	enter_combat_time = 0;
+	in_combat = false;
 }
 
 Player::Player(uintptr_t new_id, std::string new_name)
 {
 	id = new_id;
 	name = new_name;
-//	boons = std::list<Boon>();
+	enter_combat_time = 0;
+	in_combat = false;
 }
 
 Player::~Player()
@@ -50,4 +52,19 @@ void Player::removeBoon(uint16_t new_id, int32_t new_duration)
 	{
 		if(boon.id == new_id) return boon.Remove(new_duration);
 	}
+}
+
+void Player::combatEnter(uint64_t new_time)
+{
+	enter_combat_time = new_time;
+	in_combat = true;
+
+	std::lock_guard<std::mutex> lock(boons_mtx);
+	boons.clear();
+}
+
+void Player::combatExit(uint64_t new_time)
+{
+	enter_combat_time = new_time;
+	in_combat = false;
 }
