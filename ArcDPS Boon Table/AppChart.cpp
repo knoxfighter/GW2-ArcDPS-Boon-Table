@@ -16,8 +16,14 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
 	ImGui::Begin(title, p_open, ImGuiWindowFlags_NoCollapse);
 	ImGui::PushAllowKeyboardFocus(false);
+
+	int column_number = 1;
+	for (auto current_buff : tracked_buffs)
+	{
+		if (current_buff.is_relevant) column_number++;
+	}
 	
-	ImGui::Columns(tracked_buffs.size()+1);
+	ImGui::Columns(column_number);
 	ImGui::Text("Name");
 
 	uint16_t index = 0;
@@ -30,6 +36,8 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 	for (auto current_buff : tracked_buffs)
 	{
+		if (!current_buff.is_relevant)continue;
+
 		index = 0;
 		ImGui::NextColumn();
 		
@@ -47,7 +55,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 			}
 			else
 			{
-				if (current_boon_uptime >= 10.0f) ImGui::SameLine(3);
+				current_boon_uptime = current_boon_uptime > 25 ? 25 : current_boon_uptime;
 				ImGui::Text("%.1f", current_boon_uptime);
 			}
 			

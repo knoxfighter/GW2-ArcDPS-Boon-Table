@@ -30,8 +30,9 @@ struct BoonDef
 	uint16_t id;
 	std::string name;
 	bool is_duration_stacking;
+	bool is_relevant;
 
-	BoonDef(uint16_t new_id, std::string new_name, bool new_is_duration_stacking);
+	BoonDef(uint16_t new_id, std::string new_name, bool new_is_duration_stacking, bool new_is_relevant);
 };
 
 extern std::list<BoonDef> tracked_buffs;
