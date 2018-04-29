@@ -26,7 +26,7 @@ bool isTrackedBoon(uint16_t new_id)
 {
 	for (auto current_buff : tracked_buffs)
 	{
-		if (current_buff.id == new_id) return true;
+		if (current_buff.id == new_id && current_buff.is_relevant) return true;
 	}
 	return false;
 }
