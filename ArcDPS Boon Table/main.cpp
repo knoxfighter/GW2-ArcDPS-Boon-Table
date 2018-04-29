@@ -8,9 +8,13 @@
 #include <string>
 #include <list>
 
+#include "imgui\imgui.h"
+
 #include "ArcdpsDataStructures.h"
 #include "Player.h"
 #include "Tracker.h"
+#include "AppChart.h"
+#include "Helpers.h"
 
 /* proto/globals */
 arcdps_exports arc_exports;
@@ -23,8 +27,13 @@ arcdps_exports* mod_init();
 uintptr_t mod_release();
 uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname);
+uintptr_t mod_imgui(); /* id3dd9::present callback, before imgui::render, fn() */
+uintptr_t mod_options(); /* id3dd9::present callback, appending to the end of options window in arcdps, fn() */
 
 Tracker tracker;
+
+AppChart chart;
+bool show_chart = false;
 
 /* dll main -- winapi */
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD ulReasonForCall, LPVOID lpReserved) {
@@ -51,7 +60,7 @@ void dll_exit() {
 /* export -- arcdps looks for this exported function and calls the address it returns */
 extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext) {
 	arcvers = arcversionstr;
-	//ImGui::SetCurrentContext((ImGuiContext*)imguicontext);
+	ImGui::SetCurrentContext((ImGuiContext*)imguicontext);
 	return mod_init;
 }
 
@@ -71,6 +80,8 @@ arcdps_exports* mod_init()
 	arc_exports.sig = 0x64003268;//from random.org
 	arc_exports.wnd = mod_wnd;
 	arc_exports.combat = mod_combat;
+	arc_exports.imgui = mod_imgui;
+	arc_exports.options = mod_options;
 	return &arc_exports;
 }
 
@@ -143,14 +154,14 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname)
 			{
 				if (current_player = tracker.getPlayer(src))
 				{
-					current_player->combatEnter(ev->time);
+					current_player->combatEnter(getCurrentTime());
 				}
 			}
 			else if (ev->is_statechange == CBTS_EXITCOMBAT)
 			{
 				if (current_player = tracker.getPlayer(src))
 				{
-					current_player->combatExit(ev->time);
+					current_player->combatExit(getCurrentTime());
 				}
 			}
 		}
@@ -198,5 +209,16 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname)
 
 		/* common */
 	}
+	return 0;
+}
+
+uintptr_t mod_imgui()
+{
+	if (show_chart) chart.Draw("BOON TABLE", &show_chart, &tracker);
+	return 0;
+}
+uintptr_t mod_options()
+{
+	ImGui::Checkbox("BOON TABLE", &show_chart);
 	return 0;
 }

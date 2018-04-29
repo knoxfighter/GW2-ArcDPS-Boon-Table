@@ -11,7 +11,7 @@ Player::Player()
 {
 	id = 0;
 	name = "";
-	enter_combat_time = 0;
+	enter_combat_time = getCurrentTime();
 	in_combat = false;
 }
 
@@ -19,7 +19,7 @@ Player::Player(uintptr_t new_id, std::string new_name)
 {
 	id = new_id;
 	name = new_name;
-	enter_combat_time = 0;
+	enter_combat_time = getCurrentTime();
 	in_combat = false;
 }
 
@@ -35,9 +35,13 @@ void Player::applyBoon(uint16_t new_id, int32_t new_duration)
 
 	std::lock_guard<std::mutex> lock(boons_mtx);
 
-	for (auto boon : boons)
+	for (std::list<Boon>::iterator boon = boons.begin(); boon != boons.end(); ++boon)
 	{
-		if(boon.id == new_id) return boon.Apply(new_duration);
+		if (boon->id == new_id)
+		{
+			boon->Apply(new_duration);
+			return;
+		}
 	}
 
 	boons.push_back(Boon(new_id, new_duration));
@@ -50,10 +54,24 @@ void Player::removeBoon(uint16_t new_id, int32_t new_duration)
 
 	std::lock_guard<std::mutex> lock(boons_mtx);
 
+	for (std::list<Boon>::iterator boon = boons.begin(); boon != boons.end(); ++boon)
+	{
+		if (boon->id == new_id)
+		{
+			boon->Remove(new_duration);
+			return;
+		}
+	}
+}
+
+float Player::getBoonUptime(uint16_t new_id)
+{
 	for (auto boon : boons)
 	{
-		if(boon.id == new_id) return boon.Remove(new_duration);
+		if (boon.id == new_id) return (float)boon.duration / getCombatTime();
 	}
+	
+	return 0.0f;
 }
 
 void Player::combatEnter(uint64_t new_time)
@@ -69,4 +87,9 @@ void Player::combatExit(uint64_t new_time)
 {
 	enter_combat_time = new_time;
 	in_combat = false;
+}
+
+float Player::getCombatTime()
+{
+	return getCurrentTime() - enter_combat_time;
 }

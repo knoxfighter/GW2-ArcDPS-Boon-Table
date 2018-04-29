@@ -2,6 +2,7 @@
 
 #include <inttypes.h>
 #include <list>
+#include <string>
 
 const uint16_t BUFF_MIGHT = 740;
 const uint16_t BUFF_FURY = 725;
@@ -24,3 +25,13 @@ const uint16_t BUFF_SPIRIT_STONE = 12547;
 const uint16_t BUFF_SPIRIT_STORM = 12549;
 
 bool isTrackedBoon(uint16_t new_id);
+struct BoonDef
+{
+	uint16_t id;
+	std::string name;
+	bool is_duration_stacking;
+
+	BoonDef(uint16_t new_id, std::string new_name, bool new_is_duration_stacking);
+};
+
+extern std::list<BoonDef> tracked_buffs;

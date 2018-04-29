@@ -3,6 +3,7 @@
 #include <string>
 #include <list>
 #include <mutex>
+#include "Helpers.h"
 #include "Boon.h"
 #include "BuffIds.h"
 
@@ -23,9 +24,11 @@ public:
 
 	void applyBoon(uint16_t new_id,int32_t new_duration);
 	void removeBoon(uint16_t new_id, int32_t new_duration);
+	float getBoonUptime(uint16_t new_id);
 
 	void combatEnter(uint64_t new_time);
 	void combatExit(uint64_t new_time);
+	float getCombatTime();
 };
 
 extern std::mutex boons_mtx;
