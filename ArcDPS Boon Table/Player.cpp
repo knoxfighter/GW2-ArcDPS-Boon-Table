@@ -68,7 +68,8 @@ float Player::getBoonUptime(uint16_t new_id)
 {
 	for (auto boon : boons)
 	{
-		if (boon.id == new_id) return (float)boon.duration / getCombatTime();
+		if (getCombatTime() == 0) return 0.0f;
+		else if (boon.id == new_id) return (float)boon.duration / getCombatTime();
 	}
 	
 	return 0.0f;
@@ -85,7 +86,7 @@ void Player::combatEnter(uint64_t new_time)
 
 void Player::combatExit(uint64_t new_time)
 {
-	enter_combat_time = new_time;
+	exit_combat_time = new_time;
 	in_combat = false;
 }
 

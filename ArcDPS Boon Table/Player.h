@@ -14,6 +14,7 @@ public:
 	std::string name;
 	std::list<Boon> boons;
 	uint64_t enter_combat_time;
+	uint64_t exit_combat_time;
 	bool in_combat;
 
 	bool operator==(uintptr_t other_id);
