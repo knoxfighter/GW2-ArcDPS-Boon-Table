@@ -32,4 +32,5 @@ void Boon::Apply(int32_t new_duration)
 void Boon::Remove(int32_t new_duration)
 {
 	duration -= new_duration;
+	if (duration < 0) duration = 0;
 }
