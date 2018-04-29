@@ -30,7 +30,6 @@ bool Tracker::addPlayer(uintptr_t new_id, std::string new_name)
 
 bool Tracker::removePlayer(uintptr_t new_id)
 {
-	std::lock_guard<std::mutex> lock(players_mtx);
 	auto it = std::find(players.begin(), players.end(), new_id);
 
 	//player not tracked yet
@@ -40,6 +39,7 @@ bool Tracker::removePlayer(uintptr_t new_id)
 	}
 	else//player tracked
 	{
+		std::lock_guard<std::mutex> lock(players_mtx);
 		players.erase(it);
 		return true;
 	}

@@ -28,6 +28,9 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 	uint16_t index = 0;
 	float current_boon_uptime = 0.0f;
+
+	std::lock_guard<std::mutex> lock(tracker->players_mtx);
+
 	for (auto current_player : tracker->players)
 	{
 		ImGui::Text(current_player.name.c_str());

@@ -9,8 +9,8 @@
 
 class Tracker
 {
-	std::mutex players_mtx;
 public:
+	std::mutex players_mtx;
 	std::list<Player> players;
 
 	Tracker();
