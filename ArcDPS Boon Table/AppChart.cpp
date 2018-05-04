@@ -14,8 +14,22 @@ AppChart::~AppChart()
 void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker = nullptr)
 {
 	ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
-	ImGui::Begin(title, p_open, ImGuiWindowFlags_NoCollapse);
+	ImGui::Begin(title, p_open, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_MenuBar);
 	ImGui::PushAllowKeyboardFocus(false);
+
+	//menu
+	if (ImGui::BeginMenuBar())
+	{
+		if (ImGui::BeginMenu("Show"))
+		{
+			for (std::list<BoonDef>::iterator boon = tracked_buffs.begin(); boon != tracked_buffs.end(); ++boon)
+			{
+				ImGui::MenuItem(boon->name.c_str(), NULL, &boon->is_relevant);
+			}
+			ImGui::EndMenu();
+		}
+		ImGui::EndMenuBar();
+	}
 
 	int column_number = 1;
 	for (auto current_buff : tracked_buffs)
