@@ -3,6 +3,7 @@
 #include <string>
 #include <list>
 #include <mutex>
+#include "ArcdpsDataStructures.h"
 #include "Helpers.h"
 #include "Boon.h"
 #include "BuffIds.h"
@@ -23,8 +24,8 @@ public:
 	Player(uintptr_t new_id, std::string new_name);
 	~Player();
 
-	void applyBoon(uint16_t new_id,int32_t new_duration);
-	void removeBoon(uint16_t new_id, int32_t new_duration);
+	void applyBoon(cbtevent* ev);
+	void removeBoon(cbtevent* ev);
 	float getBoonUptime(uint16_t new_id);
 
 	void combatEnter(uint64_t new_time);

@@ -28,37 +28,43 @@ Player::~Player()
 
 }
 
-void Player::applyBoon(uint16_t new_id, int32_t new_duration)
+void Player::applyBoon(cbtevent* ev)
 {
-	if (new_duration == 0) return;
-	if (!isTrackedBoon(new_id)) return;
+	if (!ev) return;
+	if (ev->value == 0) return;
+	if (ev->value <= ev->overstack_value) return;
+	if (!isTrackedBoon(ev->skillid)) return;
+	if (!in_combat) return;
 
 	std::lock_guard<std::mutex> lock(boons_mtx);
 
 	for (std::list<Boon>::iterator boon = boons.begin(); boon != boons.end(); ++boon)
 	{
-		if (boon->id == new_id)
+		if (boon->id == ev->skillid)
 		{
-			boon->Apply(new_duration);
+			boon->Apply(ev->value - ev->overstack_value);
 			return;
 		}
 	}
 
-	boons.push_back(Boon(new_id, new_duration));
+	boons.push_back(Boon(ev->skillid, ev->value - ev->overstack_value));
 }
 
-void Player::removeBoon(uint16_t new_id, int32_t new_duration)
+void Player::removeBoon(cbtevent* ev)
 {
-	if (new_duration == 0) return;
-	if (!isTrackedBoon(new_id)) return;
+	if (!ev) return;
+	if (ev->value == 0) return;
+	if (ev->value <= ev->overstack_value) return;
+	if (!isTrackedBoon(ev->skillid)) return;
+	if (!in_combat) return;
 
 	std::lock_guard<std::mutex> lock(boons_mtx);
 
 	for (std::list<Boon>::iterator boon = boons.begin(); boon != boons.end(); ++boon)
 	{
-		if (boon->id == new_id)
+		if (boon->id == ev->skillid)
 		{
-			boon->Remove(new_duration);
+			boon->Remove(ev->value - ev->overstack_value);
 			return;
 		}
 	}
@@ -92,5 +98,12 @@ void Player::combatExit(uint64_t new_time)
 
 float Player::getCombatTime()
 {
-	return getCurrentTime() - enter_combat_time;
+	if (in_combat)
+	{
+		return getCurrentTime() - enter_combat_time;
+	}
+	else
+	{
+		return exit_combat_time - enter_combat_time;
+	}
 }

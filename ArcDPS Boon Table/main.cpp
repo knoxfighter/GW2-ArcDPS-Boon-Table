@@ -177,7 +177,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname)
 		{
 			if (current_player = tracker.getPlayer(dst))
 			{
-				current_player->removeBoon(ev->skillid, ev->value);
+				current_player->removeBoon(ev);
 			}
 		}
 
@@ -196,7 +196,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname)
 			{
 				if (current_player = tracker.getPlayer(dst))
 				{
-					current_player->applyBoon(ev->skillid, ev->value);
+					current_player->applyBoon(ev);
 				}
 			}
 		}
