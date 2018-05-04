@@ -40,7 +40,6 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	ImGui::Columns(column_number);
 	ImGui::Text("Name");
 
-	uint16_t index = 0;
 	float current_boon_uptime = 0.0f;
 
 	std::lock_guard<std::mutex> lock(tracker->players_mtx);
@@ -48,14 +47,12 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	for (auto current_player : tracker->players)
 	{
 		ImGui::Text(current_player.name.c_str());
-		index++;
 	}
 
 	for (auto current_buff : tracked_buffs)
 	{
 		if (!current_buff.is_relevant)continue;
 
-		index = 0;
 		ImGui::NextColumn();
 		
 		ImGui::Text(current_buff.name.c_str());
@@ -75,8 +72,6 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 				current_boon_uptime = current_boon_uptime > 25 ? 25 : current_boon_uptime;
 				ImGui::Text("%.1f", current_boon_uptime);
 			}
-			
-			index++;
 		}
 	}
 	ImGui::Columns(1);
