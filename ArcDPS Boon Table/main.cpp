@@ -175,7 +175,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname)
 		/* buff remove */
 		else if (ev->is_buffremove)
 		{
-			if (current_player = tracker.getPlayer(dst))
+			if (current_player = tracker.getPlayer(src))
 			{
 				current_player->removeBoon(ev);
 			}
