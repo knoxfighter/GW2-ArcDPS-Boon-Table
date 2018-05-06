@@ -20,15 +20,11 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	//menu
 	if (ImGui::BeginMenuBar())
 	{
-		if (ImGui::BeginMenu("Options"))
+		if (ImGui::BeginMenu("Show..."))
 		{
-			if (ImGui::BeginMenu("Show"))
+			for (std::list<BoonDef>::iterator boon = tracked_buffs.begin(); boon != tracked_buffs.end(); ++boon)
 			{
-				for (std::list<BoonDef>::iterator boon = tracked_buffs.begin(); boon != tracked_buffs.end(); ++boon)
-				{
-					ImGui::MenuItem(boon->name.c_str(), NULL, &boon->is_relevant);
-				}
-				ImGui::EndMenu();
+				ImGui::MenuItem(boon->name.c_str(), NULL, &boon->is_relevant);
 			}
 			ImGui::EndMenu();
 		}
