@@ -10,16 +10,16 @@ std::list<BoonDef> tracked_buffs = std::list<BoonDef>({
 	BoonDef(BUFF_EA,"EA",true,false),
 	BoonDef(BUFF_PINPOINT,"PP",true,false),
 	BoonDef(BUFF_ASSASSINS_PRESENCE,"AP",true,false),
-	BoonDef(BUFF_SPOTTER,"SPOT",true,false),
+	BoonDef(BUFF_SPOTTER,"Spot",true,false),
 	BoonDef(BUFF_BANNER_STR,"STR",true,false),
 	BoonDef(BUFF_BANNER_DIS,"DIS",true,false),
 	BoonDef(BUFF_BANNER_TAC,"TAC",true,false),
 	BoonDef(BUFF_BANNER_DEF,"DEF",true,false),
 	BoonDef(BUFF_GLYPH_EMPOW,"EMP",true,false),
-	BoonDef(BUFF_SPIRIT_FROST,"FROST",true,false),
-	BoonDef(BUFF_SPIRIT_SUN,"SUN",true,false),
-	BoonDef(BUFF_SPIRIT_STONE,"STON",true,false),
-	BoonDef(BUFF_SPIRIT_STORM,"STOR",true,false)
+	BoonDef(BUFF_SPIRIT_FROST,"Frost",true,false),
+	BoonDef(BUFF_SPIRIT_SUN,"Sun",true,false),
+	BoonDef(BUFF_SPIRIT_STONE,"Stone",true,false),
+	BoonDef(BUFF_SPIRIT_STORM,"Storm",true,false)
 	});
 
 bool isTrackedBoon(uint16_t new_id)
