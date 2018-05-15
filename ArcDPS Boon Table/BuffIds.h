@@ -19,10 +19,10 @@ const uint16_t BUFF_BANNER_DIS = 14449;
 const uint16_t BUFF_BANNER_TAC = 14450;
 const uint16_t BUFF_BANNER_DEF = 14543;
 const uint16_t BUFF_GLYPH_EMPOW = 31803;
-const uint16_t BUFF_SPIRIT_FROST = 12544;
-const uint16_t BUFF_SPIRIT_SUN = 12540;
-const uint16_t BUFF_SPIRIT_STONE = 12547;
-const uint16_t BUFF_SPIRIT_STORM = 12549;
+const uint16_t BUFF_SPIRIT_FROST = 50421;
+const uint16_t BUFF_SPIRIT_SUN = 50413;
+const uint16_t BUFF_SPIRIT_STONE = 50415;
+const uint16_t BUFF_SPIRIT_STORM = 50381;
 
 bool isTrackedBoon(uint16_t new_id);
 struct BoonDef
