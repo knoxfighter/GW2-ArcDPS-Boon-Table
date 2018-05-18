@@ -46,6 +46,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 	for (auto current_player : tracker->players)
 	{
+		ImGui::AlignFirstTextHeightToWidgets();
 		ImGui::Text(current_player.name.c_str());
 	}
 
