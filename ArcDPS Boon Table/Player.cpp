@@ -42,12 +42,12 @@ void Player::applyBoon(cbtevent* ev)
 	{
 		if (boon->id == ev->skillid)
 		{
-			boon->Apply(ev->value - ev->overstack_value);
+			boon->Apply(ev->value);
 			return;
 		}
 	}
 
-	boons.push_back(Boon(ev->skillid, ev->value - ev->overstack_value));
+	boons.push_back(Boon(ev->skillid, ev->value));
 }
 
 void Player::removeBoon(cbtevent* ev)
