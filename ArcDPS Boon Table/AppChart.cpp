@@ -63,14 +63,16 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 			if (current_buff.is_duration_stacking)
 			{
-				current_boon_uptime *= 100.0f;
-				current_boon_uptime = current_boon_uptime > 100 ? 100 : current_boon_uptime;
-				ImGui::Text("%d%%", (int)current_boon_uptime);
+				current_boon_uptime = current_boon_uptime > 1 ? 1 : current_boon_uptime;
+				ImGui::ProgressBar(current_boon_uptime);
 			}
 			else
 			{
 				current_boon_uptime = current_boon_uptime > 25 ? 25 : current_boon_uptime;
-				ImGui::Text("%.1f", current_boon_uptime);
+				char label[5];
+				sprintf(label, "%.1f", current_boon_uptime);
+				current_boon_uptime /= 25;
+				ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, 0), label);
 			}
 		}
 	}
