@@ -6,6 +6,7 @@ std::list<BoonDef> tracked_buffs = std::list<BoonDef>({
 	BoonDef(BUFF_REGEN,"Regen",true,false),
 	BoonDef(BUFF_PROT,"Prot",true,true),
 	BoonDef(BUFF_QUICK,"Quick",true,true),
+	BoonDef(BUFF_RETAL,"Retal",true,false),
 	BoonDef(BUFF_ALAC,"Alac",true,true),
 	BoonDef(BUFF_EA,"EA",true,false),
 	BoonDef(BUFF_PINPOINT,"PP",true,false),

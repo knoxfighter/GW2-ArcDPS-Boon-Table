@@ -10,6 +10,7 @@ const uint16_t BUFF_REGEN = 718;
 const uint16_t BUFF_PROT = 717;
 const uint16_t BUFF_QUICK = 1187;
 const uint16_t BUFF_ALAC = 30328;
+const uint16_t BUFF_RETAL = 873;
 const uint16_t BUFF_EA = 14222;
 const uint16_t BUFF_PINPOINT = 38333;
 const uint16_t BUFF_ASSASSINS_PRESENCE = 26854;
