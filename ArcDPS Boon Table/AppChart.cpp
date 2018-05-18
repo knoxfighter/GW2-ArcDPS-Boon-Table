@@ -46,7 +46,6 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 	for (auto current_player : tracker->players)
 	{
-		ImGui::AlignFirstTextHeightToWidgets();
 		ImGui::Text(current_player.name.c_str());
 	}
 
@@ -65,7 +64,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 			if (current_buff.is_duration_stacking)
 			{
 				current_boon_uptime = current_boon_uptime > 1 ? 1 : current_boon_uptime;
-				ImGui::ProgressBar(current_boon_uptime);
+				ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()));
 			}
 			else
 			{
@@ -73,7 +72,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 				char label[5];
 				sprintf(label, "%.1f", current_boon_uptime);
 				current_boon_uptime /= 25;
-				ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, 0), label);
+				ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()), label);
 			}
 		}
 	}
