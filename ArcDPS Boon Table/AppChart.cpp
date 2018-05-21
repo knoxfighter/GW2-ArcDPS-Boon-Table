@@ -54,6 +54,8 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 		ImGui::Text("Sub %d", current_subgroup);
 	}
 
+	ImGui::Text("Total");
+
 	for (auto current_buff : tracked_buffs)
 	{
 		if (!current_buff.is_relevant)continue;
@@ -62,18 +64,24 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 		
 		ImGui::Text(current_buff.name.c_str());
 
+		//players
 		for (auto current_player : tracker->players)
 		{
 			current_boon_uptime = current_player.getBoonUptime(current_buff.id);
 
 			buffProgressBar(current_buff, current_boon_uptime);
 		}
+		//subgroups
 		for (auto current_subgroup : tracker->getSubgroups())
 		{
 			current_boon_uptime = tracker->getSubgroupBoonUptime(current_buff.id, current_subgroup);
 
 			buffProgressBar(current_buff, current_boon_uptime);
 		}
+		//total
+		current_boon_uptime = tracker->getAverageBoonUptime(current_buff.id);
+
+		buffProgressBar(current_buff, current_boon_uptime);
 	}
 	ImGui::Columns(1);
 	

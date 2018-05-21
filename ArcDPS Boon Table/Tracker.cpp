@@ -106,3 +106,17 @@ float Tracker::getSubgroupBoonUptime(uint16_t new_boon_id, uint8_t new_subgroup)
 	if (player_num == 0) return out;
 	else return out / player_num;
 }
+
+float Tracker::getAverageBoonUptime(uint16_t new_boon_id)
+{
+	float out = 0.0f;
+	uint8_t player_num = 0;
+
+	for (auto player : players)
+	{
+		out += player.getBoonUptime(new_boon_id);
+		player_num++;
+	}
+	if (player_num == 0) return out;
+	else return out / player_num;
+}
