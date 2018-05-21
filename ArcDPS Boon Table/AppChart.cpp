@@ -11,10 +11,10 @@ AppChart::~AppChart()
 {
 }
 
-void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker = nullptr)
+void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker = nullptr,ImGuiWindowFlags flags)
 {
 	ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
-	ImGui::Begin(title, p_open, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_MenuBar);
+	ImGui::Begin(title, p_open, flags);
 	ImGui::PushAllowKeyboardFocus(false);
 
 	//menu

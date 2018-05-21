@@ -32,6 +32,8 @@ uintptr_t mod_imgui(); /* id3dd9::present callback, before imgui::render, fn() *
 uintptr_t mod_options(); /* id3dd9::present callback, appending to the end of options window in arcdps, fn() */
 void parseIni();
 void writeIni();
+bool modsPressed();
+bool canMoveWindows();
 
 Tracker tracker;
 
@@ -42,6 +44,7 @@ CSimpleIniA arc_ini(true);
 bool valid_arc_ini = false;
 WPARAM arc_global_mod1;
 WPARAM arc_global_mod2;
+bool arc_movelock_altui = false;
 
 CSimpleIniA table_ini(true);
 bool valid_table_ini = false;
@@ -234,7 +237,8 @@ uintptr_t mod_imgui()
 		}
 	}
 
-	if (show_chart) chart.Draw("BOON TABLE", &show_chart, &tracker);
+	if (show_chart) chart.Draw("BOON TABLE", &show_chart, &tracker, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_MenuBar 
+		| (!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0));
 	return 0;
 }
 uintptr_t mod_options()
@@ -253,6 +257,9 @@ void parseIni()
 
 	pszValue = arc_ini.GetValue("keys", "global_mod2", "0x12");
 	arc_global_mod2 = std::stoi(pszValue, 0, 16);
+
+	pszValue = arc_ini.GetValue("session", "movelock_altui", "0");
+	arc_movelock_altui = std::stoi(pszValue);
 
 	rc = table_ini.LoadFile("addons\\arcdps\\arcdps_table.ini");
 	valid_table_ini = rc < 0;
@@ -280,4 +287,23 @@ void writeIni()
 	}
 
 	rc = table_ini.SaveFile("addons\\arcdps\\arcdps_table.ini");
+}
+
+bool modsPressed()
+{
+	auto io = &ImGui::GetIO();
+
+	return io->KeysDown[arc_global_mod1] && io->KeysDown[arc_global_mod2];
+}
+
+bool canMoveWindows()
+{
+	if (!arc_movelock_altui)
+	{
+		return true;
+	}
+	else
+	{
+		return modsPressed();
+	}
 }
