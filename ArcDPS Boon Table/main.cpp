@@ -9,6 +9,7 @@
 #include <list>
 
 #include "imgui\imgui.h"
+#include "simpleini\SimpleIni.h"
 
 #include "ArcdpsDataStructures.h"
 #include "Player.h"
@@ -29,11 +30,23 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname);
 uintptr_t mod_imgui(); /* id3dd9::present callback, before imgui::render, fn() */
 uintptr_t mod_options(); /* id3dd9::present callback, appending to the end of options window in arcdps, fn() */
+void parseIni();
+void writeIni();
 
 Tracker tracker;
 
 AppChart chart;
 bool show_chart = false;
+
+CSimpleIniA arc_ini(true);
+bool valid_arc_ini = false;
+WPARAM arc_global_mod1;
+WPARAM arc_global_mod2;
+
+CSimpleIniA table_ini(true);
+bool valid_table_ini = false;
+WPARAM table_key;
+
 
 /* dll main -- winapi */
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD ulReasonForCall, LPVOID lpReserved) {
@@ -61,6 +74,9 @@ void dll_exit() {
 extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext) {
 	arcvers = arcversionstr;
 	ImGui::SetCurrentContext((ImGuiContext*)imguicontext);
+
+	parseIni();
+
 	return mod_init;
 }
 
@@ -86,8 +102,9 @@ arcdps_exports* mod_init()
 }
 
 /* release mod -- return ignored */
-uintptr_t mod_release() {
-	FreeConsole();
+uintptr_t mod_release()
+{
+	writeIni();
 	return 0;
 }
 
@@ -177,7 +194,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname)
 		{
 			if (current_player = tracker.getPlayer(src))
 			{
-				current_player->removeBoon(ev);
+//				current_player->removeBoon(ev);
 			}
 		}
 
@@ -221,4 +238,43 @@ uintptr_t mod_options()
 {
 	ImGui::Checkbox("BOON TABLE", &show_chart);
 	return 0;
+}
+
+void parseIni()
+{
+	SI_Error rc = arc_ini.LoadFile("addons\\arcdps\\arcdps.ini");
+	valid_arc_ini = rc < 0;
+
+	std::string pszValue = arc_ini.GetValue("keys", "global_mod1", "0x10");
+	arc_global_mod1 = std::stoi(pszValue, 0, 16);
+
+	pszValue = arc_ini.GetValue("keys", "global_mod2", "0x12");
+	arc_global_mod2 = std::stoi(pszValue, 0, 16);
+
+	rc = table_ini.LoadFile("addons\\arcdps\\arcdps_table.ini");
+	valid_table_ini = rc < 0;
+
+	pszValue = table_ini.GetValue("table", "show", "0");
+	show_chart = std::stoi(pszValue);
+
+	pszValue = table_ini.GetValue("table", "key", "86");
+	table_key = std::stoi(pszValue);
+
+	for (std::list<BoonDef>::iterator boon_def = tracked_buffs.begin(); boon_def != tracked_buffs.end(); ++boon_def)
+	{
+		pszValue = table_ini.GetValue("boons", boon_def->name.c_str(), std::to_string(boon_def->is_relevant).c_str());
+		boon_def->is_relevant = std::stoi(pszValue);
+	}
+}
+
+void writeIni()
+{
+	SI_Error rc = table_ini.SetValue("table", "show", std::to_string(show_chart).c_str());
+
+	for (std::list<BoonDef>::iterator boon_def = tracked_buffs.begin(); boon_def != tracked_buffs.end(); ++boon_def)
+	{
+		rc = table_ini.SetValue("boons", boon_def->name.c_str(), std::to_string(boon_def->is_relevant).c_str());
+	}
+
+	rc = table_ini.SaveFile("addons\\arcdps\\arcdps_table.ini");
 }

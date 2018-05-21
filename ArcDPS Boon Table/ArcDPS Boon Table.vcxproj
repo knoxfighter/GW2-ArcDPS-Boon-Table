@@ -142,6 +142,7 @@ copy /Y "$(TargetPath)" "C:\Program Files\Guild Wars 2\bin64\$(TargetFileName)"<
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="simpleini\ConvertUTF.c" />
     <ClCompile Include="Tracker.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +159,8 @@ copy /Y "$(TargetPath)" "C:\Program Files\Guild Wars 2\bin64\$(TargetFileName)"<
     <ClInclude Include="imgui\stb_truetype.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="simpleini\ConvertUTF.h" />
+    <ClInclude Include="simpleini\SimpleIni.h" />
     <ClInclude Include="Tracker.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

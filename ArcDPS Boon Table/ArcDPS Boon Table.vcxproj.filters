@@ -19,6 +19,12 @@
     <Filter Include="Header Files\imgui">
       <UniqueIdentifier>{6efe4edd-3146-48b9-adb8-f4574313337f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\simpleini">
+      <UniqueIdentifier>{7ca9d431-2cf2-4bd5-acaa-59ef521d5b0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\simpleini">
+      <UniqueIdentifier>{64104c97-0448-43a5-b9ca-3872e9266c87}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -53,6 +59,9 @@
     </ClCompile>
     <ClCompile Include="Helpers.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="simpleini\ConvertUTF.c">
+      <Filter>Source Files\simpleini</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -97,6 +106,12 @@
     </ClInclude>
     <ClInclude Include="Helpers.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="simpleini\ConvertUTF.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="simpleini\SimpleIni.h">
+      <Filter>Header Files\simpleini</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
