@@ -49,6 +49,11 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 		ImGui::Text(current_player.name.c_str());
 	}
 
+	for (auto current_subgroup : tracker->getSubgroups())
+	{
+		ImGui::Text("Sub %d", current_subgroup);
+	}
+
 	for (auto current_buff : tracked_buffs)
 	{
 		if (!current_buff.is_relevant)continue;
@@ -61,19 +66,13 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 		{
 			current_boon_uptime = current_player.getBoonUptime(current_buff.id);
 
-			if (current_buff.is_duration_stacking)
-			{
-				current_boon_uptime = current_boon_uptime > 1 ? 1 : current_boon_uptime;
-				ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()));
-			}
-			else
-			{
-				current_boon_uptime = current_boon_uptime > 25 ? 25 : current_boon_uptime;
-				char label[5];
-				sprintf(label, "%.1f", current_boon_uptime);
-				current_boon_uptime /= 25;
-				ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()), label);
-			}
+			buffProgressBar(current_buff, current_boon_uptime);
+		}
+		for (auto current_subgroup : tracker->getSubgroups())
+		{
+			current_boon_uptime = tracker->getSubgroupBoonUptime(current_buff.id, current_subgroup);
+
+			buffProgressBar(current_buff, current_boon_uptime);
 		}
 	}
 	ImGui::Columns(1);
@@ -82,4 +81,21 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 	ImGui::PopAllowKeyboardFocus();
 	ImGui::End();
+}
+
+void buffProgressBar(BoonDef current_buff, float current_boon_uptime)
+{
+	if (current_buff.is_duration_stacking)
+	{
+		current_boon_uptime = current_boon_uptime > 1 ? 1 : current_boon_uptime;
+		ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()));
+	}
+	else
+	{
+		current_boon_uptime = current_boon_uptime > 25 ? 25 : current_boon_uptime;
+		char label[5];
+		sprintf(label, "%.1f", current_boon_uptime);
+		current_boon_uptime /= 25;
+		ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()), label);
+	}
 }

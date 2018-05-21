@@ -20,5 +20,8 @@ public:
 	bool removePlayer(uintptr_t new_id);
 
 	Player* getPlayer(ag* new_player);
+	
+	std::list<uint8_t> getSubgroups();
+	float getSubgroupBoonUptime(uint16_t new_boon_id, uint8_t new_subgroup);
 };
 

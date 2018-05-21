@@ -17,6 +17,7 @@ public:
 	uint64_t enter_combat_time;
 	uint64_t exit_combat_time;
 	bool in_combat;
+	uint8_t subgroup;
 
 	bool operator==(uintptr_t other_id);
 
@@ -28,7 +29,7 @@ public:
 	void removeBoon(cbtevent* ev);
 	float getBoonUptime(uint16_t new_id);
 
-	void combatEnter(uint64_t new_time);
+	void combatEnter(uint64_t new_time, uint8_t new_subgroup);
 	void combatExit(uint64_t new_time);
 	float getCombatTime();
 };

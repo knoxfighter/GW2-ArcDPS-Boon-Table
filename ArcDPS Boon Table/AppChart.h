@@ -14,3 +14,4 @@ public:
 	void Draw(const char* title, bool* p_open, Tracker* tracker);
 };
 
+void buffProgressBar(BoonDef current_buff, float current_boon_uptime);

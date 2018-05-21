@@ -109,21 +109,14 @@ uintptr_t mod_release()
 }
 
 /* window callback -- return is assigned to umsg (return zero to not be processed by arcdps or game) */
-uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-#if 0
-	/* big buffer */
-	char buff[4096];
-	char* p = &buff[0];
+uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	auto io = &ImGui::GetIO();
 
-	/* common */
-	p += _snprintf(p, 400, "==== wndproc %llx ====\n", hWnd);
-	p += _snprintf(p, 400, "umsg %u, wparam %lld, lparam %lld\n", uMsg, wParam, lParam);
-
-	/* print */
-	DWORD written = 0;
-	HANDLE hnd = GetStdHandle(STD_OUTPUT_HANDLE);
-	//WriteConsoleA(hnd, &buff[0], p - &buff[0], &written, 0);
-#endif
+	if (io->KeysDown[arc_global_mod1] && io->KeysDown[arc_global_mod2])
+	{
+		if (io->KeysDown[table_key]) return 0;
+	}
 	return uMsg;
 }
 
@@ -171,7 +164,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname)
 			{
 				if (current_player = tracker.getPlayer(src))
 				{
-					current_player->combatEnter(getCurrentTime());
+					current_player->combatEnter(getCurrentTime(),ev->dst_agent);
 				}
 			}
 			else if (ev->is_statechange == CBTS_EXITCOMBAT)
@@ -231,6 +224,16 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname)
 
 uintptr_t mod_imgui()
 {
+	auto io = &ImGui::GetIO();
+
+	if (io->KeysDown[arc_global_mod1] && io->KeysDown[arc_global_mod2])
+	{
+		if (ImGui::IsKeyPressed(table_key))
+		{
+			show_chart = !show_chart;
+		}
+	}
+
 	if (show_chart) chart.Draw("BOON TABLE", &show_chart, &tracker);
 	return 0;
 }

@@ -13,6 +13,7 @@ Player::Player()
 	name = "";
 	enter_combat_time = getCurrentTime();
 	in_combat = false;
+	subgroup = 1;
 }
 
 Player::Player(uintptr_t new_id, std::string new_name)
@@ -21,6 +22,7 @@ Player::Player(uintptr_t new_id, std::string new_name)
 	name = new_name;
 	enter_combat_time = getCurrentTime();
 	in_combat = false;
+	subgroup = 1;
 }
 
 Player::~Player()
@@ -81,10 +83,11 @@ float Player::getBoonUptime(uint16_t new_id)
 	return 0.0f;
 }
 
-void Player::combatEnter(uint64_t new_time)
+void Player::combatEnter(uint64_t new_time, uint8_t new_subgroup)
 {
 	enter_combat_time = new_time;
 	in_combat = true;
+	subgroup = new_subgroup;
 
 	std::lock_guard<std::mutex> lock(boons_mtx);
 	boons.clear();

@@ -61,3 +61,48 @@ Player* Tracker::getPlayer(ag* new_player)
 		return &*it;
 	}
 }
+
+std::list<uint8_t> Tracker::getSubgroups()
+{
+	auto out = std::list<uint8_t>();
+	bool found = false;
+
+	for (auto player : players)
+	{
+		for (auto current_sub : out)
+		{
+			if (player.subgroup == current_sub)
+			{
+				found = true;
+				break;
+			}
+		}
+		if (found)
+		{
+			found = false;
+			continue;
+		}
+		else
+		{
+			out.push_back(player.subgroup);
+		}
+	}
+	out.sort();
+	return out;
+}
+
+float Tracker::getSubgroupBoonUptime(uint16_t new_boon_id, uint8_t new_subgroup)
+{
+	float out = 0.0f;
+	uint8_t player_num = 0;
+
+	for (auto player : players)
+	{
+		if (player.subgroup != new_subgroup) continue;
+
+		out += player.getBoonUptime(new_boon_id);
+		player_num++;
+	}
+	if (player_num == 0) return out;
+	else return out / player_num;
+}
