@@ -22,7 +22,7 @@ public:
 	Player* getPlayer(ag* new_player);
 	
 	std::list<uint8_t> getSubgroups();
-	float getSubgroupBoonUptime(uint16_t new_boon_id, uint8_t new_subgroup);
-	float getAverageBoonUptime(uint16_t new_boon_id);
+	float getSubgroupBoonUptime(BoonDef new_boon, uint8_t new_subgroup);
+	float getAverageBoonUptime(BoonDef new_boon);
 };
 

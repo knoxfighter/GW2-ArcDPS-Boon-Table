@@ -91,7 +91,7 @@ std::list<uint8_t> Tracker::getSubgroups()
 	return out;
 }
 
-float Tracker::getSubgroupBoonUptime(uint16_t new_boon_id, uint8_t new_subgroup)
+float Tracker::getSubgroupBoonUptime(BoonDef new_boon, uint8_t new_subgroup)
 {
 	float out = 0.0f;
 	uint8_t player_num = 0;
@@ -100,21 +100,21 @@ float Tracker::getSubgroupBoonUptime(uint16_t new_boon_id, uint8_t new_subgroup)
 	{
 		if (player.subgroup != new_subgroup) continue;
 
-		out += player.getBoonUptime(new_boon_id);
+		out += player.getBoonUptime(new_boon);
 		player_num++;
 	}
 	if (player_num == 0) return out;
 	else return out / player_num;
 }
 
-float Tracker::getAverageBoonUptime(uint16_t new_boon_id)
+float Tracker::getAverageBoonUptime(BoonDef new_boon)
 {
 	float out = 0.0f;
 	uint8_t player_num = 0;
 
 	for (auto player : players)
 	{
-		out += player.getBoonUptime(new_boon_id);
+		out += player.getBoonUptime(new_boon);
 		player_num++;
 	}
 	if (player_num == 0) return out;

@@ -67,19 +67,19 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 		//players
 		for (auto current_player : tracker->players)
 		{
-			current_boon_uptime = current_player.getBoonUptime(current_buff.id);
+			current_boon_uptime = current_player.getBoonUptime(current_buff);
 
 			buffProgressBar(current_buff, current_boon_uptime);
 		}
 		//subgroups
 		for (auto current_subgroup : tracker->getSubgroups())
 		{
-			current_boon_uptime = tracker->getSubgroupBoonUptime(current_buff.id, current_subgroup);
+			current_boon_uptime = tracker->getSubgroupBoonUptime(current_buff, current_subgroup);
 
 			buffProgressBar(current_buff, current_boon_uptime);
 		}
 		//total
-		current_boon_uptime = tracker->getAverageBoonUptime(current_buff.id);
+		current_boon_uptime = tracker->getAverageBoonUptime(current_buff);
 
 		buffProgressBar(current_buff, current_boon_uptime);
 	}
@@ -95,12 +95,10 @@ void buffProgressBar(BoonDef current_buff, float current_boon_uptime)
 {
 	if (current_buff.is_duration_stacking)
 	{
-		current_boon_uptime = current_boon_uptime > 1 ? 1 : current_boon_uptime;
 		ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()));
 	}
 	else
 	{
-		current_boon_uptime = current_boon_uptime > 25 ? 25 : current_boon_uptime;
 		char label[5];
 		sprintf(label, "%.1f", current_boon_uptime);
 		current_boon_uptime /= 25;

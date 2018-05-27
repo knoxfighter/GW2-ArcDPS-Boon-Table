@@ -27,7 +27,7 @@ public:
 
 	void applyBoon(cbtevent* ev);
 	void removeBoon(cbtevent* ev);
-	float getBoonUptime(uint16_t new_id);
+	float getBoonUptime(BoonDef new_boon);
 
 	void combatEnter(uint64_t new_time, uint8_t new_subgroup);
 	void combatExit(uint64_t new_time);
