@@ -79,7 +79,7 @@ float Player::getBoonUptime(BoonDef new_boon)
 		if (getCombatTime() == 0) return 0.0f;
 		else if (current_boon.id == new_boon.id)
 		{
-			float out = (float)current_boon.duration / getCombatTime();
+			float out = (float)current_boon.getDuration() / getCombatTime();
 
 			if (new_boon.is_duration_stacking)
 			{
