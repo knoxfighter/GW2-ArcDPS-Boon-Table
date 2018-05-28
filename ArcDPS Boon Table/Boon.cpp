@@ -48,13 +48,13 @@ void Boon::Remove(int32_t new_duration)
 	if (expected_end_time > getCurrentTime()) expected_end_time -= new_duration;
 }
 
-int32_t Boon::getDuration()
+int32_t Boon::getDuration(uint64_t current_time)
 {
 	int32_t out = duration;
 	
-	if (getCurrentTime() < expected_end_time)
+	if (current_time < expected_end_time)
 	{
-		out -= expected_end_time - getCurrentTime();
+		out -= expected_end_time - current_time;
 	}
 
 	return out;
