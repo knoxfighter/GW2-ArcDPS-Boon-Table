@@ -168,6 +168,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname)
 				if (current_player = tracker.getPlayer(src))
 				{
 					current_player->combatEnter(getCurrentTime(),ev->dst_agent);
+					tracker.bakeCombatData();
 				}
 			}
 			else if (ev->is_statechange == CBTS_EXITCOMBAT)

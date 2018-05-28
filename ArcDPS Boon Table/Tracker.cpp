@@ -45,6 +45,11 @@ bool Tracker::removePlayer(uintptr_t new_id)
 	}
 }
 
+void Tracker::bakeCombatData()
+{
+	subgroups = getSubgroups();
+}
+
 Player* Tracker::getPlayer(ag* new_player)
 {
 	if (!is_player(new_player)) return nullptr;
