@@ -15,3 +15,5 @@ public:
 };
 
 void buffProgressBar(BoonDef* current_buff, float current_boon_uptime);
+
+bool bShowTotal(Tracker* tracker);
