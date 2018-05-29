@@ -44,9 +44,9 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 	std::lock_guard<std::mutex> lock(tracker->players_mtx);
 
-	for (auto current_player : tracker->players)
+	for (std::list<Player>::iterator current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
 	{
-		ImGui::Text(current_player.name.c_str());
+		ImGui::Text(current_player->name.c_str());
 	}
 
 	for (auto current_subgroup : tracker->subgroups)
@@ -56,34 +56,34 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 	if(tracker->players.size() > 0) ImGui::Text("Total");
 
-	for (auto current_buff : tracked_buffs)
+	for (std::list<BoonDef>::iterator current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
 	{
-		if (!current_buff.is_relevant)continue;
+		if (!current_buff->is_relevant)continue;
 
 		ImGui::NextColumn();
 		
-		ImGui::Text(current_buff.name.c_str());
+		ImGui::Text(current_buff->name.c_str());
 
 		//players
-		for (auto current_player : tracker->players)
+		for (std::list<Player>::iterator current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
 		{
-			current_boon_uptime = current_player.getBoonUptime(current_buff);
+			current_boon_uptime = current_player->getBoonUptime(&*current_buff);
 
-			buffProgressBar(current_buff, current_boon_uptime);
+			buffProgressBar(&*current_buff, current_boon_uptime);
 		}
 		//subgroups
 		for (auto current_subgroup : tracker->subgroups)
 		{
-			current_boon_uptime = tracker->getSubgroupBoonUptime(current_buff, current_subgroup);
+			current_boon_uptime = tracker->getSubgroupBoonUptime(&*current_buff, current_subgroup);
 
-			buffProgressBar(current_buff, current_boon_uptime);
+			buffProgressBar(&*current_buff, current_boon_uptime);
 		}
 		//total
 		if (tracker->players.size() > 0)
 		{
-			current_boon_uptime = tracker->getAverageBoonUptime(current_buff);
+			current_boon_uptime = tracker->getAverageBoonUptime(&*current_buff);
 
-			buffProgressBar(current_buff, current_boon_uptime);
+			buffProgressBar(&*current_buff, current_boon_uptime);
 		}
 	}
 	ImGui::Columns(1);
@@ -94,9 +94,9 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	ImGui::End();
 }
 
-void buffProgressBar(BoonDef current_buff, float current_boon_uptime)
+void buffProgressBar(BoonDef* current_buff, float current_boon_uptime)
 {
-	if (current_buff.is_duration_stacking)
+	if (current_buff->is_duration_stacking)
 	{
 		ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()));
 	}

@@ -72,16 +72,16 @@ void Player::removeBoon(cbtevent* ev)
 	}
 }
 
-float Player::getBoonUptime(BoonDef new_boon)
+float Player::getBoonUptime(BoonDef* new_boon)
 {
-	for (auto current_boon : boons)
+	for (std::list<Boon>::iterator current_boon = boons.begin(); current_boon != boons.end(); ++current_boon)
 	{
 		if (getCombatTime() == 0) return 0.0f;
-		else if (current_boon.id == new_boon.id)
+		else if (current_boon->id == new_boon->id)
 		{
-			float out = (float)current_boon.getDuration(in_combat ? getCurrentTime() : exit_combat_time) / getCombatTime();
+			float out = (float)current_boon->getDuration(in_combat ? getCurrentTime() : exit_combat_time) / getCombatTime();
 
-			if (new_boon.is_duration_stacking)
+			if (new_boon->is_duration_stacking)
 			{
 				out = out > 1.0f ? 1.0f : out;
 			}

@@ -69,14 +69,15 @@ Player* Tracker::getPlayer(ag* new_player)
 
 std::list<uint8_t> Tracker::getSubgroups()
 {
+	std::lock_guard<std::mutex> lock(subgroups_mtx);
 	auto out = std::list<uint8_t>();
 	bool found = false;
 
-	for (auto player : players)
+	for (std::list<Player>::iterator player = players.begin(); player != players.end(); ++player)
 	{
 		for (auto current_sub : out)
 		{
-			if (player.subgroup == current_sub)
+			if (player->subgroup == current_sub)
 			{
 				found = true;
 				break;
@@ -89,37 +90,37 @@ std::list<uint8_t> Tracker::getSubgroups()
 		}
 		else
 		{
-			out.push_back(player.subgroup);
+			out.push_back(player->subgroup);
 		}
 	}
 	out.sort();
 	return out;
 }
 
-float Tracker::getSubgroupBoonUptime(BoonDef new_boon, uint8_t new_subgroup)
+float Tracker::getSubgroupBoonUptime(BoonDef* new_boon, uint8_t new_subgroup)
 {
 	float out = 0.0f;
 	uint8_t player_num = 0;
 
-	for (auto player : players)
+	for (std::list<Player>::iterator player = players.begin(); player != players.end(); ++player)
 	{
-		if (player.subgroup != new_subgroup) continue;
+		if (player->subgroup != new_subgroup) continue;
 
-		out += player.getBoonUptime(new_boon);
+		out += player->getBoonUptime(new_boon);
 		player_num++;
 	}
 	if (player_num == 0) return out;
 	else return out / player_num;
 }
 
-float Tracker::getAverageBoonUptime(BoonDef new_boon)
+float Tracker::getAverageBoonUptime(BoonDef* new_boon)
 {
 	float out = 0.0f;
 	uint8_t player_num = 0;
 
-	for (auto player : players)
+	for (std::list<Player>::iterator player = players.begin(); player != players.end(); ++player)
 	{
-		out += player.getBoonUptime(new_boon);
+		out += player->getBoonUptime(new_boon);
 		player_num++;
 	}
 	if (player_num == 0) return out;

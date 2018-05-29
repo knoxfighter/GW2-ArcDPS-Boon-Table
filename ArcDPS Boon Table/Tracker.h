@@ -12,6 +12,8 @@ class Tracker
 public:
 	std::mutex players_mtx;
 	std::list<Player> players;
+
+	std::mutex subgroups_mtx;
 	std::list<uint8_t> subgroups;
 
 	Tracker();
@@ -25,7 +27,7 @@ public:
 	Player* getPlayer(ag* new_player);
 	
 	std::list<uint8_t> getSubgroups();
-	float getSubgroupBoonUptime(BoonDef new_boon, uint8_t new_subgroup);
-	float getAverageBoonUptime(BoonDef new_boon);
+	float getSubgroupBoonUptime(BoonDef* new_boon, uint8_t new_subgroup);
+	float getAverageBoonUptime(BoonDef* new_boon);
 };
 
