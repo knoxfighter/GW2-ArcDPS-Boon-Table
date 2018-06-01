@@ -4,6 +4,10 @@
 
 AppChart::AppChart()
 {
+	active_player = -1;
+	active_column = -1;
+	last_active_player = -1;
+	last_active_column = -1;
 }
 
 
@@ -16,6 +20,10 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
 	ImGui::Begin(title, p_open, flags);
 	ImGui::PushAllowKeyboardFocus(false);
+	last_active_player = active_player;
+	last_active_column = active_column;
+	active_player = -1;
+	active_column = -1;
 
 	//menu
 	if (ImGui::BeginMenuBar())
@@ -46,12 +54,38 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 	for (std::list<Player>::iterator current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
 	{
+		if (last_active_player == current_player->id)
+		{
+			ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
+		}
 		ImGui::Text(current_player->name.c_str());
+		if (ImGui::IsItemHoveredRect())
+		{
+			active_player = current_player->id;
+			active_column = ImGui::GetColumnIndex();
+		}
+		if (last_active_player == current_player->id)
+		{
+			ImGui::PopStyleColor();
+		}
 	}
 
 	for (auto current_subgroup : tracker->subgroups)
 	{
+		if (last_active_player == current_subgroup)
+		{
+			ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
+		}
 		ImGui::Text("Sub %d", current_subgroup);
+		if (ImGui::IsItemHoveredRect())
+		{
+			active_player = current_subgroup;
+			active_column = ImGui::GetColumnIndex();
+		}
+		if (last_active_player == current_subgroup)
+		{
+			ImGui::PopStyleColor();
+		}
 	}
 
 	if (bShowTotal(tracker)) ImGui::Text("Total");
@@ -62,28 +96,41 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 		ImGui::NextColumn();
 		
+		if (last_active_column == ImGui::GetColumnIndex())
+		{
+			ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
+		}
+		
 		ImGui::Text(current_buff->name.c_str());
-
+		if (ImGui::IsItemHoveredRect())
+		{
+			active_player = -1;
+			active_column = ImGui::GetColumnIndex();
+		}
 		//players
 		for (std::list<Player>::iterator current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
 		{
 			current_boon_uptime = current_player->getBoonUptime(&*current_buff);
 
-			buffProgressBar(&*current_buff, current_boon_uptime);
+			buffProgressBar(&*current_buff, current_boon_uptime, current_player->id);
 		}
 		//subgroups
 		for (auto current_subgroup : tracker->subgroups)
 		{
 			current_boon_uptime = tracker->getSubgroupBoonUptime(&*current_buff, current_subgroup);
 
-			buffProgressBar(&*current_buff, current_boon_uptime);
+			buffProgressBar(&*current_buff, current_boon_uptime, current_subgroup);
 		}
 		//total
 		if (bShowTotal(tracker))
 		{
 			current_boon_uptime = tracker->getAverageBoonUptime(&*current_buff);
 
-			buffProgressBar(&*current_buff, current_boon_uptime);
+			buffProgressBar(&*current_buff, current_boon_uptime, 0);
+		}
+		if (last_active_column == ImGui::GetColumnIndex())
+		{
+			ImGui::PopStyleColor();
 		}
 	}
 	ImGui::Columns(1);
@@ -94,8 +141,12 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	ImGui::End();
 }
 
-void buffProgressBar(BoonDef* current_buff, float current_boon_uptime)
+void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime, uintptr_t current_player)
 {
+	if (last_active_player == current_player)
+	{
+		ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
+	}
 	if (current_buff->is_duration_stacking)
 	{
 		ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()));
@@ -106,6 +157,15 @@ void buffProgressBar(BoonDef* current_buff, float current_boon_uptime)
 		sprintf(label, "%.1f", current_boon_uptime);
 		current_boon_uptime /= 25;
 		ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()), label);
+	}
+	if (last_active_player == current_player)
+	{
+		ImGui::PopStyleColor();
+	}
+	if (ImGui::IsItemHoveredRect())
+	{
+		active_player = current_player;
+		active_column = ImGui::GetColumnIndex();
 	}
 }
 
