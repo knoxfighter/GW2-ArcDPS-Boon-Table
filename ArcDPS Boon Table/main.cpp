@@ -147,6 +147,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname)
 			else
 			{
 				tracker.removePlayer(src->id);
+				tracker.bakeCombatData();
 			}
 		}
 
