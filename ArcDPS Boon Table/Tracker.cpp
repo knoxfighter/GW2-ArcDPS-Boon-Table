@@ -4,6 +4,8 @@
 
 Tracker::Tracker()
 {
+	sort_method = subgroup;
+	sorted_boon = nullptr;
 }
 
 
@@ -43,6 +45,37 @@ bool Tracker::removePlayer(uintptr_t new_id)
 		players.erase(it);
 		return true;
 	}
+}
+
+void Tracker::sortPlayers()
+{
+	switch (sort_method)
+	{
+		case name:
+		{
+			players.sort();
+			break;
+		}
+		case subgroup:
+		{
+			players.sort([](Player lhs, Player rhs) {return lhs.subgroup < rhs.subgroup; });
+			break;
+		}
+		case boon:
+		{
+			players.sort([this](Player lhs, Player rhs) {return lhs.getBoonUptime(sorted_boon) < rhs.getBoonUptime(sorted_boon); });
+			break;
+		}
+		break;
+	};
+
+}
+
+void Tracker::setSortMethod(SortMethod new_method, BoonDef * new_boon)
+{
+	if (new_method == boon && !new_boon) return;
+	sort_method = new_method;
+	if (new_boon) sorted_boon = new_boon;
 }
 
 void Tracker::bakeCombatData()

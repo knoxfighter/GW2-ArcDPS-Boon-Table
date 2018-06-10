@@ -20,6 +20,7 @@ public:
 	uint8_t subgroup;
 
 	bool operator==(uintptr_t other_id);
+	bool operator<(const Player &other_player);
 
 	Player();
 	Player(uintptr_t new_id, std::string new_name);

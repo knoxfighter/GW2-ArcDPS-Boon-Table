@@ -8,6 +8,7 @@ AppChart::AppChart()
 	active_column = -1;
 	last_active_player = -1;
 	last_active_column = -1;
+	sorting_collumn = 1;
 }
 
 
@@ -25,6 +26,9 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	active_player = -1;
 	active_column = -1;
 
+	std::lock_guard<std::mutex> lock(tracker->players_mtx);
+	tracker->sortPlayers();
+
 	//menu
 	if (ImGui::BeginMenuBar())
 	{
@@ -39,18 +43,16 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 		ImGui::EndMenuBar();
 	}
 
-	int column_number = 1;
+	int column_number = 2;
 	for (auto current_buff : tracked_buffs)
 	{
 		if (current_buff.is_relevant) column_number++;
 	}
 	
 	ImGui::Columns(column_number);
-	ImGui::Text("Name");
+	if (ImGui::SmallButton("Name")) tracker->setSortMethod(name);
 
 	float current_boon_uptime = 0.0f;
-
-	std::lock_guard<std::mutex> lock(tracker->players_mtx);
 
 	for (std::list<Player>::iterator current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
 	{
@@ -90,6 +92,28 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 	if (bShowTotal(tracker)) ImGui::Text("Total");
 
+	//show subgroup numbers
+	ImGui::NextColumn();
+	if (last_active_column == ImGui::GetColumnIndex())
+	{
+		ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
+	}
+	if (ImGui::SmallButton("Subgrp")) tracker->setSortMethod(subgroup);
+	for (std::list<Player>::iterator current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
+	{
+		ImGui::Text("%d", current_player->subgroup);
+		if (ImGui::IsItemHoveredRect())
+		{
+			active_player = current_player->id;
+			active_column = ImGui::GetColumnIndex();
+		}
+	}
+	if (last_active_column == ImGui::GetColumnIndex())
+	{
+		ImGui::PopStyleColor();
+	}
+
+	//show boon uptimes
 	for (std::list<BoonDef>::iterator current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
 	{
 		if (!current_buff->is_relevant)continue;
@@ -101,7 +125,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 			ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
 		}
 		
-		ImGui::Text(current_buff->name.c_str());
+		if (ImGui::SmallButton(current_buff->name.c_str())) tracker->setSortMethod(boon, &*current_buff);
 		if (ImGui::IsItemHoveredRect())
 		{
 			active_player = -1;

@@ -7,8 +7,18 @@
 #include "ArcdpsDataStructures.h"
 #include "Player.h"
 
+enum SortMethod
+{
+	name,
+	subgroup,
+	boon
+};
+
 class Tracker
 {
+private:
+	SortMethod sort_method;
+	BoonDef* sorted_boon;
 public:
 	std::mutex players_mtx;
 	std::list<Player> players;
@@ -21,6 +31,11 @@ public:
 
 	bool addPlayer(uintptr_t new_id, std::string name);
 	bool removePlayer(uintptr_t new_id);
+
+	
+
+	void sortPlayers();
+	void setSortMethod(SortMethod new_method, BoonDef* new_boon = nullptr);
 
 	void bakeCombatData();
 
