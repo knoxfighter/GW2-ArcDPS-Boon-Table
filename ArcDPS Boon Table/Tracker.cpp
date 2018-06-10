@@ -53,7 +53,7 @@ void Tracker::sortPlayers()
 	{
 		case name:
 		{
-			players.sort();
+			players.sort([](Player lhs, Player rhs) {return lhs.name < rhs.name; });
 			break;
 		}
 		case subgroup:

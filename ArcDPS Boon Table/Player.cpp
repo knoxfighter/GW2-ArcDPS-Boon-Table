@@ -7,11 +7,6 @@ bool Player::operator==(uintptr_t other_id)
 	return id == other_id;
 }
 
-bool Player::operator<(const Player & other_player)
-{
-	return name < other_player.name;
-}
-
 Player::Player()
 {
 	id = 0;
