@@ -57,12 +57,14 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	{
 		highlightedText(current_player->id, current_player->name.c_str());
 	}
-
-	for (auto current_subgroup : tracker->subgroups)
+	if (bShowSubgroups(tracker))
 	{
-		highlightedText(current_subgroup, "Subgroup");
+		for (auto current_subgroup : tracker->subgroups)
+		{
+			highlightedText(current_subgroup, "Subgroup");
+		}
 	}
-
+	
 	if (bShowTotal(tracker)) highlightedText(12345, "Total");
 
 	//show subgroup numbers
@@ -76,10 +78,14 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	{
 		highlightedText(current_player->id, "%d", current_player->subgroup);
 	}
-	for (std::list<uint8_t>::iterator current_subgroup = tracker->subgroups.begin(); current_subgroup != tracker->subgroups.end(); ++current_subgroup)
+	if (bShowSubgroups(tracker))
 	{
-		highlightedText(*current_subgroup, "%d", *current_subgroup);
+		for (std::list<uint8_t>::iterator current_subgroup = tracker->subgroups.begin(); current_subgroup != tracker->subgroups.end(); ++current_subgroup)
+		{
+			highlightedText(*current_subgroup, "%d", *current_subgroup);
+		}
 	}
+	
 	if (last_active_column == ImGui::GetColumnIndex())
 	{
 		ImGui::PopStyleColor();
@@ -111,12 +117,16 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 			buffProgressBar(&*current_buff, current_boon_uptime, current_player->id);
 		}
 		//subgroups
-		for (auto current_subgroup : tracker->subgroups)
+		if (bShowSubgroups(tracker))
 		{
-			current_boon_uptime = tracker->getSubgroupBoonUptime(&*current_buff, current_subgroup);
+			for (auto current_subgroup : tracker->subgroups)
+			{
+				current_boon_uptime = tracker->getSubgroupBoonUptime(&*current_buff, current_subgroup);
 
-			buffProgressBar(&*current_buff, current_boon_uptime, current_subgroup);
+				buffProgressBar(&*current_buff, current_boon_uptime, current_subgroup);
+			}
 		}
+		
 		//total
 		if (bShowTotal(tracker))
 		{
@@ -185,6 +195,11 @@ void AppChart::highlightedText(uintptr_t player_id, const char* fmt, ...)
 	{
 		ImGui::PopStyleColor();
 	}
+}
+
+bool bShowSubgroups(Tracker* tracker)
+{
+	return tracker->subgroups.size()>1;
 }
 
 bool bShowTotal(Tracker* tracker)

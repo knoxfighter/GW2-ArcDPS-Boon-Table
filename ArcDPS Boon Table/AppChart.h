@@ -23,4 +23,5 @@ public:
 	void highlightedText(uintptr_t player_id, const char* fmt, ...);
 };
 
+bool bShowSubgroups(Tracker* tracker);
 bool bShowTotal(Tracker* tracker);
