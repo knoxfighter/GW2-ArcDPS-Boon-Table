@@ -6,6 +6,7 @@ Tracker::Tracker()
 {
 	sort_method = subgroup;
 	sorted_boon = nullptr;
+	needs_resort = true;
 }
 
 
@@ -22,6 +23,7 @@ bool Tracker::addPlayer(uintptr_t new_id, std::string new_name)
 	if (it == players.end())
 	{
 		players.push_back(Player(new_id, new_name));
+		queueResort();
 		return true;
 	}
 	else//player tracked
@@ -43,12 +45,15 @@ bool Tracker::removePlayer(uintptr_t new_id)
 	else//player tracked
 	{
 		players.erase(it);
+		queueResort();
 		return true;
 	}
 }
 
 void Tracker::sortPlayers()
 {
+	if (!needs_resort) return;
+	std::lock_guard<std::mutex> lock(players_mtx);
 	switch (sort_method)
 	{
 		case name:
@@ -68,7 +73,7 @@ void Tracker::sortPlayers()
 		}
 		break;
 	};
-
+	needs_resort = false;
 }
 
 void Tracker::setSortMethod(SortMethod new_method, BoonDef * new_boon)
@@ -76,11 +81,18 @@ void Tracker::setSortMethod(SortMethod new_method, BoonDef * new_boon)
 	if (new_method == boon && !new_boon) return;
 	sort_method = new_method;
 	if (new_boon) sorted_boon = new_boon;
+	queueResort();
+}
+
+void Tracker::queueResort()
+{
+	needs_resort = true;
 }
 
 void Tracker::bakeCombatData()
 {
 	subgroups = getSubgroups();
+	queueResort();
 }
 
 Player* Tracker::getPlayer(ag* new_player)

@@ -19,6 +19,8 @@ public:
 	void Draw(const char* title, bool* p_open, Tracker* tracker, ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_MenuBar);
 
 	void buffProgressBar(BoonDef* current_buff, float current_boon_uptime, uintptr_t current_player);
+
+	void highlightedText(uintptr_t player_id, const char* fmt, ...);
 };
 
 bool bShowTotal(Tracker* tracker);

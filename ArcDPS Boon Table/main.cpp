@@ -212,6 +212,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname)
 				if (current_player = tracker.getPlayer(dst))
 				{
 					current_player->applyBoon(ev);
+					tracker.queueResort();
 				}
 			}
 		}
@@ -239,8 +240,13 @@ uintptr_t mod_imgui()
 		}
 	}
 
-	if (show_chart) chart.Draw("BOON TABLE", &show_chart, &tracker, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_MenuBar 
-		| (!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0));
+	if (show_chart)
+	{
+		tracker.sortPlayers();
+
+		chart.Draw("BOON TABLE", &show_chart, &tracker, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_MenuBar
+			| (!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0));
+	}
 	return 0;
 }
 uintptr_t mod_options()

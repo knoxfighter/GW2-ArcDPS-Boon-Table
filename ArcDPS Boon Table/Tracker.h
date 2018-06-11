@@ -16,9 +16,11 @@ enum SortMethod
 
 class Tracker
 {
-private:
+protected:
 	SortMethod sort_method;
 	BoonDef* sorted_boon;
+
+	bool needs_resort;
 public:
 	std::mutex players_mtx;
 	std::list<Player> players;
@@ -36,6 +38,7 @@ public:
 
 	void sortPlayers();
 	void setSortMethod(SortMethod new_method, BoonDef* new_boon = nullptr);
+	void queueResort();
 
 	void bakeCombatData();
 

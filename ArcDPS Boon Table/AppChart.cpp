@@ -27,7 +27,6 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	active_column = -1;
 
 	std::lock_guard<std::mutex> lock(tracker->players_mtx);
-	tracker->sortPlayers();
 
 	//menu
 	if (ImGui::BeginMenuBar())
@@ -56,41 +55,15 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 	for (std::list<Player>::iterator current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
 	{
-		if (last_active_player == current_player->id)
-		{
-			ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
-		}
-		ImGui::Text(current_player->name.c_str());
-		if (ImGui::IsItemHoveredRect())
-		{
-			active_player = current_player->id;
-			active_column = ImGui::GetColumnIndex();
-		}
-		if (last_active_player == current_player->id)
-		{
-			ImGui::PopStyleColor();
-		}
+		highlightedText(current_player->id, current_player->name.c_str());
 	}
 
 	for (auto current_subgroup : tracker->subgroups)
 	{
-		if (last_active_player == current_subgroup)
-		{
-			ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
-		}
-		ImGui::Text("Sub %d", current_subgroup);
-		if (ImGui::IsItemHoveredRect())
-		{
-			active_player = current_subgroup;
-			active_column = ImGui::GetColumnIndex();
-		}
-		if (last_active_player == current_subgroup)
-		{
-			ImGui::PopStyleColor();
-		}
+		highlightedText(current_subgroup, "Subgroup");
 	}
 
-	if (bShowTotal(tracker)) ImGui::Text("Total");
+	if (bShowTotal(tracker)) highlightedText(12345, "Total");
 
 	//show subgroup numbers
 	ImGui::NextColumn();
@@ -101,12 +74,11 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	if (ImGui::SmallButton("Subgrp")) tracker->setSortMethod(subgroup);
 	for (std::list<Player>::iterator current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
 	{
-		ImGui::Text("%d", current_player->subgroup);
-		if (ImGui::IsItemHoveredRect())
-		{
-			active_player = current_player->id;
-			active_column = ImGui::GetColumnIndex();
-		}
+		highlightedText(current_player->id, "%d", current_player->subgroup);
+	}
+	for (std::list<uint8_t>::iterator current_subgroup = tracker->subgroups.begin(); current_subgroup != tracker->subgroups.end(); ++current_subgroup)
+	{
+		highlightedText(*current_subgroup, "%d", *current_subgroup);
 	}
 	if (last_active_column == ImGui::GetColumnIndex())
 	{
@@ -190,6 +162,28 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 	{
 		active_player = current_player;
 		active_column = ImGui::GetColumnIndex();
+	}
+}
+
+void AppChart::highlightedText(uintptr_t player_id, const char* fmt, ...)
+{
+	if (last_active_player == player_id)
+	{
+		ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
+	}
+	va_list args;
+	va_start(args, fmt);
+	ImGui::TextV(fmt,args);
+	va_end(args);
+
+	if (ImGui::IsItemHoveredRect())
+	{
+		active_player = player_id;
+		active_column = ImGui::GetColumnIndex();
+	}
+	if (last_active_player == player_id)
+	{
+		ImGui::PopStyleColor();
 	}
 }
 
