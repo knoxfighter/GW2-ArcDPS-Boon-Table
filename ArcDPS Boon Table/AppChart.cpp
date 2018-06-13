@@ -57,8 +57,6 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	{
 		highlightedText(current_player->id, current_player->name.c_str());
 	}
-	
-	if (bShowTotal(tracker)) highlightedText(12345, "Total");
 
 	//show player subgroup numbers
 	ImGui::NextColumn();
@@ -102,14 +100,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 			buffProgressBar(&*current_buff, current_boon_uptime, current_player->id);
 		}
-		
-		//total
-		if (bShowTotal(tracker))
-		{
-			current_boon_uptime = tracker->getAverageBoonUptime(&*current_buff);
 
-			buffProgressBar(&*current_buff, current_boon_uptime, 0);
-		}
 		if (last_active_column == ImGui::GetColumnIndex())
 		{
 			ImGui::PopStyleColor();
@@ -148,10 +139,33 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 				buffProgressBar(&*current_buff, current_boon_uptime, current_subgroup);
 			}
 		}
+		ImGui::Columns(1);
 	}
-	ImGui::Columns(1);
 	
-	
+	if (bShowTotal(tracker))
+	{
+		ImGui::Separator();
+
+		ImGui::Columns(column_number, "Total");
+
+		highlightedText(12345, "Total");
+
+		ImGui::NextColumn();
+		
+		highlightedText(12345, "All");
+
+		for (std::list<BoonDef>::iterator current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
+		{
+			if (!current_buff->is_relevant)continue;
+
+			ImGui::NextColumn();
+
+			current_boon_uptime = tracker->getAverageBoonUptime(&*current_buff);
+
+			buffProgressBar(&*current_buff, current_boon_uptime, 12345);
+		}
+		ImGui::Columns(1);
+	}
 
 	ImGui::PopAllowKeyboardFocus();
 	ImGui::End();
