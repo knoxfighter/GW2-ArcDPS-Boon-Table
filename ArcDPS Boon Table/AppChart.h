@@ -7,6 +7,10 @@
 
 class AppChart
 {
+protected:
+	const uintptr_t INDEX_NONE = -1;
+	const uintptr_t INDEX_SORTING_BUTTON = -2;
+	const uintptr_t INDEX_TOTAL = -3;
 public:
 	uintptr_t active_player, last_active_player;
 	int8_t active_column, last_active_column;
@@ -21,6 +25,7 @@ public:
 	void buffProgressBar(BoonDef* current_buff, float current_boon_uptime, uintptr_t current_player);
 
 	void highlightedText(uintptr_t player_id, const char* fmt, ...);
+	bool highlightedSmallButton(uintptr_t player_id, const char * fmt);
 };
 
 bool bShowSubgroups(Tracker* tracker);

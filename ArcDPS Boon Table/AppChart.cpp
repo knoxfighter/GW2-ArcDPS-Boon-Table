@@ -23,8 +23,8 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	ImGui::PushAllowKeyboardFocus(false);
 	last_active_player = active_player;
 	last_active_column = active_column;
-	active_player = -1;
-	active_column = -1;
+	active_player = INDEX_NONE;
+	active_column = INDEX_NONE;
 
 	std::lock_guard<std::mutex> lock(tracker->players_mtx);
 
@@ -49,7 +49,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	}
 	
 	ImGui::Columns(column_number,"Players");
-	if (ImGui::SmallButton("Name")) tracker->setSortMethod(name);
+	if (highlightedSmallButton(INDEX_SORTING_BUTTON,"Name")) tracker->setSortMethod(name);
 
 	float current_boon_uptime = 0.0f;
 
@@ -60,19 +60,11 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 	//show player subgroup numbers
 	ImGui::NextColumn();
-	if (last_active_column == ImGui::GetColumnIndex())
-	{
-		ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
-	}
-	if (ImGui::SmallButton("Subgrp")) tracker->setSortMethod(subgroup);
+	if (highlightedSmallButton(INDEX_SORTING_BUTTON,"Subgrp")) tracker->setSortMethod(subgroup);
+
 	for (std::list<Player>::iterator current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
 	{
 		highlightedText(current_player->id, "%d", current_player->subgroup);
-	}
-	
-	if (last_active_column == ImGui::GetColumnIndex())
-	{
-		ImGui::PopStyleColor();
 	}
 
 	//show boon uptimes
@@ -82,28 +74,14 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 		ImGui::NextColumn();
 		
-		if (last_active_column == ImGui::GetColumnIndex())
-		{
-			ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
-		}
-		
-		if (ImGui::SmallButton(current_buff->name.c_str())) tracker->setSortMethod(boon, &*current_buff);
-		if (ImGui::IsItemHoveredRect())
-		{
-			active_player = -1;
-			active_column = ImGui::GetColumnIndex();
-		}
+		if (highlightedSmallButton(INDEX_SORTING_BUTTON,current_buff->name.c_str())) tracker->setSortMethod(boon, &*current_buff);
+
 		//players
 		for (std::list<Player>::iterator current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
 		{
 			current_boon_uptime = current_player->getBoonUptime(&*current_buff);
 
 			buffProgressBar(&*current_buff, current_boon_uptime, current_player->id);
-		}
-
-		if (last_active_column == ImGui::GetColumnIndex())
-		{
-			ImGui::PopStyleColor();
 		}
 	}
 	ImGui::Columns(1);
@@ -148,11 +126,11 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 		ImGui::Columns(column_number, "Total");
 
-		highlightedText(12345, "Total");
+		highlightedText(INDEX_TOTAL, "Total");
 
 		ImGui::NextColumn();
 		
-		highlightedText(12345, "All");
+		highlightedText(INDEX_TOTAL, "All");
 
 		for (std::list<BoonDef>::iterator current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
 		{
@@ -162,7 +140,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 			current_boon_uptime = tracker->getAverageBoonUptime(&*current_buff);
 
-			buffProgressBar(&*current_buff, current_boon_uptime, 12345);
+			buffProgressBar(&*current_buff, current_boon_uptime, INDEX_TOTAL);
 		}
 		ImGui::Columns(1);
 	}
@@ -173,7 +151,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime, uintptr_t current_player)
 {
-	if (last_active_player == current_player)
+	if (last_active_player == current_player || last_active_column == ImGui::GetColumnIndex())
 	{
 		ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
 	}
@@ -188,7 +166,7 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 		current_boon_uptime /= 25;
 		ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()), label);
 	}
-	if (last_active_player == current_player)
+	if (last_active_player == current_player || last_active_column == ImGui::GetColumnIndex())
 	{
 		ImGui::PopStyleColor();
 	}
@@ -201,7 +179,7 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 
 void AppChart::highlightedText(uintptr_t player_id, const char* fmt, ...)
 {
-	if (last_active_player == player_id)
+	if (last_active_player == player_id || last_active_column == ImGui::GetColumnIndex())
 	{
 		ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
 	}
@@ -215,10 +193,30 @@ void AppChart::highlightedText(uintptr_t player_id, const char* fmt, ...)
 		active_player = player_id;
 		active_column = ImGui::GetColumnIndex();
 	}
-	if (last_active_player == player_id)
+	if (last_active_player == player_id || last_active_column == ImGui::GetColumnIndex())
 	{
 		ImGui::PopStyleColor();
 	}
+}
+
+bool AppChart::highlightedSmallButton(uintptr_t player_id, const char* fmt)
+{
+	if (last_active_column == ImGui::GetColumnIndex())
+	{
+		ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
+	}
+	bool out = ImGui::SmallButton(fmt);
+
+	if (ImGui::IsItemHoveredRect())
+	{
+		active_player = player_id;
+		active_column = ImGui::GetColumnIndex();
+	}
+	if (last_active_column == ImGui::GetColumnIndex())
+	{
+		ImGui::PopStyleColor();
+	}
+	return out;
 }
 
 bool bShowSubgroups(Tracker* tracker)
