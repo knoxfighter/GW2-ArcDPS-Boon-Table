@@ -16,14 +16,15 @@ Tracker::~Tracker()
 
 bool Tracker::addPlayer(uintptr_t new_id, std::string new_name)
 {
-	std::lock_guard<std::mutex> lock(players_mtx);
+	std::unique_lock<std::mutex> lock(players_mtx);
 	auto it = std::find(players.begin(), players.end(), new_id);
 
 	//player not tracked yet
 	if (it == players.end())
 	{
 		players.push_back(Player(new_id, new_name));
-		queueResort();
+		lock.unlock();
+		bakeCombatData();
 		return true;
 	}
 	else//player tracked
@@ -34,7 +35,7 @@ bool Tracker::addPlayer(uintptr_t new_id, std::string new_name)
 
 bool Tracker::removePlayer(uintptr_t new_id)
 {
-	std::lock_guard<std::mutex> lock(players_mtx);
+	std::unique_lock<std::mutex> lock(players_mtx);
 	auto it = std::find(players.begin(), players.end(), new_id);
 
 	//player not tracked yet
@@ -45,7 +46,8 @@ bool Tracker::removePlayer(uintptr_t new_id)
 	else//player tracked
 	{
 		players.erase(it);
-		queueResort();
+		lock.unlock();
+		bakeCombatData();
 		return true;
 	}
 }
