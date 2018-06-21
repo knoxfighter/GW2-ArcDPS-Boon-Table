@@ -8,6 +8,7 @@ const uint16_t BUFF_MIGHT = 740;
 const uint16_t BUFF_FURY = 725;
 const uint16_t BUFF_REGEN = 718;
 const uint16_t BUFF_PROT = 717;
+const uint16_t BUFF_VIGOR = 726;
 const uint16_t BUFF_QUICK = 1187;
 const uint16_t BUFF_ALAC = 30328;
 const uint16_t BUFF_RETAL = 873;
