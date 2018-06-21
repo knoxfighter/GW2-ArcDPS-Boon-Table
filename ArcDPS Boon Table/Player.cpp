@@ -34,7 +34,7 @@ void Player::applyBoon(cbtevent* ev)
 {
 	if (!ev) return;
 	if (ev->value == 0) return;
-	if (ev->value <= ev->overstack_value) return;
+//	if (ev->value <= ev->overstack_value) return;
 	if (!isTrackedBoon(ev->skillid)) return;
 	if (!in_combat) return;
 
@@ -44,19 +44,19 @@ void Player::applyBoon(cbtevent* ev)
 	{
 		if (boon->id == ev->skillid)
 		{
-			boon->Apply(ev->value);
+			boon->Apply(ev->value - ev->overstack_value);
 			return;
 		}
 	}
 
-	boons.push_back(Boon(ev->skillid, ev->value));
+	boons.push_back(Boon(ev->skillid, ev->value - ev->overstack_value));
 }
 
 void Player::removeBoon(cbtevent* ev)
 {
 	if (!ev) return;
 	if (ev->value == 0) return;
-	if (ev->value <= ev->overstack_value) return;
+//	if (ev->value <= ev->overstack_value) return;
 	if (!isTrackedBoon(ev->skillid)) return;
 	if (!in_combat) return;
 
