@@ -277,7 +277,7 @@ void parseIni()
 	pszValue = table_ini.GetValue("table", "show", "0");
 	show_chart = std::stoi(pszValue);
 
-	pszValue = table_ini.GetValue("table", "key", "86");
+	pszValue = table_ini.GetValue("table", "key", "66");
 	table_key = std::stoi(pszValue);
 
 	for (std::list<BoonDef>::iterator boon_def = tracked_buffs.begin(); boon_def != tracked_buffs.end(); ++boon_def)
