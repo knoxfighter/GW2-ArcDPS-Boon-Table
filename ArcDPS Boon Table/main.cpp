@@ -189,9 +189,12 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname)
 		/* buff remove */
 		else if (ev->is_buffremove)
 		{
-			if (current_player = tracker.getPlayer(src))
+			if (ev->is_buffremove == CBTB_MANUAL)
 			{
-//				current_player->removeBoon(ev);
+				if (current_player = tracker.getPlayer(src))
+				{
+					current_player->removeBoon(ev);
+				}
 			}
 		}
 
