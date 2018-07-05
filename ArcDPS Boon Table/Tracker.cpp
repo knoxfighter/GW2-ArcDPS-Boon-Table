@@ -93,6 +93,7 @@ void Tracker::queueResort()
 
 void Tracker::bakeCombatData()
 {
+	std::lock_guard<std::mutex> lock(subgroups_mtx);
 	subgroups = getSubgroups();
 	queueResort();
 }
@@ -116,8 +117,7 @@ Player* Tracker::getPlayer(ag* new_player)
 
 std::list<uint8_t> Tracker::getSubgroups()
 {
-	std::lock_guard<std::mutex> lock(subgroups_mtx);
-	std::lock_guard<std::mutex> lock2(players_mtx);
+	std::lock_guard<std::mutex> lock(players_mtx);
 	auto out = std::list<uint8_t>();
 	bool found = false;
 
