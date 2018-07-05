@@ -14,7 +14,8 @@ protected:
 public:
 	uintptr_t active_player, last_active_player;
 	int8_t active_column, last_active_column;
-	ImVec4 active_bar_color = ImVec4(1, 1, 1, 70);
+	ImVec4 active_bar_color = ImVec4(1, 1, 1, 1);
+	ImVec4 hidden_bar_color = ImVec4(1, 1, 1, 0.3);
 	int sorting_collumn;
 	
 	AppChart();

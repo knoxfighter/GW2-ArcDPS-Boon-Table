@@ -155,6 +155,10 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 	{
 		ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
 	}
+	else if (last_active_player != -1 || last_active_column != -1)
+	{
+		ImGui::PushStyleColor(ImGuiCol_Text, hidden_bar_color);
+	}
 	if (current_buff->is_duration_stacking)
 	{
 		ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()));
@@ -166,7 +170,7 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 		current_boon_uptime /= 25;
 		ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()), label);
 	}
-	if (last_active_player == current_player || last_active_column == ImGui::GetColumnIndex())
+	if (last_active_player != -1 || last_active_column != -1)
 	{
 		ImGui::PopStyleColor();
 	}
@@ -183,6 +187,10 @@ void AppChart::highlightedText(uintptr_t player_id, const char* fmt, ...)
 	{
 		ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
 	}
+	else if (last_active_player != -1 || last_active_column != -1)
+	{
+		ImGui::PushStyleColor(ImGuiCol_Text, hidden_bar_color);
+	}
 	va_list args;
 	va_start(args, fmt);
 	ImGui::TextV(fmt,args);
@@ -193,7 +201,7 @@ void AppChart::highlightedText(uintptr_t player_id, const char* fmt, ...)
 		active_player = player_id;
 		active_column = ImGui::GetColumnIndex();
 	}
-	if (last_active_player == player_id || last_active_column == ImGui::GetColumnIndex())
+	if (last_active_player != -1 || last_active_column != -1)
 	{
 		ImGui::PopStyleColor();
 	}
@@ -205,6 +213,10 @@ bool AppChart::highlightedSmallButton(uintptr_t player_id, const char* fmt)
 	{
 		ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
 	}
+	else if (last_active_player != -1 || last_active_column != -1)
+	{
+		ImGui::PushStyleColor(ImGuiCol_Text, hidden_bar_color);
+	}
 	bool out = ImGui::SmallButton(fmt);
 
 	if (ImGui::IsItemHoveredRect())
@@ -212,7 +224,7 @@ bool AppChart::highlightedSmallButton(uintptr_t player_id, const char* fmt)
 		active_player = player_id;
 		active_column = ImGui::GetColumnIndex();
 	}
-	if (last_active_column == ImGui::GetColumnIndex())
+	if (last_active_player != -1 || last_active_column != -1)
 	{
 		ImGui::PopStyleColor();
 	}
