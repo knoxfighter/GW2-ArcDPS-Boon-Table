@@ -6,6 +6,7 @@ Tracker::Tracker()
 {
 	sort_method = subgroup;
 	sorted_boon = nullptr;
+	sort_reverse = false;
 	needs_resort = true;
 }
 
@@ -60,17 +61,17 @@ void Tracker::sortPlayers()
 	{
 		case name:
 		{
-			players.sort([](Player lhs, Player rhs) {return lhs.name < rhs.name; });
+			players.sort([this](Player lhs, Player rhs) {return sort_reverse ? lhs.name > rhs.name : lhs.name < rhs.name; });
 			break;
 		}
 		case subgroup:
 		{
-			players.sort([](Player lhs, Player rhs) {return lhs.subgroup < rhs.subgroup; });
+			players.sort([this](Player lhs, Player rhs) {return sort_reverse ? lhs.subgroup > rhs.subgroup : lhs.subgroup < rhs.subgroup; });
 			break;
 		}
 		case boon:
 		{
-			players.sort([this](Player lhs, Player rhs) {return lhs.getBoonUptime(sorted_boon) < rhs.getBoonUptime(sorted_boon); });
+			players.sort([this](Player lhs, Player rhs) {return sort_reverse ? lhs.getBoonUptime(sorted_boon) > rhs.getBoonUptime(sorted_boon) : lhs.getBoonUptime(sorted_boon) < rhs.getBoonUptime(sorted_boon); });
 			break;
 		}
 		break;
@@ -81,6 +82,7 @@ void Tracker::sortPlayers()
 void Tracker::setSortMethod(SortMethod new_method, BoonDef * new_boon)
 {
 	if (new_method == boon && !new_boon) return;
+	if (sort_method == new_method) sort_reverse = !sort_reverse;
 	sort_method = new_method;
 	if (new_boon) sorted_boon = new_boon;
 	queueResort();

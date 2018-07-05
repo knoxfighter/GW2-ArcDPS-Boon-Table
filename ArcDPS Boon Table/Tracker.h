@@ -19,6 +19,7 @@ class Tracker
 protected:
 	SortMethod sort_method;
 	BoonDef* sorted_boon;
+	bool sort_reverse;
 
 	bool needs_resort;
 public:
