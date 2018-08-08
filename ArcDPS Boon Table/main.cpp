@@ -284,6 +284,15 @@ void parseIni()
 	pszValue = table_ini.GetValue("table", "key", "66");
 	table_key = std::stoi(pszValue);
 
+	pszValue = table_ini.GetValue("table", "show_players", "1");
+	chart.setShowPlayers(std::stoi(pszValue));
+
+	pszValue = table_ini.GetValue("table", "show_subgroups", "1");
+	chart.setShowSubgroups(std::stoi(pszValue));
+
+	pszValue = table_ini.GetValue("table", "show_total", "1");
+	chart.setShowTotal(std::stoi(pszValue));
+
 	for (std::list<BoonDef>::iterator boon_def = tracked_buffs.begin(); boon_def != tracked_buffs.end(); ++boon_def)
 	{
 		pszValue = table_ini.GetValue("boons", boon_def->name.c_str(), std::to_string(boon_def->is_relevant).c_str());
@@ -294,6 +303,10 @@ void parseIni()
 void writeIni()
 {
 	SI_Error rc = table_ini.SetValue("table", "show", std::to_string(show_chart).c_str());
+
+	rc = table_ini.SetValue("table", "show_players", std::to_string(chart.bShowPlayers(nullptr)).c_str());
+	rc = table_ini.SetValue("table", "show_subgroups", std::to_string(chart.bShowSubgroups(nullptr)).c_str());
+	rc = table_ini.SetValue("table", "show_total", std::to_string(chart.bShowTotal(nullptr)).c_str());
 
 	for (std::list<BoonDef>::iterator boon_def = tracked_buffs.begin(); boon_def != tracked_buffs.end(); ++boon_def)
 	{
