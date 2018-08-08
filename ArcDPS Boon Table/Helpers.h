@@ -1,5 +1,7 @@
 #pragma once
-#include <chrono>
+#include <stdint.h>
+
+static uint64_t current_time = 0;
 
 #define PERCENT_STR(x, dura) {							\
 		u32 per = (u32)(x / (f32)(dura) * 100.0f);		\

@@ -132,34 +132,38 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname)
 	/* ev is null. dst will only be valid on tracking add. skillname will also be null */
 	if (!ev)
 	{
-
-		/* notify tracking change */
-		if (!src->elite)
+		if (src)
 		{
-
-			/* add */
-			if (src->prof)
+			/* notify tracking change */
+			if (!src->elite)
 			{
-				tracker.addPlayer(src->id, std::string(src->name));
+
+				/* add */
+				if (src->prof)
+				{
+					tracker.addPlayer(src->id, std::string(src->name));
+				}
+
+				/* remove */
+				else
+				{
+					tracker.removePlayer(src->id);
+				}
 			}
 
-			/* remove */
-			else
+			/* notify target change */
+			else if (src->elite == 1)
 			{
-				tracker.removePlayer(src->id);
-			}
-		}
 
-		/* notify target change */
-		else if (src->elite == 1)
-		{
-			
+			}
 		}
 	}
 
 	/* combat event. skillname may be null. non-null skillname will remain static until module is unloaded. refer to evtc notes for complete detail */
 	else
 	{
+		current_time = ev->time;
+
 		/* statechange */
 		if (ev->is_statechange)
 		{
