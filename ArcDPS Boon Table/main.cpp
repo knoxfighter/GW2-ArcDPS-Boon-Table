@@ -162,7 +162,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname)
 	/* combat event. skillname may be null. non-null skillname will remain static until module is unloaded. refer to evtc notes for complete detail */
 	else
 	{
-		current_time = ev->time;
+		if(ev->time > 0) current_time = ev->time;
 
 		/* statechange */
 		if (ev->is_statechange)
