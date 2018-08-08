@@ -11,6 +11,11 @@ protected:
 	const uintptr_t INDEX_NONE = -1;
 	const uintptr_t INDEX_SORTING_BUTTON = -2;
 	const uintptr_t INDEX_TOTAL = -3;
+	const uintptr_t INDEX_HIDE_ALL = -4;
+
+	bool show_players = true;
+	bool show_subgroups = true;
+	bool show_total = true;
 public:
 	uintptr_t active_player, last_active_player;
 	int8_t active_column, last_active_column;
@@ -27,7 +32,12 @@ public:
 
 	void highlightedText(uintptr_t player_id, const char* fmt, ...);
 	bool highlightedSmallButton(uintptr_t player_id, const char * fmt);
-};
 
-bool bShowSubgroups(Tracker* tracker);
-bool bShowTotal(Tracker* tracker);
+	void setShowPlayers(bool new_show);
+	void setShowSubgroups(bool new_show);
+	void setShowTotal(bool new_show);
+
+	bool bShowPlayers(Tracker* tracker);
+	bool bShowSubgroups(Tracker* tracker);
+	bool bShowTotal(Tracker* tracker);
+};
