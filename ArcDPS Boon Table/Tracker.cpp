@@ -123,7 +123,7 @@ std::list<uint8_t> Tracker::getSubgroups()
 	auto out = std::list<uint8_t>();
 	bool found = false;
 
-	for (std::list<Player>::iterator player = players.begin(); player != players.end(); ++player)
+	for (auto player = players.begin(); player != players.end(); ++player)
 	{
 		for (auto current_sub : out)
 		{
@@ -152,7 +152,7 @@ float Tracker::getSubgroupBoonUptime(BoonDef* new_boon, uint8_t new_subgroup)
 	float out = 0.0f;
 	uint8_t player_num = 0;
 
-	for (std::list<Player>::iterator player = players.begin(); player != players.end(); ++player)
+	for (auto player = players.begin(); player != players.end(); ++player)
 	{
 		if (player->subgroup != new_subgroup) continue;
 
@@ -168,7 +168,7 @@ float Tracker::getAverageBoonUptime(BoonDef* new_boon)
 	float out = 0.0f;
 	uint8_t player_num = 0;
 
-	for (std::list<Player>::iterator player = players.begin(); player != players.end(); ++player)
+	for (auto player = players.begin(); player != players.end(); ++player)
 	{
 		out += player->getBoonUptime(new_boon);
 		player_num++;

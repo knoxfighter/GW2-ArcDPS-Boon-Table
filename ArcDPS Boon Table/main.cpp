@@ -293,7 +293,7 @@ void parseIni()
 	pszValue = table_ini.GetValue("table", "show_total", "1");
 	chart.setShowTotal(std::stoi(pszValue));
 
-	for (std::list<BoonDef>::iterator boon_def = tracked_buffs.begin(); boon_def != tracked_buffs.end(); ++boon_def)
+	for (auto boon_def = tracked_buffs.begin(); boon_def != tracked_buffs.end(); ++boon_def)
 	{
 		pszValue = table_ini.GetValue("boons", boon_def->name.c_str(), std::to_string(boon_def->is_relevant).c_str());
 		boon_def->is_relevant = std::stoi(pszValue);
@@ -308,7 +308,7 @@ void writeIni()
 	rc = table_ini.SetValue("table", "show_subgroups", std::to_string(chart.bShowSubgroups(nullptr)).c_str());
 	rc = table_ini.SetValue("table", "show_total", std::to_string(chart.bShowTotal(nullptr)).c_str());
 
-	for (std::list<BoonDef>::iterator boon_def = tracked_buffs.begin(); boon_def != tracked_buffs.end(); ++boon_def)
+	for (auto boon_def = tracked_buffs.begin(); boon_def != tracked_buffs.end(); ++boon_def)
 	{
 		rc = table_ini.SetValue("boons", boon_def->name.c_str(), std::to_string(boon_def->is_relevant).c_str());
 	}

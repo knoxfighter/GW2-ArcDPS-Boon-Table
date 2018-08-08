@@ -40,7 +40,7 @@ void Player::applyBoon(cbtevent* ev)
 
 	std::lock_guard<std::mutex> lock(boons_mtx);
 
-	for (std::list<Boon>::iterator boon = boons.begin(); boon != boons.end(); ++boon)
+	for (auto boon = boons.begin(); boon != boons.end(); ++boon)
 	{
 		if (boon->id == ev->skillid)
 		{
@@ -62,7 +62,7 @@ void Player::removeBoon(cbtevent* ev)
 
 	std::lock_guard<std::mutex> lock(boons_mtx);
 
-	for (std::list<Boon>::iterator boon = boons.begin(); boon != boons.end(); ++boon)
+	for (auto boon = boons.begin(); boon != boons.end(); ++boon)
 	{
 		if (boon->id == ev->skillid)
 		{
@@ -74,7 +74,7 @@ void Player::removeBoon(cbtevent* ev)
 
 float Player::getBoonUptime(BoonDef* new_boon)
 {
-	for (std::list<Boon>::iterator current_boon = boons.begin(); current_boon != boons.end(); ++current_boon)
+	for (auto current_boon = boons.begin(); current_boon != boons.end(); ++current_boon)
 	{
 		if (getCombatTime() == 0) return 0.0f;
 		else if (current_boon->id == new_boon->id)

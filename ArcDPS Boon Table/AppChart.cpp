@@ -65,7 +65,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 		ImGui::Columns(column_number, "Players");
 		if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Name")) tracker->setSortMethod(name);
 
-		for (std::list<Player>::iterator current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
+		for (auto current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
 		{
 			highlightedText(current_player->id, current_player->name.c_str());
 		}
@@ -74,13 +74,13 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 		ImGui::NextColumn();
 		if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Subgrp")) tracker->setSortMethod(subgroup);
 
-		for (std::list<Player>::iterator current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
+		for (auto current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
 		{
 			highlightedText(current_player->id, "%d", current_player->subgroup);
 		}
 
 		//show boon uptimes
-		for (std::list<BoonDef>::iterator current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
+		for (auto current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
 		{
 			if (!current_buff->is_relevant)continue;
 
@@ -89,7 +89,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 			if (highlightedSmallButton(INDEX_SORTING_BUTTON, current_buff->name.c_str())) tracker->setSortMethod(boon, &*current_buff);
 
 			//players
-			for (std::list<Player>::iterator current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
+			for (auto current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
 			{
 				current_boon_uptime = current_player->getBoonUptime(&*current_buff);
 
@@ -112,12 +112,12 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 		
 		ImGui::NextColumn();
 
-		for (std::list<uint8_t>::iterator current_subgroup = tracker->subgroups.begin(); current_subgroup != tracker->subgroups.end(); ++current_subgroup)
+		for (auto current_subgroup = tracker->subgroups.begin(); current_subgroup != tracker->subgroups.end(); ++current_subgroup)
 		{
 			highlightedText(*current_subgroup, "%d", *current_subgroup);
 		}
 
-		for (std::list<BoonDef>::iterator current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
+		for (auto current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
 		{
 			if (!current_buff->is_relevant)continue;
 
@@ -145,7 +145,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 		
 		highlightedText(INDEX_TOTAL, "All");
 
-		for (std::list<BoonDef>::iterator current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
+		for (auto current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
 		{
 			if (!current_buff->is_relevant)continue;
 
