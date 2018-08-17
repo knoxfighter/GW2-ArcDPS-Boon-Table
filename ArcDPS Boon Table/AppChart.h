@@ -26,7 +26,9 @@ public:
 	AppChart();
 	~AppChart();
 
-	void Draw(const char* title, bool* p_open, Tracker* tracker, ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_MenuBar);
+	void Draw(const char* title, bool* p_open, Tracker* tracker, ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse);
+
+	void drawRtClickMenu();
 
 	void buffProgressBar(BoonDef* current_buff, float current_boon_uptime, uintptr_t current_player);
 

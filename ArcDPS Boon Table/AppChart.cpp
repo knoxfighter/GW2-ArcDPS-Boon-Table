@@ -29,29 +29,10 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 	std::lock_guard<std::mutex> lock(tracker->players_mtx);
 
-	//menu
-	if (ImGui::BeginMenuBar())
+	if (ImGui::BeginPopupContextItem("Options"))
 	{
-		if (ImGui::BeginMenu("Show..."))
-		{
-			active_player = INDEX_HIDE_ALL;
-			active_column = INDEX_HIDE_ALL;
-
-			ImGui::MenuItem("Players", NULL, &show_players);
-			ImGui::MenuItem("Subgroups", NULL, &show_subgroups);
-			ImGui::MenuItem("Total", NULL, &show_total);
-
-			if (ImGui::BeginMenu("Buffs"))
-			{
-				for (auto boon = tracked_buffs.begin(); boon != tracked_buffs.end(); ++boon)
-				{
-					ImGui::MenuItem(boon->name.c_str(), NULL, &boon->is_relevant);
-				}
-				ImGui::EndMenu();
-			}
-			ImGui::EndMenu();
-		}
-		ImGui::EndMenuBar();
+		drawRtClickMenu();
+		ImGui::EndPopup();
 	}
 
 	int column_number = 2;
@@ -59,23 +40,41 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	{
 		if (current_buff.is_relevant) column_number++;
 	}
+
+	//show headers
+	ImGui::Columns(column_number, "Headers");
+	if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Name")) tracker->setSortMethod(name);
+
+	ImGui::NextColumn();
+	if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Subgrp")) tracker->setSortMethod(subgroup);
 	
+	for (auto current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
+	{
+		if (!current_buff->is_relevant)continue;
+
+		ImGui::NextColumn();
+
+		if (highlightedSmallButton(INDEX_SORTING_BUTTON, current_buff->name.c_str())) tracker->setSortMethod(boon, &*current_buff);
+	}
+	ImGui::Columns(1);
+
+	ImGui::BeginChild("Scrolling");
 	if (bShowPlayers(tracker))
 	{
+		ImGui::Separator();
 		ImGui::Columns(column_number, "Players");
-		if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Name")) tracker->setSortMethod(name);
 
 		for (auto current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
 		{
+			if (!current_player->isRelevant()) continue;
 			highlightedText(current_player->id, current_player->name.c_str());
 		}
 
 		//show player subgroup numbers
 		ImGui::NextColumn();
-		if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Subgrp")) tracker->setSortMethod(subgroup);
-
 		for (auto current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
 		{
+			if (!current_player->isRelevant()) continue;
 			highlightedText(current_player->id, "%d", current_player->subgroup);
 		}
 
@@ -86,11 +85,10 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 			ImGui::NextColumn();
 
-			if (highlightedSmallButton(INDEX_SORTING_BUTTON, current_buff->name.c_str())) tracker->setSortMethod(boon, &*current_buff);
-
 			//players
 			for (auto current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
 			{
+				if (!current_player->isRelevant()) continue;
 				current_boon_uptime = current_player->getBoonUptime(&*current_buff);
 
 				buffProgressBar(&*current_buff, current_boon_uptime, current_player->id);
@@ -158,8 +156,29 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 		ImGui::Columns(1);
 	}
 
+	ImGui::EndChild();
+
 	ImGui::PopAllowKeyboardFocus();
 	ImGui::End();
+}
+
+void AppChart::drawRtClickMenu()
+{
+	active_player = INDEX_HIDE_ALL;
+	active_column = INDEX_HIDE_ALL;
+
+	ImGui::MenuItem("Players", NULL, &show_players);
+	ImGui::MenuItem("Subgroups", NULL, &show_subgroups);
+	ImGui::MenuItem("Total", NULL, &show_total);
+
+	if (ImGui::BeginMenu("Buffs"))
+	{
+		for (auto boon = tracked_buffs.begin(); boon != tracked_buffs.end(); ++boon)
+		{
+			ImGui::MenuItem(boon->name.c_str(), NULL, &boon->is_relevant);
+		}
+		ImGui::EndMenu();
+	}
 }
 
 void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime, uintptr_t current_player)

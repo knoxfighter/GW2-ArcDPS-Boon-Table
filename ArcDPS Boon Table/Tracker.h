@@ -33,7 +33,7 @@ public:
 	~Tracker();
 
 	bool addPlayer(uintptr_t new_id, std::string name);
-	bool removePlayer(uintptr_t new_id);
+	bool removePlayer(uintptr_t new_id, std::string new_name);
 
 	
 

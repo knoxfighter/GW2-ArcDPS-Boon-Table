@@ -18,12 +18,15 @@ public:
 	uint64_t exit_combat_time;
 	bool in_combat;
 	uint8_t subgroup;
+	bool is_relevant;
 
 	bool operator==(uintptr_t other_id);
 
 	Player();
 	Player(uintptr_t new_id, std::string new_name);
 	~Player();
+
+	bool isRelevant();
 
 	void applyBoon(cbtevent* ev);
 	void removeBoon(cbtevent* ev);

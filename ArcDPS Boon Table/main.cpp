@@ -132,30 +132,26 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname)
 	/* ev is null. dst will only be valid on tracking add. skillname will also be null */
 	if (!ev)
 	{
-		if (src)
+		/* notify tracking change */
+		if (!src->elite)
 		{
-			/* notify tracking change */
-			if (!src->elite)
+			/* add */
+			if (src->prof)
 			{
-
-				/* add */
-				if (src->prof)
-				{
-					tracker.addPlayer(src->id, std::string(src->name));
-				}
-
-				/* remove */
-				else
-				{
-					tracker.removePlayer(src->id);
-				}
+				tracker.addPlayer(src->id, std::string(src->name));
 			}
 
-			/* notify target change */
-			else if (src->elite == 1)
+			/* remove */
+			else
 			{
-
+				tracker.removePlayer(src->id, std::string(src->name));
 			}
+		}
+
+		/* notify target change */
+		else if (src->elite == 1)
+		{
+
 		}
 	}
 
@@ -250,7 +246,7 @@ uintptr_t mod_imgui()
 	{
 		tracker.sortPlayers();
 
-		chart.Draw("BOON TABLE", &show_chart, &tracker, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_MenuBar
+		chart.Draw("BOON TABLE", &show_chart, &tracker, ImGuiWindowFlags_NoCollapse 
 			| (!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0));
 	}
 	return 0;

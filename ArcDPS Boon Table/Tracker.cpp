@@ -18,39 +18,39 @@ Tracker::~Tracker()
 bool Tracker::addPlayer(uintptr_t new_id, std::string new_name)
 {
 	std::unique_lock<std::mutex> lock(players_mtx);
-	auto it = std::find(players.begin(), players.end(), new_id);
 
-	//player not tracked yet
-	if (it == players.end())
+	for (auto player = players.begin(); player != players.end(); ++player)
 	{
-		players.push_back(Player(new_id, new_name));
-		lock.unlock();
-		bakeCombatData();
-		return true;
+		if (player->id == new_id || player->name == new_name)
+		{
+			player->is_relevant = true;
+			player->id = new_id;
+			return false;
+		}
 	}
-	else//player tracked
-	{
-		return false;
-	}
+
+	players.push_back(Player(new_id, new_name));
+	lock.unlock();
+	bakeCombatData();
+	return true;	
 }
 
-bool Tracker::removePlayer(uintptr_t new_id)
+bool Tracker::removePlayer(uintptr_t new_id, std::string new_name)
 {
 	std::unique_lock<std::mutex> lock(players_mtx);
-	auto it = std::find(players.begin(), players.end(), new_id);
 
-	//player not tracked yet
-	if (it == players.end())
+	for (auto player = players.begin(); player != players.end(); ++player)
 	{
-		return false;
+		if (player->id == new_id || player->name == new_name)
+		{
+			player->is_relevant = false;
+			lock.unlock();
+			bakeCombatData();
+			return true;
+		}
 	}
-	else//player tracked
-	{
-		players.erase(it);
-		lock.unlock();
-		bakeCombatData();
-		return true;
-	}
+
+	return false;
 }
 
 void Tracker::sortPlayers()
@@ -125,6 +125,7 @@ std::list<uint8_t> Tracker::getSubgroups()
 
 	for (auto player = players.begin(); player != players.end(); ++player)
 	{
+		if (!player->isRelevant()) continue;
 		for (auto current_sub : out)
 		{
 			if (player->subgroup == current_sub)
@@ -154,6 +155,7 @@ float Tracker::getSubgroupBoonUptime(BoonDef* new_boon, uint8_t new_subgroup)
 
 	for (auto player = players.begin(); player != players.end(); ++player)
 	{
+		if (!player->isRelevant()) continue;
 		if (player->subgroup != new_subgroup) continue;
 
 		out += player->getBoonUptime(new_boon);
@@ -170,6 +172,7 @@ float Tracker::getAverageBoonUptime(BoonDef* new_boon)
 
 	for (auto player = players.begin(); player != players.end(); ++player)
 	{
+		if (!player->isRelevant()) continue;
 		out += player->getBoonUptime(new_boon);
 		player_num++;
 	}
