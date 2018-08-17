@@ -9,9 +9,9 @@
 
 enum SortMethod
 {
-	name,
-	subgroup,
-	boon
+	sort_name,
+	sort_subgroup,
+	sort_boon
 };
 
 class Tracker

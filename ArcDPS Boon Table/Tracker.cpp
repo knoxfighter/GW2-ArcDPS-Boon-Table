@@ -4,7 +4,7 @@
 
 Tracker::Tracker()
 {
-	sort_method = subgroup;
+	sort_method = sort_subgroup;
 	sorted_boon = nullptr;
 	sort_reverse = false;
 	needs_resort = true;
@@ -59,17 +59,17 @@ void Tracker::sortPlayers()
 	std::lock_guard<std::mutex> lock(players_mtx);
 	switch (sort_method)
 	{
-		case name:
+		case sort_name:
 		{
 			players.sort([this](Player lhs, Player rhs) {return sort_reverse ? lhs.name > rhs.name : lhs.name < rhs.name; });
 			break;
 		}
-		case subgroup:
+		case sort_subgroup:
 		{
 			players.sort([this](Player lhs, Player rhs) {return sort_reverse ? lhs.subgroup > rhs.subgroup : lhs.subgroup < rhs.subgroup; });
 			break;
 		}
-		case boon:
+		case sort_boon:
 		{
 			players.sort([this](Player lhs, Player rhs) {return sort_reverse ? lhs.getBoonUptime(sorted_boon) > rhs.getBoonUptime(sorted_boon) : lhs.getBoonUptime(sorted_boon) < rhs.getBoonUptime(sorted_boon); });
 			break;

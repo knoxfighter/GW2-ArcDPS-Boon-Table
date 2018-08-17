@@ -43,10 +43,10 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 	//show headers
 	ImGui::Columns(column_number, "Headers");
-	if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Name")) tracker->setSortMethod(name);
+	if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Name")) tracker->setSortMethod(sort_name);
 
 	ImGui::NextColumn();
-	if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Subgrp")) tracker->setSortMethod(subgroup);
+	if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Subgrp")) tracker->setSortMethod(sort_subgroup);
 	
 	for (auto current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
 	{
@@ -54,7 +54,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 		ImGui::NextColumn();
 
-		if (highlightedSmallButton(INDEX_SORTING_BUTTON, current_buff->name.c_str())) tracker->setSortMethod(boon, &*current_buff);
+		if (highlightedSmallButton(INDEX_SORTING_BUTTON, current_buff->name.c_str())) tracker->setSortMethod(sort_boon, &*current_buff);
 	}
 	ImGui::Columns(1);
 
@@ -171,11 +171,28 @@ void AppChart::drawRtClickMenu()
 	ImGui::MenuItem("Subgroups", NULL, &show_subgroups);
 	ImGui::MenuItem("Total", NULL, &show_total);
 
-	if (ImGui::BeginMenu("Buffs"))
+	
+	if (ImGui::BeginMenu("Boons"))
 	{
-		for (auto boon = tracked_buffs.begin(); boon != tracked_buffs.end(); ++boon)
+		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
 		{
-			ImGui::MenuItem(boon->name.c_str(), NULL, &boon->is_relevant);
+			if(current_boon->type == boon) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+		}
+		ImGui::EndMenu();
+	}
+	if (ImGui::BeginMenu("Offensive Buffs"))
+	{
+		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
+		{
+			if (current_boon->type == buff_offensive) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+		}
+		ImGui::EndMenu();
+	}
+	if (ImGui::BeginMenu("Defensive Buffs"))
+	{
+		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
+		{
+			if (current_boon->type == buff_defensive) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
 		}
 		ImGui::EndMenu();
 	}
