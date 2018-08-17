@@ -32,9 +32,11 @@ bool isTrackedBoon(uint16_t new_id);
 
 enum BoonType
 {
-	boon,
-	buff_offensive,
-	buff_defensive
+	BoonType_boon,
+	BoonType_trait,
+	BoonType_banner,
+	BoonType_spirit,
+	BoonType_other,
 };
 struct BoonDef
 {

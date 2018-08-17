@@ -4,7 +4,7 @@
 
 Tracker::Tracker()
 {
-	sort_method = sort_subgroup;
+	sort_method = SortMethod_subgroup;
 	sorted_boon = nullptr;
 	sort_reverse = false;
 	needs_resort = true;
@@ -59,17 +59,17 @@ void Tracker::sortPlayers()
 	std::lock_guard<std::mutex> lock(players_mtx);
 	switch (sort_method)
 	{
-		case sort_name:
+		case SortMethod_name:
 		{
 			players.sort([this](Player lhs, Player rhs) {return sort_reverse ? lhs.name > rhs.name : lhs.name < rhs.name; });
 			break;
 		}
-		case sort_subgroup:
+		case SortMethod_subgroup:
 		{
 			players.sort([this](Player lhs, Player rhs) {return sort_reverse ? lhs.subgroup > rhs.subgroup : lhs.subgroup < rhs.subgroup; });
 			break;
 		}
-		case sort_boon:
+		case SortMethod_boon:
 		{
 			players.sort([this](Player lhs, Player rhs) {return sort_reverse ? lhs.getBoonUptime(sorted_boon) > rhs.getBoonUptime(sorted_boon) : lhs.getBoonUptime(sorted_boon) < rhs.getBoonUptime(sorted_boon); });
 			break;
@@ -81,7 +81,7 @@ void Tracker::sortPlayers()
 
 void Tracker::setSortMethod(SortMethod new_method, BoonDef * new_boon)
 {
-	if (new_method == boon && !new_boon) return;
+	if (new_method == SortMethod_boon && !new_boon) return;
 	if (sort_method == new_method) sort_reverse = !sort_reverse;
 	sort_method = new_method;
 	if (new_boon) sorted_boon = new_boon;

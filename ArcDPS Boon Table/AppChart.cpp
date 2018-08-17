@@ -43,10 +43,10 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 	//show headers
 	ImGui::Columns(column_number, "Headers");
-	if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Name")) tracker->setSortMethod(sort_name);
+	if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Name")) tracker->setSortMethod(SortMethod_name);
 
 	ImGui::NextColumn();
-	if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Subgrp")) tracker->setSortMethod(sort_subgroup);
+	if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Subgrp")) tracker->setSortMethod(SortMethod_subgroup);
 	
 	for (auto current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
 	{
@@ -54,7 +54,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 		ImGui::NextColumn();
 
-		if (highlightedSmallButton(INDEX_SORTING_BUTTON, current_buff->name.c_str())) tracker->setSortMethod(sort_boon, &*current_buff);
+		if (highlightedSmallButton(INDEX_SORTING_BUTTON, current_buff->name.c_str())) tracker->setSortMethod(SortMethod_boon, &*current_buff);
 	}
 	ImGui::Columns(1);
 
@@ -176,23 +176,39 @@ void AppChart::drawRtClickMenu()
 	{
 		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
 		{
-			if(current_boon->type == boon) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+			if(current_boon->type == BoonType_boon) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
 		}
 		ImGui::EndMenu();
 	}
-	if (ImGui::BeginMenu("Offensive Buffs"))
+	if (ImGui::BeginMenu("Traits"))
 	{
 		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
 		{
-			if (current_boon->type == buff_offensive) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+			if (current_boon->type == BoonType_trait) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
 		}
 		ImGui::EndMenu();
 	}
-	if (ImGui::BeginMenu("Defensive Buffs"))
+	if (ImGui::BeginMenu("Banners"))
 	{
 		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
 		{
-			if (current_boon->type == buff_defensive) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+			if (current_boon->type == BoonType_banner) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+		}
+		ImGui::EndMenu();
+	}
+	if (ImGui::BeginMenu("Spirits"))
+	{
+		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
+		{
+			if (current_boon->type == BoonType_spirit) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+		}
+		ImGui::EndMenu();
+	}
+	if (ImGui::BeginMenu("Other"))
+	{
+		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
+		{
+			if (current_boon->type == BoonType_other) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
 		}
 		ImGui::EndMenu();
 	}
