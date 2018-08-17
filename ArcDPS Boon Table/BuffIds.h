@@ -18,6 +18,9 @@ const uint16_t BUFF_EA = 14222;
 const uint16_t BUFF_PINPOINT = 38333;
 const uint16_t BUFF_ASSASSINS_PRESENCE = 26854;
 const uint16_t BUFF_SPOTTER = 14055;
+const uint16_t BUFF_SOOTHING_MIST = 5587;
+const uint16_t BUFF_VAMPIRIC_AURA = 30285;
+const uint16_t BUFF_STRENGTH_IN_NUMBERS = 13796;
 const uint16_t BUFF_BANNER_STR = 14417;
 const uint16_t BUFF_BANNER_DIS = 14449;
 const uint16_t BUFF_BANNER_TAC = 14450;
@@ -36,6 +39,7 @@ enum BoonType
 	BoonType_trait,
 	BoonType_banner,
 	BoonType_spirit,
+	BoonType_skill,
 	BoonType_other,
 };
 struct BoonDef

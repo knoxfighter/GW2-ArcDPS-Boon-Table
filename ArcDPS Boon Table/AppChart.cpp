@@ -204,6 +204,14 @@ void AppChart::drawRtClickMenu()
 		}
 		ImGui::EndMenu();
 	}
+	if (ImGui::BeginMenu("Skills"))
+	{
+		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
+		{
+			if (current_boon->type == BoonType_skill) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+		}
+		ImGui::EndMenu();
+	}
 	if (ImGui::BeginMenu("Other"))
 	{
 		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)

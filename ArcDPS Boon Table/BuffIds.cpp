@@ -14,16 +14,19 @@ std::list<BoonDef> tracked_buffs = std::list<BoonDef>({
 	BoonDef(BUFF_EA,"EA",true,false,BoonType_trait),
 	BoonDef(BUFF_PINPOINT,"PP",true,false,BoonType_trait),
 	BoonDef(BUFF_ASSASSINS_PRESENCE,"AP",true,false,BoonType_trait),
-	BoonDef(BUFF_SPOTTER,"Spot",true,false,BoonType_trait),
+	BoonDef(BUFF_SPOTTER,"Spotter",true,false,BoonType_trait),
+	BoonDef(BUFF_SOOTHING_MIST,"Sooth Mist",true,false,BoonType_trait),
+	BoonDef(BUFF_VAMPIRIC_AURA,"Vam Aura",true,false,BoonType_trait),
+	BoonDef(BUFF_STRENGTH_IN_NUMBERS,"Stren Num",true,false,BoonType_trait),
 	BoonDef(BUFF_BANNER_STR,"Strength",true,false,BoonType_banner),
 	BoonDef(BUFF_BANNER_DIS,"Discipline",true,false,BoonType_banner),
 	BoonDef(BUFF_BANNER_TAC,"Tactics",true,false,BoonType_banner),
 	BoonDef(BUFF_BANNER_DEF,"Defense",true,false,BoonType_banner),
-	BoonDef(BUFF_GLYPH_EMPOW,"Empower",true,false,BoonType_other),
 	BoonDef(BUFF_SPIRIT_FROST,"Frost",true,false,BoonType_spirit),
 	BoonDef(BUFF_SPIRIT_SUN,"Sun",true,false,BoonType_spirit),
 	BoonDef(BUFF_SPIRIT_STONE,"Stone",true,false,BoonType_spirit),
-	BoonDef(BUFF_SPIRIT_STORM,"Storm",true,false,BoonType_spirit)
+	BoonDef(BUFF_SPIRIT_STORM,"Storm",true,false,BoonType_spirit),
+	BoonDef(BUFF_GLYPH_EMPOW,"Empower",true,false,BoonType_skill)
 	});
 
 bool isTrackedBoon(uint16_t new_id)
