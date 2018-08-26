@@ -132,26 +132,29 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname)
 	/* ev is null. dst will only be valid on tracking add. skillname will also be null */
 	if (!ev)
 	{
-		/* notify tracking change */
-		if (!src->elite)
+		if (src)
 		{
-			/* add */
-			if (src->prof)
+			/* notify tracking change */
+			if (!src->elite)
 			{
-				tracker.addPlayer(src->id, std::string(src->name));
+				/* add */
+				if (src->prof)
+				{
+					tracker.addPlayer(src->id, std::string(src->name));
+				}
+
+				/* remove */
+				else
+				{
+					tracker.removePlayer(src->id, std::string(src->name));
+				}
 			}
 
-			/* remove */
-			else
+			/* notify target change */
+			else if (src->elite == 1)
 			{
-				tracker.removePlayer(src->id, std::string(src->name));
+
 			}
-		}
-
-		/* notify target change */
-		else if (src->elite == 1)
-		{
-
 		}
 	}
 
