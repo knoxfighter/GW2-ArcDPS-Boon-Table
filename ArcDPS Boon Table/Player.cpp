@@ -102,6 +102,20 @@ float Player::getBoonUptime(BoonDef* new_boon)
 	return 0.0f;
 }
 
+bool Player::hasBoonNow(BoonDef * new_boon)
+{
+	if (!in_combat) return false;
+
+	for (auto current_boon = boons.begin(); current_boon != boons.end(); ++current_boon)
+	{
+		if (current_boon->id == new_boon->id)
+		{
+			return current_boon->expected_end_time > current_time;
+		}
+	}
+	return false;
+}
+
 void Player::combatEnter(uint64_t new_time, uint8_t new_subgroup)
 {
 	enter_combat_time = new_time;

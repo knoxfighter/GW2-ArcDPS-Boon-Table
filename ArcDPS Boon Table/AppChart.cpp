@@ -41,7 +41,10 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 		if (current_buff.is_relevant) column_number++;
 	}
 
+	float header_hight = ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.y;
+
 	//show headers
+	ImGui::BeginChild("HeadersChild",ImVec2(0, header_hight));
 	ImGui::Columns(column_number, "Headers");
 	if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Name")) tracker->setSortMethod(SortMethod_name);
 
@@ -57,6 +60,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 		if (highlightedSmallButton(INDEX_SORTING_BUTTON, current_buff->name.c_str())) tracker->setSortMethod(SortMethod_boon, &*current_buff);
 	}
 	ImGui::Columns(1);
+	ImGui::EndChild();
 
 	ImGui::BeginChild("Scrolling");
 	if (bShowPlayers(tracker))
@@ -91,7 +95,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 				if (!current_player->isRelevant()) continue;
 				current_boon_uptime = current_player->getBoonUptime(&*current_buff);
 
-				buffProgressBar(&*current_buff, current_boon_uptime, current_player->id);
+				buffProgressBar(&*current_buff, current_boon_uptime, &*current_player, current_player->id);
 			}
 		}
 		ImGui::Columns(1);
@@ -125,7 +129,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 			{
 				current_boon_uptime = tracker->getSubgroupBoonUptime(&*current_buff, current_subgroup);
 
-				buffProgressBar(&*current_buff, current_boon_uptime, current_subgroup);
+				buffProgressBar(&*current_buff, current_boon_uptime, nullptr, current_subgroup);
 			}
 		}
 		ImGui::Columns(1);
@@ -151,7 +155,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 			current_boon_uptime = tracker->getAverageBoonUptime(&*current_buff);
 
-			buffProgressBar(&*current_buff, current_boon_uptime, INDEX_TOTAL);
+			buffProgressBar(&*current_buff, current_boon_uptime, nullptr, INDEX_TOTAL);
 		}
 		ImGui::Columns(1);
 	}
@@ -222,9 +226,9 @@ void AppChart::drawRtClickMenu()
 	}
 }
 
-void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime, uintptr_t current_player)
+void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime, Player* current_player, uintptr_t current_id)
 {
-	if (last_active_player == current_player || last_active_column == ImGui::GetColumnIndex())
+	if (last_active_player == current_id || last_active_column == ImGui::GetColumnIndex())
 	{
 		ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
 	}
@@ -232,6 +236,29 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 	{
 		ImGui::PushStyleColor(ImGuiCol_Text, hidden_bar_color);
 	}
+
+	if (current_player)
+	{
+		if (current_player->in_combat)
+		{
+			if (current_player->hasBoonNow(current_buff))
+			{
+				ImGui::TextColored(has_boon_color, "Y");
+				ImGui::SameLine();
+			}
+			else
+			{
+				ImGui::TextColored(not_have_boon_color, "N");
+				ImGui::SameLine();
+			}
+		}
+		else
+		{
+			ImGui::Text("N");
+			ImGui::SameLine();
+		}
+	}
+
 	if (current_buff->is_duration_stacking)
 	{
 		ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()));
@@ -249,7 +276,7 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 	}
 	if (ImGui::IsItemHovered())
 	{
-		active_player = current_player;
+		active_player = current_id;
 		active_column = ImGui::GetColumnIndex();
 	}
 }

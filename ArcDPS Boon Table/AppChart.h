@@ -21,6 +21,8 @@ public:
 	int8_t active_column, last_active_column;
 	ImVec4 active_bar_color = ImVec4(1, 1, 1, 1);
 	ImVec4 hidden_bar_color = ImVec4(1, 1, 1, 0.3);
+	ImVec4 has_boon_color = ImVec4(0.1, 1, 0.1, 1);
+	ImVec4 not_have_boon_color = ImVec4(1, 0.1, 0.1, 1);
 	int sorting_collumn;
 	
 	AppChart();
@@ -30,7 +32,7 @@ public:
 
 	void drawRtClickMenu();
 
-	void buffProgressBar(BoonDef* current_buff, float current_boon_uptime, uintptr_t current_player);
+	void buffProgressBar(BoonDef* current_buff, float current_boon_uptime, Player* current_player, uintptr_t current_id);
 
 	void highlightedText(uintptr_t player_id, const char* fmt, ...);
 	bool highlightedSmallButton(uintptr_t player_id, const char * fmt);
