@@ -117,6 +117,18 @@ Player* Tracker::getPlayer(ag* new_player)
 	}
 }
 
+uint16_t Tracker::getRelevantPlayerCount()
+{
+	uint16_t out = 0;
+
+	for (auto player = players.begin(); player != players.end(); ++player)
+	{
+		if (player->isRelevant()) out++;
+	}
+	
+	return out;
+}
+
 std::list<uint8_t> Tracker::getSubgroups()
 {
 	std::lock_guard<std::mutex> lock(players_mtx);

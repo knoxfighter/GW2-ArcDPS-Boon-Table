@@ -44,6 +44,8 @@ public:
 	void bakeCombatData();
 
 	Player* getPlayer(ag* new_player);
+
+	uint16_t getRelevantPlayerCount();
 	
 	std::list<uint8_t> getSubgroups();
 	float getSubgroupBoonUptime(BoonDef* new_boon, uint8_t new_subgroup);

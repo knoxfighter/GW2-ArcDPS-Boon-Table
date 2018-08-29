@@ -333,5 +333,5 @@ bool AppChart::bShowSubgroups(Tracker* tracker)
 bool AppChart::bShowTotal(Tracker* tracker)
 {
 	return show_total 
-		&& (tracker ? tracker->players.size() > 1 : true);
+		&& (tracker ? tracker->getRelevantPlayerCount() > 1 : true);
 }
