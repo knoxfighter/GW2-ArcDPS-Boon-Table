@@ -237,7 +237,7 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 	{
 		ImGui::PushStyleColor(ImGuiCol_Text, hidden_bar_color);
 	}
-
+	ImGui::BeginGroup();
 	if (bShowCurrent() && current_player)
 	{
 		if (current_player->in_combat)
@@ -271,6 +271,7 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 		current_boon_uptime /= 25;
 		ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()), label);
 	}
+	ImGui::EndGroup();
 	if (last_active_player != -1 || last_active_column != -1)
 	{
 		ImGui::PopStyleColor();
