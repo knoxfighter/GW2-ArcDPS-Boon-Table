@@ -2,11 +2,11 @@
 #include <inttypes.h>
 
 //enums and structs:
-/* iff */
+/* is friend/foe */
 enum iff {
-	IFF_FRIEND, // green vs green, red vs red
-	IFF_FOE, // green vs red
-	IFF_UNKNOWN // something very wrong happened
+	IFF_FRIEND,
+	IFF_FOE,
+	IFF_UNKNOWN // or uncertain
 };
 
 /* combat result (physical) */
@@ -19,7 +19,8 @@ enum cbtresult {
 	CBTR_INTERRUPT, // physical hit interrupted something
 	CBTR_ABSORB, // physical hit was "invlun" or absorbed eg. guardian elite
 	CBTR_BLIND, // physical hit missed
-	CBTR_KILLINGBLOW // physical hit was killing hit
+	CBTR_KILLINGBLOW, // hit was killing hit
+	CBTR_DOWNED, // hit was downing hit
 };
 
 /* combat activation */
@@ -52,15 +53,19 @@ enum cbtstatechange {
 	CBTS_GWBUILD, // src_agent will be game build
 	CBTS_SHARDID, // src_agent will be sever shard id
 	CBTS_REWARD, // src_agent is self, dst_agent is reward id, value is reward type. these are the wiggly boxes that you get
-	CBTS_BUFFINITIAL // combat event that will appear once per buff per agent on logging start (zero duration, buff==18)
+	CBTS_BUFFINITIAL, // combat event that will appear once per buff per agent on logging start (zero duration, buff==18)
+	CBTS_POSITION, // src_agent changed, cast float* p = (float*)&dst_agent, access as x/y/z (float[3])
+	CBTS_VELOCITY, // src_agent changed, cast float* v = (float*)&dst_agent, access as x/y/z (float[3])
+	CBTS_FACING, // src_agent changed, cast float* f = (float*)&dst_agent, access as x/y (float[2])
+	CBTS_TEAMCHANGE // src_agent change, dst_agent new team id
 };
 
 /* combat buff remove type */
 enum cbtbuffremove {
 	CBTB_NONE, // not used - not this kind of event
-	CBTB_ALL, // all stacks removed
-	CBTB_SINGLE, // single stack removed. disabled on server trigger, will happen for each stack on cleanse
-	CBTB_MANUAL, // autoremoved by ooc or allstack (ignore for strip/cleanse calc, use for in/out volume)
+	CBTB_ALL, // last/all stacks removed (sent by server)
+	CBTB_SINGLE, // single stack removed (sent by server). will happen for each stack on cleanse
+	CBTB_MANUAL, // single stack removed (auto by arc on ooc or all stack, ignore for strip/cleanse calc, use for in/out volume)
 };
 
 /* custom skill ids */
@@ -80,17 +85,18 @@ enum gwlanguage {
 
 /* arcdps export table */
 typedef struct arcdps_exports {
-	uintptr_t size; /* arcdps internal use, ignore */
-	uintptr_t sig; /* pick a non-zero number that isn't used by other modules */
+	uintptr_t size; /* size of exports table */
+	uintptr_t sig; /* pick a number between 0 and uint64_t max that isn't used by other modules */
 	char* out_name; /* name string */
 	char* out_build; /* build string */
-	void* wnd; /* wndproc callback, fn(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) */
-	void* combat; /* combat event callback, fn(cbtevent* ev, ag* src, ag* dst, char* skillname) */
+	void* wnd_nofilter; /* wndproc callback, fn(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) */
+	void* combat; /* combat event callback, fn(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t id, uint64_t revision) */
 	void* imgui; /* id3dd9::present callback, before imgui::render, fn() */
 	void* options; /* id3dd9::present callback, appending to the end of options window in arcdps, fn() */
+	void* combat_local;  /* combat event callback like area but from chat log, fn(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t id, uint64_t revision) */
 } arcdps_exports;
 
-/* combat event */
+/* combat event (current) */
 typedef struct cbtevent {
 	uint64_t time; /* timegettime() at time of event */
 	uint64_t src_agent; /* unique identifier */
@@ -115,16 +121,47 @@ typedef struct cbtevent {
 	uint8_t buff; /* buff application, removal, or damage event */
 	uint8_t result; /* from cbtresult enum */
 	uint8_t is_activation; /* from cbtactivation enum */
-	uint8_t is_buffremove; /* buff removed. src=relevant, dst=caused it (for strips/cleanses). from cbtr enum  */
+	uint8_t is_buffremove; /* buff removed. src=relevant, dst=caused it (for strips/cleanses). from cbtr enum */
 	uint8_t is_ninety; /* source agent health was over 90% */
 	uint8_t is_fifty; /* target agent health was under 50% */
 	uint8_t is_moving; /* source agent was moving */
 	uint8_t is_statechange; /* from cbtstatechange enum */
 	uint8_t is_flanking; /* target agent was not facing source */
-	uint8_t is_shields; /* all or partial damage was vs barrier/shield */
-	uint8_t pad63; /* internal tracking. garbage */
+	uint8_t is_shields; /* all or part damage was vs barrier/shield */
+	uint8_t is_offcycle; /* zero if buff dmg happened during tick, non-zero otherwise */
 	uint8_t pad64; /* internal tracking. garbage */
 } cbtevent;
+
+/* combat event logging (revision 1, when header[12] == 1) */
+typedef struct cbtevent1 {
+	uint64_t time;
+	uint64_t src_agent;
+	uint64_t dst_agent;
+	int32_t value;
+	int32_t buff_dmg;
+	uint32_t overstack_value;
+	uint32_t skillid;
+	uint16_t src_instid;
+	uint16_t dst_instid;
+	uint16_t src_master_instid;
+	uint16_t dst_master_instid;
+	uint8_t iff;
+	uint8_t buff;
+	uint8_t result;
+	uint8_t is_activation;
+	uint8_t is_buffremove;
+	uint8_t is_ninety;
+	uint8_t is_fifty;
+	uint8_t is_moving;
+	uint8_t is_statechange;
+	uint8_t is_flanking;
+	uint8_t is_shields;
+	uint8_t is_offcycle;
+	uint8_t pad61;
+	uint8_t pad62;
+	uint8_t pad63;
+	uint8_t pad64;
+} cbtevent1;
 
 /* agent short */
 typedef struct ag {

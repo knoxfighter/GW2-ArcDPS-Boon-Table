@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <Windows.h>
+#include <d3d9.h>
 #include <string>
 #include <list>
 
@@ -22,12 +23,12 @@ arcdps_exports arc_exports;
 char* arcvers;
 void dll_init(HANDLE hModule);
 void dll_exit();
-extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext);
+extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, IDirect3DDevice9* id3dd9);
 extern "C" __declspec(dllexport) void* get_release_addr();
 arcdps_exports* mod_init();
 uintptr_t mod_release();
 uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname);
+uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t id, uint64_t revision);
 uintptr_t mod_imgui(); /* id3dd9::present callback, before imgui::render, fn() */
 uintptr_t mod_options(); /* id3dd9::present callback, appending to the end of options window in arcdps, fn() */
 void parseIni();
@@ -74,7 +75,7 @@ void dll_exit() {
 }
 
 /* export -- arcdps looks for this exported function and calls the address it returns */
-extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext) {
+extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, IDirect3DDevice9* id3dd9) {
 	arcvers = arcversionstr;
 	ImGui::SetCurrentContext((ImGuiContext*)imguicontext);
 
@@ -93,11 +94,12 @@ extern "C" __declspec(dllexport) void* get_release_addr() {
 arcdps_exports* mod_init()
 {
 	/* for arcdps */
+	memset(&arc_exports, 0, sizeof(arcdps_exports));
+	arc_exports.sig = 0x64003268;//from random.org
 	arc_exports.size = sizeof(arcdps_exports);
 	arc_exports.out_name = "Boon Table";
 	arc_exports.out_build = "0.1";
-	arc_exports.sig = 0x64003268;//from random.org
-	arc_exports.wnd = mod_wnd;
+	arc_exports.wnd_nofilter = mod_wnd;
 	arc_exports.combat = mod_combat;
 	arc_exports.imgui = mod_imgui;
 	arc_exports.options = mod_options;
@@ -125,7 +127,7 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 /* combat callback -- may be called asynchronously. return ignored */
 /* one participant will be party/squad, or minion of. no spawn statechange events. despawn statechange only on marked boss npcs */
-uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname)
+uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t id, uint64_t revision)
 {
 	Player* current_player = nullptr;
 
