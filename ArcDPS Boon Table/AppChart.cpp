@@ -27,13 +27,13 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	active_column = INDEX_NONE;
 	float current_boon_uptime = 0.0f;
 
-	std::lock_guard<std::mutex> lock(tracker->players_mtx);
-
 	if (ImGui::BeginPopupContextItem("Options"))
 	{
-		drawRtClickMenu();
+		drawRtClickMenu(tracker);
 		ImGui::EndPopup();
 	}
+	
+	std::lock_guard<std::mutex> lock(tracker->players_mtx);
 
 	int column_number = 2;
 	for (auto current_buff : tracked_buffs)
@@ -166,7 +166,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	ImGui::End();
 }
 
-void AppChart::drawRtClickMenu()
+void AppChart::drawRtClickMenu(Tracker* tracker)
 {
 	active_player = INDEX_HIDE_ALL;
 	active_column = INDEX_HIDE_ALL;
@@ -225,6 +225,11 @@ void AppChart::drawRtClickMenu()
 		}
 		ImGui::EndMenu();
 	}
+	if (ImGui::Button("Clear"))
+	{
+		tracker->clearPlayers();
+	}
+	if(ImGui::IsItemHovered()) ImGui::SetTooltip("Requires map reload");
 }
 
 void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime, Player* current_player, uintptr_t current_id)

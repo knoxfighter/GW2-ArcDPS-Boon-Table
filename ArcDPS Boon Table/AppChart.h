@@ -31,7 +31,7 @@ public:
 
 	void Draw(const char* title, bool* p_open, Tracker* tracker, ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse);
 
-	void drawRtClickMenu();
+	void drawRtClickMenu(Tracker* tracker);
 
 	void buffProgressBar(BoonDef* current_buff, float current_boon_uptime, Player* current_player, uintptr_t current_id);
 

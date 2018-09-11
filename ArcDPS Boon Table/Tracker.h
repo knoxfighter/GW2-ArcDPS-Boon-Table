@@ -34,7 +34,7 @@ public:
 
 	bool addPlayer(uintptr_t new_id, std::string name);
 	bool removePlayer(uintptr_t new_id, std::string new_name);
-
+	void clearPlayers();//marks all players as not in squad
 	
 
 	void sortPlayers();

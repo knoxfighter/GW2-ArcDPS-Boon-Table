@@ -53,6 +53,18 @@ bool Tracker::removePlayer(uintptr_t new_id, std::string new_name)
 	return false;
 }
 
+void Tracker::clearPlayers()
+{
+	std::unique_lock<std::mutex> lock(players_mtx);
+
+	for (auto player = players.begin(); player != players.end(); ++player)
+	{
+		player->is_relevant = false;
+	}
+	lock.unlock();
+	bakeCombatData();
+}
+
 void Tracker::sortPlayers()
 {
 	if (!needs_resort) return;
