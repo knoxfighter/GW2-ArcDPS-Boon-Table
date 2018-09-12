@@ -15,21 +15,22 @@ Tracker::~Tracker()
 {
 }
 
-bool Tracker::addPlayer(uintptr_t new_id, std::string new_name)
+bool Tracker::addPlayer(uintptr_t new_id, std::string new_name, std::string new_account_name)
 {
 	std::unique_lock<std::mutex> lock(players_mtx);
 
 	for (auto player = players.begin(); player != players.end(); ++player)
 	{
-		if (player->id == new_id || player->name == new_name)
+		if (player->id == new_id || player->account_name == new_account_name)
 		{
 			player->is_relevant = true;
 			player->id = new_id;
+			player->name = new_name;
 			return false;
 		}
 	}
 
-	players.push_back(Player(new_id, new_name));
+	players.push_back(Player(new_id, new_name, new_account_name));
 	lock.unlock();
 	bakeCombatData();
 	return true;	
@@ -57,10 +58,7 @@ void Tracker::clearPlayers()
 {
 	std::unique_lock<std::mutex> lock(players_mtx);
 
-	for (auto player = players.begin(); player != players.end(); ++player)
-	{
-		player->is_relevant = false;
-	}
+	players.clear();
 	lock.unlock();
 	bakeCombatData();
 }

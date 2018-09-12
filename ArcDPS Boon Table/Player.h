@@ -13,6 +13,7 @@ class Player
 public:
 	uintptr_t id;
 	std::string name;
+	std::string account_name;
 	std::list<Boon> boons;
 	uint64_t enter_combat_time;
 	uint64_t exit_combat_time;
@@ -23,7 +24,7 @@ public:
 	bool operator==(uintptr_t other_id);
 
 	Player();
-	Player(uintptr_t new_id, std::string new_name);
+	Player(uintptr_t new_id, std::string new_name, std::string new_account_name);
 	~Player();
 
 	bool isRelevant();

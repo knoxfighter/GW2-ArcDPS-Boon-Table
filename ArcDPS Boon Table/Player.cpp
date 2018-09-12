@@ -11,19 +11,22 @@ Player::Player()
 {
 	id = 0;
 	name = "";
+	account_name = "";
 	enter_combat_time = getCurrentTime();
 	in_combat = false;
 	subgroup = 1;
 	is_relevant = true;
 }
 
-Player::Player(uintptr_t new_id, std::string new_name)
+Player::Player(uintptr_t new_id, std::string new_name, std::string new_account_name)
 {
 	id = new_id;
 	name = new_name;
+	account_name = new_account_name;
 	enter_combat_time = getCurrentTime();
 	in_combat = false;
 	subgroup = 1;
+	is_relevant = true;
 }
 
 Player::~Player()

@@ -32,7 +32,7 @@ public:
 	Tracker();
 	~Tracker();
 
-	bool addPlayer(uintptr_t new_id, std::string name);
+	bool addPlayer(uintptr_t new_id, std::string name, std::string new_account_name);
 	bool removePlayer(uintptr_t new_id, std::string new_name);
 	void clearPlayers();//marks all players as not in squad
 	

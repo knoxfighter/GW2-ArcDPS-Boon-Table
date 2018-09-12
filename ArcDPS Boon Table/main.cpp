@@ -142,7 +142,10 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 				/* add */
 				if (src->prof)
 				{
-					tracker.addPlayer(src->id, std::string(src->name));
+					if (dst)
+					{
+						tracker.addPlayer(src->id, std::string(src->name), std::string(dst->name));
+					}
 				}
 
 				/* remove */
