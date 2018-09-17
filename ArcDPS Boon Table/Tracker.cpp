@@ -42,9 +42,11 @@ bool Tracker::removePlayer(uintptr_t new_id, std::string new_name)
 
 	for (auto player = players.begin(); player != players.end(); ++player)
 	{
-		if (player->id == new_id || player->name == new_name)
+		if (player->id == new_id || 
+			(new_name.length() > 1 &&  player->name == new_name))
 		{
 			player->is_relevant = false;
+			if (player->in_combat) player->combatExit(getCurrentTime());
 			lock.unlock();
 			bakeCombatData();
 			return true;
