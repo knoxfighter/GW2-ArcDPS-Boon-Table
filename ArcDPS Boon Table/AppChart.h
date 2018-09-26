@@ -29,7 +29,7 @@ public:
 	AppChart();
 	~AppChart();
 
-	void Draw(const char* title, bool* p_open, Tracker* tracker, ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse);
+	void Draw(const char* title, bool* p_open, Tracker* tracker, ImGuiWindowFlags flags);
 
 	void drawRtClickMenu(Tracker* tracker);
 
