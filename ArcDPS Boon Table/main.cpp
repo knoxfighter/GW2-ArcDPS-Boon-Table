@@ -254,14 +254,14 @@ uintptr_t mod_imgui()
 	{
 		tracker.sortPlayers();
 
-		chart.Draw("BOON TABLE", &show_chart, &tracker, ImGuiWindowFlags_NoCollapse 
+		chart.Draw("Boon Table", &show_chart, &tracker, ImGuiWindowFlags_NoCollapse 
 			| (!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0));
 	}
 	return 0;
 }
 uintptr_t mod_options()
 {
-	ImGui::Checkbox("BOON TABLE", &show_chart);
+	ImGui::Checkbox("Boon Table", &show_chart);
 	return 0;
 }
 
