@@ -22,9 +22,10 @@ public:
 	bool is_relevant;
 
 	bool operator==(uintptr_t other_id);
+	bool operator==(std::string other_name);
 
 	Player();
-	Player(uintptr_t new_id, std::string new_name, std::string new_account_name);
+	Player(uintptr_t new_id, std::string new_name, std::string new_account_name, uint8_t new_subgroup);
 	~Player();
 
 	bool isRelevant();

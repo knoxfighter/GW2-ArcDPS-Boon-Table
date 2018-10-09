@@ -15,45 +15,46 @@ Tracker::~Tracker()
 {
 }
 
-bool Tracker::addPlayer(uintptr_t new_id, std::string new_name, std::string new_account_name)
+void Tracker::addPlayer(ag* src, ag* dst)
 {
-	std::unique_lock<std::mutex> lock(players_mtx);
+	if (!is_player(src)) return;
 
-	for (auto player = players.begin(); player != players.end(); ++player)
+	uintptr_t new_id = src->id;
+	std::string new_character_name = std::string(src->name);
+	std::string new_account_name = std::string(dst->name);
+	uint8_t new_subgroup = dst->team;
+
+	Player* current_player = getPlayer(new_account_name);
+
+	if (current_player)
 	{
-		if (player->id == new_id || player->account_name == new_account_name)
-		{
-			player->is_relevant = true;
-			player->id = new_id;
-			player->name = new_name;
-			return false;
-		}
+		current_player->is_relevant = true;
+		current_player->id = new_id;
+		current_player->name = new_character_name;
+		current_player->subgroup = new_subgroup;
 	}
-
-	players.push_back(Player(new_id, new_name, new_account_name));
-	lock.unlock();
-	bakeCombatData();
-	return true;	
+	else
+	{
+		std::unique_lock<std::mutex> lock(players_mtx);
+		players.push_back(Player(new_id, new_character_name, new_account_name, new_subgroup));
+		lock.unlock();
+		bakeCombatData();
+	}
 }
 
-bool Tracker::removePlayer(uintptr_t new_id, std::string new_name)
+void Tracker::removePlayer(ag* src)
 {
-	std::unique_lock<std::mutex> lock(players_mtx);
+	uintptr_t new_id = src->id;
+	std::string new_character_name = std::string(src->name);
 
-	for (auto player = players.begin(); player != players.end(); ++player)
+	Player* current_player = getPlayer(new_id);
+
+	if (current_player)
 	{
-		if (player->id == new_id || 
-			(new_name.length() > 1 &&  player->name == new_name))
-		{
-			player->is_relevant = false;
-			if (player->in_combat) player->combatExit(getCurrentTime());
-			lock.unlock();
-			bakeCombatData();
-			return true;
-		}
+		current_player->is_relevant = false;
+		if (current_player->in_combat) current_player->combatExit(getCurrentTime());
+		bakeCombatData();
 	}
-
-	return false;
 }
 
 void Tracker::clearPlayers()
@@ -112,11 +113,26 @@ void Tracker::bakeCombatData()
 	queueResort();
 }
 
-Player* Tracker::getPlayer(ag* new_player)
+Player* Tracker::getPlayer(uintptr_t new_player)
 {
-	if (!is_player(new_player)) return nullptr;
 	std::lock_guard<std::mutex> lock(players_mtx);
-	auto it = std::find(players.begin(), players.end(), new_player->id);
+	auto it = std::find(players.begin(), players.end(), new_player);
+
+	//player not tracked yet
+	if (it == players.end())
+	{
+		return nullptr;
+	}
+	else//player tracked
+	{
+		return &*it;
+	}
+}
+
+Player* Tracker::getPlayer(std::string new_player)
+{
+	std::lock_guard<std::mutex> lock(players_mtx);
+	auto it = std::find(players.begin(), players.end(), new_player);
 
 	//player not tracked yet
 	if (it == players.end())

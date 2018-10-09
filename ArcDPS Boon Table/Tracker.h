@@ -32,8 +32,8 @@ public:
 	Tracker();
 	~Tracker();
 
-	bool addPlayer(uintptr_t new_id, std::string name, std::string new_account_name);
-	bool removePlayer(uintptr_t new_id, std::string new_name);
+	void addPlayer(ag* src, ag* dst);
+	void removePlayer(ag* src);
 	void clearPlayers();//marks all players as not in squad
 	
 
@@ -43,7 +43,8 @@ public:
 
 	void bakeCombatData();
 
-	Player* getPlayer(ag* new_player);
+	Player* getPlayer(uintptr_t new_player);
+	Player* getPlayer(std::string new_player);
 
 	uint16_t getRelevantPlayerCount();
 	

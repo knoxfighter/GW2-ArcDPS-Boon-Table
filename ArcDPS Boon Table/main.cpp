@@ -144,14 +144,14 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 				{
 					if (dst)
 					{
-						tracker.addPlayer(src->id, std::string(src->name), std::string(dst->name));
+						tracker.addPlayer(src,dst);
 					}
 				}
 
 				/* remove */
 				else
 				{
-					tracker.removePlayer(src->id, std::string(src->name));
+					tracker.removePlayer(src);
 				}
 			}
 
@@ -173,7 +173,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 		{
 			if (ev->is_statechange == CBTS_ENTERCOMBAT)
 			{
-				if (current_player = tracker.getPlayer(src))
+				if (current_player = tracker.getPlayer(src->id))
 				{
 					current_player->combatEnter(getCurrentTime(),ev->dst_agent);
 					tracker.bakeCombatData();
@@ -181,7 +181,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 			}
 			else if (ev->is_statechange == CBTS_EXITCOMBAT)
 			{
-				if (current_player = tracker.getPlayer(src))
+				if (current_player = tracker.getPlayer(src->id))
 				{
 					current_player->combatExit(getCurrentTime());
 				}
@@ -199,7 +199,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 		{
 			if (ev->is_buffremove == CBTB_MANUAL)
 			{
-				if (current_player = tracker.getPlayer(src))
+				if (current_player = tracker.getPlayer(src->id))
 				{
 					current_player->removeBoon(ev);
 				}
@@ -219,7 +219,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 			/* application */
 			else
 			{
-				if (current_player = tracker.getPlayer(dst))
+				if (current_player = tracker.getPlayer(dst->id))
 				{
 					current_player->applyBoon(ev);
 					tracker.queueResort();
