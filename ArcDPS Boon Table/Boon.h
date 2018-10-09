@@ -7,13 +7,13 @@ class Boon
 {
 	int32_t duration;
 public:
-	uint16_t id;
+	uint32_t id;
 	uint64_t expected_end_time;
 	
-	bool operator==(uint16_t other_id);
+	bool operator==(uint32_t other_id);
 
 	Boon();
-	Boon(uint16_t new_id, int32_t new_duration);
+	Boon(uint32_t new_id, int32_t new_duration);
 
 	~Boon();
 

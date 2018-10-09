@@ -29,7 +29,7 @@ std::list<BoonDef> tracked_buffs = std::list<BoonDef>({
 	BoonDef(BUFF_GLYPH_EMPOW,"Empower",true,false,BoonType_skill)
 	});
 
-bool isTrackedBoon(uint16_t new_id)
+bool isTrackedBoon(uint32_t new_id)
 {
 	for (auto current_buff : tracked_buffs)
 	{
@@ -38,7 +38,7 @@ bool isTrackedBoon(uint16_t new_id)
 	return false;
 }
 
-BoonDef::BoonDef(uint16_t new_id, std::string new_name, bool new_is_duration_stacking, bool new_is_relevant, BoonType new_type)
+BoonDef::BoonDef(uint32_t new_id, std::string new_name, bool new_is_duration_stacking, bool new_is_relevant, BoonType new_type)
 {
 	id = new_id;
 	name = new_name;

@@ -2,7 +2,7 @@
 
 
 
-bool Boon::operator==(uint16_t other_id)
+bool Boon::operator==(uint32_t other_id)
 {
 	return id == other_id;
 }
@@ -14,7 +14,7 @@ Boon::Boon()
 	expected_end_time = 0;
 }
 
-Boon::Boon(uint16_t new_id, int32_t new_duration)
+Boon::Boon(uint32_t new_id, int32_t new_duration)
 {
 	id = new_id;
 	duration = new_duration;
