@@ -181,7 +181,7 @@ void AppChart::drawRtClickMenu(Tracker* tracker)
 	{
 		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
 		{
-			if(current_boon->type == BoonType_boon) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+			if(current_boon->category == BoonType_boon) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
 		}
 		ImGui::EndMenu();
 	}
@@ -189,7 +189,7 @@ void AppChart::drawRtClickMenu(Tracker* tracker)
 	{
 		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
 		{
-			if (current_boon->type == BoonType_trait) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+			if (current_boon->category == BoonType_trait) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
 		}
 		ImGui::EndMenu();
 	}
@@ -197,7 +197,7 @@ void AppChart::drawRtClickMenu(Tracker* tracker)
 	{
 		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
 		{
-			if (current_boon->type == BoonType_banner) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+			if (current_boon->category == BoonType_banner) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
 		}
 		ImGui::EndMenu();
 	}
@@ -205,7 +205,7 @@ void AppChart::drawRtClickMenu(Tracker* tracker)
 	{
 		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
 		{
-			if (current_boon->type == BoonType_spirit) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+			if (current_boon->category == BoonType_spirit) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
 		}
 		ImGui::EndMenu();
 	}
@@ -213,7 +213,7 @@ void AppChart::drawRtClickMenu(Tracker* tracker)
 	{
 		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
 		{
-			if (current_boon->type == BoonType_skill) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+			if (current_boon->category == BoonType_skill) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
 		}
 		ImGui::EndMenu();
 	}
@@ -221,7 +221,7 @@ void AppChart::drawRtClickMenu(Tracker* tracker)
 	{
 		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
 		{
-			if (current_boon->type == BoonType_other) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+			if (current_boon->category == BoonType_other) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
 		}
 		ImGui::EndMenu();
 	}
@@ -265,16 +265,16 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 		}
 	}
 
-	if (current_buff->is_duration_stacking)
-	{
-		ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()));
-	}
-	else
+	if (current_buff->stacking_type == StackingType_intensity)
 	{
 		char label[5];
 		sprintf(label, "%.1f", current_boon_uptime);
 		current_boon_uptime /= 25;
 		ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()), label);
+	}
+	else
+	{
+		ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()));
 	}
 	ImGui::EndGroup();
 	if (last_active_player != -1 || last_active_column != -1)

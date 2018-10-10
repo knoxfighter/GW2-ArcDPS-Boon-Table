@@ -42,15 +42,23 @@ enum BoonType
 	BoonType_skill,
 	BoonType_other,
 };
+
+enum StackingType
+{
+	StackingType_duration,
+	StackingType_intensity,
+	StackingType_single
+};
+
 struct BoonDef
 {
 	uint32_t id;
 	std::string name;
-	bool is_duration_stacking;
+	StackingType stacking_type;
 	bool is_relevant;
-	BoonType type;
+	BoonType category;
 
-	BoonDef(uint32_t new_id, std::string new_name, bool new_is_duration_stacking, bool new_is_relevant, BoonType new_type);
+	BoonDef(uint32_t new_id, std::string new_name, StackingType new_stacking_type, bool new_is_relevant, BoonType new_category);
 };
 
 extern std::list<BoonDef> tracked_buffs;
