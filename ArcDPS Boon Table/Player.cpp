@@ -53,18 +53,17 @@ void Player::applyBoon(cbtevent* ev)
 	if (!isTrackedBoon(ev->skillid)) return;
 	if (!in_combat) return;
 
-	std::lock_guard<std::mutex> lock(boons_mtx);
+	Boon* current_boon = getBoon(ev->skillid);
 
-	for (auto boon = boons.begin(); boon != boons.end(); ++boon)
+	if (current_boon)
 	{
-		if (boon->id == ev->skillid)
-		{
-			boon->Apply(ev->value - ev->overstack_value);
-			return;
-		}
+		current_boon->Apply(ev->value - ev->overstack_value);
 	}
-
-	boons.push_back(Boon(ev->skillid, ev->value - ev->overstack_value));
+	else
+	{
+		std::lock_guard<std::mutex> lock(boons_mtx);
+		boons.push_back(Boon(ev->skillid, ev->value - ev->overstack_value));
+	}
 }
 
 void Player::removeBoon(cbtevent* ev)
@@ -75,37 +74,45 @@ void Player::removeBoon(cbtevent* ev)
 	if (!isTrackedBoon(ev->skillid)) return;
 	if (!in_combat) return;
 
-	std::lock_guard<std::mutex> lock(boons_mtx);
+	Boon* current_boon = getBoon(ev->skillid);
 
-	for (auto boon = boons.begin(); boon != boons.end(); ++boon)
+	if (current_boon)
 	{
-		if (boon->id == ev->skillid)
+		current_boon->Remove(ev->value);
+	}
+}
+
+Boon* Player::getBoon(uint32_t new_boon)
+{
+	for (auto current_boon = boons.begin(); current_boon != boons.end(); ++current_boon)
+	{
+		if (current_boon->id == new_boon)
 		{
-			boon->Remove(ev->value);
-			return;
+			return &*current_boon;
 		}
 	}
+	return nullptr;
 }
 
 float Player::getBoonUptime(BoonDef* new_boon)
 {
-	for (auto current_boon = boons.begin(); current_boon != boons.end(); ++current_boon)
-	{
-		if (getCombatTime() == 0) return 0.0f;
-		else if (current_boon->id == new_boon->id)
-		{
-			float out = (float)current_boon->getDuration(in_combat ? getCurrentTime() : exit_combat_time) / getCombatTime();
+	if (getCombatTime() == 0) return 0.0f;
 
-			if (new_boon->is_duration_stacking)
-			{
-				out = out > 1.0f ? 1.0f : out;
-			}
-			else
-			{
-				out = out > 25.0f ? 25.0f : out;
-			}
-			return out;
+	Boon* current_boon = getBoon(new_boon->id);
+
+	if (current_boon)
+	{
+		float out = (float)current_boon->getDuration(in_combat ? getCurrentTime() : exit_combat_time) / getCombatTime();
+
+		if (new_boon->is_duration_stacking)
+		{
+			out = out > 1.0f ? 1.0f : out;
 		}
+		else
+		{
+			out = out > 25.0f ? 25.0f : out;
+		}
+		return out;
 	}
 	
 	return 0.0f;
@@ -115,12 +122,11 @@ bool Player::hasBoonNow(BoonDef * new_boon)
 {
 	if (!in_combat) return false;
 
-	for (auto current_boon = boons.begin(); current_boon != boons.end(); ++current_boon)
+	Boon* current_boon = getBoon(new_boon->id);
+
+	if (current_boon)
 	{
-		if (current_boon->id == new_boon->id)
-		{
-			return current_boon->expected_end_time > current_time;
-		}
+		return current_boon->expected_end_time > getCurrentTime();
 	}
 	return false;
 }

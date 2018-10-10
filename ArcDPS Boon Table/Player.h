@@ -32,6 +32,8 @@ public:
 
 	void applyBoon(cbtevent* ev);
 	void removeBoon(cbtevent* ev);
+
+	Boon* getBoon(uint32_t new_boon);
 	
 	float getBoonUptime(BoonDef* new_boon);
 	bool hasBoonNow(BoonDef* new_boon);
