@@ -84,14 +84,18 @@ void Player::removeBoon(cbtevent* ev)
 
 Boon* Player::getBoon(uint32_t new_boon)
 {
-	for (auto current_boon = boons.begin(); current_boon != boons.end(); ++current_boon)
+	std::lock_guard<std::mutex> lock(boons_mtx);
+	auto it = std::find(boons.begin(), boons.end(), new_boon);
+
+	//boon not tracked
+	if (it == boons.end())
 	{
-		if (current_boon->id == new_boon)
-		{
-			return &*current_boon;
-		}
+		return nullptr;
 	}
-	return nullptr;
+	else//boon tracked
+	{
+		return &*it;
+	}
 }
 
 float Player::getBoonUptime(BoonDef* new_boon)
