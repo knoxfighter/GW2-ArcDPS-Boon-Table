@@ -202,6 +202,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 				if (current_player = tracker.getPlayer(src->id))
 				{
 					current_player->removeBoon(ev);
+					tracker.queueResort();
 				}
 			}
 		}
