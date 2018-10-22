@@ -14,7 +14,6 @@ protected:
 	const uintptr_t INDEX_HIDE_ALL = -4;
 
 	bool show_players = true;
-	bool show_current = true;
 	bool show_subgroups = true;
 	bool show_total = true;
 public:
@@ -39,12 +38,10 @@ public:
 	bool highlightedSmallButton(uintptr_t player_id, const char * fmt);
 
 	void setShowPlayers(bool new_show);
-	void setShowCurrent(bool new_show);
 	void setShowSubgroups(bool new_show);
 	void setShowTotal(bool new_show);
 
 	bool bShowPlayers(Tracker* tracker);
-	bool bShowCurrent();
 	bool bShowSubgroups(Tracker* tracker);
 	bool bShowTotal(Tracker* tracker);
 };

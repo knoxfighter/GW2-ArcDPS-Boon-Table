@@ -174,7 +174,6 @@ void AppChart::drawRtClickMenu(Tracker* tracker)
 	ImGui::MenuItem("Players", NULL, &show_players);
 	ImGui::MenuItem("Subgroups", NULL, &show_subgroups);
 	ImGui::MenuItem("Total", NULL, &show_total);
-	ImGui::MenuItem("Currently Has", NULL, &show_current);
 
 	
 	if (ImGui::BeginMenu("Boons"))
@@ -242,29 +241,8 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 	{
 		ImGui::PushStyleColor(ImGuiCol_Text, hidden_bar_color);
 	}
+	
 	ImGui::BeginGroup();
-	if (bShowCurrent() && current_player)
-	{
-		if (current_player->in_combat)
-		{
-			if (current_player->hasBoonNow(current_buff))
-			{
-				ImGui::TextColored(has_boon_color, "Y");
-				ImGui::SameLine();
-			}
-			else
-			{
-				ImGui::TextColored(not_have_boon_color, "N");
-				ImGui::SameLine();
-			}
-		}
-		else
-		{
-			ImGui::Text("N");
-			ImGui::SameLine();
-		}
-	}
-
 	if (current_buff->stacking_type == StackingType_intensity)
 	{
 		char label[5];
@@ -343,11 +321,6 @@ void AppChart::setShowPlayers(bool new_show)
 	show_players = new_show;
 }
 
-void AppChart::setShowCurrent(bool new_show)
-{
-	show_current = new_show;
-}
-
 void AppChart::setShowSubgroups(bool new_show)
 {
 	show_subgroups = new_show;
@@ -361,11 +334,6 @@ void AppChart::setShowTotal(bool new_show)
 bool AppChart::bShowPlayers(Tracker * tracker)
 {
 	return show_players;
-}
-
-bool AppChart::bShowCurrent()
-{
-	return show_current;
 }
 
 bool AppChart::bShowSubgroups(Tracker* tracker)

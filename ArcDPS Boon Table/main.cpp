@@ -292,9 +292,6 @@ void parseIni()
 	pszValue = table_ini.GetValue("table", "show_players", "1");
 	chart.setShowPlayers(std::stoi(pszValue));
 
-	pszValue = table_ini.GetValue("table", "show_current", "1");
-	chart.setShowCurrent(std::stoi(pszValue));
-
 	pszValue = table_ini.GetValue("table", "show_subgroups", "1");
 	chart.setShowSubgroups(std::stoi(pszValue));
 
@@ -313,7 +310,6 @@ void writeIni()
 	SI_Error rc = table_ini.SetValue("table", "show", std::to_string(show_chart).c_str());
 
 	rc = table_ini.SetValue("table", "show_players", std::to_string(chart.bShowPlayers(nullptr)).c_str());
-	rc = table_ini.SetValue("table", "show_current", std::to_string(chart.bShowCurrent()).c_str());
 	rc = table_ini.SetValue("table", "show_subgroups", std::to_string(chart.bShowSubgroups(nullptr)).c_str());
 	rc = table_ini.SetValue("table", "show_total", std::to_string(chart.bShowTotal(nullptr)).c_str());
 
