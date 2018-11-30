@@ -11,6 +11,8 @@ std::list<BoonDef> tracked_buffs = std::list<BoonDef>({
 	BoonDef(BUFF_VIGOR,"Vigor",StackingType_duration,false,BoonType_boon),
 	BoonDef(BUFF_STAB,"Stability",StackingType_intensity,false,BoonType_boon),
 	BoonDef(BUFF_AEGIS,"Aegis",StackingType_duration,false,BoonType_boon),
+	BoonDef(BUFF_SWIFT,"Swiftness",StackingType_duration,false,BoonType_boon),
+	BoonDef(BUFF_RESIST,"Resistance",StackingType_duration,false,BoonType_boon),
 	BoonDef(BUFF_EA,"EA",StackingType_single,false,BoonType_trait),
 	BoonDef(BUFF_PINPOINT,"PP",StackingType_single,false,BoonType_trait),
 	BoonDef(BUFF_ASSASSINS_PRESENCE,"AP",StackingType_single,false,BoonType_trait),
