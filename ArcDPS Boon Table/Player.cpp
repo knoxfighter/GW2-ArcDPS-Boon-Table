@@ -106,7 +106,7 @@ float Player::getBoonUptime(BoonDef* new_boon)
 
 	if (current_boon)
 	{
-		float out = (float)current_boon->getDuration(in_combat ? getCurrentTime() : exit_combat_time) / getCombatTime();
+		double out = (double)current_boon->getDuration(in_combat ? getCurrentTime() : exit_combat_time) / (double)getCombatTime();
 
 		switch (new_boon->stacking_type)
 		{
@@ -123,6 +123,9 @@ float Player::getBoonUptime(BoonDef* new_boon)
 			out = out > 1.0f ? 1.0f : out;
 			break;
 		}
+
+		if (out < 0.0f) out = 0.0f;
+
 		return out;
 	}
 	
@@ -158,7 +161,7 @@ void Player::combatExit(uint64_t new_time)
 	in_combat = false;
 }
 
-float Player::getCombatTime()
+uint64_t Player::getCombatTime()
 {
 	if (in_combat)
 	{

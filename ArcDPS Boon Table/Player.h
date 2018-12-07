@@ -40,7 +40,7 @@ public:
 
 	void combatEnter(uint64_t new_time, uint8_t new_subgroup);
 	void combatExit(uint64_t new_time);
-	float getCombatTime();
+	uint64_t getCombatTime();
 };
 
 extern std::mutex boons_mtx;
