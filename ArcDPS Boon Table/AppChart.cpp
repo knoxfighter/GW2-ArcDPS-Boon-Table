@@ -27,7 +27,9 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	active_column = INDEX_NONE;
 	float current_boon_uptime = 0.0f;
 
-	if (ImGui::BeginPopupContextItem("Options"))
+	if (ImGui::IsWindowHovered && ImGui::IsMouseClicked(1))
+		ImGui::OpenPopup("Options");
+	if (ImGui::BeginPopup("Options"))
 	{
 		drawRtClickMenu(tracker);
 		ImGui::EndPopup();
