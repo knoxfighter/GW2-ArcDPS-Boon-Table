@@ -26,10 +26,9 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	active_player = INDEX_NONE;
 	active_column = INDEX_NONE;
 	float current_boon_uptime = 0.0f;
+	bool _show_subgroups = bShowSubgroups(tracker);
 
-	if (ImGui::IsWindowHovered && ImGui::IsMouseClicked(1))
-		ImGui::OpenPopup("Options");
-	if (ImGui::BeginPopup("Options"))
+	if (ImGui::BeginPopupContextItem("Options") || ImGui::BeginPopupContextWindow("Options"))
 	{
 		drawRtClickMenu(tracker);
 		ImGui::EndPopup();
@@ -37,7 +36,8 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	
 	std::lock_guard<std::mutex> lock(tracker->players_mtx);
 
-	int column_number = 2;
+	int column_number = 1;
+	column_number += _show_subgroups;
 	for (auto current_buff : tracked_buffs)
 	{
 		if (current_buff.is_relevant) column_number++;
@@ -46,12 +46,15 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	float header_hight = ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.y;
 
 	//show headers
-	ImGui::BeginChild("HeadersChild",ImVec2(0, header_hight));
+	ImGui::BeginChild("HeadersChild",ImVec2(0, header_hight));//use a child for headers to make the columns line up with the main table
 	ImGui::Columns(column_number, "Headers");
 	if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Name")) tracker->setSortMethod(SortMethod_name);
 
-	ImGui::NextColumn();
-	if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Subgrp")) tracker->setSortMethod(SortMethod_subgroup);
+	if (_show_subgroups)
+	{
+		ImGui::NextColumn();
+		if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Subgrp")) tracker->setSortMethod(SortMethod_subgroup);
+	}
 	
 	for (auto current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
 	{
@@ -77,11 +80,14 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 		}
 
 		//show player subgroup numbers
-		ImGui::NextColumn();
-		for (auto current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
+		if (_show_subgroups)
 		{
-			if (!current_player->isRelevant()) continue;
-			highlightedText(current_player->id, "%d", current_player->subgroup);
+			ImGui::NextColumn();
+			for (auto current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
+			{
+				if (!current_player->isRelevant()) continue;
+				highlightedText(current_player->id, "%d", current_player->subgroup);
+			}
 		}
 
 		//show boon uptimes
@@ -103,7 +109,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 		ImGui::Columns(1);
 	}
 
-	if (bShowSubgroups(tracker))
+	if (_show_subgroups)
 	{
 		ImGui::Separator();
 
@@ -145,9 +151,12 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 		highlightedText(INDEX_TOTAL, "Total");
 
-		ImGui::NextColumn();
-		
-		highlightedText(INDEX_TOTAL, "All");
+		if (_show_subgroups)
+		{
+			ImGui::NextColumn();
+
+			highlightedText(INDEX_TOTAL, "All");
+		}
 
 		for (auto current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
 		{
