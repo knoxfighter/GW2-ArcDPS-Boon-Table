@@ -16,6 +16,7 @@ protected:
 	bool show_players = true;
 	bool show_subgroups = true;
 	bool show_total = true;
+	bool show_boon_as_progress_bar = true;
 public:
 	uintptr_t active_player, last_active_player;
 	int8_t active_column, last_active_column;
@@ -40,8 +41,10 @@ public:
 	void setShowPlayers(bool new_show);
 	void setShowSubgroups(bool new_show);
 	void setShowTotal(bool new_show);
+	void setShowBoonAsProgressBar(bool new_show);
 
 	bool bShowPlayers(Tracker* tracker);
 	bool bShowSubgroups(Tracker* tracker);
 	bool bShowTotal(Tracker* tracker);
+	bool bShowBoonAsProgressBar();
 };

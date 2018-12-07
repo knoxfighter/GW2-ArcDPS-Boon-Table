@@ -298,6 +298,9 @@ void parseIni()
 	pszValue = table_ini.GetValue("table", "show_total", "1");
 	chart.setShowTotal(std::stoi(pszValue));
 
+	pszValue = table_ini.GetValue("table", "show_uptime_as_progress_bar", "1");
+	chart.setShowBoonAsProgressBar(std::stoi(pszValue));
+
 	for (auto boon_def = tracked_buffs.begin(); boon_def != tracked_buffs.end(); ++boon_def)
 	{
 		pszValue = table_ini.GetValue("boons", boon_def->name.c_str(), std::to_string(boon_def->is_relevant).c_str());
@@ -312,6 +315,7 @@ void writeIni()
 	rc = table_ini.SetValue("table", "show_players", std::to_string(chart.bShowPlayers(nullptr)).c_str());
 	rc = table_ini.SetValue("table", "show_subgroups", std::to_string(chart.bShowSubgroups(nullptr)).c_str());
 	rc = table_ini.SetValue("table", "show_total", std::to_string(chart.bShowTotal(nullptr)).c_str());
+	rc = table_ini.SetValue("table", "show_uptime_as_progress_bar", std::to_string(chart.bShowBoonAsProgressBar()).c_str());
 
 	for (auto boon_def = tracked_buffs.begin(); boon_def != tracked_buffs.end(); ++boon_def)
 	{

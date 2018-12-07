@@ -174,6 +174,7 @@ void AppChart::drawRtClickMenu(Tracker* tracker)
 	ImGui::MenuItem("Players", NULL, &show_players);
 	ImGui::MenuItem("Subgroups", NULL, &show_subgroups);
 	ImGui::MenuItem("Total", NULL, &show_total);
+	ImGui::MenuItem("Show uptime as progress bar", NULL, &show_boon_as_progress_bar);
 
 	
 	if (ImGui::BeginMenu("Boons"))
@@ -243,16 +244,30 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 	}
 	
 	ImGui::BeginGroup();
-	if (current_buff->stacking_type == StackingType_intensity)
+	if (show_boon_as_progress_bar)
 	{
-		char label[5];
-		sprintf(label, "%.1f", current_boon_uptime);
-		current_boon_uptime /= 25;
-		ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()), label);
+		if (current_buff->stacking_type == StackingType_intensity)
+		{
+			char label[5];
+			sprintf(label, "%.1f", current_boon_uptime);
+			current_boon_uptime /= 25;
+			ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()), label);
+		}
+		else
+		{
+			ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()));
+		}
 	}
 	else
 	{
-		ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()));
+		if (current_buff->stacking_type == StackingType_intensity)
+		{//don't show the % for intensity stacking buffs
+			ImGui::Text("%.1f", current_boon_uptime);
+		}
+		else
+		{
+			ImGui::Text("%.1f%%", current_boon_uptime);
+		}
 	}
 	ImGui::EndGroup();
 	if (last_active_player != -1 || last_active_column != -1)
@@ -331,6 +346,11 @@ void AppChart::setShowTotal(bool new_show)
 	show_total = new_show;
 }
 
+void AppChart::setShowBoonAsProgressBar(bool new_show)
+{
+	show_boon_as_progress_bar = new_show;
+}
+
 bool AppChart::bShowPlayers(Tracker * tracker)
 {
 	return show_players;
@@ -346,4 +366,9 @@ bool AppChart::bShowTotal(Tracker* tracker)
 {
 	return show_total 
 		&& (tracker ? tracker->getRelevantPlayerCount() > 1 : true);
+}
+
+bool AppChart::bShowBoonAsProgressBar()
+{
+	return show_boon_as_progress_bar;
 }
