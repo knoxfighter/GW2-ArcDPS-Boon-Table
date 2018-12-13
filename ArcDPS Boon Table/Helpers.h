@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include "ArcdpsDataStructures.h"
 
 extern uint64_t current_time;
 
@@ -11,3 +12,5 @@ extern uint64_t current_time;
 		}
 
 uint64_t getCurrentTime();
+
+int32_t getBuffApplyDuration(cbtevent* ev);

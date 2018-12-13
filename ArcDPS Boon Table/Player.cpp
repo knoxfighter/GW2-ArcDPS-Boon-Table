@@ -57,12 +57,12 @@ void Player::applyBoon(cbtevent* ev)
 
 	if (current_boon)
 	{
-		current_boon->Apply(ev->value - ev->overstack_value);
+		current_boon->Apply(getBuffApplyDuration(ev));
 	}
 	else
 	{
 		std::lock_guard<std::mutex> lock(boons_mtx);
-		boons.push_back(Boon(ev->skillid, ev->value - ev->overstack_value));
+		boons.push_back(Boon(ev->skillid, getBuffApplyDuration(ev)));
 	}
 }
 
