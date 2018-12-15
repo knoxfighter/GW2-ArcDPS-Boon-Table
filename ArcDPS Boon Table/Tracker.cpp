@@ -115,6 +115,7 @@ void Tracker::bakeCombatData()
 
 Player* Tracker::getPlayer(uintptr_t new_player)
 {
+	if (!new_player) return nullptr;
 	std::lock_guard<std::mutex> lock(players_mtx);
 	auto it = std::find(players.begin(), players.end(), new_player);
 
@@ -131,6 +132,7 @@ Player* Tracker::getPlayer(uintptr_t new_player)
 
 Player* Tracker::getPlayer(std::string new_player)
 {
+	if (new_player.empty()) return nullptr;
 	std::lock_guard<std::mutex> lock(players_mtx);
 	auto it = std::find(players.begin(), players.end(), new_player);
 
