@@ -11,20 +11,19 @@
 class Player
 {
 public:
-	uintptr_t id;
-	std::string name;
-	std::string account_name;
+	uintptr_t id = 0;
+	std::string name = "";
+	std::string account_name = "";
 	std::list<Boon> boons;
-	uint64_t enter_combat_time;
-	uint64_t exit_combat_time;
-	bool in_combat;
-	uint8_t subgroup;
-	bool is_relevant;
+	uint64_t enter_combat_time = getCurrentTime();
+	uint64_t exit_combat_time = getCurrentTime();;
+	bool in_combat = false;
+	uint8_t subgroup = 0;
+	bool is_relevant = true;
 
 	bool operator==(uintptr_t other_id);
 	bool operator==(std::string other_name);
 
-	Player();
 	Player(uintptr_t new_id, std::string new_name, std::string new_account_name, uint8_t new_subgroup);
 	~Player();
 
