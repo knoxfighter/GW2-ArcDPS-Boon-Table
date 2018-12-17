@@ -1,5 +1,6 @@
 #pragma once
 #include <inttypes.h>
+#include <string>
 
 //enums and structs:
 /* is friend/foe */

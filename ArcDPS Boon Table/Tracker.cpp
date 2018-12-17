@@ -24,6 +24,9 @@ void Tracker::addPlayer(ag* src, ag* dst)
 	std::string new_account_name = std::string(dst->name);
 	uint8_t new_subgroup = dst->team;
 
+	if (new_character_name.length() < 2) return;
+	if (new_account_name.length() < 2) return;
+
 	Player* current_player = getPlayer(new_account_name);
 
 	if (current_player)
