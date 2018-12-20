@@ -15,6 +15,7 @@ public:
 	std::string name = "";
 	std::string account_name = "";
 	std::list<Boon> boons;
+	std::list<Boon> boons_initial;
 	uint64_t enter_combat_time = getCurrentTime();
 	uint64_t exit_combat_time = getCurrentTime();;
 	bool in_combat = false;
@@ -32,13 +33,13 @@ public:
 	void applyBoon(cbtevent* ev);
 	void removeBoon(cbtevent* ev);
 
-	Boon* getBoon(uint32_t new_boon);
+	Boon* getBoon(std::list<Boon>* new_boons_list, uint32_t new_boon);
 	
 	float getBoonUptime(BoonDef* new_boon);
 	bool hasBoonNow(BoonDef* new_boon);
 
-	void combatEnter(uint64_t new_time, uint8_t new_subgroup);
-	void combatExit(uint64_t new_time);
+	void combatEnter(cbtevent* ev);
+	void combatExit();
 	uint64_t getCombatTime();
 };
 

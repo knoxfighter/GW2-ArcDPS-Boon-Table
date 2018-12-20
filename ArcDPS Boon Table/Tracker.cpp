@@ -55,7 +55,7 @@ void Tracker::removePlayer(ag* src)
 	if (current_player)
 	{
 		current_player->is_relevant = false;
-		if (current_player->in_combat) current_player->combatExit(getCurrentTime());
+		if (current_player->in_combat) current_player->combatExit();
 		bakeCombatData();
 	}
 }
