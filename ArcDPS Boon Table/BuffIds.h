@@ -32,6 +32,7 @@ const uint32_t BUFF_SPIRIT_FROST = 50421;
 const uint32_t BUFF_SPIRIT_SUN = 50413;
 const uint32_t BUFF_SPIRIT_STONE = 50415;
 const uint32_t BUFF_SPIRIT_STORM = 50381;
+const uint32_t BUFF_SPIRIT_WATER = 50386;
 
 bool isTrackedBoon(uint32_t new_id);
 

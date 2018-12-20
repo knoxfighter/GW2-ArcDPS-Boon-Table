@@ -28,6 +28,7 @@ std::list<BoonDef> tracked_buffs = std::list<BoonDef>({
 	BoonDef(BUFF_SPIRIT_SUN,"Sun",StackingType_single,false,BoonType_spirit),
 	BoonDef(BUFF_SPIRIT_STONE,"Stone",StackingType_single,false,BoonType_spirit),
 	BoonDef(BUFF_SPIRIT_STORM,"Storm",StackingType_single,false,BoonType_spirit),
+	BoonDef(BUFF_SPIRIT_WATER,"Water",StackingType_single,false,BoonType_spirit),
 	BoonDef(BUFF_GLYPH_EMPOW,"Empower",StackingType_single,false,BoonType_skill)
 	});
 
