@@ -33,13 +33,13 @@ std::list<BoonDef> tracked_buffs = std::list<BoonDef>({
 //	BoonDef(10235,"SoI",StackingType_single,false,BoonType_other)
 	});
 
-bool isTrackedBoon(uint32_t new_id)
+BoonDef* getTrackedBoon(uint32_t new_id)
 {
-	for (auto current_buff : tracked_buffs)
+	for(auto current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
 	{
-		if (current_buff.id == new_id) return true;
+		if (current_buff->id == new_id) return &*current_buff;
 	}
-	return false;
+	return nullptr;
 }
 
 BoonDef::BoonDef(uint32_t new_id, std::string new_name, StackingType new_stacking_type, bool new_is_relevant, BoonType new_category)

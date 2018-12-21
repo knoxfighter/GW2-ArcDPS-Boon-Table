@@ -34,8 +34,6 @@ const uint32_t BUFF_SPIRIT_STONE = 50415;
 const uint32_t BUFF_SPIRIT_STORM = 50381;
 const uint32_t BUFF_SPIRIT_WATER = 50386;
 
-bool isTrackedBoon(uint32_t new_id);
-
 enum BoonType
 {
 	BoonType_boon,
@@ -63,5 +61,7 @@ struct BoonDef
 
 	BoonDef(uint32_t new_id, std::string new_name, StackingType new_stacking_type, bool new_is_relevant, BoonType new_category);
 };
+
+BoonDef* getTrackedBoon(uint32_t new_id);
 
 extern std::list<BoonDef> tracked_buffs;

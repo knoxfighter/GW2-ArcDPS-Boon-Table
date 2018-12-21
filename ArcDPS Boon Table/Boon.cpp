@@ -4,12 +4,13 @@
 
 bool Boon::operator==(uint32_t other_id)
 {
-	return id == other_id;
+	return def
+		&& def->id == other_id;
 }
 
-Boon::Boon(uint32_t new_id, int32_t new_duration)
+Boon::Boon(BoonDef* new_def, int32_t new_duration)
 {
-	id = new_id;
+	def = new_def;
 	duration = new_duration;
 	expected_end_time = getCurrentTime() + new_duration;
 }
@@ -51,8 +52,19 @@ int32_t Boon::getDuration(uint64_t new_current_time)
 //returns the duration of the boon still on the player's bar
 uint64_t Boon::getDurationRemaining(uint64_t new_current_time)
 {
+	uint64_t out = 0;
 	if (expected_end_time > new_current_time)
-		return expected_end_time - new_current_time;
+	{
+		out = expected_end_time - new_current_time;
+		if (def 
+			&& def->stacking_type == StackingType_intensity)//TODO: is this accurate?
+		{
+			out = out / 25;
+		}
+	}
 	else
-		return 0;
+	{
+		out = 0;
+	}
+	return out;
 }

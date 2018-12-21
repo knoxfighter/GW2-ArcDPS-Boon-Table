@@ -39,7 +39,9 @@ void Player::applyBoon(cbtevent* ev)
 	if (!ev) return;
 	if (ev->value == 0) return;
 //	if (ev->value <= ev->overstack_value) return;
-	if (!isTrackedBoon(ev->skillid)) return;
+
+	BoonDef* current_def = getTrackedBoon(ev->skillid);
+	if (!current_def) return;
 	
 	std::list<Boon>* current_boon_list = in_combat ? &boons : &boons_initial;
 
@@ -52,7 +54,7 @@ void Player::applyBoon(cbtevent* ev)
 	else
 	{
 		std::lock_guard<std::mutex> lock(boons_mtx);
-		current_boon_list->push_back(Boon(ev->skillid, getBuffApplyDuration(ev)));
+		current_boon_list->push_back(Boon(current_def, getBuffApplyDuration(ev)));
 	}
 }
 
@@ -61,7 +63,7 @@ void Player::removeBoon(cbtevent* ev)
 	if (!ev) return;
 	if (ev->value == 0) return;
 //	if (ev->value <= ev->overstack_value) return;
-	if (!isTrackedBoon(ev->skillid)) return;
+	if (!getTrackedBoon(ev->skillid)) return;
 
 	Boon* current_boon = nullptr;
 	if (in_combat)
@@ -152,7 +154,7 @@ void Player::combatEnter(cbtevent* ev)
 	{
 		if (current_initial_boon->getDurationRemaining(ev->time) > 0)
 		{
-			boons.push_back(Boon(current_initial_boon->id, current_initial_boon->getDurationRemaining(ev->time)));
+			boons.push_back(Boon(current_initial_boon->def, current_initial_boon->getDurationRemaining(ev->time)));
 		}
 	}
 
