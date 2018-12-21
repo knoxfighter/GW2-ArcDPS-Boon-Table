@@ -53,11 +53,11 @@ enum StackingType
 
 struct BoonDef
 {
-	uint32_t id;
-	std::string name;
-	StackingType stacking_type;
-	bool is_relevant;
-	BoonType category;
+	uint32_t id = 0;
+	std::string name = "";
+	StackingType stacking_type = StackingType_duration;
+	bool is_relevant = false;
+	BoonType category = BoonType_other;
 
 	BoonDef(uint32_t new_id, std::string new_name, StackingType new_stacking_type, bool new_is_relevant, BoonType new_category);
 };
