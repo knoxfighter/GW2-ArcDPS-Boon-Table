@@ -20,4 +20,6 @@ public:
 
 	int32_t getDuration(uint64_t new_current_time);
 	uint64_t getDurationRemaining(uint64_t new_current_time);
+
+	float getUptime(uint64_t new_current_time, uint64_t new_combat_time);
 };

@@ -101,7 +101,7 @@ float Player::getBoonUptime(BoonDef* new_boon)
 
 	if (current_boon)
 	{
-		double out = (double)current_boon->getDuration(in_combat ? getCurrentTime() : exit_combat_time) / (double)getCombatTime();
+		double out = (double)current_boon->getUptime(in_combat ? getCurrentTime() : exit_combat_time,getCombatTime());
 
 		switch (new_boon->stacking_type)
 		{

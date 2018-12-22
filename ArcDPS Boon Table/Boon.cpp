@@ -50,21 +50,42 @@ int32_t Boon::getDuration(uint64_t new_current_time)
 }
 
 //returns the duration of the boon still on the player's bar
+//inaccurate for intensity stacking buffs
 uint64_t Boon::getDurationRemaining(uint64_t new_current_time)
 {
 	uint64_t out = 0;
 	if (expected_end_time > new_current_time)
 	{
 		out = expected_end_time - new_current_time;
-		if (def 
-			&& def->stacking_type == StackingType_intensity)//TODO: is this accurate?
-		{
-			out = out / 25;
-		}
 	}
 	else
 	{
 		out = 0;
 	}
+	return out;
+}
+
+float Boon::getUptime(uint64_t new_current_time, uint64_t new_combat_time)
+{
+	double out = duration;
+
+	if (expected_end_time > new_current_time)
+	{
+		if (def
+			&& def->stacking_type == StackingType_intensity)//TODO: is this accurate?
+		{
+			if (new_combat_time != 0 && ((duration / new_combat_time) != 0))
+			{
+				out -= (expected_end_time - new_current_time) / (duration / new_combat_time);
+			}
+		}
+		else
+		{
+			out -= expected_end_time - new_current_time;
+		}
+	}
+
+	out = out / new_combat_time;
+
 	return out;
 }
