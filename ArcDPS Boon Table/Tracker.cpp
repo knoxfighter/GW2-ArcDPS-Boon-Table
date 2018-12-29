@@ -114,6 +114,20 @@ void Tracker::bakeCombatData()
 	std::lock_guard<std::mutex> lock(subgroups_mtx);
 	subgroups = getSubgroups();
 	queueResort();
+
+	//cache the length of the longest player name
+	std::string* longest_name = nullptr;
+	for (auto current_player = players.begin(); current_player != players.end(); ++current_player)
+	{
+		if (!current_player->is_relevant) continue;
+		if (!longest_name
+			|| current_player->name.length() > longest_name->length())
+		{
+			longest_name = &current_player->name;
+		}
+	}
+	if (longest_name)
+		max_character_name_size = ImGui::CalcTextSize(longest_name->c_str()).x;
 }
 
 Player* Tracker::getPlayer(uintptr_t new_player)
@@ -156,7 +170,7 @@ uint16_t Tracker::getRelevantPlayerCount()
 
 	for (auto player = players.begin(); player != players.end(); ++player)
 	{
-		if (player->isRelevant()) out++;
+		if (player->is_relevant) out++;
 	}
 	
 	return out;
@@ -170,7 +184,7 @@ std::list<uint8_t> Tracker::getSubgroups()
 
 	for (auto player = players.begin(); player != players.end(); ++player)
 	{
-		if (!player->isRelevant()) continue;
+		if (!player->is_relevant) continue;
 		for (auto current_sub : out)
 		{
 			if (player->subgroup == current_sub)
@@ -200,7 +214,7 @@ float Tracker::getSubgroupBoonUptime(BoonDef* new_boon, uint8_t new_subgroup)
 
 	for (auto player = players.begin(); player != players.end(); ++player)
 	{
-		if (!player->isRelevant()) continue;
+		if (!player->is_relevant) continue;
 		if (player->subgroup != new_subgroup) continue;
 
 		out += player->getBoonUptime(new_boon);
@@ -217,7 +231,7 @@ float Tracker::getAverageBoonUptime(BoonDef* new_boon)
 
 	for (auto player = players.begin(); player != players.end(); ++player)
 	{
-		if (!player->isRelevant()) continue;
+		if (!player->is_relevant) continue;
 		out += player->getBoonUptime(new_boon);
 		player_num++;
 	}

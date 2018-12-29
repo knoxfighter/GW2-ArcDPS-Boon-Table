@@ -36,139 +36,129 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	
 	std::lock_guard<std::mutex> lock(tracker->players_mtx);
 
-	int column_number = 1;
+	int column_number = 0;
 	column_number += _show_subgroups;
 	for (auto current_buff : tracked_buffs)
 	{
 		if (current_buff.is_relevant) column_number++;
 	}
+	float column_spacing = (ImGui::GetWindowContentRegionWidth() - tracker->max_character_name_size) / (column_number);
 
 	float header_hight = ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.y;
 
-	//show headers
-	ImGui::BeginChild("HeadersChild",ImVec2(0, header_hight));//use a child for headers to make the columns line up with the main table
-	ImGui::Columns(column_number, "Headers");
+	//show headers	
 	if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Name")) tracker->setSortMethod(SortMethod_name);
+	ImGui::SameLine(tracker->max_character_name_size + ImGui::GetStyle().ItemSpacing.x);
+	current_column++;
 
 	if (_show_subgroups)
 	{
-		ImGui::NextColumn();
 		if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Subgrp")) tracker->setSortMethod(SortMethod_subgroup);
+		ImGui::SameLine(0, column_spacing - ImGui::GetItemRectSize().x);
+		current_column++;
 	}
 	
 	for (auto current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
 	{
 		if (!current_buff->is_relevant)continue;
 
-		ImGui::NextColumn();
-
 		if (highlightedSmallButton(INDEX_SORTING_BUTTON, current_buff->name.c_str())) tracker->setSortMethod(SortMethod_boon, &*current_buff);
+		ImGui::SameLine(0, column_spacing - ImGui::GetItemRectSize().x);
+		current_column++;
 	}
-	ImGui::Columns(1);
-	ImGui::EndChild();
+
+	ImGui::NewLine();
+	current_column = 0;
 
 	ImGui::BeginChild("Scrolling");
+	//show players
 	if (bShowPlayers(tracker))
 	{
 		ImGui::Separator();
-		ImGui::Columns(column_number, "Players");
 
+		//show player names
 		for (auto current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
 		{
-			if (!current_player->isRelevant()) continue;
+			if (!current_player->is_relevant) continue;
 			highlightedText(current_player->id, current_player->name.c_str());
-		}
+			ImGui::SameLine(tracker->max_character_name_size + ImGui::GetStyle().ItemSpacing.x);
+			current_column++;
 
-		//show player subgroup numbers
-		if (_show_subgroups)
-		{
-			ImGui::NextColumn();
-			for (auto current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
+			if (_show_subgroups)
 			{
-				if (!current_player->isRelevant()) continue;
 				highlightedText(current_player->id, "%d", current_player->subgroup);
+				ImGui::SameLine(0,column_spacing - ImGui::GetItemRectSize().x);
+				current_column++;
 			}
-		}
 
-		//show boon uptimes
-		for (auto current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
-		{
-			if (!current_buff->is_relevant)continue;
-
-			ImGui::NextColumn();
-
-			//players
-			for (auto current_player = tracker->players.begin(); current_player != tracker->players.end(); ++current_player)
+			for (auto current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
 			{
-				if (!current_player->isRelevant()) continue;
-				current_boon_uptime = current_player->getBoonUptime(&*current_buff);
+				if (!current_buff->is_relevant)continue;
 
-				buffProgressBar(&*current_buff, current_boon_uptime, &*current_player, current_player->id);
+				current_boon_uptime = current_player->getBoonUptime(&*current_buff);
+				buffProgressBar(&*current_buff, current_boon_uptime, &*current_player, current_player->id, column_spacing - ImGui::GetStyle().ItemSpacing.x);
+				ImGui::SameLine(0, column_spacing - ImGui::GetItemRectSize().x);
+				current_column++;
 			}
+			ImGui::NewLine();
+			current_column = 0;
 		}
-		ImGui::Columns(1);
 	}
 
 	if (_show_subgroups)
 	{
 		ImGui::Separator();
 
-		ImGui::Columns(column_number,"Subgroups");
-
-		for (auto current_subgroup : tracker->subgroups)
-		{
-			highlightedText(current_subgroup, "Subgroup");
-		}
-		
-		ImGui::NextColumn();
-
 		for (auto current_subgroup = tracker->subgroups.begin(); current_subgroup != tracker->subgroups.end(); ++current_subgroup)
 		{
+			highlightedText(*current_subgroup, "Subgroup");
+			ImGui::SameLine(tracker->max_character_name_size + ImGui::GetStyle().ItemSpacing.x);
+			current_column++;
+
 			highlightedText(*current_subgroup, "%d", *current_subgroup);
-		}
+			ImGui::SameLine(0, column_spacing - ImGui::GetItemRectSize().x);
+			current_column++;
 
-		for (auto current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
-		{
-			if (!current_buff->is_relevant)continue;
-
-			ImGui::NextColumn();
-
-			for (auto current_subgroup : tracker->subgroups)
+			for (auto current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
 			{
-				current_boon_uptime = tracker->getSubgroupBoonUptime(&*current_buff, current_subgroup);
+				if (!current_buff->is_relevant)continue;
 
-				buffProgressBar(&*current_buff, current_boon_uptime, nullptr, current_subgroup);
+				current_boon_uptime = tracker->getSubgroupBoonUptime(&*current_buff, *current_subgroup);
+				buffProgressBar(&*current_buff, current_boon_uptime, nullptr, *current_subgroup, column_spacing - ImGui::GetStyle().ItemSpacing.x);
+				ImGui::SameLine(0, column_spacing - ImGui::GetItemRectSize().x);
+				current_column++;
 			}
+			ImGui::NewLine();
+			current_column = 0;
 		}
-		ImGui::Columns(1);
 	}
 	
 	if (bShowTotal(tracker))
 	{
 		ImGui::Separator();
 
-		ImGui::Columns(column_number, "Total");
-
 		highlightedText(INDEX_TOTAL, "Total");
+		ImGui::SameLine(tracker->max_character_name_size + ImGui::GetStyle().ItemSpacing.x);
+		current_column++;
 
 		if (_show_subgroups)
 		{
-			ImGui::NextColumn();
-
 			highlightedText(INDEX_TOTAL, "All");
+			ImGui::SameLine(0, column_spacing - ImGui::GetItemRectSize().x);
+			current_column++;
 		}
 
 		for (auto current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff)
 		{
 			if (!current_buff->is_relevant)continue;
 
-			ImGui::NextColumn();
-
 			current_boon_uptime = tracker->getAverageBoonUptime(&*current_buff);
-
-			buffProgressBar(&*current_buff, current_boon_uptime, nullptr, INDEX_TOTAL);
+			buffProgressBar(&*current_buff, current_boon_uptime, nullptr, INDEX_TOTAL, column_spacing - ImGui::GetStyle().ItemSpacing.x);
+			ImGui::SameLine(0, column_spacing - ImGui::GetItemRectSize().x);
+			current_column++;
 		}
-		ImGui::Columns(1);
+		ImGui::NewLine();
+		current_column = 0;
 	}
 
 	ImGui::EndChild();
@@ -243,9 +233,9 @@ void AppChart::drawRtClickMenu(Tracker* tracker)
 	if(ImGui::IsItemHovered()) ImGui::SetTooltip("Requires map reload");
 }
 
-void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime, Player* current_player, uintptr_t current_id)
+void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime, Player* current_player, uintptr_t current_id, float width)
 {
-	if (last_active_player == current_id || last_active_column == ImGui::GetColumnIndex())
+	if (last_active_player == current_id || last_active_column == current_column)
 	{
 		ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
 	}
@@ -262,11 +252,11 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 			char label[5];
 			sprintf(label, "%.1f", current_boon_uptime);
 			current_boon_uptime /= 25;
-			ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()), label);
+			ImGui::ProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label);
 		}
 		else
 		{
-			ImGui::ProgressBar(current_boon_uptime, ImVec2(-1, ImGui::GetFontSize()));
+			ImGui::ProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()));
 		}
 	}
 	else
@@ -277,7 +267,7 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 		}
 		else
 		{
-			ImGui::Text("%.1f%%", current_boon_uptime);
+			ImGui::Text("%.1f%%", 100*(double)current_boon_uptime);
 		}
 	}
 	ImGui::EndGroup();
@@ -288,13 +278,13 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 	if (ImGui::IsItemHovered())
 	{
 		active_player = current_id;
-		active_column = ImGui::GetColumnIndex();
+		active_column = current_column;
 	}
 }
 
 void AppChart::highlightedText(uintptr_t player_id, const char* fmt, ...)
 {
-	if (last_active_player == player_id || last_active_column == ImGui::GetColumnIndex())
+	if (last_active_player == player_id || last_active_column == current_column)
 	{
 		ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
 	}
@@ -310,7 +300,7 @@ void AppChart::highlightedText(uintptr_t player_id, const char* fmt, ...)
 	if (ImGui::IsItemHovered())
 	{
 		active_player = player_id;
-		active_column = ImGui::GetColumnIndex();
+		active_column = current_column;
 	}
 	if (last_active_player != -1 || last_active_column != -1)
 	{
@@ -320,7 +310,7 @@ void AppChart::highlightedText(uintptr_t player_id, const char* fmt, ...)
 
 bool AppChart::highlightedSmallButton(uintptr_t player_id, const char* fmt)
 {
-	if (last_active_column == ImGui::GetColumnIndex())
+	if (last_active_column == current_column)
 	{
 		ImGui::PushStyleColor(ImGuiCol_Text, active_bar_color);
 	}
@@ -333,7 +323,7 @@ bool AppChart::highlightedSmallButton(uintptr_t player_id, const char* fmt)
 	if (ImGui::IsItemHovered())
 	{
 		active_player = player_id;
-		active_column = ImGui::GetColumnIndex();
+		active_column = current_column;
 	}
 	if (last_active_player != -1 || last_active_column != -1)
 	{

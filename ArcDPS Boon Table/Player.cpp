@@ -29,11 +29,6 @@ Player::~Player()
 
 }
 
-bool Player::isRelevant()
-{
-	return is_relevant;
-}
-
 void Player::applyBoon(cbtevent* ev)
 {
 	if (!ev) return;

@@ -28,8 +28,6 @@ public:
 	Player(uintptr_t new_id, std::string new_name, std::string new_account_name, uint8_t new_subgroup);
 	~Player();
 
-	bool isRelevant();
-
 	void applyBoon(cbtevent* ev);
 	void removeBoon(cbtevent* ev);
 

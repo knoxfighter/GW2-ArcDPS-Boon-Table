@@ -17,6 +17,8 @@ protected:
 	bool show_subgroups = true;
 	bool show_total = true;
 	bool show_boon_as_progress_bar = true;
+
+	int current_column = 0;
 public:
 	uintptr_t active_player, last_active_player;
 	int8_t active_column, last_active_column;
@@ -33,7 +35,7 @@ public:
 
 	void drawRtClickMenu(Tracker* tracker);
 
-	void buffProgressBar(BoonDef* current_buff, float current_boon_uptime, Player* current_player, uintptr_t current_id);
+	void buffProgressBar(BoonDef* current_buff, float current_boon_uptime, Player* current_player, uintptr_t current_id, float width);
 
 	void highlightedText(uintptr_t player_id, const char* fmt, ...);
 	bool highlightedSmallButton(uintptr_t player_id, const char * fmt);

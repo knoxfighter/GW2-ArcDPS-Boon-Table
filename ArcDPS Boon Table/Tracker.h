@@ -5,6 +5,7 @@
 #include <mutex>
 
 #include "ArcdpsDataStructures.h"
+#include "imgui/imgui.h"
 #include "Player.h"
 
 enum SortMethod
@@ -23,6 +24,8 @@ protected:
 
 	bool needs_resort;
 public:
+	float max_character_name_size = 75.0f;
+
 	std::mutex players_mtx;
 	std::list<Player> players;
 
