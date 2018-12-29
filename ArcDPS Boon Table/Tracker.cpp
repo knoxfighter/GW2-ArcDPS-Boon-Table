@@ -41,8 +41,8 @@ void Tracker::addPlayer(ag* src, ag* dst)
 		std::unique_lock<std::mutex> lock(players_mtx);
 		players.push_back(Player(new_id, new_character_name, new_account_name, new_subgroup));
 		lock.unlock();
-		bakeCombatData();
 	}
+	bakeCombatData();
 }
 
 void Tracker::removePlayer(ag* src)
