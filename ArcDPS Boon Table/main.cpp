@@ -116,7 +116,93 @@ uintptr_t mod_release()
 /* window callback -- return is assigned to umsg (return zero to not be processed by arcdps or game) */
 uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	auto io = &ImGui::GetIO();
+	auto const io = &ImGui::GetIO();
+
+	switch (uMsg)
+	{
+	case WM_KEYUP:
+	{
+		const int vkey = (int)wParam;
+		io->KeysDown[vkey] = 0;
+		if (vkey == VK_CONTROL)
+		{
+			io->KeyCtrl = false;
+		}
+		else if (vkey == VK_MENU)
+		{
+			io->KeyAlt = false;
+		}
+		else if (vkey == VK_SHIFT)
+		{
+			io->KeyShift = false;
+		}
+		break;
+	}
+	case WM_KEYDOWN:
+	{
+		const int vkey = (int)wParam;
+		io->KeysDown[vkey] = 1;
+		if (vkey == VK_CONTROL)
+		{
+			io->KeyCtrl = true;
+		}
+		else if (vkey == VK_MENU)
+		{
+			io->KeyAlt = true;
+		}
+		else if (vkey == VK_SHIFT)
+		{
+			io->KeyShift = true;
+		}
+		break;
+	}
+	case WM_SYSKEYUP:
+	{
+		const int vkey = (int)wParam;
+		io->KeysDown[vkey] = 0;
+		if (vkey == VK_CONTROL)
+		{
+			io->KeyCtrl = false;
+		}
+		else if (vkey == VK_MENU)
+		{
+			io->KeyAlt = false;
+		}
+		else if (vkey == VK_SHIFT)
+		{
+			io->KeyShift = false;
+		}
+		break;
+	}
+	case WM_SYSKEYDOWN:
+	{
+		const int vkey = (int)wParam;
+		io->KeysDown[vkey] = 1;
+		if (vkey == VK_CONTROL)
+		{
+			io->KeyCtrl = true;
+		}
+		else if (vkey == VK_MENU)
+		{
+			io->KeyAlt = true;
+		}
+		else if (vkey == VK_SHIFT)
+		{
+			io->KeyShift = true;
+		}
+		break;
+	}
+	case WM_ACTIVATEAPP:
+	{
+		if (!wParam)
+		{
+			io->KeysDown[arc_global_mod1] = false;
+			io->KeysDown[arc_global_mod2] = false;
+		}
+		break;
+	}
+	break;
+	}
 
 	if (io->KeysDown[arc_global_mod1] && io->KeysDown[arc_global_mod2])
 	{
