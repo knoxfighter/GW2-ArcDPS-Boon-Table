@@ -44,8 +44,6 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	}
 	float column_spacing = (ImGui::GetWindowContentRegionWidth() - tracker->max_character_name_size) / (column_number);
 
-	float header_hight = ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.y;
-
 	//show headers	
 	if (highlightedSmallButton(INDEX_SORTING_BUTTON, "Name")) tracker->setSortMethod(SortMethod_name);
 	ImGui::SameLine(tracker->max_character_name_size + ImGui::GetStyle().ItemSpacing.x);
