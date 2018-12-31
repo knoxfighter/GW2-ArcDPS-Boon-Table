@@ -127,7 +127,7 @@ void Tracker::bakeCombatData()
 		}
 	}
 	if (longest_name)
-		max_character_name_size = ImGui::CalcTextSize(longest_name->c_str()).x;
+		max_character_name_size = ImGui::CalcTextSize(longest_name->c_str()).x + ImGui::GetStyle().ItemSpacing.x;
 }
 
 Player* Tracker::getPlayer(uintptr_t new_player)
