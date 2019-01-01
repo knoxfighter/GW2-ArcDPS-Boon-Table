@@ -117,6 +117,7 @@ void Tracker::bakeCombatData()
 
 	//cache the length of the longest player name
 	std::string* longest_name = nullptr;
+	std::lock_guard<std::mutex> lock2(players_mtx);
 	for (auto current_player = players.begin(); current_player != players.end(); ++current_player)
 	{
 		if (!current_player->is_relevant) continue;
