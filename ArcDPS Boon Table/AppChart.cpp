@@ -170,6 +170,8 @@ void AppChart::drawRtClickMenu(Tracker* tracker)
 	active_player = INDEX_HIDE_ALL;
 	active_column = INDEX_HIDE_ALL;
 
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+
 	ImGui::Checkbox("Players", &show_players);
 	ImGui::Checkbox("Subgroups", &show_subgroups);
 	ImGui::Checkbox("Total", &show_total);
@@ -224,6 +226,9 @@ void AppChart::drawRtClickMenu(Tracker* tracker)
 		}
 		ImGui::EndMenu();
 	}
+
+	ImGui::PopStyleVar();
+
 	if (ImGui::Button("Clear"))
 	{
 		tracker->clearPlayers();
