@@ -170,17 +170,17 @@ void AppChart::drawRtClickMenu(Tracker* tracker)
 	active_player = INDEX_HIDE_ALL;
 	active_column = INDEX_HIDE_ALL;
 
-	ImGui::MenuItem("Players", NULL, &show_players);
-	ImGui::MenuItem("Subgroups", NULL, &show_subgroups);
-	ImGui::MenuItem("Total", NULL, &show_total);
-	ImGui::MenuItem("Show uptime as progress bar", NULL, &show_boon_as_progress_bar);
+	ImGui::Checkbox("Players", &show_players);
+	ImGui::Checkbox("Subgroups", &show_subgroups);
+	ImGui::Checkbox("Total", &show_total);
+	ImGui::Checkbox("Show uptime as progress bar", &show_boon_as_progress_bar);
 
 	
 	if (ImGui::BeginMenu("Boons"))
 	{
 		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
 		{
-			if(current_boon->category == BoonType_boon) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+			if (current_boon->category == BoonType_boon) ImGui::Checkbox(current_boon->name.c_str(), &current_boon->is_relevant);
 		}
 		ImGui::EndMenu();
 	}
@@ -188,7 +188,7 @@ void AppChart::drawRtClickMenu(Tracker* tracker)
 	{
 		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
 		{
-			if (current_boon->category == BoonType_trait) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+			if (current_boon->category == BoonType_trait) ImGui::Checkbox(current_boon->name.c_str(), &current_boon->is_relevant);
 		}
 		ImGui::EndMenu();
 	}
@@ -196,7 +196,7 @@ void AppChart::drawRtClickMenu(Tracker* tracker)
 	{
 		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
 		{
-			if (current_boon->category == BoonType_banner) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+			if (current_boon->category == BoonType_banner) ImGui::Checkbox(current_boon->name.c_str(), &current_boon->is_relevant);
 		}
 		ImGui::EndMenu();
 	}
@@ -204,7 +204,7 @@ void AppChart::drawRtClickMenu(Tracker* tracker)
 	{
 		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
 		{
-			if (current_boon->category == BoonType_spirit) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+			if (current_boon->category == BoonType_spirit) ImGui::Checkbox(current_boon->name.c_str(), &current_boon->is_relevant);
 		}
 		ImGui::EndMenu();
 	}
@@ -212,7 +212,7 @@ void AppChart::drawRtClickMenu(Tracker* tracker)
 	{
 		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
 		{
-			if (current_boon->category == BoonType_skill) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+			if (current_boon->category == BoonType_skill) ImGui::Checkbox(current_boon->name.c_str(), &current_boon->is_relevant);
 		}
 		ImGui::EndMenu();
 	}
@@ -220,7 +220,7 @@ void AppChart::drawRtClickMenu(Tracker* tracker)
 	{
 		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
 		{
-			if (current_boon->category == BoonType_other) ImGui::MenuItem(current_boon->name.c_str(), NULL, &current_boon->is_relevant);
+			if (current_boon->category == BoonType_other) ImGui::Checkbox(current_boon->name.c_str(), &current_boon->is_relevant);
 		}
 		ImGui::EndMenu();
 	}
