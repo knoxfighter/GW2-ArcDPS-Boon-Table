@@ -369,7 +369,11 @@ bool AppChart::bShowSubgroups(Tracker* tracker)
 bool AppChart::bShowTotal(Tracker* tracker)
 {
 	return show_total 
-		&& (tracker ? tracker->getRelevantPlayerCount() > 1 : true);
+		&& (
+		(tracker ? tracker->getRelevantPlayerCount() > 1 : true)
+		|| (!show_players
+			&& (tracker ? tracker->getRelevantPlayerCount() > 0 : true))
+			);
 }
 
 bool AppChart::bShowBoonAsProgressBar()
