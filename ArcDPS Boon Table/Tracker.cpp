@@ -127,7 +127,8 @@ void Tracker::bakeCombatData()
 			longest_name = &current_player->name;
 		}
 	}
-	if (longest_name)
+	if (longest_name 
+		&& ImGui::GetFontSize())//check if font size is non-zero to avoid it being initialized late and dividing by 0
 		max_character_name_size = ImGui::CalcTextSize(longest_name->c_str()).x + ImGui::GetStyle().ItemSpacing.x;
 }
 
