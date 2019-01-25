@@ -247,7 +247,6 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 		ImGui::PushStyleColor(ImGuiCol_Text, hidden_bar_color);
 	}
 	
-	ImGui::BeginGroup();
 	if (show_boon_as_progress_bar)
 	{
 		if (current_buff->stacking_type == StackingType_intensity)
@@ -273,7 +272,7 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 			ImGui::Text("%.1f%%", 100*(double)current_boon_uptime);
 		}
 	}
-	ImGui::EndGroup();
+
 	if (last_active_player != -1 || last_active_column != -1)
 	{
 		ImGui::PopStyleColor();
