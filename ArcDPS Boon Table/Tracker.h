@@ -25,6 +25,8 @@ protected:
 	bool needs_resort;
 public:
 	float max_character_name_size = 75.0f;
+	bool is_squad = false;
+	int relevant_player_count = 0;
 
 	std::mutex players_mtx;
 	std::list<Player> players;
@@ -48,8 +50,6 @@ public:
 
 	Player* getPlayer(uintptr_t new_player);
 	Player* getPlayer(std::string new_player);
-
-	uint16_t getRelevantPlayerCount();
 	
 	std::list<uint8_t> getSubgroups();
 	float getSubgroupBoonUptime(BoonDef* new_boon, uint8_t new_subgroup);

@@ -115,12 +115,16 @@ void Tracker::bakeCombatData()
 	subgroups = getSubgroups();
 	queueResort();
 
-	//cache the length of the longest player name
+	int tmp_relevant_player_count = 0;
+
 	std::string* longest_name = nullptr;
 	std::lock_guard<std::mutex> lock2(players_mtx);
 	for (auto current_player = players.begin(); current_player != players.end(); ++current_player)
 	{
 		if (!current_player->is_relevant) continue;
+		tmp_relevant_player_count++;
+
+		//cache the length of the longest player name
 		if (!longest_name
 			|| current_player->name.length() > longest_name->length())
 		{
@@ -130,6 +134,10 @@ void Tracker::bakeCombatData()
 	if (longest_name 
 		&& ImGui::GetFontSize())//check if font size is non-zero to avoid it being initialized late and dividing by 0
 		max_character_name_size = ImGui::CalcTextSize(longest_name->c_str()).x + ImGui::GetStyle().ItemSpacing.x;
+
+	relevant_player_count = tmp_relevant_player_count;
+	
+	is_squad = relevant_player_count > 5;
 }
 
 Player* Tracker::getPlayer(uintptr_t new_player)
@@ -164,18 +172,6 @@ Player* Tracker::getPlayer(std::string new_player)
 	{
 		return &*it;
 	}
-}
-
-uint16_t Tracker::getRelevantPlayerCount()
-{
-	uint16_t out = 0;
-
-	for (auto player = players.begin(); player != players.end(); ++player)
-	{
-		if (player->is_relevant) out++;
-	}
-	
-	return out;
 }
 
 std::list<uint8_t> Tracker::getSubgroups()

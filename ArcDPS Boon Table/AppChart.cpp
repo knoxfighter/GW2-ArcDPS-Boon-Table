@@ -363,6 +363,7 @@ bool AppChart::bShowPlayers(Tracker * tracker)
 bool AppChart::bShowSubgroups(Tracker* tracker)
 {
 	return show_subgroups 
+		&& tracker->is_squad
 		&& (tracker ? tracker->subgroups.size()>1 : true);
 }
 
@@ -370,9 +371,9 @@ bool AppChart::bShowTotal(Tracker* tracker)
 {
 	return show_total 
 		&& (
-		(tracker ? tracker->getRelevantPlayerCount() > 1 : true)
+		(tracker ? tracker->relevant_player_count > 1 : true)
 		|| (!show_players
-			&& (tracker ? tracker->getRelevantPlayerCount() > 0 : true))
+			&& (tracker ? tracker->relevant_player_count > 0 : true))
 			);
 }
 
