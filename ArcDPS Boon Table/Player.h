@@ -19,7 +19,7 @@ public:
 	uint64_t enter_combat_time = getCurrentTime();
 	uint64_t exit_combat_time = getCurrentTime();;
 	bool in_combat = false;
-	uint8_t subgroup = 0;
+	uint8_t subgroup = 1;
 	bool is_relevant = true;
 
 	bool operator==(uintptr_t other_id);
