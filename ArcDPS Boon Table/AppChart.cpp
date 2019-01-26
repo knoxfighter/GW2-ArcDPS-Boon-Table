@@ -362,7 +362,7 @@ bool AppChart::bShowPlayers(Tracker * tracker)
 bool AppChart::bShowSubgroups(Tracker* tracker)
 {
 	return show_subgroups 
-		&& tracker->is_squad
+		&& (tracker ? tracker->is_squad : true)
 		&& (tracker ? tracker->subgroups.size()>1 : true);
 }
 
