@@ -362,7 +362,7 @@ uintptr_t mod_options()
 void parseIni()
 {
 	SI_Error rc = arc_ini.LoadFile("addons\\arcdps\\arcdps.ini");
-	valid_arc_ini = rc < 0;
+	valid_arc_ini = rc >= 0;
 
 	std::string pszValue = arc_ini.GetValue("keys", "global_mod1", "0x10");
 	arc_global_mod1 = std::stoi(pszValue, 0, 16);
@@ -374,7 +374,7 @@ void parseIni()
 	arc_movelock_altui = std::stoi(pszValue);
 
 	rc = table_ini.LoadFile("addons\\arcdps\\arcdps_table.ini");
-	valid_table_ini = rc < 0;
+	valid_table_ini = rc >= 0;
 
 	pszValue = table_ini.GetValue("table", "show", "0");
 	show_chart = std::stoi(pszValue);
