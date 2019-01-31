@@ -6,8 +6,8 @@
 
 class Boon
 {
-	int32_t duration = 0;
 public:
+	int32_t duration = 0;
 	BoonDef* def = nullptr;
 	uint64_t expected_end_time = 0;
 	

@@ -40,6 +40,9 @@ public:
 	void highlightedText(uintptr_t player_id, const char* fmt, ...);
 	bool highlightedSmallButton(uintptr_t player_id, const char * fmt);
 
+	float getPlayerDisplayValue(Tracker* tracker, Player * new_player, BoonDef * new_boon);
+	std::string getWindowTitle(Tracker* tracker, const char* new_title);
+
 	void setShowPlayers(bool new_show);
 	void setShowSubgroups(bool new_show);
 	void setShowTotal(bool new_show);

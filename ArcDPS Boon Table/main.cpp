@@ -29,7 +29,7 @@ arcdps_exports* mod_init();
 uintptr_t mod_release();
 uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t id, uint64_t revision);
-uintptr_t mod_imgui(); /* id3dd9::present callback, before imgui::render, fn() */
+uintptr_t mod_imgui(uint32_t not_charsel_or_loading); /* id3dd9::present callback, before imgui::render, fn(uint32_t not_charsel_or_loading) */
 uintptr_t mod_options(); /* id3dd9::present callback, appending to the end of options window in arcdps, fn() */
 void parseIni();
 void writeIni();
@@ -102,7 +102,7 @@ arcdps_exports* mod_init()
 	arc_exports.wnd_nofilter = mod_wnd;
 	arc_exports.combat = mod_combat;
 	arc_exports.imgui = mod_imgui;
-	arc_exports.options = mod_options;
+	arc_exports.options_end = mod_options;
 	return &arc_exports;
 }
 
@@ -306,6 +306,11 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 			/* application */
 			else
 			{
+				if ((current_player = tracker.getPlayer(src->id)) && is_player(dst))
+				{
+					current_player->gaveBoon(ev);
+					tracker.queueResort();
+				}
 				if (current_player = tracker.getPlayer(dst->id))
 				{
 					current_player->applyBoon(ev);
@@ -325,8 +330,10 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 	return 0;
 }
 
-uintptr_t mod_imgui()
+uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 {
+	if (!not_charsel_or_loading) return 0;
+
 	auto io = &ImGui::GetIO();
 
 	if (io->KeysDown[arc_global_mod1] && io->KeysDown[arc_global_mod2])
@@ -387,6 +394,9 @@ void parseIni()
 	pszValue = table_ini.GetValue("table", "show_uptime_as_progress_bar", "1");
 	chart.setShowBoonAsProgressBar(std::stoi(pszValue));
 
+	pszValue = table_ini.GetValue("table", "table_to_display", "0");
+	tracker.table_to_display = std::stoi(pszValue);
+
 	for (auto boon_def = tracked_buffs.begin(); boon_def != tracked_buffs.end(); ++boon_def)
 	{
 		pszValue = table_ini.GetValue("boons", boon_def->name.c_str(), std::to_string(boon_def->is_relevant).c_str());
@@ -402,6 +412,7 @@ void writeIni()
 	rc = table_ini.SetValue("table", "show_subgroups", std::to_string(chart.bShowSubgroups(nullptr)).c_str());
 	rc = table_ini.SetValue("table", "show_total", std::to_string(chart.bShowTotal(nullptr)).c_str());
 	rc = table_ini.SetValue("table", "show_uptime_as_progress_bar", std::to_string(chart.bShowBoonAsProgressBar()).c_str());
+	rc = table_ini.SetValue("table", "table_to_display", std::to_string(tracker.table_to_display).c_str());
 
 	for (auto boon_def = tracked_buffs.begin(); boon_def != tracked_buffs.end(); ++boon_def)
 	{

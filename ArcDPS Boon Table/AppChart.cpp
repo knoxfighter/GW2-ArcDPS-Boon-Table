@@ -93,7 +93,8 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 			{
 				if (!current_buff->is_relevant)continue;
 
-				current_boon_uptime = current_player->getBoonUptime(&*current_buff);
+				current_boon_uptime = getPlayerDisplayValue(tracker, &*current_player, &*current_buff);
+				
 				buffProgressBar(&*current_buff, current_boon_uptime, &*current_player, current_player->id, column_spacing - ImGui::GetStyle().ItemSpacing.x);
 				ImGui::SameLine(0, column_spacing - ImGui::GetItemRectSize().x);
 				current_column++;
@@ -122,6 +123,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 				if (!current_buff->is_relevant)continue;
 
 				current_boon_uptime = tracker->getSubgroupBoonUptime(&*current_buff, *current_subgroup);
+
 				buffProgressBar(&*current_buff, current_boon_uptime, nullptr, *current_subgroup, column_spacing - ImGui::GetStyle().ItemSpacing.x);
 				ImGui::SameLine(0, column_spacing - ImGui::GetItemRectSize().x);
 				current_column++;
@@ -172,10 +174,12 @@ void AppChart::drawRtClickMenu(Tracker* tracker)
 
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
 
+	ImGui::Combo("Display mode", &tracker->table_to_display, "Boon Uptime\0Boon Generation",2);
+
 	ImGui::Checkbox("Players", &show_players);
 	ImGui::Checkbox("Subgroups", &show_subgroups);
 	ImGui::Checkbox("Total", &show_total);
-	ImGui::Checkbox("Show uptime as progress bar", &show_boon_as_progress_bar);
+	ImGui::Checkbox("Show value as progress bar", &show_boon_as_progress_bar);
 
 	
 	if (ImGui::BeginMenu("Boons"))
@@ -251,7 +255,7 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 	{
 		if (current_buff->stacking_type == StackingType_intensity)
 		{
-			char label[5];
+			char label[10];
 			sprintf(label, "%.1f", current_boon_uptime);
 			current_boon_uptime /= 25;
 			ImGui::ProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label);
@@ -334,6 +338,31 @@ bool AppChart::highlightedSmallButton(uintptr_t player_id, const char* fmt)
 	return out;
 }
 
+float AppChart::getPlayerDisplayValue(Tracker* tracker, Player* new_player, BoonDef* new_boon)
+{
+	switch (tracker->table_to_display)
+	{
+	case TableToDisplay_uptime:
+		return new_player->getBoonUptime(new_boon);
+	case TableToDisplay_generation:
+		return new_player->getBoonGeneration(new_boon);
+	default:
+		return 0.0f;
+	}
+}
+
+std::string AppChart::getWindowTitle(Tracker * tracker, const char* new_title)
+{
+	if (!tracker) return std::string(new_title);
+
+	if (tracker->table_to_display == TableToDisplay_uptime)
+		return std::string(new_title) + " - Uptime";
+	else if (tracker->table_to_display == TableToDisplay_generation)
+		return std::string(new_title) + " - Generation";
+
+	return std::string(new_title);
+}
+
 void AppChart::setShowPlayers(bool new_show)
 {
 	show_players = new_show;
@@ -362,13 +391,15 @@ bool AppChart::bShowPlayers(Tracker * tracker)
 bool AppChart::bShowSubgroups(Tracker* tracker)
 {
 	return show_subgroups 
+		&& (tracker ? tracker->table_to_display != TableToDisplay_generation : true)
 		&& (tracker ? tracker->is_squad : true)
 		&& (tracker ? tracker->subgroups.size()>1 : true);
 }
 
 bool AppChart::bShowTotal(Tracker* tracker)
 {
-	return show_total 
+	return show_total
+		&& (tracker ? tracker->table_to_display != TableToDisplay_generation : true)
 		&& (
 		(tracker ? tracker->relevant_player_count > 1 : true)
 		|| (!show_players

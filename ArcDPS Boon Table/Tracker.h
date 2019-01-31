@@ -7,6 +7,7 @@
 #include "ArcdpsDataStructures.h"
 #include "imgui/imgui.h"
 #include "Player.h"
+#include "Helpers.h"
 
 enum SortMethod
 {
@@ -33,6 +34,8 @@ public:
 
 	std::mutex subgroups_mtx;
 	std::list<uint8_t> subgroups;
+
+	int table_to_display = TableToDisplay_uptime;
 
 	Tracker();
 	~Tracker();

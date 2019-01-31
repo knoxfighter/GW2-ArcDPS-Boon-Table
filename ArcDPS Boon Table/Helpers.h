@@ -14,3 +14,9 @@ extern uint64_t current_time;
 uint64_t getCurrentTime();
 
 int32_t getBuffApplyDuration(cbtevent* ev);
+
+enum TableToDisplay
+{
+	TableToDisplay_uptime,
+	TableToDisplay_generation
+};

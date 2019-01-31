@@ -94,10 +94,11 @@ typedef struct arcdps_exports {
 	char* out_build; /* build string */
 	void* wnd_nofilter; /* wndproc callback, fn(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) */
 	void* combat; /* combat event callback, fn(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t id, uint64_t revision) */
-	void* imgui; /* id3dd9::present callback, before imgui::render, fn() */
-	void* options; /* id3dd9::present callback, appending to the end of options window in arcdps, fn() */
+	void* imgui; /* id3dd9::present callback, before imgui::render, fn(uint32_t not_charsel_or_loading) */
+	void* options_end; /* id3dd9::present callback, appending to the end of options window in arcdps, fn() */
 	void* combat_local;  /* combat event callback like area but from chat log, fn(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t id, uint64_t revision) */
 	void* wnd_filter; /* wndproc callback like above, input filered using modifiers */
+	void* options_windows; /* called once per 'window' option checkbox, with null at the end, non-zero return disables drawing that option, fn(char* windowname) */
 } arcdps_exports;
 
 /* combat event logging (revision 1, when header[12] == 1) */
