@@ -20,7 +20,6 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 {
 	ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
 	ImGui::Begin(title, p_open, flags);
-	ImGui::PushAllowKeyboardFocus(false);
 	last_active_player = active_player;
 	last_active_column = active_column;
 	active_player = INDEX_NONE;
@@ -163,7 +162,6 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 
 	ImGui::EndChild();
 
-	ImGui::PopAllowKeyboardFocus();
 	ImGui::End();
 }
 
