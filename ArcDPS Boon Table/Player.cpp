@@ -42,13 +42,14 @@ void Player::applyBoon(cbtevent* ev)
 
 	Boon* current_boon = getBoon(current_boon_list, ev->skillid);
 
+	std::lock_guard<std::mutex> lock(boons_mtx);
+
 	if (current_boon)
 	{
 		current_boon->Apply(getBuffApplyDuration(ev));
 	}
 	else
 	{
-		std::lock_guard<std::mutex> lock(boons_mtx);
 		current_boon_list->push_back(Boon(current_def, getBuffApplyDuration(ev)));
 	}
 }
@@ -68,6 +69,7 @@ void Player::removeBoon(cbtevent* ev)
 
 	if (current_boon)
 	{
+		std::lock_guard<std::mutex> lock(boons_mtx);
 		current_boon->Remove(ev->value);
 	}
 }
@@ -85,13 +87,14 @@ void Player::gaveBoon(cbtevent * ev)
 
 	Boon* current_boon = getBoon(current_boon_list, ev->skillid);
 
+	std::lock_guard<std::mutex> lock(boons_mtx);
+
 	if (current_boon)
 	{
 		current_boon->Apply(getBuffApplyDuration(ev));
 	}
 	else
 	{
-		std::lock_guard<std::mutex> lock(boons_mtx);
 		current_boon_list->push_back(Boon(current_def, getBuffApplyDuration(ev)));
 	}
 }
@@ -118,6 +121,7 @@ float Player::getBoonUptime(BoonDef* new_boon)
 
 	Boon* current_boon = getBoon(&boons_uptime, new_boon->id);
 
+	std::lock_guard<std::mutex> lock(boons_mtx);
 	if (current_boon)
 	{
 		double out = (double)current_boon->getUptime(in_combat ? getCurrentTime() : exit_combat_time,getCombatTime());
@@ -152,6 +156,7 @@ float Player::getBoonGeneration(BoonDef * new_boon)
 
 	Boon* current_boon = getBoon(&boons_generation, new_boon->id);
 
+	std::lock_guard<std::mutex> lock(boons_mtx);
 	if (current_boon)
 	{
 		double out = (double)current_boon->duration / getCombatTime();

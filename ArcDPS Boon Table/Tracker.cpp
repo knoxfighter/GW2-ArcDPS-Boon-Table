@@ -88,9 +88,11 @@ void Tracker::sortPlayers()
 		case SortMethod_boon:
 		{
 			if(table_to_display == TableToDisplay_uptime)
-				players.sort([this](Player lhs, Player rhs) {return sort_reverse ? lhs.getBoonUptime(sorted_boon) > rhs.getBoonUptime(sorted_boon) : lhs.getBoonUptime(sorted_boon) < rhs.getBoonUptime(sorted_boon); });
+				players.sort([this](Player lhs, Player rhs) { return lhs.getBoonUptime(sorted_boon) < rhs.getBoonUptime(sorted_boon); });
 			else if(table_to_display == TableToDisplay_generation)
-				players.sort([this](Player lhs, Player rhs) {return sort_reverse ? lhs.getBoonGeneration(sorted_boon) > rhs.getBoonGeneration(sorted_boon) : lhs.getBoonGeneration(sorted_boon) < rhs.getBoonGeneration(sorted_boon); });
+				players.sort([this](Player lhs, Player rhs) { return lhs.getBoonGeneration(sorted_boon) < rhs.getBoonGeneration(sorted_boon); });
+			if (sort_reverse)
+				players.reverse();
 			break;
 		}
 		break;
