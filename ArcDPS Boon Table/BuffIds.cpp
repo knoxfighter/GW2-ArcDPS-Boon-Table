@@ -29,7 +29,6 @@ std::list<BoonDef> tracked_buffs = std::list<BoonDef>({
 	BoonDef(50415,"Stone",StackingType_single,false,BoonType_spirit),
 	BoonDef(50381,"Storm",StackingType_single,false,BoonType_spirit),
 	BoonDef(50386,"Water",StackingType_single,false,BoonType_spirit),
-	BoonDef(31803,"Empower",StackingType_single,false,BoonType_skill),
 //	BoonDef(10235,"SoI",StackingType_single,false,BoonType_other)
 	});
 
