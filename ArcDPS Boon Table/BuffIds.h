@@ -3,6 +3,7 @@
 #include <inttypes.h>
 #include <list>
 #include <string>
+#include <vector>
 
 enum BoonType
 {
@@ -23,13 +24,13 @@ enum StackingType
 
 struct BoonDef
 {
-	uint32_t id = 0;
+	std::vector<uint32_t> ids = {};
 	std::string name = "";
 	StackingType stacking_type = StackingType_duration;
 	bool is_relevant = false;
 	BoonType category = BoonType_other;
 
-	BoonDef(uint32_t new_id, std::string new_name, StackingType new_stacking_type, bool new_is_relevant, BoonType new_category);
+	BoonDef(std::initializer_list<uint32_t> new_ids, std::string new_name, StackingType new_stacking_type, bool new_is_relevant, BoonType new_category);
 };
 
 BoonDef* getTrackedBoon(uint32_t new_id);

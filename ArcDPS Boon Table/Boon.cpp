@@ -4,8 +4,14 @@
 
 bool Boon::operator==(uint32_t other_id)
 {
-	return def
-		&& def->id == other_id;
+	if (!def) return false;
+
+	for (auto current_id = def->ids.cbegin(); current_id != def->ids.cend(); ++current_id)
+	{
+		if (*current_id == other_id) return true;
+	}
+
+	return false;
 }
 
 Boon::Boon(BoonDef* new_def, int32_t new_duration)

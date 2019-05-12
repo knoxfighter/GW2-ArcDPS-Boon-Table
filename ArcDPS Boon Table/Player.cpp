@@ -119,7 +119,7 @@ float Player::getBoonUptime(BoonDef* new_boon)
 {
 	if (getCombatTime() == 0) return 0.0f;
 
-	Boon* current_boon = getBoon(&boons_uptime, new_boon->id);
+	Boon* current_boon = getBoon(&boons_uptime, new_boon->ids[0]);
 
 	std::lock_guard<std::mutex> lock(boons_mtx);
 	if (current_boon)
@@ -154,7 +154,7 @@ float Player::getBoonGeneration(BoonDef * new_boon)
 {
 	if (getCombatTime() == 0) return 0.0f;
 
-	Boon* current_boon = getBoon(&boons_generation, new_boon->id);
+	Boon* current_boon = getBoon(&boons_generation, new_boon->ids[0]);
 
 	std::lock_guard<std::mutex> lock(boons_mtx);
 	if (current_boon)
@@ -173,7 +173,7 @@ bool Player::hasBoonNow(BoonDef * new_boon)
 {
 	if (!in_combat) return false;
 
-	Boon* current_boon = getBoon(&boons_uptime, new_boon->id);
+	Boon* current_boon = getBoon(&boons_uptime, new_boon->ids[0]);
 
 	if (current_boon)
 	{
