@@ -98,7 +98,7 @@ arcdps_exports* mod_init()
 	arc_exports.sig = 0x64003268;//from random.org
 	arc_exports.size = sizeof(arcdps_exports);
 	arc_exports.out_name = "Boon Table";
-	arc_exports.out_build = "0.1";
+	arc_exports.out_build = __VERSION__;
 	arc_exports.wnd_nofilter = mod_wnd;
 	arc_exports.combat = mod_combat;
 	arc_exports.imgui = mod_imgui;

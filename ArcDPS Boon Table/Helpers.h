@@ -11,6 +11,8 @@ extern uint64_t current_time;
 		ImGui::Text("%u%%", per);						\
 		}
 
+#define __VERSION__ (__DATE__)
+
 uint64_t getCurrentTime();
 
 int32_t getBuffApplyDuration(cbtevent* ev);
