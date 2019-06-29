@@ -21,7 +21,7 @@ class Tracker
 protected:
 	SortMethod sort_method;
 	BoonDef* sorted_boon;
-	bool sort_reverse;
+	bool sort_reverse = false;
 
 	bool needs_resort;
 public:
@@ -53,6 +53,8 @@ public:
 
 	Player* getPlayer(uintptr_t new_player);
 	Player* getPlayer(std::string new_player);
+
+	void applyBoon(ag* src, ag* dst, cbtevent* ev);
 	
 	std::list<uint8_t> getSubgroups();
 	float getSubgroupBoonUptime(BoonDef* new_boon, uint8_t new_subgroup);

@@ -20,3 +20,17 @@ int32_t getBuffApplyDuration(cbtevent * ev)
 }
 
 uint64_t current_time = 0;
+
+inline float discretize(float a)
+{
+	return floorf(a * 100.0f) / 100.0f;
+}
+
+bool floatCmp(float a, float b)
+{
+	float aa = discretize(a);
+	float bb = discretize(b);
+	if (aa == bb)
+		return false;
+	return aa < bb;
+}

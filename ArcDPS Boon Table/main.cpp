@@ -283,7 +283,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 		/* buff remove */
 		else if (ev->is_buffremove)
 		{
-			if (ev->is_buffremove == CBTB_MANUAL)
+			if (ev->is_buffremove == CBTB_MANUAL)//TODO: move to tracker
 			{
 				if (current_player = tracker.getPlayer(src->id))
 				{
@@ -306,16 +306,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 			/* application */
 			else
 			{
-				if ((current_player = tracker.getPlayer(src->id)) && is_player(dst))
-				{
-					current_player->gaveBoon(ev);
-					tracker.queueResort();
-				}
-				if (current_player = tracker.getPlayer(dst->id))
-				{
-					current_player->applyBoon(ev);
-					tracker.queueResort();
-				}
+				tracker.applyBoon(src, dst, ev);
 			}
 		}
 

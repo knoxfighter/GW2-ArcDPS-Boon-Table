@@ -38,19 +38,19 @@ void Player::applyBoon(cbtevent* ev)
 	BoonDef* current_def = getTrackedBoon(ev->skillid);
 	if (!current_def) return;
 	
-	std::list<Boon>* current_boon_list = in_combat ? &boons_uptime : &boons_uptime_initial;
-
-	Boon* current_boon = getBoon(current_boon_list, ev->skillid);
+	auto current_boon_list = in_combat ? &boons_uptime : &boons_uptime_initial;
 
 	std::lock_guard<std::mutex> lock(boons_mtx);
 
-	if (current_boon)
+	auto it = current_boon_list->find(ev->skillid);
+
+	if (it != current_boon_list->end())
 	{
-		current_boon->Apply(getBuffApplyDuration(ev));
+		it->second.Apply(getBuffApplyDuration(ev));
 	}
 	else
 	{
-		current_boon_list->push_back(Boon(current_def, getBuffApplyDuration(ev)));
+		current_boon_list->insert({ current_def->ids[0],Boon(current_def, getBuffApplyDuration(ev)) });
 	}
 }
 
@@ -61,16 +61,17 @@ void Player::removeBoon(cbtevent* ev)
 //	if (ev->value <= ev->overstack_value) return;
 	if (!getTrackedBoon(ev->skillid)) return;
 
-	Boon* current_boon = nullptr;
-	if (in_combat)
-		current_boon = getBoon(&boons_uptime, ev->skillid);
-	else
-		current_boon = getBoon(&boons_uptime_initial, ev->skillid);
+	auto current_boon_list = &boons_uptime;
+	if (!in_combat)
+		current_boon_list = &boons_uptime_initial;
 
-	if (current_boon)
+	std::lock_guard<std::mutex> lock(boons_mtx);
+	
+	auto it = current_boon_list->find(ev->skillid);
+
+	if (it != current_boon_list->end())
 	{
-		std::lock_guard<std::mutex> lock(boons_mtx);
-		current_boon->Remove(ev->value);
+		it->second.Remove(ev->value);
 	}
 }
 
@@ -83,48 +84,31 @@ void Player::gaveBoon(cbtevent * ev)
 	BoonDef* current_def = getTrackedBoon(ev->skillid);
 	if (!current_def) return;
 
-	std::list<Boon>* current_boon_list = in_combat ? &boons_generation : &boons_generation_initial;
-
-	Boon* current_boon = getBoon(current_boon_list, ev->skillid);
+	auto current_boon_list = in_combat ? &boons_generation : &boons_generation_initial;
 
 	std::lock_guard<std::mutex> lock(boons_mtx);
 
-	if (current_boon)
+	auto it = current_boon_list->find(ev->skillid);
+	
+	if (it != current_boon_list->end())
 	{
-		current_boon->Apply(getBuffApplyDuration(ev));
+		it->second.Apply(getBuffApplyDuration(ev));
 	}
 	else
 	{
-		current_boon_list->push_back(Boon(current_def, getBuffApplyDuration(ev)));
+		current_boon_list->insert({ current_def->ids[0],Boon(current_def, getBuffApplyDuration(ev)) });
 	}
 }
 
-Boon* Player::getBoon(std::list<Boon>* new_boons_list, uint32_t new_boon)
-{
-	std::lock_guard<std::mutex> lock(boons_mtx);
-	auto it = std::find(new_boons_list->begin(), new_boons_list->end(), new_boon);
-
-	//boon not tracked
-	if (it == new_boons_list->end())
-	{
-		return nullptr;
-	}
-	else//boon tracked
-	{
-		return &*it;
-	}
-}
-
-float Player::getBoonUptime(BoonDef* new_boon)
+double Player::getBoonUptime(BoonDef* new_boon)
 {
 	if (getCombatTime() == 0) return 0.0f;
 
-	Boon* current_boon = getBoon(&boons_uptime, new_boon->ids[0]);
+	auto it = boons_uptime.find(new_boon->ids[0]);
 
-	std::lock_guard<std::mutex> lock(boons_mtx);
-	if (current_boon)
+	if (it != boons_uptime.end())
 	{
-		double out = (double)current_boon->getUptime(in_combat ? getCurrentTime() : exit_combat_time,getCombatTime());
+		double out = (double)it->second.getUptime(in_combat ? getCurrentTime() : exit_combat_time,getCombatTime());
 
 		switch (new_boon->stacking_type)
 		{
@@ -150,16 +134,15 @@ float Player::getBoonUptime(BoonDef* new_boon)
 	return 0.0f;
 }
 
-float Player::getBoonGeneration(BoonDef * new_boon)
+double Player::getBoonGeneration(BoonDef * new_boon)
 {
 	if (getCombatTime() == 0) return 0.0f;
 
-	Boon* current_boon = getBoon(&boons_generation, new_boon->ids[0]);
+	auto it = boons_generation.find(new_boon->ids[0]);
 
-	std::lock_guard<std::mutex> lock(boons_mtx);
-	if (current_boon)
+	if (it != boons_generation.end())
 	{
-		double out = (double)current_boon->duration / getCombatTime();
+		double out = (double)it->second.duration / getCombatTime();
 
 		if (out < 0.0f) out = 0.0f;
 
@@ -167,19 +150,6 @@ float Player::getBoonGeneration(BoonDef * new_boon)
 	}
 
 	return 0.0f;
-}
-
-bool Player::hasBoonNow(BoonDef * new_boon)
-{
-	if (!in_combat) return false;
-
-	Boon* current_boon = getBoon(&boons_uptime, new_boon->ids[0]);
-
-	if (current_boon)
-	{
-		return current_boon->expected_end_time > getCurrentTime();
-	}
-	return false;
 }
 
 void Player::combatEnter(cbtevent* ev)
@@ -194,9 +164,9 @@ void Player::combatEnter(cbtevent* ev)
 
 	for (auto current_initial_boon = boons_uptime_initial.begin(); current_initial_boon != boons_uptime_initial.end(); ++current_initial_boon)
 	{
-		if (current_initial_boon->getDurationRemaining(ev->time) > 0)
+		if (current_initial_boon->second.getDurationRemaining(ev->time) > 0)
 		{
-			boons_uptime.push_back(Boon(current_initial_boon->def, current_initial_boon->getDurationRemaining(ev->time)));
+			boons_uptime.insert({ current_initial_boon->second.def->ids[0], Boon(current_initial_boon->second.def, current_initial_boon->second.getDurationRemaining(ev->time)) });
 		}
 	}
 
@@ -206,9 +176,9 @@ void Player::combatEnter(cbtevent* ev)
 
 	for (auto current_initial_boon = boons_generation_initial.begin(); current_initial_boon != boons_generation_initial.end(); ++current_initial_boon)
 	{
-		if (current_initial_boon->getDurationRemaining(ev->time) > 0)
+		if (current_initial_boon->second.getDurationRemaining(ev->time) > 0)
 		{
-			boons_generation.push_back(Boon(current_initial_boon->def, current_initial_boon->getDurationRemaining(ev->time)));
+			boons_generation.insert({ current_initial_boon->second.def->ids[0], Boon(current_initial_boon->second.def, current_initial_boon->second.getDurationRemaining(ev->time)) });
 		}
 	}
 

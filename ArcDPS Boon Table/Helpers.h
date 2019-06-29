@@ -22,3 +22,7 @@ enum TableToDisplay
 	TableToDisplay_uptime,
 	TableToDisplay_generation
 };
+
+inline float discretize(float a);
+
+bool floatCmp(float a, float b);

@@ -6,7 +6,6 @@ Tracker::Tracker()
 {
 	sort_method = SortMethod_subgroup;
 	sorted_boon = nullptr;
-	sort_reverse = false;
 	needs_resort = true;
 }
 
@@ -73,30 +72,31 @@ void Tracker::sortPlayers()
 {
 	if (!needs_resort) return;
 	std::lock_guard<std::mutex> lock(players_mtx);
+	std::lock_guard<std::mutex> lock2(boons_mtx);
 	switch (sort_method)
 	{
 		case SortMethod_name:
 		{
-			players.sort([this](Player lhs, Player rhs) {return sort_reverse ? lhs.name > rhs.name : lhs.name < rhs.name; });
+			players.sort([this](Player &lhs, Player &rhs) {return lhs.name < rhs.name; });
 			break;
 		}
 		case SortMethod_subgroup:
 		{
-			players.sort([this](Player lhs, Player rhs) {return sort_reverse ? lhs.subgroup > rhs.subgroup : lhs.subgroup < rhs.subgroup; });
+			players.sort([this](Player &lhs, Player &rhs) {return lhs.subgroup < rhs.subgroup; });
 			break;
 		}
 		case SortMethod_boon:
 		{
 			if(table_to_display == TableToDisplay_uptime)
-				players.sort([this](Player lhs, Player rhs) { return lhs.getBoonUptime(sorted_boon) < rhs.getBoonUptime(sorted_boon); });
+				players.sort([this](Player &lhs, Player &rhs) { return floatCmp(lhs.getBoonUptime(sorted_boon), rhs.getBoonUptime(sorted_boon)); });
 			else if(table_to_display == TableToDisplay_generation)
-				players.sort([this](Player lhs, Player rhs) { return lhs.getBoonGeneration(sorted_boon) < rhs.getBoonGeneration(sorted_boon); });
-			if (sort_reverse)
-				players.reverse();
+				players.sort([this](Player &lhs, Player &rhs) { return floatCmp(lhs.getBoonGeneration(sorted_boon), rhs.getBoonGeneration(sorted_boon)); });
 			break;
 		}
 		break;
 	};
+	if (sort_reverse)
+		players.reverse();
 	needs_resort = false;
 }
 
@@ -176,6 +176,21 @@ Player* Tracker::getPlayer(std::string new_player)
 	else//player tracked
 	{
 		return &*it;
+	}
+}
+
+void Tracker::applyBoon(ag* src, ag* dst, cbtevent* ev)
+{
+	Player* current_player = nullptr;
+
+	if ((current_player = getPlayer(src->id)) && is_player(dst))
+	{
+		current_player->gaveBoon(ev);
+	}
+	if (current_player = getPlayer(dst->id))
+	{
+		current_player->applyBoon(ev);
+		queueResort();
 	}
 }
 

@@ -34,6 +34,7 @@ void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker 
 	}
 	
 	std::lock_guard<std::mutex> lock(tracker->players_mtx);
+	std::lock_guard<std::mutex> lock2(boons_mtx);
 
 	int column_number = 0;
 	column_number += _show_subgroups;

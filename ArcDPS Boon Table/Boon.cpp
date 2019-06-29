@@ -43,7 +43,7 @@ void Boon::Remove(int32_t new_duration)
 	if (expected_end_time > getCurrentTime()) expected_end_time -= new_duration;
 }
 
-int32_t Boon::getDuration(uint64_t new_current_time)
+uint64_t Boon::getDuration(uint64_t new_current_time)
 {
 	int32_t out = duration;
 	
@@ -71,7 +71,7 @@ uint64_t Boon::getDurationRemaining(uint64_t new_current_time)
 	return out;
 }
 
-float Boon::getUptime(uint64_t new_current_time, uint64_t new_combat_time)
+double Boon::getUptime(uint64_t new_current_time, uint64_t new_combat_time)
 {
 	double out = duration;
 
