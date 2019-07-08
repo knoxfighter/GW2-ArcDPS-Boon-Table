@@ -252,16 +252,17 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 	
 	if (show_boon_as_progress_bar)
 	{
+		char label[10];
 		if (current_buff->stacking_type == StackingType_intensity)
 		{
-			char label[10];
 			sprintf(label, "%.1f", current_boon_uptime);
 			current_boon_uptime /= 25;
 			ImGui::ProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label);
 		}
 		else
 		{
-			ImGui::ProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()));
+			sprintf(label, "%.0f%%", 100*(double)current_boon_uptime);
+			ImGui::ProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label);
 		}
 	}
 	else
@@ -272,7 +273,7 @@ void AppChart::buffProgressBar(BoonDef* current_buff, float current_boon_uptime,
 		}
 		else
 		{
-			ImGui::Text("%.1f%%", 100*(double)current_boon_uptime);
+			ImGui::Text("%.0f%%", 100*(double)current_boon_uptime);
 		}
 	}
 
