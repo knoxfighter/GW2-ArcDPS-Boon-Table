@@ -31,6 +31,7 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t id, uint64_t revision);
 uintptr_t mod_imgui(uint32_t not_charsel_or_loading); /* id3dd9::present callback, before imgui::render, fn(uint32_t not_charsel_or_loading) */
 uintptr_t mod_options(); /* id3dd9::present callback, appending to the end of options window in arcdps, fn() */
+void readArcExports();
 void parseIni();
 void writeIni();
 bool modsPressed();
@@ -41,11 +42,18 @@ Tracker tracker;
 AppChart chart;
 bool show_chart = false;
 
-CSimpleIniA arc_ini(true);
-bool valid_arc_ini = false;
+typedef uint64_t(*arc_export_func_u64)();
+auto arc_dll = LoadLibraryA(TEXT("d3d9.dll"));
+auto arc_export_e6 = (arc_export_func_u64)GetProcAddress(arc_dll, "e6");
+auto arc_export_e7 = (arc_export_func_u64)GetProcAddress(arc_dll, "e7");
 WPARAM arc_global_mod1;
 WPARAM arc_global_mod2;
+WPARAM arc_global_mod_multi;
+bool arc_hide_all = false;
+bool arc_panel_always_draw = false;
 bool arc_movelock_altui = false;
+bool arc_clicklock_altui = false;
+bool arc_window_fastclose = false;
 
 CSimpleIniA table_ini(true);
 bool valid_table_ini = false;
@@ -323,6 +331,8 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 
 uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 {
+	readArcExports();
+	
 	if (!not_charsel_or_loading) return 0;
 
 	auto io = &ImGui::GetIO();
@@ -350,24 +360,33 @@ uintptr_t mod_options()
 	return 0;
 }
 
+void readArcExports()
+{
+	uint64_t e6_result = arc_export_e6();
+	uint64_t e7_result = arc_export_e7();
+
+	arc_hide_all = (e6_result & 0x01);
+	arc_panel_always_draw = (e6_result & 0x02);
+	arc_movelock_altui = (e6_result & 0x04);
+	arc_clicklock_altui = (e6_result & 0x08);
+	arc_window_fastclose = (e6_result & 0x10);
+
+
+	uint16_t* ra = (uint16_t*)&e7_result;
+	if (ra)
+	{
+		arc_global_mod1 = ra[0];
+		arc_global_mod2 = ra[1];
+		arc_global_mod_multi = ra[2];
+	}
+}
+
 void parseIni()
 {
-	SI_Error rc = arc_ini.LoadFile("addons\\arcdps\\arcdps.ini");
-	valid_arc_ini = rc >= 0;
-
-	std::string pszValue = arc_ini.GetValue("keys", "global_mod1", "0x10");
-	arc_global_mod1 = std::stoi(pszValue, 0, 16);
-
-	pszValue = arc_ini.GetValue("keys", "global_mod2", "0x12");
-	arc_global_mod2 = std::stoi(pszValue, 0, 16);
-
-	pszValue = arc_ini.GetValue("session", "movelock_altui", "0");
-	arc_movelock_altui = std::stoi(pszValue);
-
-	rc = table_ini.LoadFile("addons\\arcdps\\arcdps_table.ini");
+	SI_Error rc = table_ini.LoadFile("addons\\arcdps\\arcdps_table.ini");
 	valid_table_ini = rc >= 0;
 
-	pszValue = table_ini.GetValue("table", "show", "0");
+	std::string pszValue = table_ini.GetValue("table", "show", "0");
 	show_chart = std::stoi(pszValue);
 
 	pszValue = table_ini.GetValue("table", "key", "66");
