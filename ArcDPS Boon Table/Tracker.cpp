@@ -238,6 +238,7 @@ float Tracker::getSubgroupBoonUptime(BoonDef* new_boon, uint8_t new_subgroup)
 		out += player->getBoonUptime(new_boon);
 		player_num++;
 	}
+	if (isnan(out)) return 0.0f;
 	if (player_num == 0) return out;
 	else return out / player_num;
 }
@@ -253,6 +254,7 @@ float Tracker::getAverageBoonUptime(BoonDef* new_boon)
 		out += player->getBoonUptime(new_boon);
 		player_num++;
 	}
+	if (isnan(out)) return 0.0f;
 	if (player_num == 0) return out;
 	else return out / player_num;
 }
