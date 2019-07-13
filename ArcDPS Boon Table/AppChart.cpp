@@ -221,6 +221,14 @@ void AppChart::drawRtClickMenu(Tracker* tracker)
 		}
 		ImGui::EndMenu();
 	}
+	if (ImGui::BeginMenu("Signets"))
+	{
+		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)
+		{
+			if (current_boon->category == BoonType_signet) ImGui::Checkbox(current_boon->name.c_str(), &current_boon->is_relevant);
+		}
+		ImGui::EndMenu();
+	}
 	if (ImGui::BeginMenu("Other"))
 	{
 		for (auto current_boon = tracked_buffs.begin(); current_boon != tracked_buffs.end(); ++current_boon)

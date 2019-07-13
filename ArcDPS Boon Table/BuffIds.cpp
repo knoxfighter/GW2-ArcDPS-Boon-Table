@@ -29,9 +29,9 @@ std::list<BoonDef> tracked_buffs = std::list<BoonDef>({
 	BoonDef({50415},"Stone",StackingType_single,false,BoonType_spirit),
 	BoonDef({50381},"Storm",StackingType_single,false,BoonType_spirit),
 	BoonDef({50386},"Water",StackingType_single,false,BoonType_spirit),
+	BoonDef({10235},"Inspiration",StackingType_single,false,BoonType_signet),
 	BoonDef({13017,26142,10269},"Stealth",StackingType_duration,false,BoonType_other),//stealth + Hide in Shadows
 	BoonDef({5974},"Superspeed",StackingType_single,false,BoonType_other),
-//	BoonDef({10235},"SoI",StackingType_single,false,BoonType_other)
 	});
 
 BoonDef* getTrackedBoon(uint32_t new_id)

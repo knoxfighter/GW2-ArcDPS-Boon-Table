@@ -12,6 +12,7 @@ enum BoonType
 	BoonType_banner,
 	BoonType_spirit,
 	BoonType_skill,
+	BoonType_signet,
 	BoonType_other,
 };
 
