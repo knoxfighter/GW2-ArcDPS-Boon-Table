@@ -34,13 +34,14 @@ public:
 	void applyBoon(cbtevent* ev);
 	void removeBoon(cbtevent* ev);
 	void gaveBoon(cbtevent* ev);
+	void flushAllBoons();
 	
 	double getBoonUptime(BoonDef* new_boon);
 	double getBoonGeneration(BoonDef* new_boon);
 
 	void combatEnter(cbtevent* ev);
-	void combatExit();
-	uint64_t getCombatTime();
+	void combatExit(cbtevent* ev);
+	uint64_t getCombatDuration();
 };
 
 extern std::mutex boons_mtx;

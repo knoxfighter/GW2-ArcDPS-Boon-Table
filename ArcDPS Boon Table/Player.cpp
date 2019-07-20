@@ -100,15 +100,25 @@ void Player::gaveBoon(cbtevent * ev)
 	}
 }
 
+void Player::flushAllBoons()
+{
+	std::lock_guard<std::mutex> lock(boons_mtx);
+
+	boons_uptime_initial.clear();
+	boons_uptime.clear();
+	boons_generation_initial.clear();
+	boons_generation.clear();
+}
+
 double Player::getBoonUptime(BoonDef* new_boon)
 {
-	if (getCombatTime() == 0) return 0.0f;
+	if (getCombatDuration() == 0) return 0.0f;
 
 	auto it = boons_uptime.find(new_boon->ids[0]);
 
 	if (it != boons_uptime.end())
 	{
-		double out = (double)it->second.getUptime(in_combat ? getCurrentTime() : exit_combat_time,getCombatTime());
+		double out = (double)it->second.getUptime(in_combat ? getCurrentTime() : exit_combat_time,getCombatDuration());
 
 		switch (new_boon->stacking_type)
 		{
@@ -136,13 +146,13 @@ double Player::getBoonUptime(BoonDef* new_boon)
 
 double Player::getBoonGeneration(BoonDef * new_boon)
 {
-	if (getCombatTime() == 0) return 0.0f;
+	if (getCombatDuration() == 0) return 0.0f;
 
 	auto it = boons_generation.find(new_boon->ids[0]);
 
 	if (it != boons_generation.end())
 	{
-		double out = (double)it->second.duration / getCombatTime();
+		double out = (double)it->second.duration / getCombatDuration();
 
 		if (out < 0.0f) out = 0.0f;
 
@@ -158,15 +168,17 @@ void Player::combatEnter(cbtevent* ev)
 	enter_combat_time = ev->time;
 	in_combat = true;
 	subgroup = ev->dst_agent;
+	uint64_t duration_remaining = 0;
 
 	std::lock_guard<std::mutex> lock(boons_mtx);
 	boons_uptime.clear();
 
 	for (auto current_initial_boon = boons_uptime_initial.begin(); current_initial_boon != boons_uptime_initial.end(); ++current_initial_boon)
 	{
-		if (current_initial_boon->second.getDurationRemaining(ev->time) > 0)
+		duration_remaining = current_initial_boon->second.getDurationRemaining(ev->time, 0);
+		if (duration_remaining > 0)
 		{
-			boons_uptime.insert({ current_initial_boon->second.def->ids[0], Boon(current_initial_boon->second.def, current_initial_boon->second.getDurationRemaining(ev->time)) });
+			boons_uptime.insert({ current_initial_boon->second.def->ids[0], Boon(current_initial_boon->second.def, duration_remaining) });
 		}
 	}
 
@@ -176,22 +188,50 @@ void Player::combatEnter(cbtevent* ev)
 
 	for (auto current_initial_boon = boons_generation_initial.begin(); current_initial_boon != boons_generation_initial.end(); ++current_initial_boon)
 	{
-		if (current_initial_boon->second.getDurationRemaining(ev->time) > 0)
+		duration_remaining = current_initial_boon->second.getDurationRemaining(ev->time, 0);
+		if (duration_remaining > 0)
 		{
-			boons_generation.insert({ current_initial_boon->second.def->ids[0], Boon(current_initial_boon->second.def, current_initial_boon->second.getDurationRemaining(ev->time)) });
+			boons_generation.insert({ current_initial_boon->second.def->ids[0], Boon(current_initial_boon->second.def, duration_remaining) });
 		}
 	}
 
 	boons_generation_initial.clear();
 }
 
-void Player::combatExit()
+void Player::combatExit(cbtevent* ev)
 {
 	exit_combat_time = getCurrentTime();
 	in_combat = false;
+	uint64_t duration_remaining = 0;
+
+	if (!ev) return;
+	std::lock_guard<std::mutex> lock(boons_mtx);
+	boons_uptime_initial.clear();
+
+	for (auto current_boon = boons_uptime.begin(); current_boon != boons_uptime.end(); ++current_boon)
+	{
+		duration_remaining = current_boon->second.getDurationRemaining(ev->time, getCombatDuration());
+		if (duration_remaining > 0)
+		{
+			boons_uptime_initial.insert({ current_boon->second.def->ids[0], Boon(current_boon->second.def, duration_remaining) });
+		}
+	}
+
+	boons_generation_initial.clear();
+
+	for (auto current_boon = boons_generation.begin(); current_boon != boons_generation.end(); ++current_boon)
+	{
+		duration_remaining = current_boon->second.getDurationRemaining(ev->time, getCombatDuration());
+		if (duration_remaining > 0)
+		{
+			boons_generation_initial.insert({ current_boon->second.def->ids[0], Boon(current_boon->second.def, duration_remaining) });
+		}
+	}
+
+	boons_generation.clear();
 }
 
-uint64_t Player::getCombatTime()
+uint64_t Player::getCombatDuration()
 {
 	if (in_combat)
 	{

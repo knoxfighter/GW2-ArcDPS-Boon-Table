@@ -19,7 +19,7 @@ public:
 	void Remove(int32_t new_duration);
 
 	uint64_t getDuration(uint64_t new_current_time);
-	uint64_t getDurationRemaining(uint64_t new_current_time);
+	uint64_t getDurationRemaining(uint64_t new_current_time, uint64_t new_combat_duration);
 
 	double getUptime(uint64_t new_current_time, uint64_t new_combat_time);
 };
