@@ -1,3 +1,4 @@
+# [Click Here to Download](/../../releases)
 
 # ArcDPS Boon Table
 
