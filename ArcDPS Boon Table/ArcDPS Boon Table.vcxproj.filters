@@ -113,10 +113,10 @@
     <ClInclude Include="Helpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="simpleini\ConvertUTF.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="simpleini\SimpleIni.h">
+      <Filter>Header Files\simpleini</Filter>
+    </ClInclude>
+    <ClInclude Include="simpleini\ConvertUTF.h">
       <Filter>Header Files\simpleini</Filter>
     </ClInclude>
   </ItemGroup>
