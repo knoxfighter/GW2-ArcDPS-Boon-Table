@@ -43,9 +43,19 @@ AppChart chart;
 bool show_chart = false;
 
 typedef uint64_t(*arc_export_func_u64)();
-auto arc_dll = LoadLibraryA(TEXT("d3d9.dll"));
+
+// load arcdps dll.
+// When loading directly, arcdps is the "d3d9.dll"
+// When loading with the addon manager, arcdps is called "gw2addon_arcdps.dll"
+HMODULE arc_dllD = LoadLibraryA("d3d9.dll");
+HMODULE arc_dllL = LoadLibraryA("gw2addon_arcdps.dll");
+HMODULE arc_dll = (arc_dllL != nullptr) ? arc_dllL : arc_dllD;
+
+// get exports
 auto arc_export_e6 = (arc_export_func_u64)GetProcAddress(arc_dll, "e6");
 auto arc_export_e7 = (arc_export_func_u64)GetProcAddress(arc_dll, "e7");
+
+// arc globals
 WPARAM arc_global_mod1;
 WPARAM arc_global_mod2;
 WPARAM arc_global_mod_multi;
@@ -63,23 +73,13 @@ WPARAM table_key;
 /* dll main -- winapi */
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD ulReasonForCall, LPVOID lpReserved) {
 	switch (ulReasonForCall) {
-	case DLL_PROCESS_ATTACH: dll_init(hModule); break;
-	case DLL_PROCESS_DETACH: dll_exit(); break;
-
-	case DLL_THREAD_ATTACH:  break;
-	case DLL_THREAD_DETACH:  break;
+	case DLL_PROCESS_ATTACH:
+	case DLL_PROCESS_DETACH:
+	case DLL_THREAD_ATTACH:
+	case DLL_THREAD_DETACH:
+		break;
 	}
 	return 1;
-}
-
-/* dll attach -- from winapi */
-void dll_init(HANDLE hModule) {
-	return;
-}
-
-/* dll detach -- from winapi */
-void dll_exit() {
-	return;
 }
 
 /* export -- arcdps looks for this exported function and calls the address it returns */
