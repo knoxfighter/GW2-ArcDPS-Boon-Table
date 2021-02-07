@@ -5,7 +5,6 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <Windows.h>
-#include <d3d9.h>
 #include <string>
 #include <list>
 
@@ -23,7 +22,7 @@ arcdps_exports arc_exports;
 char* arcvers;
 void dll_init(HANDLE hModule);
 void dll_exit();
-extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, IDirect3DDevice9* id3dd9);
+extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, void* id3dd9, HANDLE arcdll, void* mallocfn, void* freefn);
 extern "C" __declspec(dllexport) void* get_release_addr();
 arcdps_exports* mod_init();
 uintptr_t mod_release();
@@ -83,12 +82,13 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ulReasonForCall, LPVOID lpReserved) 
 }
 
 /* export -- arcdps looks for this exported function and calls the address it returns */
-extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, IDirect3DDevice9* id3dd9) {
+extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, void* id3dd9, HANDLE arcdll, void* mallocfn, void* freefn) {
 	arcvers = arcversionstr;
-	ImGui::SetCurrentContext((ImGuiContext*)imguicontext);
+	ImGui::SetCurrentContext(static_cast<ImGuiContext*>(imguicontext));
+	ImGui::SetAllocatorFunctions((void* (*)(size_t, void*))mallocfn, (void (*)(void*, void*))freefn);
 
 	parseIni();
-
+	
 	return mod_init;
 }
 
@@ -104,6 +104,7 @@ arcdps_exports* mod_init()
 	/* for arcdps */
 	memset(&arc_exports, 0, sizeof(arcdps_exports));
 	arc_exports.sig = 0x64003268;//from random.org
+	arc_exports.imguivers = IMGUI_VERSION_NUM;
 	arc_exports.size = sizeof(arcdps_exports);
 	arc_exports.out_name = "Boon Table";
 	arc_exports.out_build = __VERSION__;

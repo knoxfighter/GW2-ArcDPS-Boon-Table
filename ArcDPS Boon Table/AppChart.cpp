@@ -18,7 +18,7 @@ AppChart::~AppChart()
 
 void AppChart::Draw(const char* title, bool* p_open = nullptr, Tracker* tracker = nullptr,ImGuiWindowFlags flags = 0)
 {
-	ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiCond_FirstUseEver);
 	ImGui::Begin(title, p_open, flags);
 	last_active_player = active_player;
 	last_active_column = active_column;
