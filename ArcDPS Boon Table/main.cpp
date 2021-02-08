@@ -332,6 +332,8 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 {
 	readArcExports();
+
+	ImGui::ShowDemoWindow();
 	
 	if (!not_charsel_or_loading) return 0;
 
@@ -347,7 +349,7 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 
 	if (show_chart)
 	{
-		chart.Draw("Boon Table", &show_chart, tracker, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize | (!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0));
+		chart.Draw("Boon Table", &show_chart, tracker, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar | (!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0));
 	}
 	return 0;
 }
@@ -412,7 +414,7 @@ void writeIni()
 {
 	SI_Error rc = table_ini.SetValue("table", "show", std::to_string(show_chart).c_str());
 
-	rc = table_ini.SetValue("table", "show_players", std::to_string(chart.bShowPlayers(nullptr)).c_str());
+	rc = table_ini.SetValue("table", "show_players", std::to_string(chart.bShowPlayers()).c_str());
 	rc = table_ini.SetValue("table", "show_subgroups", std::to_string(chart.getShowSubgroups()).c_str());
 	rc = table_ini.SetValue("table", "show_total", std::to_string(chart.bShowTotal()).c_str());
 	rc = table_ini.SetValue("table", "show_uptime_as_progress_bar", std::to_string(chart.bShowBoonAsProgressBar()).c_str());

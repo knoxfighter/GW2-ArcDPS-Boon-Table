@@ -6,6 +6,20 @@ void AppChart::Draw(const char* title, bool* p_open, const Tracker& tracker, ImG
 {
 	ImGui::Begin(title, p_open, flags);
 
+	// header with settings
+	if (ImGui::BeginMenuBar()) {
+		if (ImGui::BeginMenu("Settings")) {
+			ImGui::MenuItem("Players", nullptr, &show_players);
+			ImGui::MenuItem("Subgroups", nullptr, &show_subgroups);
+			ImGui::MenuItem("Total", nullptr, &show_total);
+			ImGui::MenuItem("Show value as progress bar", nullptr, &show_boon_as_progress_bar);
+
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMenuBar();
+	}
+
 	// columns: charname | subgroup | tracked_buffs
 	const int columnCount = tracked_buffs.size() + 2;
 	const int nameColumnId = columnCount - 2;
@@ -56,6 +70,8 @@ void AppChart::Draw(const char* title, bool* p_open, const Tracker& tracker, ImG
 		if (bShowSubgroups(tracker))
 		{
 			ImGui::TableNextRow();
+			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, 0xffffffff);
+
 			for (uint8_t subgroup : tracker.subgroups) {
 				ImGui::TableNextRow();
 
@@ -80,6 +96,7 @@ void AppChart::Draw(const char* title, bool* p_open, const Tracker& tracker, ImG
 		if (bShowTotal())
 		{
 			ImGui::TableNextRow();
+			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, 0xffffffff);
 			ImGui::TableNextRow();
 			
 			// charname
@@ -160,8 +177,7 @@ void AppChart::setShowBoonAsProgressBar(bool new_show)
 	show_boon_as_progress_bar = new_show;
 }
 
-bool AppChart::bShowPlayers(Tracker * tracker)
-{
+bool AppChart::bShowPlayers() const {
 	return show_players;
 }
 

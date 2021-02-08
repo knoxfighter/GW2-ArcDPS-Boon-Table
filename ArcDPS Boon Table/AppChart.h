@@ -33,7 +33,7 @@ public:
 	void setShowTotal(bool new_show);
 	void setShowBoonAsProgressBar(bool new_show);
 
-	[[nodiscard]] bool bShowPlayers(Tracker* tracker);
+	[[nodiscard]] bool bShowPlayers() const;
 	[[nodiscard]] bool bShowSubgroups(const Tracker& tracker) const;
 	[[nodiscard]] bool getShowSubgroups() const;
 	[[nodiscard]] bool bShowTotal() const;
