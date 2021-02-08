@@ -17,12 +17,6 @@ uint64_t getCurrentTime();
 
 int32_t getBuffApplyDuration(cbtevent* ev);
 
-enum TableToDisplay
-{
-	TableToDisplay_uptime,
-	TableToDisplay_generation
-};
-
 inline float discretize(float a);
 
 bool floatCmp(float a, float b);

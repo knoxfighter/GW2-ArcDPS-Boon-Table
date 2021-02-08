@@ -297,7 +297,6 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 				if (current_player = tracker.getPlayer(src->id))
 				{
 					current_player->removeBoon(ev);
-					tracker.queueResort();
 				}
 			}
 		}
@@ -348,10 +347,7 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 
 	if (show_chart)
 	{
-		tracker.sortPlayers();
-
-		chart.Draw("Boon Table", &show_chart, &tracker, ImGuiWindowFlags_NoCollapse 
-			| (!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0));
+		chart.Draw("Boon Table", &show_chart, tracker, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize | (!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0));
 	}
 	return 0;
 }
@@ -405,9 +401,6 @@ void parseIni()
 	pszValue = table_ini.GetValue("table", "show_uptime_as_progress_bar", "1");
 	chart.setShowBoonAsProgressBar(std::stoi(pszValue));
 
-	pszValue = table_ini.GetValue("table", "table_to_display", "0");
-	tracker.table_to_display = std::stoi(pszValue);
-
 	for (auto boon_def = tracked_buffs.begin(); boon_def != tracked_buffs.end(); ++boon_def)
 	{
 		pszValue = table_ini.GetValue("boons", boon_def->name.c_str(), std::to_string(boon_def->is_relevant).c_str());
@@ -420,10 +413,9 @@ void writeIni()
 	SI_Error rc = table_ini.SetValue("table", "show", std::to_string(show_chart).c_str());
 
 	rc = table_ini.SetValue("table", "show_players", std::to_string(chart.bShowPlayers(nullptr)).c_str());
-	rc = table_ini.SetValue("table", "show_subgroups", std::to_string(chart.bShowSubgroups(nullptr)).c_str());
-	rc = table_ini.SetValue("table", "show_total", std::to_string(chart.bShowTotal(nullptr)).c_str());
+	rc = table_ini.SetValue("table", "show_subgroups", std::to_string(chart.getShowSubgroups()).c_str());
+	rc = table_ini.SetValue("table", "show_total", std::to_string(chart.bShowTotal()).c_str());
 	rc = table_ini.SetValue("table", "show_uptime_as_progress_bar", std::to_string(chart.bShowBoonAsProgressBar()).c_str());
-	rc = table_ini.SetValue("table", "table_to_display", std::to_string(tracker.table_to_display).c_str());
 
 	for (auto boon_def = tracked_buffs.begin(); boon_def != tracked_buffs.end(); ++boon_def)
 	{

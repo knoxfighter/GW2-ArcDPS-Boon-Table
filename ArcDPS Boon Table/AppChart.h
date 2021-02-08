@@ -1,7 +1,6 @@
 #pragma once
-#include <string>
+
 #include "imgui\imgui.h"
-#include "Player.h"
 #include "Tracker.h"
 #include "BuffIds.h"
 
@@ -20,36 +19,24 @@ protected:
 
 	int current_column = 0;
 public:
-	uintptr_t active_player, last_active_player;
-	int8_t active_column, last_active_column;
-	ImVec4 active_bar_color = ImVec4(1, 1, 1, 1);
-	ImVec4 hidden_bar_color = ImVec4(1, 1, 1, 0.3);
-	ImVec4 has_boon_color = ImVec4(0.1, 1, 0.1, 1);
-	ImVec4 not_have_boon_color = ImVec4(1, 0.1, 0.1, 1);
-	int sorting_collumn;
+	ImVec4 has_boon_color = ImVec4(0.1f, 1, 0.1f, 1);
+	ImVec4 not_have_boon_color = ImVec4(1, 0.1f, 0.1f, 1);
 	
-	AppChart();
-	~AppChart();
+	AppChart() = default;
 
-	void Draw(const char* title, bool* p_open, Tracker* tracker, ImGuiWindowFlags flags);
+	void Draw(const char* title, bool* p_open, const Tracker& tracker, ImGuiWindowFlags flags);
 
-	void drawRtClickMenu(Tracker* tracker);
-
-	void buffProgressBar(BoonDef* current_buff, float current_boon_uptime, Player* current_player, uintptr_t current_id, float width);
-
-	void highlightedText(uintptr_t player_id, const char* fmt, ...);
-	bool highlightedSmallButton(uintptr_t player_id, const char * fmt);
-
-	float getPlayerDisplayValue(Tracker* tracker, Player * new_player, BoonDef * new_boon);
-	std::string getWindowTitle(Tracker* tracker, const char* new_title);
+	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width) const;
 
 	void setShowPlayers(bool new_show);
 	void setShowSubgroups(bool new_show);
 	void setShowTotal(bool new_show);
 	void setShowBoonAsProgressBar(bool new_show);
 
-	bool bShowPlayers(Tracker* tracker);
-	bool bShowSubgroups(Tracker* tracker);
-	bool bShowTotal(Tracker* tracker);
-	bool bShowBoonAsProgressBar();
+	[[nodiscard]] bool bShowPlayers(Tracker* tracker);
+	[[nodiscard]] bool bShowSubgroups(const Tracker& tracker) const;
+	[[nodiscard]] bool getShowSubgroups() const;
+	[[nodiscard]] bool bShowTotal() const;
+	[[nodiscard]] bool bShowBoonAsProgressBar() const;
+	float getPlayerDisplayValue(const Tracker& tracker, const Player& player, const BoonDef& boon);
 };

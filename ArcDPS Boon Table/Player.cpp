@@ -2,18 +2,20 @@
 
 std::mutex boons_mtx;
 
-bool Player::operator==(uintptr_t other_id)
-{
+bool Player::operator==(uintptr_t other_id) const {
 	return id == other_id;
 }
 
-bool Player::operator==(std::string other_name)
-{
+bool Player::operator==(std::string other_name) const {
 	return name == other_name
 		|| account_name == other_name;
 }
 
-Player::Player(uintptr_t new_id, std::string new_name, std::string new_account_name, uint8_t new_subgroup)
+bool Player::operator==(const Player& other) const {
+	return id == other.id && name == other.name;
+}
+
+Player::Player(uintptr_t new_id, const std::string& new_name, const std::string& new_account_name, uint8_t new_subgroup)
 {
 	id = new_id;
 	name = new_name;
@@ -21,12 +23,6 @@ Player::Player(uintptr_t new_id, std::string new_name, std::string new_account_n
 	enter_combat_time = getCurrentTime();
 	in_combat = false;
 	subgroup = new_subgroup;
-	is_relevant = true;
-}
-
-Player::~Player()
-{
-
 }
 
 void Player::applyBoon(cbtevent* ev)
@@ -110,26 +106,23 @@ void Player::flushAllBoons()
 	boons_generation.clear();
 }
 
-double Player::getBoonUptime(BoonDef* new_boon)
-{
+float Player::getBoonUptime(const BoonDef& boon) const {
 	if (getCombatDuration() == 0) return 0.0f;
 
-	auto it = boons_uptime.find(new_boon->ids[0]);
+	auto it = boons_uptime.find(boon.ids[0]);
 
 	if (it != boons_uptime.end())
 	{
-		double out = (double)it->second.getUptime(in_combat ? getCurrentTime() : exit_combat_time,getCombatDuration());
+		float out = it->second.getUptime(in_combat ? getCurrentTime() : exit_combat_time,getCombatDuration());
 
-		switch (new_boon->stacking_type)
+		switch (boon.stacking_type)
 		{
+		case StackingType_single:
 		case StackingType_duration:
 			out = out > 1.0f ? 1.0f : out;
 			break;
 		case StackingType_intensity:
 			out = out > 25.0f ? 25.0f : out;
-			break;
-		case StackingType_single:
-			out = out > 1.0f ? 1.0f : out;
 			break;
 		default:
 			out = out > 1.0f ? 1.0f : out;
@@ -144,15 +137,14 @@ double Player::getBoonUptime(BoonDef* new_boon)
 	return 0.0f;
 }
 
-double Player::getBoonGeneration(BoonDef * new_boon)
-{
+float Player::getBoonGeneration(const BoonDef& new_boon) const {
 	if (getCombatDuration() == 0) return 0.0f;
 
-	auto it = boons_generation.find(new_boon->ids[0]);
+	auto it = boons_generation.find(new_boon.ids[0]);
 
 	if (it != boons_generation.end())
 	{
-		double out = (double)it->second.duration / getCombatDuration();
+		float out = it->second.duration / getCombatDuration();
 
 		if (out < 0.0f) out = 0.0f;
 
@@ -231,8 +223,7 @@ void Player::combatExit(cbtevent* ev)
 	boons_generation.clear();
 }
 
-uint64_t Player::getCombatDuration()
-{
+uint64_t Player::getCombatDuration() const {
 	if (in_combat)
 	{
 		return getCurrentTime() - enter_combat_time;
