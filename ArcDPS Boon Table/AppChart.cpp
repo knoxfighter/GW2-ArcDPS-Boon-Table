@@ -92,7 +92,7 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
 						if (descend) {
 							return player1.getBoonUptime(buff) < player2.getBoonUptime(buff);
 						} else {
-							return player1.getBoonGeneration(buff) > player2.getBoonUptime(buff);
+							return player1.getBoonUptime(buff) > player2.getBoonUptime(buff);
 						}
 					});
 				}

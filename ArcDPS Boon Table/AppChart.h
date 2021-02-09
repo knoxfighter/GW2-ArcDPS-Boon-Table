@@ -17,12 +17,12 @@ protected:
 	bool show_total = true;
 	bool show_boon_as_progress_bar = true;
 
-	std::atomic_bool needSort;
-
 	int current_column = 0;
 public:
 	ImVec4 has_boon_color = ImVec4(0.1f, 1, 0.1f, 1);
 	ImVec4 not_have_boon_color = ImVec4(1, 0.1f, 0.1f, 1);
+
+	std::atomic_bool needSort;
 	
 	AppChart() = default;
 

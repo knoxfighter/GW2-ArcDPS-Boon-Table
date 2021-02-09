@@ -240,6 +240,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 					if (dst)
 					{
 						tracker.addPlayer(src,dst);
+						chart.needSort = true;
 					}
 				}
 
@@ -272,6 +273,8 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 				{
 					current_player->combatEnter(ev);
 					tracker.bakeCombatData();
+					chart.needSort = true;
+					
 				}
 			}
 			else if (ev->is_statechange == CBTS_EXITCOMBAT)
@@ -297,6 +300,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 				if (current_player = tracker.getPlayer(src->id))
 				{
 					current_player->removeBoon(ev);
+					chart.needSort = true;
 				}
 			}
 		}
@@ -315,6 +319,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 			else
 			{
 				tracker.applyBoon(src, dst, ev);
+				chart.needSort = true;
 			}
 		}
 
