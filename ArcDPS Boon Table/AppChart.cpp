@@ -10,7 +10,7 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
 	// header with settings
 	if (ImGui::BeginMenuBar()) {
 		if (ImGui::BeginMenu("Settings")) {
-			ImGui::MenuItem("Players", nullptr, &show_players);
+			// ImGui::MenuItem("Players", nullptr, &show_players);
 			ImGui::MenuItem("Subgroups", nullptr, &show_subgroups);
 			ImGui::MenuItem("Total", nullptr, &show_total);
 			ImGui::MenuItem("Show value as progress bar", nullptr, &show_boon_as_progress_bar);
