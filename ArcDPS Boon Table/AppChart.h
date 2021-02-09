@@ -17,6 +17,8 @@ protected:
 	bool show_total = true;
 	bool show_boon_as_progress_bar = true;
 
+	std::atomic_bool needSort;
+
 	int current_column = 0;
 public:
 	ImVec4 has_boon_color = ImVec4(0.1f, 1, 0.1f, 1);
@@ -24,7 +26,7 @@ public:
 	
 	AppChart() = default;
 
-	void Draw(const char* title, bool* p_open, const Tracker& tracker, ImGuiWindowFlags flags);
+	void Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWindowFlags flags);
 
 	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width) const;
 

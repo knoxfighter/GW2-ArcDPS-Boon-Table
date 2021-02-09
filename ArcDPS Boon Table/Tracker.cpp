@@ -6,8 +6,12 @@ void Tracker::addPlayer(ag* src, ag* dst)
 
 	uintptr_t id = src->id;
 	std::string characterName = std::string(src->name);
-	std::string accountName = std::string(dst->name);
 	uint8_t subgroup = dst->team;
+	std::string accountName = std::string(dst->name);
+	// remove ':' from accountName if it is there
+	if (accountName.at(0) == ':') {
+		accountName.erase(0, 1);
+	}
 
 	if (characterName.length() < 2) return;
 	if (accountName.length() < 2) return;

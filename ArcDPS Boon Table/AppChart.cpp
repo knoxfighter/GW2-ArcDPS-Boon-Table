@@ -1,8 +1,9 @@
 #include "AppChart.h"
 
+#include <algorithm>
 #include <mutex>
 
-void AppChart::Draw(const char* title, bool* p_open, const Tracker& tracker, ImGuiWindowFlags flags = 0)
+void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 {
 	ImGui::Begin(title, p_open, flags);
 
@@ -48,6 +49,58 @@ void AppChart::Draw(const char* title, bool* p_open, const Tracker& tracker, ImG
 
 		ImGui::TableHeadersRow();
 
+		// sorting
+		if (ImGuiTableSortSpecs* sorts_specs = ImGui::TableGetSortSpecs()) {
+			// Sort our data if sort specs have been changed!
+			if (sorts_specs->SpecsDirty)
+				needSort = true;
+
+			bool expected = true;
+			if (needSort.compare_exchange_strong(expected, false)) {
+				const bool descend = sorts_specs->Specs->SortDirection == ImGuiSortDirection_Descending;
+
+				if (sorts_specs->Specs->ColumnUserID == nameColumnId) {
+					// sort by account name.
+					tracker.players.sort([descend](const Player& player1, const Player& player2) -> bool {
+						std::string charName1 = player1.name;
+						std::string charName2 = player2.name;
+						std::transform(charName1.begin(), charName1.end(), charName1.begin(), [](unsigned char c) { return std::tolower(c); });
+						std::transform(charName2.begin(), charName2.end(), charName2.begin(), [](unsigned char c) { return std::tolower(c); });
+
+						if (descend) {
+							bool res = charName1 < charName2;
+							return res;
+						} else {
+							return charName1 > charName2;
+						}
+					});
+				} else if (sorts_specs->Specs->ColumnUserID == subgroupColumnId) {
+					// sort by subgroup
+					tracker.players.sort([descend](const Player& player1, const Player& player2) {
+						if (descend) {
+							return player1.subgroup < player2.subgroup;
+						} else {
+							return player1.subgroup > player2.subgroup;
+						}
+					});
+				}
+				else {
+					// sort by buff
+					const ImGuiID buffId = sorts_specs->Specs->ColumnUserID;
+					BoonDef buff = tracked_buffs[buffId];
+					tracker.players.sort([descend, buff](const Player& player1, const Player& player2) {
+						if (descend) {
+							return player1.getBoonUptime(buff) < player2.getBoonUptime(buff);
+						} else {
+							return player1.getBoonGeneration(buff) > player2.getBoonUptime(buff);
+						}
+					});
+				}
+				sorts_specs->SpecsDirty = false;
+			}
+		}
+		
+		// Show players
 		for (Player player : tracker.players) {
 			// charname
 			ImGui::TableNextRow();
