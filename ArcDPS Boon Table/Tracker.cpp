@@ -5,8 +5,9 @@ void Tracker::addPlayer(ag* src, ag* dst)
 	if (!is_player(src)) return;
 
 	uintptr_t id = src->id;
-	std::string characterName = std::string(src->name);
 	uint8_t subgroup = dst->team;
+	prof profession = dst->prof;
+	std::string characterName = std::string(src->name);
 	std::string accountName = std::string(dst->name);
 	// remove ':' from accountName if it is there
 	if (accountName.at(0) == ':') {
@@ -24,11 +25,12 @@ void Tracker::addPlayer(ag* src, ag* dst)
 		current_player->id = id;
 		current_player->name = characterName;
 		current_player->subgroup = subgroup;
+		current_player->profession = profession;
 	}
 	else
 	{
 		std::unique_lock<std::mutex> lock(players_mtx);
-		players.emplace_back(id, characterName, accountName, subgroup);
+		players.emplace_back(id, characterName, accountName, subgroup, profession);
 		lock.unlock();
 
 		bakeCombatData();

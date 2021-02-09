@@ -2,11 +2,9 @@
 * arcdps combat api example
 */
 
-#include <stdint.h>
-#include <stdio.h>
+#include <cstdint>
 #include <Windows.h>
 #include <string>
-#include <list>
 
 #include "imgui\imgui.h"
 #include "simpleini\SimpleIni.h"
@@ -42,6 +40,7 @@ AppChart chart;
 bool show_chart = false;
 
 typedef uint64_t(*arc_export_func_u64)();
+typedef void(*log_func)(char* str);
 
 // load arcdps dll.
 // When loading directly, arcdps is the "d3d9.dll"
@@ -51,6 +50,7 @@ HMODULE arc_dllL = LoadLibraryA("gw2addon_arcdps.dll");
 HMODULE arc_dll = (arc_dllL != nullptr) ? arc_dllL : arc_dllD;
 
 // get exports
+arc_color_func arc_export_e5 = (arc_color_func)GetProcAddress(arc_dll, "e5");
 auto arc_export_e6 = (arc_export_func_u64)GetProcAddress(arc_dll, "e6");
 auto arc_export_e7 = (arc_export_func_u64)GetProcAddress(arc_dll, "e7");
 
@@ -274,7 +274,6 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 					current_player->combatEnter(ev);
 					tracker.bakeCombatData();
 					chart.needSort = true;
-					
 				}
 			}
 			else if (ev->is_statechange == CBTS_EXITCOMBAT)
@@ -338,8 +337,6 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 {
 	readArcExports();
 
-	ImGui::ShowDemoWindow();
-	
 	if (!not_charsel_or_loading) return 0;
 
 	auto io = &ImGui::GetIO();
@@ -408,11 +405,8 @@ void parseIni()
 	pszValue = table_ini.GetValue("table", "show_uptime_as_progress_bar", "1");
 	chart.setShowBoonAsProgressBar(std::stoi(pszValue));
 
-	for (auto boon_def = tracked_buffs.begin(); boon_def != tracked_buffs.end(); ++boon_def)
-	{
-		pszValue = table_ini.GetValue("boons", boon_def->name.c_str(), std::to_string(boon_def->is_relevant).c_str());
-		boon_def->is_relevant = std::stoi(pszValue);
-	}
+	pszValue = table_ini.GetValue("table", "show_colored", "0");
+	chart.setShowColored(std::stoi(pszValue));
 }
 
 void writeIni()
@@ -423,11 +417,7 @@ void writeIni()
 	rc = table_ini.SetValue("table", "show_subgroups", std::to_string(chart.getShowSubgroups()).c_str());
 	rc = table_ini.SetValue("table", "show_total", std::to_string(chart.bShowTotal()).c_str());
 	rc = table_ini.SetValue("table", "show_uptime_as_progress_bar", std::to_string(chart.bShowBoonAsProgressBar()).c_str());
-
-	for (auto boon_def = tracked_buffs.begin(); boon_def != tracked_buffs.end(); ++boon_def)
-	{
-		rc = table_ini.SetValue("boons", boon_def->name.c_str(), std::to_string(boon_def->is_relevant).c_str());
-	}
+	rc = table_ini.SetValue("table", "show_colored", std::to_string(chart.bShowColored()).c_str());
 
 	rc = table_ini.SaveFile("addons\\arcdps\\arcdps_table.ini");
 }

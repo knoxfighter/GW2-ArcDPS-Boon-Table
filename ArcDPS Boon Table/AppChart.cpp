@@ -14,6 +14,7 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
 			ImGui::MenuItem("Subgroups", nullptr, &show_subgroups);
 			ImGui::MenuItem("Total", nullptr, &show_total);
 			ImGui::MenuItem("Show value as progress bar", nullptr, &show_boon_as_progress_bar);
+			ImGui::MenuItem("Paint by profession", nullptr, &show_colored);
 
 			ImGui::EndMenu();
 		}
@@ -102,6 +103,8 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
 		
 		// Show players
 		for (Player player : tracker.players) {
+			ImVec4 player_color = player.getProfessionColor();
+			
 			// charname
 			ImGui::TableNextRow();
 			ImGui::TableNextColumn();
@@ -116,7 +119,7 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
 				ImGui::TableNextColumn();
 				const float boonUptime = getPlayerDisplayValue(tracker, player, trackedBuff);
 
-				buffProgressBar(trackedBuff, boonUptime, ImGui::GetColumnWidth());
+				buffProgressBar(trackedBuff, boonUptime, ImGui::GetColumnWidth(), player_color);
 			}
 		}
 
@@ -174,9 +177,13 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
 	ImGui::End();
 }
 
-void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width) const {
+void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, ImVec4 color) const {
+	bool hidden_color = false;
+	if (color.z == 0.f) hidden_color = true;
 	if (show_boon_as_progress_bar)
 	{
+		if (show_colored && !hidden_color) ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
+		
 		char label[10];
 		if (current_buff.stacking_type == StackingType_intensity)
 		{
@@ -189,9 +196,13 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 			sprintf(label, "%.0f%%", 100*current_boon_uptime);
 			ImGui::ProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label);
 		}
+
+		if (show_colored && !hidden_color) ImGui::PopStyleColor();
 	}
 	else
 	{
+		if (show_colored && !hidden_color) ImGui::PushStyleColor(ImGuiCol_Text, color);
+
 		if (current_buff.stacking_type == StackingType_intensity)
 		{
 			//don't show the % for intensity stacking buffs
@@ -201,6 +212,8 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 		{
 			ImGui::Text("%.0f%%", 100*current_boon_uptime);
 		}
+
+		if (show_colored && !hidden_color) ImGui::PopStyleColor();
 	}
 }
 
@@ -230,6 +243,10 @@ void AppChart::setShowBoonAsProgressBar(bool new_show)
 	show_boon_as_progress_bar = new_show;
 }
 
+void AppChart::setShowColored(bool new_colored) {
+	show_colored = new_colored;
+}
+
 bool AppChart::bShowPlayers() const {
 	return show_players;
 }
@@ -254,4 +271,8 @@ bool AppChart::bShowTotal() const {
 
 bool AppChart::bShowBoonAsProgressBar() const {
 	return show_boon_as_progress_bar;
+}
+
+bool AppChart::bShowColored() const {
+	return show_colored;
 }

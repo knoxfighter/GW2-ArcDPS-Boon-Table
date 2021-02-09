@@ -16,6 +16,7 @@ protected:
 	bool show_subgroups = true;
 	bool show_total = true;
 	bool show_boon_as_progress_bar = true;
+	bool show_colored = false;
 
 	int current_column = 0;
 public:
@@ -28,17 +29,19 @@ public:
 
 	void Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWindowFlags flags);
 
-	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width) const;
+	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, ImVec4 color = ImVec4(0,0,0,0)) const;
 
 	void setShowPlayers(bool new_show);
 	void setShowSubgroups(bool new_show);
 	void setShowTotal(bool new_show);
 	void setShowBoonAsProgressBar(bool new_show);
+	void setShowColored(bool new_colored);
 
 	[[nodiscard]] bool bShowPlayers() const;
 	[[nodiscard]] bool bShowSubgroups(const Tracker& tracker) const;
 	[[nodiscard]] bool getShowSubgroups() const;
 	[[nodiscard]] bool bShowTotal() const;
 	[[nodiscard]] bool bShowBoonAsProgressBar() const;
+	[[nodiscard]] bool bShowColored() const;
 	float getPlayerDisplayValue(const Tracker& tracker, const Player& player, const BoonDef& boon);
 };
