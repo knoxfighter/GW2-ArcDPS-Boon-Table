@@ -13,19 +13,15 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
 {
 	ImGui::Begin(title, p_open, flags);
 
-	// header with settings
-	if (ImGui::BeginMenuBar()) {
-		if (ImGui::BeginMenu("Settings")) {
-			// ImGui::MenuItem("Players", nullptr, &show_players);
-			ImGui::MenuItem("Subgroups", nullptr, &show_subgroups);
-			ImGui::MenuItem("Total", nullptr, &show_total);
-			ImGui::MenuItem("Show value as progress bar", nullptr, &show_boon_as_progress_bar);
-			ImGui::MenuItem("Paint by profession", nullptr, &show_colored);
+	// Settings on right-click-menu
+	if (ImGui::BeginPopupContextWindow()) {
+		// ImGui::MenuItem("Players", nullptr, &show_players);
+		ImGui::MenuItem("Subgroups", nullptr, &show_subgroups);
+		ImGui::MenuItem("Total", nullptr, &show_total);
+		ImGui::MenuItem("Show value as progress bar", nullptr, &show_boon_as_progress_bar);
+		ImGui::MenuItem("Paint by profession", nullptr, &show_colored);
 
-			ImGui::EndMenu();
-		}
-
-		ImGui::EndMenuBar();
+		ImGui::EndPopup();
 	}
 
 	// columns: charname | subgroup | tracked_buffs
@@ -36,7 +32,8 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
 	std::scoped_lock<std::mutex, std::mutex> lock(tracker.players_mtx, boons_mtx);
 	
 	if (ImGui::BeginTable("Table", columnCount, 
-                                                ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_Hideable | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Sortable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_RowBg)) {
+        ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_Hideable | ImGuiTableFlags_SizingFixedFit | 
+		ImGuiTableFlags_Sortable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_RowBg | ImGuiTableFlags_ContextMenuInBody)) {
 		ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide | ImGuiTableColumnFlags_NoReorder, 0, nameColumnId);
 		ImGui::TableSetupColumn("Subgrp", 0, 0, subgroupColumnId);
 

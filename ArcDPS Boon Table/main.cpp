@@ -351,7 +351,7 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 
 	if (show_chart)
 	{
-		chart.Draw("Boon Table", &show_chart, tracker, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar | (!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0));
+		chart.Draw("Boon Table", &show_chart, tracker, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize | (!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0));
 	}
 	return 0;
 }
