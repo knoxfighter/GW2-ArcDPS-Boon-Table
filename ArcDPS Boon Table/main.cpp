@@ -20,7 +20,7 @@ arcdps_exports arc_exports;
 char* arcvers;
 void dll_init(HANDLE hModule);
 void dll_exit();
-extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, void* id3dd9, HANDLE arcdll, void* mallocfn, void* freefn);
+extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, void* id3dd9, HMODULE arcdll, void* mallocfn, void* freefn);
 extern "C" __declspec(dllexport) void* get_release_addr();
 arcdps_exports* mod_init();
 uintptr_t mod_release();
@@ -42,17 +42,12 @@ bool show_chart = false;
 typedef uint64_t(*arc_export_func_u64)();
 typedef void(*log_func)(char* str);
 
-// load arcdps dll.
-// When loading directly, arcdps is the "d3d9.dll"
-// When loading with the addon manager, arcdps is called "gw2addon_arcdps.dll"
-HMODULE arc_dllD = LoadLibraryA("d3d9.dll");
-HMODULE arc_dllL = LoadLibraryA("gw2addon_arcdps.dll");
-HMODULE arc_dll = (arc_dllL != nullptr) ? arc_dllL : arc_dllD;
+HMODULE arc_dll;
 
 // get exports
-arc_color_func arc_export_e5 = (arc_color_func)GetProcAddress(arc_dll, "e5");
-auto arc_export_e6 = (arc_export_func_u64)GetProcAddress(arc_dll, "e6");
-auto arc_export_e7 = (arc_export_func_u64)GetProcAddress(arc_dll, "e7");
+arc_color_func arc_export_e5;
+arc_export_func_u64 arc_export_e6;
+arc_export_func_u64 arc_export_e7;
 
 // arc globals
 WPARAM arc_global_mod1;
@@ -82,8 +77,15 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ulReasonForCall, LPVOID lpReserved) 
 }
 
 /* export -- arcdps looks for this exported function and calls the address it returns */
-extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, void* id3dd9, HANDLE arcdll, void* mallocfn, void* freefn) {
+extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, void* id3dd9, HMODULE new_arcdll, void* mallocfn, void* freefn) {
+	// set all arcdps stuff
 	arcvers = arcversionstr;
+	arc_dll = new_arcdll;
+	arc_export_e5 = (arc_color_func)GetProcAddress(arc_dll, "e5");
+	arc_export_e6 = (arc_export_func_u64)GetProcAddress(arc_dll, "e6");
+	arc_export_e7 = (arc_export_func_u64)GetProcAddress(arc_dll, "e7");
+
+	// set imgui context && allocation for arcdps dll space
 	ImGui::SetCurrentContext(static_cast<ImGuiContext*>(imguicontext));
 	ImGui::SetAllocatorFunctions((void* (*)(size_t, void*))mallocfn, (void (*)(void*, void*))freefn);
 
