@@ -3,6 +3,12 @@
 #include <algorithm>
 #include <mutex>
 
+// Includes/Defines to use, when enabling the custom aligned progressbar text.
+// #ifndef IMGUI_DEFINE_MATH_OPERATORS
+// #define IMGUI_DEFINE_MATH_OPERATORS
+// #endif
+// #include "imgui/imgui_internal.h"
+
 void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 {
 	ImGui::Begin(title, p_open, flags);
@@ -104,7 +110,7 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
 		// Show players
 		for (Player player : tracker.players) {
 			ImVec4 player_color = player.getProfessionColor();
-			
+
 			// charname
 			ImGui::TableNextRow();
 			ImGui::TableNextColumn();
@@ -126,7 +132,7 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
 		if (bShowSubgroups(tracker))
 		{
 			ImGui::TableNextRow();
-			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, 0xffffffff);
+			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
 
 			for (uint8_t subgroup : tracker.subgroups) {
 				ImGui::TableNextRow();
@@ -152,7 +158,8 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
 		if (bShowTotal())
 		{
 			ImGui::TableNextRow();
-			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, 0xffffffff);
+			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
+
 			ImGui::TableNextRow();
 			
 			// charname
@@ -189,12 +196,14 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 		{
 			sprintf(label, "%.1f", current_boon_uptime);
 			current_boon_uptime /= 25;
-			ImGui::ProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label);
+			// ImGui::ProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label);
+			CustomProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label);
 		}
 		else
 		{
 			sprintf(label, "%.0f%%", 100*current_boon_uptime);
-			ImGui::ProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label);
+			// ImGui::ProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label);
+			CustomProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label);
 		}
 
 		if (show_colored && !hidden_color) ImGui::PopStyleColor();
@@ -216,6 +225,50 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 		if (show_colored && !hidden_color) ImGui::PopStyleColor();
 	}
 }
+
+void AppChart::CustomProgressBar(float fraction, const ImVec2& size_arg, const char* overlay) const {
+	ImGui::ProgressBar(fraction, size_arg, overlay);
+}
+
+// This code can be used to make the text over the progressBar centered.
+// Moving from there, left/right alignment would be also easy to implement.
+// This also uses imgui internals, which are likely to change between versions.
+/*void AppChart::CustomProgressBar(float fraction, const ImVec2& size_arg, const char* overlay) const {
+	ImGuiWindow* window = ImGui::GetCurrentWindow();
+	if (window->SkipItems)
+		return;
+
+	ImGuiContext& g = *GImGui;
+	const ImGuiStyle& style = g.Style;
+
+	ImVec2 pos = window->DC.CursorPos;
+	ImVec2 size = ImGui::CalcItemSize(size_arg, ImGui::CalcItemWidth(), g.FontSize + style.FramePadding.y * 2.0f);
+	ImRect bb(pos, pos + size);
+	ImGui::ItemSize(size, style.FramePadding.y);
+	if (!ImGui::ItemAdd(bb, 0))
+		return;
+
+	// Render
+	fraction = ImSaturate(fraction);
+	ImGui::RenderFrame(bb.Min, bb.Max, ImGui::GetColorU32(ImGuiCol_FrameBg), true, style.FrameRounding);
+	bb.Expand(ImVec2(-style.FrameBorderSize, -style.FrameBorderSize));
+	const ImVec2 fill_br = ImVec2(ImLerp(bb.Min.x, bb.Max.x, fraction), bb.Max.y);
+	ImGui::RenderRectFilledRangeH(window->DrawList, bb, ImGui::GetColorU32(ImGuiCol_PlotHistogram), 0.0f, fraction, style.FrameRounding);
+
+	// Default displaying the fraction as percentage string, but user can override it
+	char overlay_buf[32];
+	if (!overlay)
+	{
+		ImFormatString(overlay_buf, IM_ARRAYSIZE(overlay_buf), "%.0f%%", fraction * 100 + 0.01f);
+		overlay = overlay_buf;
+	}
+
+	ImVec2 overlay_size = ImGui::CalcTextSize(overlay, NULL);
+	if (overlay_size.x > 0.0f)
+		// width / 2 + text_widht / 2
+		ImGui::RenderText(ImVec2(pos.x + (size.x / 2) - (overlay_size.x / 2), pos.y), overlay);
+		// ImGui::RenderTextClipped(ImVec2(ImClamp(fill_br.x + style.ItemSpacing.x, bb.Min.x, bb.Max.x - overlay_size.x - style.ItemInnerSpacing.x), bb.Min.y), bb.Max, overlay, NULL, &overlay_size, ImVec2(0.0f, 0.5f), &bb);
+}*/
 
 float AppChart::getPlayerDisplayValue(const Tracker& tracker, const Player& player, const BoonDef& boon)
 {

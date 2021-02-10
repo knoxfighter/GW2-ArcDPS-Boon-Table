@@ -30,6 +30,7 @@ public:
 	void Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWindowFlags flags);
 
 	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, ImVec4 color = ImVec4(0,0,0,0)) const;
+	void CustomProgressBar(float fraction, const ImVec2& size_arg, const char* overlay) const;
 
 	void setShowPlayers(bool new_show);
 	void setShowSubgroups(bool new_show);
