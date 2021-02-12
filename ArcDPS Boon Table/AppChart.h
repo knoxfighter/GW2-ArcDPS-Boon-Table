@@ -17,6 +17,8 @@ protected:
 	bool show_total = true;
 	bool show_boon_as_progress_bar = true;
 	bool show_colored = false;
+	Alignment alignment = Alignment::Right;
+	std::string alignment_text = to_string(Alignment::Right);
 
 	int current_column = 0;
 public:
@@ -28,6 +30,7 @@ public:
 	AppChart() = default;
 
 	void Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWindowFlags flags);
+	void alignmentSelectable(Alignment select_alignment);
 
 	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, ImVec4 color = ImVec4(0,0,0,0)) const;
 	void CustomProgressBar(float fraction, const ImVec2& size_arg, const char* overlay) const;
@@ -37,6 +40,7 @@ public:
 	void setShowTotal(bool new_show);
 	void setShowBoonAsProgressBar(bool new_show);
 	void setShowColored(bool new_colored);
+	void setAlignment(Alignment new_alignment);
 
 	[[nodiscard]] bool bShowPlayers() const;
 	[[nodiscard]] bool bShowSubgroups(const Tracker& tracker) const;
@@ -44,5 +48,6 @@ public:
 	[[nodiscard]] bool bShowTotal() const;
 	[[nodiscard]] bool bShowBoonAsProgressBar() const;
 	[[nodiscard]] bool bShowColored() const;
+	[[nodiscard]] Alignment getAlignment() const;
 	float getPlayerDisplayValue(const Tracker& tracker, const Player& player, const BoonDef& boon);
 };

@@ -156,3 +156,13 @@ typedef struct ag {
 } ag;
 
 bool is_player(ag* new_player);
+
+// additional enum for alignment
+enum class Alignment {
+	Unaligned,
+	Left,
+	Center,
+	Right
+};
+
+std::string to_string(Alignment alignment);

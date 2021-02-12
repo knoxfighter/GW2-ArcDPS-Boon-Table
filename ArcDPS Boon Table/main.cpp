@@ -354,26 +354,29 @@ void parseIni()
 	SI_Error rc = table_ini.LoadFile("addons\\arcdps\\arcdps_table.ini");
 	valid_table_ini = rc >= 0;
 
-	std::string pszValue = table_ini.GetValue("table", "show", "0");
-	show_chart = std::stoi(pszValue);
+	std::string pszValueString = table_ini.GetValue("table", "show", "0");
+	show_chart = std::stoi(pszValueString);
 
-	pszValue = table_ini.GetValue("table", "key", "66");
-	table_key = std::stoi(pszValue);
+	pszValueString = table_ini.GetValue("table", "key", "66");
+	table_key = std::stoi(pszValueString);
 
-	pszValue = table_ini.GetValue("table", "show_players", "1");
-	chart.setShowPlayers(std::stoi(pszValue));
+	pszValueString = table_ini.GetValue("table", "show_players", "1");
+	chart.setShowPlayers(std::stoi(pszValueString));
 
-	pszValue = table_ini.GetValue("table", "show_subgroups", "1");
-	chart.setShowSubgroups(std::stoi(pszValue));
+	pszValueString = table_ini.GetValue("table", "show_subgroups", "1");
+	chart.setShowSubgroups(std::stoi(pszValueString));
 
-	pszValue = table_ini.GetValue("table", "show_total", "1");
-	chart.setShowTotal(std::stoi(pszValue));
+	pszValueString = table_ini.GetValue("table", "show_total", "1");
+	chart.setShowTotal(std::stoi(pszValueString));
 
-	pszValue = table_ini.GetValue("table", "show_uptime_as_progress_bar", "1");
-	chart.setShowBoonAsProgressBar(std::stoi(pszValue));
+	pszValueString = table_ini.GetValue("table", "show_uptime_as_progress_bar", "1");
+	chart.setShowBoonAsProgressBar(std::stoi(pszValueString));
 
-	pszValue = table_ini.GetValue("table", "show_colored", "0");
-	chart.setShowColored(std::stoi(pszValue));
+	pszValueString = table_ini.GetValue("table", "show_colored", "0");
+	chart.setShowColored(std::stoi(pszValueString));
+
+	long pszValueLong = table_ini.GetLongValue("table", "alignment", static_cast<long>(Alignment::Right));
+	chart.setAlignment(static_cast<Alignment>(pszValueLong));
 }
 
 void writeIni()
@@ -385,6 +388,7 @@ void writeIni()
 	rc = table_ini.SetValue("table", "show_total", std::to_string(chart.bShowTotal()).c_str());
 	rc = table_ini.SetValue("table", "show_uptime_as_progress_bar", std::to_string(chart.bShowBoonAsProgressBar()).c_str());
 	rc = table_ini.SetValue("table", "show_colored", std::to_string(chart.bShowColored()).c_str());
+	rc = table_ini.SetLongValue("table", "alignment", static_cast<long>(chart.getAlignment()));
 
 	rc = table_ini.SaveFile("addons\\arcdps\\arcdps_table.ini");
 }

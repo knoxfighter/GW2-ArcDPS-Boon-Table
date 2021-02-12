@@ -4,10 +4,10 @@
 #include <mutex>
 
 // Includes/Defines to use, when enabling the custom aligned progressbar text.
-// #ifndef IMGUI_DEFINE_MATH_OPERATORS
-// #define IMGUI_DEFINE_MATH_OPERATORS
-// #endif
-// #include "imgui/imgui_internal.h"
+#ifndef IMGUI_DEFINE_MATH_OPERATORS
+#define IMGUI_DEFINE_MATH_OPERATORS
+#endif
+#include "imgui/imgui_internal.h"
 
 void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 {
@@ -20,6 +20,20 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
 		ImGui::MenuItem("Total", nullptr, &show_total);
 		ImGui::MenuItem("Show value as progress bar", nullptr, &show_boon_as_progress_bar);
 		ImGui::MenuItem("Paint by profession", nullptr, &show_colored);
+
+		float cursorPosY = ImGui::GetCursorPosY();
+		ImGui::SetCursorPosY(cursorPosY + 4);
+		ImGui::Text("Alignment");
+		ImGui::SameLine();
+		ImGui::SetCursorPosY(cursorPosY);
+		if (ImGui::BeginCombo("###Alignment", alignment_text.c_str())) {
+			alignmentSelectable(Alignment::Unaligned);
+			alignmentSelectable(Alignment::Left);
+			alignmentSelectable(Alignment::Center);
+			alignmentSelectable(Alignment::Right);
+			
+			ImGui::EndCombo();
+		}
 
 		ImGui::EndPopup();
 	}
@@ -181,6 +195,14 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
 	ImGui::End();
 }
 
+void AppChart::alignmentSelectable(Alignment select_alignment) {
+	std::string new_alignment_text = to_string(select_alignment);
+	if (ImGui::Selectable(new_alignment_text.c_str())) {
+		alignment = select_alignment;
+		alignment_text = new_alignment_text;
+	}
+}
+
 void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, ImVec4 color) const {
 	bool hidden_color = false;
 	if (color.z == 0.f) hidden_color = true;
@@ -223,14 +245,14 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 	}
 }
 
-void AppChart::CustomProgressBar(float fraction, const ImVec2& size_arg, const char* overlay) const {
-	ImGui::ProgressBar(fraction, size_arg, overlay);
-}
+// void AppChart::CustomProgressBar(float fraction, const ImVec2& size_arg, const char* overlay) const {
+	// ImGui::ProgressBar(fraction, size_arg, overlay);
+// }
 
 // This code can be used to make the text over the progressBar centered.
 // Moving from there, left/right alignment would be also easy to implement.
 // This also uses imgui internals, which are likely to change between versions.
-/*void AppChart::CustomProgressBar(float fraction, const ImVec2& size_arg, const char* overlay) const {
+void AppChart::CustomProgressBar(float fraction, const ImVec2& size_arg, const char* overlay) const {
 	ImGuiWindow* window = ImGui::GetCurrentWindow();
 	if (window->SkipItems)
 		return;
@@ -261,11 +283,22 @@ void AppChart::CustomProgressBar(float fraction, const ImVec2& size_arg, const c
 	}
 
 	ImVec2 overlay_size = ImGui::CalcTextSize(overlay, NULL);
-	if (overlay_size.x > 0.0f)
-		// width / 2 + text_widht / 2
-		ImGui::RenderText(ImVec2(pos.x + (size.x / 2) - (overlay_size.x / 2), pos.y), overlay);
-		// ImGui::RenderTextClipped(ImVec2(ImClamp(fill_br.x + style.ItemSpacing.x, bb.Min.x, bb.Max.x - overlay_size.x - style.ItemInnerSpacing.x), bb.Min.y), bb.Max, overlay, NULL, &overlay_size, ImVec2(0.0f, 0.5f), &bb);
-}*/
+	if (overlay_size.x > 0.0f) {
+		switch (alignment) {
+		case Alignment::Left:
+			ImGui::RenderTextClipped(bb.Min, bb.Max, overlay, NULL, &overlay_size, ImVec2(0.f, 0.f), &bb);
+			break;
+		case Alignment::Center:
+			ImGui::RenderTextClipped(bb.Min, bb.Max, overlay, NULL, &overlay_size, ImVec2(0.5f, 0.5f), &bb);
+			break;
+		case Alignment::Right: 
+			ImGui::RenderTextClipped(bb.Min, bb.Max, overlay, NULL, &overlay_size, ImVec2(1.f, 0.f), &bb);
+			break;
+		default: 
+			ImGui::RenderTextClipped(ImVec2(ImClamp(fill_br.x + style.ItemSpacing.x, bb.Min.x, bb.Max.x - overlay_size.x - style.ItemInnerSpacing.x), bb.Min.y), bb.Max, overlay, NULL, &overlay_size, ImVec2(0.0f, 0.5f), &bb);
+		}
+	}
+}
 
 float AppChart::getPlayerDisplayValue(const Tracker& tracker, const Player& player, const BoonDef& boon)
 {
@@ -297,6 +330,11 @@ void AppChart::setShowColored(bool new_colored) {
 	show_colored = new_colored;
 }
 
+void AppChart::setAlignment(Alignment new_alignment) {
+	alignment = new_alignment;
+	alignment_text = to_string(new_alignment);
+}
+
 bool AppChart::bShowPlayers() const {
 	return show_players;
 }
@@ -325,4 +363,8 @@ bool AppChart::bShowBoonAsProgressBar() const {
 
 bool AppChart::bShowColored() const {
 	return show_colored;
+}
+
+Alignment AppChart::getAlignment() const {
+	return alignment;
 }
