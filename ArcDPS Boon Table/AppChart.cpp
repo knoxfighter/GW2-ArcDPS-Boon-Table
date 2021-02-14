@@ -16,6 +16,7 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
 	// Settings on right-click-menu
 	if (ImGui::BeginPopupContextWindow()) {
 		// ImGui::MenuItem("Players", nullptr, &show_players);
+		ImGui::MenuItem("Players", nullptr, &show_players);
 		ImGui::MenuItem("Subgroups", nullptr, &show_subgroups);
 		ImGui::MenuItem("Total", nullptr, &show_total);
 		ImGui::MenuItem("Show value as progress bar", nullptr, &show_boon_as_progress_bar);
@@ -119,24 +120,26 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
 		}
 		
 		// Show players
-		for (Player player : tracker.players) {
-			ImVec4 player_color = player.getProfessionColor();
+		if (bShowPlayers()) {
+			for (Player player : tracker.players) {
+				ImVec4 player_color = player.getProfessionColor();
 
-			// charname
-			ImGui::TableNextRow();
-			ImGui::TableNextColumn();
-			ImGui::Text(player.name.c_str());
-
-			// subgroup
-			ImGui::TableNextColumn();
-			AlignedTextColumn("%d", player.subgroup);
-
-			// buffs
-			for (const BoonDef& trackedBuff : tracked_buffs) {
+				// charname
+				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
-				const float boonUptime = getPlayerDisplayValue(tracker, player, trackedBuff);
+				ImGui::Text(player.name.c_str());
 
-				buffProgressBar(trackedBuff, boonUptime, ImGui::GetColumnWidth(), player_color);
+				// subgroup
+				ImGui::TableNextColumn();
+				AlignedTextColumn("%d", player.subgroup);
+
+				// buffs
+				for (const BoonDef& trackedBuff : tracked_buffs) {
+					ImGui::TableNextColumn();
+					const float boonUptime = getPlayerDisplayValue(tracker, player, trackedBuff);
+
+					buffProgressBar(trackedBuff, boonUptime, ImGui::GetColumnWidth(), player_color);
+				}
 			}
 		}
 
