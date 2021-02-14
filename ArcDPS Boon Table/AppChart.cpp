@@ -49,7 +49,7 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
         ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_Hideable | ImGuiTableFlags_SizingFixedFit | 
 		ImGuiTableFlags_Sortable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_RowBg | ImGuiTableFlags_ContextMenuInBody)) {
 		ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide | ImGuiTableColumnFlags_NoReorder, 0, nameColumnId);
-		ImGui::TableSetupColumn("Subgrp", 0, 0, subgroupColumnId);
+		ImGui::TableSetupColumn("Sub", 0, 0, subgroupColumnId);
 
 		ImU32 i = 0;
 		for (const BoonDef& trackedBuff : tracked_buffs) {
@@ -129,7 +129,7 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
 
 			// subgroup
 			ImGui::TableNextColumn();
-			ImGui::Text("%d", player.subgroup);
+			AlignedTextColumn("%d", player.subgroup);
 
 			// buffs
 			for (const BoonDef& trackedBuff : tracked_buffs) {
@@ -154,7 +154,7 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
 
 				// subgroup
 				ImGui::TableNextColumn();
-				ImGui::Text("%d", subgroup);
+				AlignedTextColumn("%d", subgroup);
 
 				// buffs
 				for (const BoonDef& trackedBuff : tracked_buffs) {
@@ -179,7 +179,7 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
 
 			// subgroup
 			ImGui::TableNextColumn();
-			ImGui::Text("ALL");
+			AlignedTextColumn("ALL");
 
 			// buffs
 			for (const BoonDef& trackedBuff : tracked_buffs) {
@@ -234,20 +234,51 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 		if (current_buff.stacking_type == StackingType_intensity)
 		{
 			//don't show the % for intensity stacking buffs
-			ImGui::Text("%.1f", current_boon_uptime);
+			AlignedTextColumn("%.1f", current_boon_uptime);
 		}
 		else
 		{
-			ImGui::Text("%.0f%%", 100*current_boon_uptime);
+			AlignedTextColumn("%.0f%%", 100 * current_boon_uptime);
 		}
 
 		if (show_colored && !hidden_color) ImGui::PopStyleColor();
 	}
 }
 
-// void AppChart::CustomProgressBar(float fraction, const ImVec2& size_arg, const char* overlay) const {
-	// ImGui::ProgressBar(fraction, size_arg, overlay);
-// }
+void AppChart::AlignedTextColumn(const char* text, ...) const {
+	va_list args;
+	va_start(args, text);
+	char buf[4096];
+	ImFormatStringV(buf, 4096, text, args);
+	va_end(args);
+
+	const float posX = ImGui::GetCursorPosX();
+	float newX = posX;
+	float textWidth = ImGui::CalcTextSize(buf).x;
+	float columnWidth = ImGui::GetColumnWidth();
+
+	switch (alignment) {
+
+	case Alignment::Unaligned:
+	case Alignment::Left:
+		break;
+	case Alignment::Center: 
+		newX = posX + columnWidth / 2 - textWidth / 2;
+		break;
+	case Alignment::Right:
+		newX = posX + columnWidth - textWidth;
+		break;
+	}
+
+	// Clip to left, if text is bigger than current column
+	if (newX < posX) {
+		newX = posX;
+	}
+	
+	ImGui::SetCursorPosX(newX);
+	
+	ImGui::TextUnformatted(buf);
+}
 
 // This code can be used to make the text over the progressBar centered.
 // Moving from there, left/right alignment would be also easy to implement.

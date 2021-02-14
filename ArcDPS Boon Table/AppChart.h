@@ -33,6 +33,7 @@ public:
 	void alignmentSelectable(Alignment select_alignment);
 
 	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, ImVec4 color = ImVec4(0,0,0,0)) const;
+	void AlignedTextColumn(const char* text, ...) const;
 	void CustomProgressBar(float fraction, const ImVec2& size_arg, const char* overlay) const;
 
 	void setShowPlayers(bool new_show);
