@@ -31,6 +31,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 		ImGui::MenuItem("Show value as progress bar", nullptr, &show_boon_as_progress_bar);
 		ImGui::MenuItem("Paint by profession", nullptr, &show_colored);
 		ImGui::MenuItem("Always resize window to content", nullptr, &size_to_content);
+		ImGui::MenuItem("Alternating Row Background", nullptr, &alternating_row_bg);
 
 		float cursorPosY = ImGui::GetCursorPosY();
 		ImGui::SetCursorPosY(cursorPosY + 4);
@@ -57,8 +58,12 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 	std::scoped_lock<std::mutex, std::mutex> lock(tracker.players_mtx, boons_mtx);
 
 	int tableFlags = ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_Sortable | ImGuiTableFlags_ContextMenuInBody |
-		ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_RowBg |
+		ImGuiTableFlags_BordersInnerH |
 		ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX | ImGuiTableFlags_ScrollY;
+
+	if (bAlternatingRowBg()) {
+		tableFlags |= ImGuiTableFlags_RowBg;
+	}
 	
 	if (ImGui::BeginTable("Table", columnCount, tableFlags)) {
 		ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide | ImGuiTableColumnFlags_NoReorder, 0, nameColumnId);
@@ -380,6 +385,10 @@ void AppChart::setSizeToContent(bool new_size_to_content) {
 	size_to_content = new_size_to_content;
 }
 
+void AppChart::setAlternatingRowBg(bool new_alternating_row_bg) {
+	alternating_row_bg = new_alternating_row_bg;
+}
+
 void AppChart::setAlignment(Alignment new_alignment) {
 	alignment = new_alignment;
 	alignment_text = to_string(new_alignment);
@@ -417,6 +426,10 @@ bool AppChart::bShowColored() const {
 
 bool AppChart::bSizeToContent() const {
 	return size_to_content;
+}
+
+bool AppChart::bAlternatingRowBg() const {
+	return alternating_row_bg;
 }
 
 Alignment AppChart::getAlignment() const {

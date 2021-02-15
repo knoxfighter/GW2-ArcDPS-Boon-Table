@@ -18,6 +18,7 @@ protected:
 	bool show_boon_as_progress_bar = true;
 	bool show_colored = false;
 	bool size_to_content = true;
+	bool alternating_row_bg = true;
 	Alignment alignment = Alignment::Right;
 	std::string alignment_text = to_string(Alignment::Right);
 
@@ -43,6 +44,7 @@ public:
 	void setShowBoonAsProgressBar(bool new_show);
 	void setShowColored(bool new_colored);
 	void setSizeToContent(bool new_size_to_content);
+	void setAlternatingRowBg(bool new_alternating_row_bg);
 	void setAlignment(Alignment new_alignment);
 
 	[[nodiscard]] bool bShowPlayers() const;
@@ -52,6 +54,7 @@ public:
 	[[nodiscard]] bool bShowBoonAsProgressBar() const;
 	[[nodiscard]] bool bShowColored() const;
 	[[nodiscard]] bool bSizeToContent() const;
+	[[nodiscard]] bool bAlternatingRowBg() const;
 	[[nodiscard]] Alignment getAlignment() const;
 	float getPlayerDisplayValue(const Tracker& tracker, const Player& player, const BoonDef& boon);
 };
