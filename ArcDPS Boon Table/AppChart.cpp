@@ -9,18 +9,28 @@
 #endif
 #include "imgui/imgui_internal.h"
 
-void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
+void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 {
-	ImGui::Begin(title, p_open, flags);
+	// min height: font_size * 3 + 5 -> header, self, TOTAL
+	// max height: font_size * 14 + 2*5 + 5
+	// ImGui::SetNextWindowSize(ImVec2(ImGui::GetFontSize() * 3 + 5, 500)/*, ImGuiCond_FirstUseEver*/);
+	// ImGui::SetNextWindowSizeConstraints(ImVec2(180, 180), ImVec2(500,500));
+	// flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	
+	flags |= ImGuiWindowFlags_NoCollapse;
+	if (bSizeToContent()) {
+		flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	}
+	ImGui::Begin("Boon Table", p_open, flags);
 
 	// Settings on right-click-menu
 	if (ImGui::BeginPopupContextWindow()) {
-		// ImGui::MenuItem("Players", nullptr, &show_players);
 		ImGui::MenuItem("Players", nullptr, &show_players);
 		ImGui::MenuItem("Subgroups", nullptr, &show_subgroups);
 		ImGui::MenuItem("Total", nullptr, &show_total);
 		ImGui::MenuItem("Show value as progress bar", nullptr, &show_boon_as_progress_bar);
 		ImGui::MenuItem("Paint by profession", nullptr, &show_colored);
+		ImGui::MenuItem("Always resize window to content", nullptr, &size_to_content);
 
 		float cursorPosY = ImGui::GetCursorPosY();
 		ImGui::SetCursorPosY(cursorPosY + 4);
@@ -45,10 +55,12 @@ void AppChart::Draw(const char* title, bool* p_open, Tracker& tracker, ImGuiWind
 	const int subgroupColumnId = columnCount - 1;
 
 	std::scoped_lock<std::mutex, std::mutex> lock(tracker.players_mtx, boons_mtx);
+
+	int tableFlags = ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_Sortable | ImGuiTableFlags_ContextMenuInBody |
+		ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_RowBg |
+		ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX | ImGuiTableFlags_ScrollY;
 	
-	if (ImGui::BeginTable("Table", columnCount, 
-        ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_Hideable | ImGuiTableFlags_SizingFixedFit | 
-		ImGuiTableFlags_Sortable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_RowBg | ImGuiTableFlags_ContextMenuInBody)) {
+	if (ImGui::BeginTable("Table", columnCount, tableFlags)) {
 		ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide | ImGuiTableColumnFlags_NoReorder, 0, nameColumnId);
 		ImGui::TableSetupColumn("Sub", 0, 0, subgroupColumnId);
 
@@ -364,6 +376,10 @@ void AppChart::setShowColored(bool new_colored) {
 	show_colored = new_colored;
 }
 
+void AppChart::setSizeToContent(bool new_size_to_content) {
+	size_to_content = new_size_to_content;
+}
+
 void AppChart::setAlignment(Alignment new_alignment) {
 	alignment = new_alignment;
 	alignment_text = to_string(new_alignment);
@@ -397,6 +413,10 @@ bool AppChart::bShowBoonAsProgressBar() const {
 
 bool AppChart::bShowColored() const {
 	return show_colored;
+}
+
+bool AppChart::bSizeToContent() const {
+	return size_to_content;
 }
 
 Alignment AppChart::getAlignment() const {

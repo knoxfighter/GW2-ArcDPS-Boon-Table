@@ -304,6 +304,8 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 {
 	readArcExports();
 
+	ImGui::ShowDemoWindow();
+
 	if (!not_charsel_or_loading) return 0;
 
 	auto io = &ImGui::GetIO();
@@ -318,7 +320,7 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 
 	if (show_chart)
 	{
-		chart.Draw("Boon Table", &show_chart, tracker, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize | (!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0));
+		chart.Draw(&show_chart, tracker, !canMoveWindows() ? ImGuiWindowFlags_NoMove : 0);
 	}
 	return 0;
 }
@@ -375,6 +377,9 @@ void parseIni()
 	pszValueString = table_ini.GetValue("table", "show_colored", "0");
 	chart.setShowColored(std::stoi(pszValueString));
 
+	bool size_to_content = table_ini.GetBoolValue("table", "size_to_content", true);
+	chart.setSizeToContent(size_to_content);
+
 	long pszValueLong = table_ini.GetLongValue("table", "alignment", static_cast<long>(Alignment::Right));
 	chart.setAlignment(static_cast<Alignment>(pszValueLong));
 }
@@ -388,6 +393,7 @@ void writeIni()
 	rc = table_ini.SetValue("table", "show_total", std::to_string(chart.bShowTotal()).c_str());
 	rc = table_ini.SetValue("table", "show_uptime_as_progress_bar", std::to_string(chart.bShowBoonAsProgressBar()).c_str());
 	rc = table_ini.SetValue("table", "show_colored", std::to_string(chart.bShowColored()).c_str());
+	rc = table_ini.SetBoolValue("table", "size_to_content", chart.bSizeToContent());
 	rc = table_ini.SetLongValue("table", "alignment", static_cast<long>(chart.getAlignment()));
 
 	rc = table_ini.SaveFile("addons\\arcdps\\arcdps_table.ini");
