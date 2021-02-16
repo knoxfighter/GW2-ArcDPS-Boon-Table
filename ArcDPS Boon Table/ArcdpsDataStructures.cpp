@@ -21,3 +21,14 @@ std::string to_string(Alignment alignment) {
 		return "Unaligned";
 	}
 }
+
+std::string to_string(ProgressBarColoringMode coloringMode) {
+	switch (coloringMode) {
+	case ProgressBarColoringMode::Uncolored: 
+		return "Default";
+	case ProgressBarColoringMode::ByProfession:
+		return "By Profession";
+	case ProgressBarColoringMode::ByPercentage:
+		return "By Percentage";
+	}
+}

@@ -166,3 +166,12 @@ enum class Alignment {
 };
 
 std::string to_string(Alignment alignment);
+
+// additional enum for progressbar color
+enum class ProgressBarColoringMode {
+	Uncolored,
+	ByProfession,
+	ByPercentage
+};
+
+std::string to_string(ProgressBarColoringMode coloringMode);

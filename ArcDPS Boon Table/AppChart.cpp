@@ -29,11 +29,24 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 		ImGui::MenuItem("Subgroups", nullptr, &show_subgroups);
 		ImGui::MenuItem("Total", nullptr, &show_total);
 		ImGui::MenuItem("Show value as progress bar", nullptr, &show_boon_as_progress_bar);
-		ImGui::MenuItem("Paint by profession", nullptr, &show_colored);
 		ImGui::MenuItem("Always resize window to content", nullptr, &size_to_content);
 		ImGui::MenuItem("Alternating Row Background", nullptr, &alternating_row_bg);
 
+
 		float cursorPosY = ImGui::GetCursorPosY();
+		ImGui::SetCursorPosY(cursorPosY + 4);
+		ImGui::Text("Coloring Mode");
+		ImGui::SameLine();
+		ImGui::SetCursorPosY(cursorPosY);
+		if (ImGui::BeginCombo("###ShowColored", to_string(show_colored).c_str())) {
+			showColorSelectable(ProgressBarColoringMode::Uncolored);
+			showColorSelectable(ProgressBarColoringMode::ByProfession);
+			showColorSelectable(ProgressBarColoringMode::ByPercentage);
+
+			ImGui::EndCombo();
+		}
+		
+		cursorPosY = ImGui::GetCursorPosY();
 		ImGui::SetCursorPosY(cursorPosY + 4);
 		ImGui::Text("Alignment");
 		ImGui::SameLine();
@@ -155,7 +168,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 					ImGui::TableNextColumn();
 					const float boonUptime = getPlayerDisplayValue(tracker, player, trackedBuff);
 
-					buffProgressBar(trackedBuff, boonUptime, ImGui::GetColumnWidth(), player_color);
+					buffProgressBar(trackedBuff, boonUptime, ImGui::GetColumnWidth(), player);
 				}
 			}
 		}
@@ -179,7 +192,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 				// buffs
 				for (const BoonDef& trackedBuff : tracked_buffs) {
 					ImGui::TableNextColumn();
-					const float boonUptime = tracker.getSubgroupBoonUptime(trackedBuff, subgroup);
+					float boonUptime = tracker.getSubgroupBoonUptime(trackedBuff, subgroup);
 
 					buffProgressBar(trackedBuff, boonUptime, ImGui::GetColumnWidth());
 				}
@@ -215,6 +228,13 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 	ImGui::End();
 }
 
+void AppChart::showColorSelectable(ProgressBarColoringMode select_coloring_mode) {
+	std::string new_coloring_text = to_string(select_coloring_mode);
+	if (ImGui::Selectable(new_coloring_text.c_str())) {
+		show_colored = select_coloring_mode;
+	}
+}
+
 void AppChart::alignmentSelectable(Alignment select_alignment) {
 	std::string new_alignment_text = to_string(select_alignment);
 	if (ImGui::Selectable(new_alignment_text.c_str())) {
@@ -225,10 +245,10 @@ void AppChart::alignmentSelectable(Alignment select_alignment) {
 
 void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, ImVec4 color) const {
 	bool hidden_color = false;
-	if (color.z == 0.f) hidden_color = true;
+	if (color.w == 0.f) hidden_color = true;
 	if (show_boon_as_progress_bar)
 	{
-		if (show_colored && !hidden_color) ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
+		if (show_colored != ProgressBarColoringMode::Uncolored && !hidden_color) ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
 		
 		char label[10];
 		if (current_buff.stacking_type == StackingType_intensity)
@@ -245,11 +265,11 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 			CustomProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label);
 		}
 
-		if (show_colored && !hidden_color) ImGui::PopStyleColor();
+		if (show_colored != ProgressBarColoringMode::Uncolored && !hidden_color) ImGui::PopStyleColor();
 	}
 	else
 	{
-		if (show_colored && !hidden_color) ImGui::PushStyleColor(ImGuiCol_Text, color);
+		if (show_colored != ProgressBarColoringMode::Uncolored && !hidden_color) ImGui::PushStyleColor(ImGuiCol_Text, color);
 
 		if (current_buff.stacking_type == StackingType_intensity)
 		{
@@ -261,7 +281,50 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 			AlignedTextColumn("%.0f%%", 100 * current_boon_uptime);
 		}
 
-		if (show_colored && !hidden_color) ImGui::PopStyleColor();
+		if (show_colored != ProgressBarColoringMode::Uncolored && !hidden_color) ImGui::PopStyleColor();
+	}
+}
+
+void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width) {
+	switch (show_colored) {
+	case ProgressBarColoringMode::ByPercentage:
+	{
+		float percentage = 0;
+		if (current_buff.stacking_type == StackingType_intensity) {
+			percentage = current_boon_uptime / 25;
+		}
+		else {
+			percentage = current_boon_uptime;
+		}
+		// ImVec4 color((1 - percentage) * 255, 125/*percentage * 255*/, 0, 1);
+		ImVec4 color(1 - percentage,percentage,0,0.75);
+		buffProgressBar(current_buff, current_boon_uptime, width, color);
+		break;
+	}
+	default: buffProgressBar(current_buff, current_boon_uptime, width, ImVec4(0, 0, 0, 0));
+	}
+}
+
+void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, const Player& player) const {
+	switch (show_colored) {
+	case ProgressBarColoringMode::ByProfession:
+		buffProgressBar(current_buff, current_boon_uptime, width, player.getProfessionColor());
+		break;
+	case ProgressBarColoringMode::ByPercentage:
+	{
+		float percentage = 0;
+		if (current_buff.stacking_type == StackingType_intensity) {
+			percentage = current_boon_uptime / 25;
+		}
+		else {
+			percentage = current_boon_uptime;
+		}
+		ImVec4 color(1 - percentage, percentage, 0, 0.75);
+		buffProgressBar(current_buff, current_boon_uptime, width, color);
+		break;
+	}
+	default: 
+		buffProgressBar(current_buff, current_boon_uptime, width, ImVec4(0, 0, 0, 0));
 	}
 }
 
@@ -377,7 +440,7 @@ void AppChart::setShowBoonAsProgressBar(bool new_show)
 	show_boon_as_progress_bar = new_show;
 }
 
-void AppChart::setShowColored(bool new_colored) {
+void AppChart::setShowColored(ProgressBarColoringMode new_colored) {
 	show_colored = new_colored;
 }
 
@@ -420,7 +483,7 @@ bool AppChart::bShowBoonAsProgressBar() const {
 	return show_boon_as_progress_bar;
 }
 
-bool AppChart::bShowColored() const {
+ProgressBarColoringMode AppChart::getShowColored() const {
 	return show_colored;
 }
 

@@ -304,8 +304,6 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 {
 	readArcExports();
 
-	ImGui::ShowDemoWindow();
-
 	if (!not_charsel_or_loading) return 0;
 
 	auto io = &ImGui::GetIO();
@@ -375,7 +373,8 @@ void parseIni()
 	chart.setShowBoonAsProgressBar(std::stoi(pszValueString));
 
 	pszValueString = table_ini.GetValue("table", "show_colored", "0");
-	chart.setShowColored(std::stoi(pszValueString));
+	long show_colored = table_ini.GetLongValue("table", "show_colored", static_cast<long>(ProgressBarColoringMode::Uncolored));
+	chart.setShowColored(static_cast<ProgressBarColoringMode>(show_colored));
 
 	bool size_to_content = table_ini.GetBoolValue("table", "size_to_content", true);
 	chart.setSizeToContent(size_to_content);
@@ -395,7 +394,7 @@ void writeIni()
 	rc = table_ini.SetValue("table", "show_subgroups", std::to_string(chart.getShowSubgroups()).c_str());
 	rc = table_ini.SetValue("table", "show_total", std::to_string(chart.bShowTotal()).c_str());
 	rc = table_ini.SetValue("table", "show_uptime_as_progress_bar", std::to_string(chart.bShowBoonAsProgressBar()).c_str());
-	rc = table_ini.SetValue("table", "show_colored", std::to_string(chart.bShowColored()).c_str());
+	rc = table_ini.SetLongValue("table", "show_colored", static_cast<long>(chart.getShowColored()));
 	rc = table_ini.SetBoolValue("table", "size_to_content", chart.bSizeToContent());
 	rc = table_ini.SetBoolValue("table", "alternating_row_bg", chart.bAlternatingRowBg());
 	rc = table_ini.SetLongValue("table", "alignment", static_cast<long>(chart.getAlignment()));

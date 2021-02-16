@@ -16,9 +16,9 @@ protected:
 	bool show_subgroups = true;
 	bool show_total = true;
 	bool show_boon_as_progress_bar = true;
-	bool show_colored = false;
 	bool size_to_content = true;
 	bool alternating_row_bg = true;
+	ProgressBarColoringMode show_colored = ProgressBarColoringMode::Uncolored;
 	Alignment alignment = Alignment::Right;
 	std::string alignment_text = to_string(Alignment::Right);
 
@@ -32,9 +32,12 @@ public:
 	AppChart() = default;
 
 	void Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags);
+	void showColorSelectable(ProgressBarColoringMode select_coloring_mode);
 	void alignmentSelectable(Alignment select_alignment);
 
-	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, ImVec4 color = ImVec4(0,0,0,0)) const;
+	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, ImVec4 color) const;
+	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width);
+	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, const Player& player) const;
 	void AlignedTextColumn(const char* text, ...) const;
 	void CustomProgressBar(float fraction, const ImVec2& size_arg, const char* overlay) const;
 
@@ -42,8 +45,8 @@ public:
 	void setShowSubgroups(bool new_show);
 	void setShowTotal(bool new_show);
 	void setShowBoonAsProgressBar(bool new_show);
-	void setShowColored(bool new_colored);
 	void setSizeToContent(bool new_size_to_content);
+	void setShowColored(ProgressBarColoringMode new_colored);
 	void setAlternatingRowBg(bool new_alternating_row_bg);
 	void setAlignment(Alignment new_alignment);
 
@@ -52,9 +55,9 @@ public:
 	[[nodiscard]] bool getShowSubgroups() const;
 	[[nodiscard]] bool bShowTotal() const;
 	[[nodiscard]] bool bShowBoonAsProgressBar() const;
-	[[nodiscard]] bool bShowColored() const;
 	[[nodiscard]] bool bSizeToContent() const;
 	[[nodiscard]] bool bAlternatingRowBg() const;
+	[[nodiscard]] ProgressBarColoringMode getShowColored() const;
 	[[nodiscard]] Alignment getAlignment() const;
 	float getPlayerDisplayValue(const Tracker& tracker, const Player& player, const BoonDef& boon);
 };
