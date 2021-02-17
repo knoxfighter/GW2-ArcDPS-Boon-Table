@@ -160,15 +160,17 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 				ImGui::Text(player.name.c_str());
 
 				// subgroup
-				ImGui::TableNextColumn();
-				AlignedTextColumn("%d", player.subgroup);
+				if (ImGui::TableNextColumn()) {
+					AlignedTextColumn("%d", player.subgroup);
+				}
 
 				// buffs
 				for (const BoonDef& trackedBuff : tracked_buffs) {
-					ImGui::TableNextColumn();
-					const float boonUptime = getPlayerDisplayValue(tracker, player, trackedBuff);
+					if (ImGui::TableNextColumn()) {
+						const float boonUptime = getPlayerDisplayValue(tracker, player, trackedBuff);
 
-					buffProgressBar(trackedBuff, boonUptime, ImGui::GetColumnWidth(), player);
+						buffProgressBar(trackedBuff, boonUptime, ImGui::GetColumnWidth(), player);
+					}
 				}
 			}
 		}
@@ -186,15 +188,17 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 				ImGui::Text("Subgroup");
 
 				// subgroup
-				ImGui::TableNextColumn();
-				AlignedTextColumn("%d", subgroup);
+				if (ImGui::TableNextColumn()) {
+					AlignedTextColumn("%d", subgroup);
+				}
 
 				// buffs
 				for (const BoonDef& trackedBuff : tracked_buffs) {
-					ImGui::TableNextColumn();
-					float boonUptime = tracker.getSubgroupBoonUptime(trackedBuff, subgroup);
+					if (ImGui::TableNextColumn()) {
+						float boonUptime = tracker.getSubgroupBoonUptime(trackedBuff, subgroup);
 
-					buffProgressBar(trackedBuff, boonUptime, ImGui::GetColumnWidth());
+						buffProgressBar(trackedBuff, boonUptime, ImGui::GetColumnWidth());
+					}
 				}
 			}
 		}
@@ -211,14 +215,16 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 			ImGui::Text("TOTAL");
 
 			// subgroup
-			ImGui::TableNextColumn();
-			AlignedTextColumn("ALL");
+			if (ImGui::TableNextColumn()) {
+				AlignedTextColumn("ALL");
+			}
 
 			// buffs
 			for (const BoonDef& trackedBuff : tracked_buffs) {
-				ImGui::TableNextColumn();
-				float averageBoonUptime = tracker.getAverageBoonUptime(trackedBuff);
-				buffProgressBar(trackedBuff, averageBoonUptime, ImGui::GetColumnWidth());
+				if (ImGui::TableNextColumn()) {
+					float averageBoonUptime = tracker.getAverageBoonUptime(trackedBuff);
+					buffProgressBar(trackedBuff, averageBoonUptime, ImGui::GetColumnWidth());
+				}
 			}
 		}
 
