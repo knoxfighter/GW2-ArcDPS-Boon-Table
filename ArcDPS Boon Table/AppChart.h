@@ -1,7 +1,6 @@
 #pragma once
-#include <string>
+
 #include "imgui\imgui.h"
-#include "Player.h"
 #include "Tracker.h"
 #include "BuffIds.h"
 
@@ -17,39 +16,48 @@ protected:
 	bool show_subgroups = true;
 	bool show_total = true;
 	bool show_boon_as_progress_bar = true;
+	bool size_to_content = true;
+	bool alternating_row_bg = true;
+	ProgressBarColoringMode show_colored = ProgressBarColoringMode::Uncolored;
+	Alignment alignment = Alignment::Right;
+	std::string alignment_text = to_string(Alignment::Right);
 
 	int current_column = 0;
 public:
-	uintptr_t active_player, last_active_player;
-	int8_t active_column, last_active_column;
-	ImVec4 active_bar_color = ImVec4(1, 1, 1, 1);
-	ImVec4 hidden_bar_color = ImVec4(1, 1, 1, 0.3);
-	ImVec4 has_boon_color = ImVec4(0.1, 1, 0.1, 1);
-	ImVec4 not_have_boon_color = ImVec4(1, 0.1, 0.1, 1);
-	int sorting_collumn;
+	ImVec4 has_boon_color = ImVec4(0.1f, 1, 0.1f, 1);
+	ImVec4 not_have_boon_color = ImVec4(1, 0.1f, 0.1f, 1);
+
+	std::atomic_bool needSort;
 	
-	AppChart();
-	~AppChart();
+	AppChart() = default;
 
-	void Draw(const char* title, bool* p_open, Tracker* tracker, ImGuiWindowFlags flags);
+	void Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags);
+	void showColorSelectable(ProgressBarColoringMode select_coloring_mode);
+	void alignmentSelectable(Alignment select_alignment);
 
-	void drawRtClickMenu(Tracker* tracker);
-
-	void buffProgressBar(BoonDef* current_buff, float current_boon_uptime, Player* current_player, uintptr_t current_id, float width);
-
-	void highlightedText(uintptr_t player_id, const char* fmt, ...);
-	bool highlightedSmallButton(uintptr_t player_id, const char * fmt);
-
-	float getPlayerDisplayValue(Tracker* tracker, Player * new_player, BoonDef * new_boon);
-	std::string getWindowTitle(Tracker* tracker, const char* new_title);
+	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, ImVec4 color) const;
+	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width);
+	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, const Player& player) const;
+	void AlignedTextColumn(const char* text, ...) const;
+	void CustomProgressBar(float fraction, const ImVec2& size_arg, const char* overlay) const;
 
 	void setShowPlayers(bool new_show);
 	void setShowSubgroups(bool new_show);
 	void setShowTotal(bool new_show);
 	void setShowBoonAsProgressBar(bool new_show);
+	void setSizeToContent(bool new_size_to_content);
+	void setShowColored(ProgressBarColoringMode new_colored);
+	void setAlternatingRowBg(bool new_alternating_row_bg);
+	void setAlignment(Alignment new_alignment);
 
-	bool bShowPlayers(Tracker* tracker);
-	bool bShowSubgroups(Tracker* tracker);
-	bool bShowTotal(Tracker* tracker);
-	bool bShowBoonAsProgressBar();
+	[[nodiscard]] bool bShowPlayers() const;
+	[[nodiscard]] bool bShowSubgroups(const Tracker& tracker) const;
+	[[nodiscard]] bool getShowSubgroups() const;
+	[[nodiscard]] bool bShowTotal() const;
+	[[nodiscard]] bool bShowBoonAsProgressBar() const;
+	[[nodiscard]] bool bSizeToContent() const;
+	[[nodiscard]] bool bAlternatingRowBg() const;
+	[[nodiscard]] ProgressBarColoringMode getShowColored() const;
+	[[nodiscard]] Alignment getAlignment() const;
+	float getPlayerDisplayValue(const Tracker& tracker, const Player& player, const BoonDef& boon);
 };

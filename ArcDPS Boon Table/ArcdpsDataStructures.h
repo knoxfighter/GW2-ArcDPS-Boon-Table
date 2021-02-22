@@ -1,5 +1,4 @@
 #pragma once
-#include <inttypes.h>
 #include <string>
 
 //enums and structs:
@@ -86,10 +85,24 @@ enum gwlanguage {
 	GWL_SPA = 4,
 };
 
+enum prof : uint32_t {
+	PROF_UNKNOWN = 0,
+	PROF_GUARD = 1,
+	PROF_WARRIOR = 2,
+	PROF_ENGINEER = 3,
+	PROF_RANGER = 4,
+	PROF_THIEF = 5,
+	PROF_ELE  = 6,
+	PROF_MESMER = 7,
+	PROF_NECRO = 8,
+	PROF_RENEGADE = 9,
+};
+
 /* arcdps export table */
 typedef struct arcdps_exports {
 	uintptr_t size; /* size of exports table */
-	uintptr_t sig; /* pick a number between 0 and uint64_t max that isn't used by other modules */
+	uint32_t sig; /* pick a number between 0 and uint32_t max that isn't used by other modules */
+	uint32_t imguivers; /* set this to IMGUI_VERSION_NUM. if you don't use imgui, 18000 (as of 2021-02-02) */
 	char* out_name; /* name string */
 	char* out_build; /* build string */
 	void* wnd_nofilter; /* wndproc callback, fn(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) */
@@ -136,10 +149,29 @@ typedef struct cbtevent {
 typedef struct ag {
 	char* name; /* agent name. may be null. valid only at time of event. utf8 */
 	uintptr_t id; /* agent unique identifier */
-	uint32_t prof; /* profession at time of event. refer to evtc notes for identification */
+	prof prof; /* profession at time of event. refer to evtc notes for identification */
 	uint32_t elite; /* elite spec at time of event. refer to evtc notes for identification */
 	uint32_t self; /* 1 if self, 0 if not */
 	uint16_t team; /* sep21+ */
 } ag;
 
 bool is_player(ag* new_player);
+
+// additional enum for alignment
+enum class Alignment {
+	Unaligned,
+	Left,
+	Center,
+	Right
+};
+
+std::string to_string(Alignment alignment);
+
+// additional enum for progressbar color
+enum class ProgressBarColoringMode {
+	Uncolored,
+	ByProfession,
+	ByPercentage
+};
+
+std::string to_string(ProgressBarColoringMode coloringMode);

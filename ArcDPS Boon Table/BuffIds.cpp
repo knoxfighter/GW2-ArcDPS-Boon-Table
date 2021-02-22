@@ -1,6 +1,6 @@
 #include "BuffIds.h"
 
-std::list<BoonDef> tracked_buffs = std::list<BoonDef>({
+std::vector<BoonDef> tracked_buffs = std::vector<BoonDef>({
 	BoonDef({740},"Might",StackingType_intensity,true,BoonType_boon),
 	BoonDef({725},"Fury",StackingType_duration,true,BoonType_boon),
 	BoonDef({718},"Regen",StackingType_duration,false,BoonType_boon),

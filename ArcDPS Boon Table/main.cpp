@@ -2,12 +2,9 @@
 * arcdps combat api example
 */
 
-#include <stdint.h>
-#include <stdio.h>
+#include <cstdint>
 #include <Windows.h>
-#include <d3d9.h>
 #include <string>
-#include <list>
 
 #include "imgui\imgui.h"
 #include "simpleini\SimpleIni.h"
@@ -23,7 +20,7 @@ arcdps_exports arc_exports;
 char* arcvers;
 void dll_init(HANDLE hModule);
 void dll_exit();
-extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, IDirect3DDevice9* id3dd9);
+extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, void* id3dd9, HMODULE arcdll, void* mallocfn, void* freefn);
 extern "C" __declspec(dllexport) void* get_release_addr();
 arcdps_exports* mod_init();
 uintptr_t mod_release();
@@ -43,9 +40,16 @@ AppChart chart;
 bool show_chart = false;
 
 typedef uint64_t(*arc_export_func_u64)();
-auto arc_dll = LoadLibraryA(TEXT("d3d9.dll"));
-auto arc_export_e6 = (arc_export_func_u64)GetProcAddress(arc_dll, "e6");
-auto arc_export_e7 = (arc_export_func_u64)GetProcAddress(arc_dll, "e7");
+typedef void(*log_func)(char* str);
+
+HMODULE arc_dll;
+
+// get exports
+arc_color_func arc_export_e5;
+arc_export_func_u64 arc_export_e6;
+arc_export_func_u64 arc_export_e7;
+
+// arc globals
 WPARAM arc_global_mod1;
 WPARAM arc_global_mod2;
 WPARAM arc_global_mod_multi;
@@ -63,32 +67,30 @@ WPARAM table_key;
 /* dll main -- winapi */
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD ulReasonForCall, LPVOID lpReserved) {
 	switch (ulReasonForCall) {
-	case DLL_PROCESS_ATTACH: dll_init(hModule); break;
-	case DLL_PROCESS_DETACH: dll_exit(); break;
-
-	case DLL_THREAD_ATTACH:  break;
-	case DLL_THREAD_DETACH:  break;
+	case DLL_PROCESS_ATTACH:
+	case DLL_PROCESS_DETACH:
+	case DLL_THREAD_ATTACH:
+	case DLL_THREAD_DETACH:
+		break;
 	}
 	return 1;
 }
 
-/* dll attach -- from winapi */
-void dll_init(HANDLE hModule) {
-	return;
-}
-
-/* dll detach -- from winapi */
-void dll_exit() {
-	return;
-}
-
 /* export -- arcdps looks for this exported function and calls the address it returns */
-extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, IDirect3DDevice9* id3dd9) {
+extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, void* id3dd9, HMODULE new_arcdll, void* mallocfn, void* freefn) {
+	// set all arcdps stuff
 	arcvers = arcversionstr;
-	ImGui::SetCurrentContext((ImGuiContext*)imguicontext);
+	arc_dll = new_arcdll;
+	arc_export_e5 = (arc_color_func)GetProcAddress(arc_dll, "e5");
+	arc_export_e6 = (arc_export_func_u64)GetProcAddress(arc_dll, "e6");
+	arc_export_e7 = (arc_export_func_u64)GetProcAddress(arc_dll, "e7");
+
+	// set imgui context && allocation for arcdps dll space
+	ImGui::SetCurrentContext(static_cast<ImGuiContext*>(imguicontext));
+	ImGui::SetAllocatorFunctions((void* (*)(size_t, void*))mallocfn, (void (*)(void*, void*))freefn);
 
 	parseIni();
-
+	
 	return mod_init;
 }
 
@@ -104,6 +106,7 @@ arcdps_exports* mod_init()
 	/* for arcdps */
 	memset(&arc_exports, 0, sizeof(arcdps_exports));
 	arc_exports.sig = 0x64003268;//from random.org
+	arc_exports.imguivers = IMGUI_VERSION_NUM;
 	arc_exports.size = sizeof(arcdps_exports);
 	arc_exports.out_name = "Boon Table";
 	arc_exports.out_build = __VERSION__;
@@ -129,41 +132,6 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	switch (uMsg)
 	{
 	case WM_KEYUP:
-	{
-		const int vkey = (int)wParam;
-		io->KeysDown[vkey] = 0;
-		if (vkey == VK_CONTROL)
-		{
-			io->KeyCtrl = false;
-		}
-		else if (vkey == VK_MENU)
-		{
-			io->KeyAlt = false;
-		}
-		else if (vkey == VK_SHIFT)
-		{
-			io->KeyShift = false;
-		}
-		break;
-	}
-	case WM_KEYDOWN:
-	{
-		const int vkey = (int)wParam;
-		io->KeysDown[vkey] = 1;
-		if (vkey == VK_CONTROL)
-		{
-			io->KeyCtrl = true;
-		}
-		else if (vkey == VK_MENU)
-		{
-			io->KeyAlt = true;
-		}
-		else if (vkey == VK_SHIFT)
-		{
-			io->KeyShift = true;
-		}
-		break;
-	}
 	case WM_SYSKEYUP:
 	{
 		const int vkey = (int)wParam;
@@ -182,6 +150,7 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	}
+	case WM_KEYDOWN:
 	case WM_SYSKEYDOWN:
 	{
 		const int vkey = (int)wParam;
@@ -209,7 +178,6 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	}
-	break;
 	}
 
 	if (io->KeysDown[arc_global_mod1] && io->KeysDown[arc_global_mod2])
@@ -239,6 +207,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 					if (dst)
 					{
 						tracker.addPlayer(src,dst);
+						chart.needSort = true;
 					}
 				}
 
@@ -271,6 +240,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 				{
 					current_player->combatEnter(ev);
 					tracker.bakeCombatData();
+					chart.needSort = true;
 				}
 			}
 			else if (ev->is_statechange == CBTS_EXITCOMBAT)
@@ -296,7 +266,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 				if (current_player = tracker.getPlayer(src->id))
 				{
 					current_player->removeBoon(ev);
-					tracker.queueResort();
+					chart.needSort = true;
 				}
 			}
 		}
@@ -315,6 +285,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 			else
 			{
 				tracker.applyBoon(src, dst, ev);
+				chart.needSort = true;
 			}
 		}
 
@@ -332,7 +303,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 {
 	readArcExports();
-	
+
 	if (!not_charsel_or_loading) return 0;
 
 	auto io = &ImGui::GetIO();
@@ -347,10 +318,7 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 
 	if (show_chart)
 	{
-		tracker.sortPlayers();
-
-		chart.Draw("Boon Table", &show_chart, &tracker, ImGuiWindowFlags_NoCollapse 
-			| (!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0));
+		chart.Draw(&show_chart, tracker, !canMoveWindows() ? ImGuiWindowFlags_NoMove : 0);
 	}
 	return 0;
 }
@@ -386,48 +354,50 @@ void parseIni()
 	SI_Error rc = table_ini.LoadFile("addons\\arcdps\\arcdps_table.ini");
 	valid_table_ini = rc >= 0;
 
-	std::string pszValue = table_ini.GetValue("table", "show", "0");
-	show_chart = std::stoi(pszValue);
+	std::string pszValueString = table_ini.GetValue("table", "show", "0");
+	show_chart = std::stoi(pszValueString);
 
-	pszValue = table_ini.GetValue("table", "key", "66");
-	table_key = std::stoi(pszValue);
+	pszValueString = table_ini.GetValue("table", "key", "66");
+	table_key = std::stoi(pszValueString);
 
-	pszValue = table_ini.GetValue("table", "show_players", "1");
-	chart.setShowPlayers(std::stoi(pszValue));
+	pszValueString = table_ini.GetValue("table", "show_players", "1");
+	chart.setShowPlayers(std::stoi(pszValueString));
 
-	pszValue = table_ini.GetValue("table", "show_subgroups", "1");
-	chart.setShowSubgroups(std::stoi(pszValue));
+	pszValueString = table_ini.GetValue("table", "show_subgroups", "1");
+	chart.setShowSubgroups(std::stoi(pszValueString));
 
-	pszValue = table_ini.GetValue("table", "show_total", "1");
-	chart.setShowTotal(std::stoi(pszValue));
+	pszValueString = table_ini.GetValue("table", "show_total", "1");
+	chart.setShowTotal(std::stoi(pszValueString));
 
-	pszValue = table_ini.GetValue("table", "show_uptime_as_progress_bar", "1");
-	chart.setShowBoonAsProgressBar(std::stoi(pszValue));
+	pszValueString = table_ini.GetValue("table", "show_uptime_as_progress_bar", "1");
+	chart.setShowBoonAsProgressBar(std::stoi(pszValueString));
 
-	pszValue = table_ini.GetValue("table", "table_to_display", "0");
-	tracker.table_to_display = std::stoi(pszValue);
+	pszValueString = table_ini.GetValue("table", "show_colored", "0");
+	long show_colored = table_ini.GetLongValue("table", "show_colored", static_cast<long>(ProgressBarColoringMode::Uncolored));
+	chart.setShowColored(static_cast<ProgressBarColoringMode>(show_colored));
 
-	for (auto boon_def = tracked_buffs.begin(); boon_def != tracked_buffs.end(); ++boon_def)
-	{
-		pszValue = table_ini.GetValue("boons", boon_def->name.c_str(), std::to_string(boon_def->is_relevant).c_str());
-		boon_def->is_relevant = std::stoi(pszValue);
-	}
+	bool size_to_content = table_ini.GetBoolValue("table", "size_to_content", true);
+	chart.setSizeToContent(size_to_content);
+
+	bool alternating_row_bg = table_ini.GetBoolValue("table", "alternating_row_bg", true);
+	chart.setAlternatingRowBg(alternating_row_bg);
+
+	long pszValueLong = table_ini.GetLongValue("table", "alignment", static_cast<long>(Alignment::Right));
+	chart.setAlignment(static_cast<Alignment>(pszValueLong));
 }
 
 void writeIni()
 {
 	SI_Error rc = table_ini.SetValue("table", "show", std::to_string(show_chart).c_str());
 
-	rc = table_ini.SetValue("table", "show_players", std::to_string(chart.bShowPlayers(nullptr)).c_str());
-	rc = table_ini.SetValue("table", "show_subgroups", std::to_string(chart.bShowSubgroups(nullptr)).c_str());
-	rc = table_ini.SetValue("table", "show_total", std::to_string(chart.bShowTotal(nullptr)).c_str());
+	rc = table_ini.SetValue("table", "show_players", std::to_string(chart.bShowPlayers()).c_str());
+	rc = table_ini.SetValue("table", "show_subgroups", std::to_string(chart.getShowSubgroups()).c_str());
+	rc = table_ini.SetValue("table", "show_total", std::to_string(chart.bShowTotal()).c_str());
 	rc = table_ini.SetValue("table", "show_uptime_as_progress_bar", std::to_string(chart.bShowBoonAsProgressBar()).c_str());
-	rc = table_ini.SetValue("table", "table_to_display", std::to_string(tracker.table_to_display).c_str());
-
-	for (auto boon_def = tracked_buffs.begin(); boon_def != tracked_buffs.end(); ++boon_def)
-	{
-		rc = table_ini.SetValue("boons", boon_def->name.c_str(), std::to_string(boon_def->is_relevant).c_str());
-	}
+	rc = table_ini.SetLongValue("table", "show_colored", static_cast<long>(chart.getShowColored()));
+	rc = table_ini.SetBoolValue("table", "size_to_content", chart.bSizeToContent());
+	rc = table_ini.SetBoolValue("table", "alternating_row_bg", chart.bAlternatingRowBg());
+	rc = table_ini.SetLongValue("table", "alignment", static_cast<long>(chart.getAlignment()));
 
 	rc = table_ini.SaveFile("addons\\arcdps\\arcdps_table.ini");
 }
