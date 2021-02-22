@@ -2,8 +2,7 @@
 
 
 
-bool Boon::operator==(uint32_t other_id)
-{
+bool Boon::operator==(uint32_t other_id) const {
 	if (!def) return false;
 
 	for (auto current_id = def->ids.cbegin(); current_id != def->ids.cend(); ++current_id)
@@ -38,14 +37,12 @@ void Boon::Apply(int32_t new_duration)
 void Boon::Remove(int32_t new_duration)
 {
 	duration -= new_duration;
-	if (duration < 0) duration = 0;
 
 	if (expected_end_time > getCurrentTime()) expected_end_time -= new_duration;
 }
 
-uint64_t Boon::getDuration(uint64_t new_current_time)
-{
-	int32_t out = duration;
+uint64_t Boon::getDuration(uint64_t new_current_time) const {
+	uint64_t out = duration;
 	
 	if (new_current_time < expected_end_time)
 	{
@@ -57,8 +54,7 @@ uint64_t Boon::getDuration(uint64_t new_current_time)
 
 //returns the duration of the boon still on the player's bar
 //inaccurate for intensity stacking buffs
-uint64_t Boon::getDurationRemaining(uint64_t new_current_time, uint64_t new_combat_duration)
-{
+uint64_t Boon::getDurationRemaining(uint64_t new_current_time, uint64_t new_combat_duration) const {
 	uint64_t out = 0;
 	if (expected_end_time > new_current_time)
 	{
@@ -81,9 +77,9 @@ uint64_t Boon::getDurationRemaining(uint64_t new_current_time, uint64_t new_comb
 	return out;
 }
 
-double Boon::getUptime(uint64_t new_current_time, uint64_t new_combat_time)
+float Boon::getUptime(uint64_t new_current_time, uint64_t new_combat_time) const
 {
-	double out = duration;
+	float out = duration;
 
 	if (expected_end_time > new_current_time)
 	{

@@ -2,38 +2,49 @@
 
 # ArcDPS Boon Table
 
-![preview](https://i.imgur.com/K10miQG.png)
+![preview](Screenshot.png)
 
 ## Usage
 
 Alt+Shift+B (overwrites Arc’s default boon table hotkey) or checkbox in the arc options
 
-Right-click for options menu
+Right-click on the header for options menu.  
+Right-click on the table to change visible columns.  
+Table columns can be reordered by dragging the column header.  
+Sort by column by clicking on the header, it is sorted by character name by default.
+
+### options
+- Players: Show/Hide all players in the table (Default: ON)
+- Subgroups: Show/Hide subgroup average (Default: ON)
+- Total: Shoe/Hide groupt/squad average (Default: ON)
+- Show value as progress bar: Show the values as progressbar additional to the actual number. (Default: ON)
+- Always resize window to content: Will always make the window as big as it has to be to show all boons. This will disable the possibility to resize the window manually. (Default: ON)
+- Alternating Row Background: Show/Hide background colors, to better distinguish rows. (Default: ON)
+- Coloring Mode: How to color the text/progress bars. Can be Default (Gray), By percentage (red to green), By Profession. (Default: Default)
+- Alignment: Align the text to the column. Can be Left, Right, Center and Unaligned. Unaligned means, that it is most left as possible, without beeing on top of the progress bar. (Default: Right)
 
 ## TODO:
 
-    use disabled color for on not-hover
     show in/out of combat
     add profession column
-    add optional profession colors
     add scholar uptime
     add seaweed salad uptime
-    make columns same order as dps.report
-    option to re-order columns
-    show which column is used for sorting currently
-    add line between subgroups when sorting by subgroup
     add condi generation/uptime
     add style options similar to Arc
-    add option to ‘Hide Zero Buffs’
     look into self being 1st player in list
     make the subgroups bake use a tuple for (subgroup number,<players in subgroup>)
     Add signet uptime
-    does the subgroup hiding work well?
     stances
     guardian signet share
 
-## Changelog
+    Write me on discord or in an issue what of those should be added.
 
+## Changelog
+    
+    February 22 2021
+        Add compatibility to new arcdps with ImGui 1.80.
+        Change table to use modern ImGui table instead of old one.
+            This gives the possibility to hide, reorder and sort columns in a more easy way.
     July 20 2019
         Add dynamic version string
         Make boon generation not cap at 100% for duration stacking boons

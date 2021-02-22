@@ -2,18 +2,20 @@
 
 std::mutex boons_mtx;
 
-bool Player::operator==(uintptr_t other_id)
-{
+bool Player::operator==(uintptr_t other_id) const {
 	return id == other_id;
 }
 
-bool Player::operator==(std::string other_name)
-{
+bool Player::operator==(std::string other_name) const {
 	return name == other_name
 		|| account_name == other_name;
 }
 
-Player::Player(uintptr_t new_id, std::string new_name, std::string new_account_name, uint8_t new_subgroup)
+bool Player::operator==(const Player& other) const {
+	return id == other.id && name == other.name;
+}
+
+Player::Player(uintptr_t new_id, const std::string& new_name, const std::string& new_account_name, uint8_t new_subgroup, prof new_profession)
 {
 	id = new_id;
 	name = new_name;
@@ -21,12 +23,7 @@ Player::Player(uintptr_t new_id, std::string new_name, std::string new_account_n
 	enter_combat_time = getCurrentTime();
 	in_combat = false;
 	subgroup = new_subgroup;
-	is_relevant = true;
-}
-
-Player::~Player()
-{
-
+	profession = new_profession;
 }
 
 void Player::applyBoon(cbtevent* ev)
@@ -110,26 +107,23 @@ void Player::flushAllBoons()
 	boons_generation.clear();
 }
 
-double Player::getBoonUptime(BoonDef* new_boon)
-{
+float Player::getBoonUptime(const BoonDef& boon) const {
 	if (getCombatDuration() == 0) return 0.0f;
 
-	auto it = boons_uptime.find(new_boon->ids[0]);
+	auto it = boons_uptime.find(boon.ids[0]);
 
 	if (it != boons_uptime.end())
 	{
-		double out = (double)it->second.getUptime(in_combat ? getCurrentTime() : exit_combat_time,getCombatDuration());
+		float out = it->second.getUptime(in_combat ? getCurrentTime() : exit_combat_time,getCombatDuration());
 
-		switch (new_boon->stacking_type)
+		switch (boon.stacking_type)
 		{
+		case StackingType_single:
 		case StackingType_duration:
 			out = out > 1.0f ? 1.0f : out;
 			break;
 		case StackingType_intensity:
 			out = out > 25.0f ? 25.0f : out;
-			break;
-		case StackingType_single:
-			out = out > 1.0f ? 1.0f : out;
 			break;
 		default:
 			out = out > 1.0f ? 1.0f : out;
@@ -144,15 +138,14 @@ double Player::getBoonUptime(BoonDef* new_boon)
 	return 0.0f;
 }
 
-double Player::getBoonGeneration(BoonDef * new_boon)
-{
+float Player::getBoonGeneration(const BoonDef& new_boon) const {
 	if (getCombatDuration() == 0) return 0.0f;
 
-	auto it = boons_generation.find(new_boon->ids[0]);
+	auto it = boons_generation.find(new_boon.ids[0]);
 
 	if (it != boons_generation.end())
 	{
-		double out = (double)it->second.duration / getCombatDuration();
+		float out = it->second.duration / getCombatDuration();
 
 		if (out < 0.0f) out = 0.0f;
 
@@ -231,8 +224,7 @@ void Player::combatExit(cbtevent* ev)
 	boons_generation.clear();
 }
 
-uint64_t Player::getCombatDuration()
-{
+uint64_t Player::getCombatDuration() const {
 	if (in_combat)
 	{
 		return getCurrentTime() - enter_combat_time;
@@ -241,4 +233,33 @@ uint64_t Player::getCombatDuration()
 	{
 		return exit_combat_time - enter_combat_time;
 	}
+}
+
+ImVec4 Player::getProfessionColor() const {
+	/* e5 writes out colour array ptrs, sizeof(out) == sizeof(ImVec4*) * 5.  [ void e5(ImVec4** out) ]
+       out[0] = core cols
+                   enum n_colours_core {
+                     CCOL_TRANSPARENT,
+                     CCOL_WHITE,
+                     CCOL_LWHITE,
+                     CCOL_LGREY,
+                     CCOL_LYELLOW,
+                     CCOL_LGREEN,
+                     CCOL_LRED,
+                     CCOL_LTEAL,
+                     CCOL_MGREY,
+                     CCOL_DGREY,
+                     CCOL_NUM
+                   };
+       out[1] = prof colours base
+       out[2] = prof colours highlight
+                   prof colours match prof enum
+       out[3] = subgroup colours base
+       out[4] = subgroup colours highlight
+                   subgroup colours match subgroup, up to game max, out[3][15]
+	 */
+	ImVec4* arc_colors[5];
+	arc_export_e5(arc_colors);
+
+	return arc_colors[2][profession];
 }

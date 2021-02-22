@@ -1,0 +1,6 @@
+[submodule "ArcDPS Boon Table/imgui"]
+	path = ArcDPS Boon Table/imgui
+	url = https://github.com/ocornut/imgui.git
+[submodule "ArcDPS Boon Table/simpleini"]
+	path = ArcDPS Boon Table/simpleini
+	url = https://github.com/brofield/simpleini.git

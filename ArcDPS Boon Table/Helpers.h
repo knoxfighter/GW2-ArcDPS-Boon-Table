@@ -1,6 +1,7 @@
 #pragma once
-#include <stdint.h>
+#include <cstdint>
 #include "ArcdpsDataStructures.h"
+#include "imgui/imgui.h"
 
 extern uint64_t current_time;
 
@@ -17,12 +18,9 @@ uint64_t getCurrentTime();
 
 int32_t getBuffApplyDuration(cbtevent* ev);
 
-enum TableToDisplay
-{
-	TableToDisplay_uptime,
-	TableToDisplay_generation
-};
-
 inline float discretize(float a);
 
 bool floatCmp(float a, float b);
+
+typedef void(*arc_color_func)(ImVec4**);
+extern arc_color_func arc_export_e5;
