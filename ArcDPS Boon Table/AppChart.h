@@ -16,7 +16,7 @@ protected:
 	bool show_subgroups = true;
 	bool show_total = true;
 	bool show_boon_as_progress_bar = true;
-	bool size_to_content = true;
+	//bool size_to_content = true;
 	bool alternating_row_bg = true;
 	ProgressBarColoringMode show_colored = ProgressBarColoringMode::Uncolored;
 	Alignment alignment = Alignment::Right;
@@ -45,7 +45,7 @@ public:
 	void setShowSubgroups(bool new_show);
 	void setShowTotal(bool new_show);
 	void setShowBoonAsProgressBar(bool new_show);
-	void setSizeToContent(bool new_size_to_content);
+	//void setSizeToContent(bool new_size_to_content);
 	void setShowColored(ProgressBarColoringMode new_colored);
 	void setAlternatingRowBg(bool new_alternating_row_bg);
 	void setAlignment(Alignment new_alignment);
@@ -55,7 +55,7 @@ public:
 	[[nodiscard]] bool getShowSubgroups() const;
 	[[nodiscard]] bool bShowTotal() const;
 	[[nodiscard]] bool bShowBoonAsProgressBar() const;
-	[[nodiscard]] bool bSizeToContent() const;
+	//[[nodiscard]] bool bSizeToContent() const;
 	[[nodiscard]] bool bAlternatingRowBg() const;
 	[[nodiscard]] ProgressBarColoringMode getShowColored() const;
 	[[nodiscard]] Alignment getAlignment() const;

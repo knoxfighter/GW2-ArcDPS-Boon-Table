@@ -376,8 +376,8 @@ void parseIni()
 	long show_colored = table_ini.GetLongValue("table", "show_colored", static_cast<long>(ProgressBarColoringMode::Uncolored));
 	chart.setShowColored(static_cast<ProgressBarColoringMode>(show_colored));
 
-	bool size_to_content = table_ini.GetBoolValue("table", "size_to_content", true);
-	chart.setSizeToContent(size_to_content);
+	//bool size_to_content = table_ini.GetBoolValue("table", "size_to_content", true);
+	//chart.setSizeToContent(size_to_content);
 
 	bool alternating_row_bg = table_ini.GetBoolValue("table", "alternating_row_bg", true);
 	chart.setAlternatingRowBg(alternating_row_bg);
@@ -395,7 +395,7 @@ void writeIni()
 	rc = table_ini.SetValue("table", "show_total", std::to_string(chart.bShowTotal()).c_str());
 	rc = table_ini.SetValue("table", "show_uptime_as_progress_bar", std::to_string(chart.bShowBoonAsProgressBar()).c_str());
 	rc = table_ini.SetLongValue("table", "show_colored", static_cast<long>(chart.getShowColored()));
-	rc = table_ini.SetBoolValue("table", "size_to_content", chart.bSizeToContent());
+	//rc = table_ini.SetBoolValue("table", "size_to_content", chart.bSizeToContent());
 	rc = table_ini.SetBoolValue("table", "alternating_row_bg", chart.bAlternatingRowBg());
 	rc = table_ini.SetLongValue("table", "alignment", static_cast<long>(chart.getAlignment()));
 

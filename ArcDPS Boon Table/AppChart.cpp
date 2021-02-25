@@ -17,11 +17,10 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 	// ImGui::SetNextWindowSizeConstraints(ImVec2(180, 180), ImVec2(500,500));
 	// flags |= ImGuiWindowFlags_AlwaysAutoResize;
 	
-	flags |= ImGuiWindowFlags_NoCollapse;
-	if (bSizeToContent()) {
-		flags |= ImGuiWindowFlags_AlwaysAutoResize;
-	}
-	ImGui::Begin("Boon Table", p_open, flags);
+    flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+    ImGui::SetNextWindowSizeConstraints(ImVec2(0, -1), ImVec2(FLT_MAX, -1));
+
+    ImGui::Begin("Boon Table", p_open, flags);
 
 	// Settings on right-click-menu
 	if (ImGui::BeginPopupContextWindow()) {
@@ -29,7 +28,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 		ImGui::MenuItem("Subgroups", nullptr, &show_subgroups);
 		ImGui::MenuItem("Total", nullptr, &show_total);
 		ImGui::MenuItem("Show value as progress bar", nullptr, &show_boon_as_progress_bar);
-		ImGui::MenuItem("Always resize window to content", nullptr, &size_to_content);
+		//ImGui::MenuItem("Always resize window to content", nullptr, &size_to_content);
 		ImGui::MenuItem("Alternating Row Background", nullptr, &alternating_row_bg);
 
 
@@ -70,21 +69,27 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 
 	std::scoped_lock<std::mutex, std::mutex> lock(tracker.players_mtx, boons_mtx);
 
-	int tableFlags = ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_Sortable | ImGuiTableFlags_ContextMenuInBody |
-		ImGuiTableFlags_BordersInnerH |
-		ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX | ImGuiTableFlags_ScrollY;
+    int tableFlags = ImGuiTableFlags_Sortable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable |
+                     ImGuiTableFlags_ContextMenuInBody |
+                     ImGuiTableFlags_BordersInnerH |
+                     ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_ScrollY;
 
 	if (bAlternatingRowBg()) {
 		tableFlags |= ImGuiTableFlags_RowBg;
 	}
 	
 	if (ImGui::BeginTable("Table", columnCount, tableFlags)) {
-		ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide | ImGuiTableColumnFlags_NoReorder, 0, nameColumnId);
-		ImGui::TableSetupColumn("Sub", 0, 0, subgroupColumnId);
+        ImGui::TableSetupColumn("Name",
+                                ImGuiTableColumnFlags_NoHide | ImGuiTableColumnFlags_NoReorder | ImGuiTableColumnFlags_WidthFixed,
+                                0, nameColumnId); // TODO: add setting for Maximum Name-column width. Rest can stretch.
+
+        ImGui::TableSetupColumn("Sub", 
+                                ImGuiTableColumnFlags_WidthFixed, 
+                                0, subgroupColumnId);
 
 		ImU32 i = 0;
 		for (const BoonDef& trackedBuff : tracked_buffs) {
-			int bufFlags = ImGuiTableColumnFlags_WidthFixed;
+			int bufFlags = ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableColumnFlags_WidthStretch;
 			if (!trackedBuff.is_relevant) {
 				bufFlags |= ImGuiTableColumnFlags_DefaultHide;
 			}
@@ -230,6 +235,9 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 
 		ImGui::EndTable();
 	}
+
+	auto* current_window = ImGui::GetCurrentWindow();
+	ImGui::SetWindowSize(current_window, ImVec2(current_window->SizeFull.x, ImGui::CalcWindowNextAutoFitSize(current_window).y));
 
 	ImGui::End();
 }
@@ -450,9 +458,11 @@ void AppChart::setShowColored(ProgressBarColoringMode new_colored) {
 	show_colored = new_colored;
 }
 
+/*
 void AppChart::setSizeToContent(bool new_size_to_content) {
 	size_to_content = new_size_to_content;
 }
+*/
 
 void AppChart::setAlternatingRowBg(bool new_alternating_row_bg) {
 	alternating_row_bg = new_alternating_row_bg;
@@ -493,9 +503,11 @@ ProgressBarColoringMode AppChart::getShowColored() const {
 	return show_colored;
 }
 
+/*
 bool AppChart::bSizeToContent() const {
 	return size_to_content;
 }
+*/
 
 bool AppChart::bAlternatingRowBg() const {
 	return alternating_row_bg;
