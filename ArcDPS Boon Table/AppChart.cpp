@@ -157,7 +157,8 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 				// charname
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
-				ImGui::Text(player.name.c_str());
+				std::string name_string = player.name + "(" + std::to_string(player.id) + ")";
+				ImGui::Text(name_string.c_str());
 
 				// subgroup
 				if (ImGui::TableNextColumn()) {

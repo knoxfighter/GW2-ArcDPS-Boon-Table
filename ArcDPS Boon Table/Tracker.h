@@ -20,7 +20,10 @@ public:
 	Tracker() = default;
 
 	void addPlayer(ag* src, ag* dst);
+	void addPlayer(uintptr_t id, uint8_t subgroup, prof profession, std::string characterName, std::string accountName);
+	void addNewPlayer(uintptr_t id, uint8_t subgroup, prof profession, std::string characterName, std::string accountName);
 	void removePlayer(ag* src);
+	void removePlayer(Player* player);
 	void clearPlayers();//marks all players as not in squad
 	void bakeCombatData();
 

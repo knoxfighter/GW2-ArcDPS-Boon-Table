@@ -15,7 +15,11 @@ bool Player::operator==(const Player& other) const {
 	return id == other.id && name == other.name;
 }
 
-Player::Player(uintptr_t new_id, const std::string& new_name, const std::string& new_account_name, uint8_t new_subgroup, prof new_profession)
+Player::Player(uintptr_t new_id = 0,
+	const std::string& new_name = "",
+	const std::string& new_account_name = "",
+	uint8_t new_subgroup = 1,
+	prof new_profession = PROF_UNKNOWN)
 {
 	id = new_id;
 	name = new_name;

@@ -11,10 +11,10 @@
 class Player
 {
 public:
-	uintptr_t id = 0;
-	std::string name = "";
-	std::string account_name = "";
-	prof profession = PROF_UNKNOWN;
+	uintptr_t id;
+	std::string name;
+	std::string account_name;
+	prof profession;
 	std::map<uint32_t, Boon> boons_uptime;
 	std::map<uint32_t, Boon> boons_uptime_initial;
 	std::map<uint32_t, Boon> boons_generation;
@@ -22,7 +22,7 @@ public:
 	uint64_t enter_combat_time = getCurrentTime();
 	uint64_t exit_combat_time = getCurrentTime();;
 	bool in_combat = false;
-	uint8_t subgroup = 1;
+	uint8_t subgroup;
 
 	bool operator==(uintptr_t other_id) const;
 	bool operator==(std::string other_name) const;

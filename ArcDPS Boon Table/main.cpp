@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <Windows.h>
 #include <string>
+#include <iostream>
 
 #include "imgui\imgui.h"
 #include "simpleini\SimpleIni.h"
@@ -20,6 +21,7 @@ arcdps_exports arc_exports;
 char* arcvers;
 void dll_init(HANDLE hModule);
 void dll_exit();
+uint32_t cbtcount = 0;
 extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, void* id3dd9, HMODULE arcdll, void* mallocfn, void* freefn);
 extern "C" __declspec(dllexport) void* get_release_addr();
 arcdps_exports* mod_init();
@@ -33,6 +35,26 @@ void parseIni();
 void writeIni();
 bool modsPressed();
 bool canMoveWindows();
+
+void log_file(char* str);
+void log_arc(char* str);
+
+/* arcdps exports */
+void* filelog;
+void* arclog;
+
+/* log to arcdps.log, thread/async safe */
+void log_file(char* str) {
+	size_t(*log)(char*) = (size_t(*)(char*))filelog;
+	if (log) (*log)(str);
+	return;
+}
+/* log to extensions tab in arcdps log window, thread/async safe */
+void log_arc(char* str) {
+	size_t(*log)(char*) = (size_t(*)(char*))arclog;
+	if (log) (*log)(str);
+	return;
+}
 
 Tracker tracker;
 
@@ -84,6 +106,8 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 	arc_export_e5 = (arc_color_func)GetProcAddress(arc_dll, "e5");
 	arc_export_e6 = (arc_export_func_u64)GetProcAddress(arc_dll, "e6");
 	arc_export_e7 = (arc_export_func_u64)GetProcAddress(arc_dll, "e7");
+	filelog = (void*)GetProcAddress((HMODULE)arc_dll, "e3");
+	arclog = (void*)GetProcAddress((HMODULE)arc_dll, "e8");
 
 	// set imgui context && allocation for arcdps dll space
 	ImGui::SetCurrentContext(static_cast<ImGuiContext*>(imguicontext));
@@ -114,6 +138,8 @@ arcdps_exports* mod_init()
 	arc_exports.combat = mod_combat;
 	arc_exports.imgui = mod_imgui;
 	arc_exports.options_end = mod_options;
+	log_arc((char*)"boon-table: done mod_init"); // if using vs2015+, project properties > c++ > conformance mode > permissive to avoid const to not const conversion error
+	log_file((char*)"boon-table: done mod init");
 	return &arc_exports;
 }
 
@@ -187,11 +213,17 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return uMsg;
 }
 
+bool addedGlenna = false;
+uintptr_t glenna_id;
+
+
 /* combat callback -- may be called asynchronously. return ignored */
 /* one participant will be party/squad, or minion of. no spawn statechange events. despawn statechange only on marked boss npcs */
 uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t id, uint64_t revision)
 {
 	Player* current_player = nullptr;
+	char buff[4096];
+	char* p = &buff[0];
 
 	/* ev is null. dst will only be valid on tracking add. skillname will also be null */
 	if (!ev)
@@ -204,7 +236,10 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 				/* add */
 				if (src->prof)
 				{
-					if (dst)
+					p += _snprintf_s(p, 400, _TRUNCATE, "==== cbtnotify ====\n");
+					p += _snprintf_s(p, 400, _TRUNCATE, "agent added: %s:%s (%0llx), instid: %u, prof: %u, elite: %u, self: %u, team: %u, subgroup: %u\n", src->name, dst->name, src->id, dst->id, dst->prof, dst->elite, dst->self, src->team, dst->team);
+					
+					if (dst || dst->name)
 					{
 						tracker.addPlayer(src,dst);
 						chart.needSort = true;
@@ -214,6 +249,8 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 				/* remove */
 				else
 				{
+					p += _snprintf_s(p, 400, _TRUNCATE, "==== cbtnotify ====\n");
+					p += _snprintf_s(p, 400, _TRUNCATE, "agent removed: %s (%0llx)\n", src->name, src->id);
 					tracker.removePlayer(src);
 				}
 			}
@@ -221,6 +258,8 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 			/* notify target change */
 			else if (src->elite == 1)
 			{
+				p += _snprintf_s(p, 400, _TRUNCATE, "==== cbtnotify ====\n");
+				p += _snprintf_s(p, 400, _TRUNCATE, "new target: %0llx\n", src->id);
 
 			}
 		}
@@ -229,11 +268,36 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 	/* combat event. skillname may be null. non-null skillname will remain static until module is unloaded. refer to evtc notes for complete detail */
 	else
 	{
+		/* default names */
+		if (!src->name || !strlen(src->name)) src->name = (char*)"(area)";
+		if (!dst->name || !strlen(dst->name)) dst->name = (char*)"(area)";
+		
+		/* common */
+		p += _snprintf_s(p, 400, _TRUNCATE, "combatdemo: ==== cbtevent %u at %llu ====\n", cbtcount, ev->time);
+		p += _snprintf_s(p, 400, _TRUNCATE, "source agent: %s (%0llx:%u, %lx:%lx), master: %u; %u\n", src->name, ev->src_agent, ev->src_instid, src->prof, src->elite, ev->src_master_instid, src->id);
+		if (ev->dst_agent) p += _snprintf_s(p, 400, _TRUNCATE, "target agent: %s (%0llx:%u, %lx:%lx); %u\n", dst->name, ev->dst_agent, ev->dst_instid, dst->prof, dst->elite, dst->id);
+		else p += _snprintf_s(p, 400, _TRUNCATE, "target agent: n/a\n");
+
+		std::string name_glenna = "Priory Scholar";
+
+		if (!addedGlenna && name_glenna.compare(dst->name) == 0) {
+			p += _snprintf_s(p, 400, _TRUNCATE, "Added Priory Scholar\n");
+			addedGlenna = true;
+			tracker.addPlayer(dst->id,
+				1,
+				PROF_UNKNOWN,
+				dst->name,
+				"NPC"
+			);
+			glenna_id = dst->id;
+		}
+
 		if(ev->time > 0) current_time = ev->time;
 
 		/* statechange */
 		if (ev->is_statechange)
 		{
+			p += _snprintf_s(p, 400, _TRUNCATE, "is_statechange: %u\n", ev->is_statechange);
 			if (ev->is_statechange == CBTS_ENTERCOMBAT)
 			{
 				if (current_player = tracker.getPlayer(src->id))
@@ -241,6 +305,15 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 					current_player->combatEnter(ev);
 					tracker.bakeCombatData();
 					chart.needSort = true;
+
+					if(src->self) {
+						if (current_player = tracker.getPlayer(glenna_id))
+						{
+							current_player->combatEnter(ev);
+							tracker.bakeCombatData();
+							chart.needSort = true;
+						}
+					}
 				}
 			}
 			else if (ev->is_statechange == CBTS_EXITCOMBAT)
@@ -248,6 +321,13 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 				if (current_player = tracker.getPlayer(src->id))
 				{
 					current_player->combatExit(ev);
+
+					if (src->self) {
+						if (current_player = tracker.getPlayer(glenna_id))
+						{
+							current_player->combatExit(ev);
+						}
+					}
 				}
 			}
 		}
@@ -255,12 +335,19 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 		/* activation */
 		else if (ev->is_activation)
 		{
+			p += _snprintf_s(p, 400, _TRUNCATE, "is_activation: %u\n", ev->is_activation);
+			p += _snprintf_s(p, 400, _TRUNCATE, "skill: %s:%u\n", skillname, ev->skillid);
+			p += _snprintf_s(p, 400, _TRUNCATE, "ms_expected: %d\n", ev->value);
 
 		}
 
 		/* buff remove */
 		else if (ev->is_buffremove)
 		{
+			p += _snprintf_s(p, 400, _TRUNCATE, "is_buffremove: %u\n", ev->is_buffremove);
+			p += _snprintf_s(p, 400, _TRUNCATE, "skill: %s:%u\n", skillname, ev->skillid);
+			p += _snprintf_s(p, 400, _TRUNCATE, "ms_duration: %d\n", ev->value);
+			p += _snprintf_s(p, 400, _TRUNCATE, "ms_intensity: %d\n", ev->buff_dmg);
 			if (ev->is_buffremove == CBTB_MANUAL)//TODO: move to tracker
 			{
 				if (current_player = tracker.getPlayer(src->id))
@@ -278,12 +365,21 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 			/* damage */
 			if (ev->buff_dmg)
 			{
-				
+
+				p += _snprintf_s(p, 400, _TRUNCATE, "is_buff: %u\n", ev->buff);
+				p += _snprintf_s(p, 400, _TRUNCATE, "skill: %s:%u\n", skillname, ev->skillid);
+				p += _snprintf_s(p, 400, _TRUNCATE, "dmg: %d\n", ev->buff_dmg);
+				p += _snprintf_s(p, 400, _TRUNCATE, "is_shields: %u\n", ev->is_shields);
 			}
 
 			/* application */
 			else
 			{
+				p += _snprintf_s(p, 400, _TRUNCATE, "is_buff: %u\n", ev->buff);
+				p += _snprintf_s(p, 400, _TRUNCATE, "skill: %s:%u\n", skillname, ev->skillid);
+				p += _snprintf_s(p, 400, _TRUNCATE, "raw ms: %d\n", ev->value);
+				p += _snprintf_s(p, 400, _TRUNCATE, "overstack ms: %u\n", ev->overstack_value);
+
 				tracker.applyBoon(src, dst, ev);
 				chart.needSort = true;
 			}
@@ -292,11 +388,22 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 		/* physical */
 		else
 		{
+			p += _snprintf_s(p, 400, _TRUNCATE, "is_buff: %u\n", ev->buff);
+			p += _snprintf_s(p, 400, _TRUNCATE, "skill: %s:%u\n", skillname, ev->skillid);
+			p += _snprintf_s(p, 400, _TRUNCATE, "dmg: %d\n", ev->value);
+			p += _snprintf_s(p, 400, _TRUNCATE, "is_moving: %u\n", ev->is_moving);
+			p += _snprintf_s(p, 400, _TRUNCATE, "is_ninety: %u\n", ev->is_ninety);
+			p += _snprintf_s(p, 400, _TRUNCATE, "is_flanking: %u\n", ev->is_flanking);
+			p += _snprintf_s(p, 400, _TRUNCATE, "is_shields: %u\n", ev->is_shields);
 			
 		}
 
 		/* common */
+		p += _snprintf_s(p, 400, _TRUNCATE, "iff: %u\n", ev->iff);
+		p += _snprintf_s(p, 400, _TRUNCATE, "result: %u\n", ev->result);
+		cbtcount += 1;
 	}
+	log_arc(&buff[0]);
 	return 0;
 }
 

@@ -80,7 +80,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>d3d9_arcdps_table</TargetName>
     <TargetExt>.dll</TargetExt>
-    <OutDir>C:\Program Files\Guild Wars 2\bin64\</OutDir>
+    <OutDir>E:\Spiele\Guild Wars 2\bin64</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetName>d3d9_arcdps_table</TargetName>
