@@ -64,6 +64,10 @@ void Tracker::removePlayer(ag* src)
 
 	// remove player from tracked list at all
 	Player* current_player = getPlayer(id);
+	removePlayer(current_player);
+}
+
+void Tracker::removePlayer(Player* current_player) {
 
 	std::unique_lock<std::mutex> lock(players_mtx);
 	players.remove(*current_player);

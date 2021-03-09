@@ -140,6 +140,7 @@
     <ClCompile Include="ArcdpsDataStructures.cpp" />
     <ClCompile Include="Boon.cpp" />
     <ClCompile Include="BuffIds.cpp" />
+    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="ArcdpsDataStructures.h" />
     <ClInclude Include="Boon.h" />
     <ClInclude Include="BuffIds.h" />
+    <ClInclude Include="Entity.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />

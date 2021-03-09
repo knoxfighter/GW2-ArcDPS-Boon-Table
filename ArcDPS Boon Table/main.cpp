@@ -213,8 +213,17 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return uMsg;
 }
 
-bool addedGlenna = false;
-uintptr_t glenna_id;
+constexpr auto num_of_npcs = 2;
+
+const std::string npc_names[num_of_npcs] = {
+	"Priory Scholar", //Glenna (Wing 3, 1st encounter: Escort)
+	"Saul" //Saul D'Alessio (Wing 4, 4th encounter: Deimos)
+};
+bool npc_registered[num_of_npcs] = { false };
+
+uintptr_t npc_ids[num_of_npcs];
+
+
 
 
 /* combat callback -- may be called asynchronously. return ignored */
@@ -252,6 +261,18 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 					p += _snprintf_s(p, 400, _TRUNCATE, "==== cbtnotify ====\n");
 					p += _snprintf_s(p, 400, _TRUNCATE, "agent removed: %s (%0llx)\n", src->name, src->id);
 					tracker.removePlayer(src);
+
+					if (src->self) {
+						//all npcs removed with the player (i.e. swapping wings)
+						for (int i = 0; i < num_of_npcs; i++) {
+							if (npc_registered[i]) {
+								if (current_player = tracker.getPlayer(npc_ids[i]))
+								{
+									tracker.removePlayer(current_player);
+								}
+							}
+						}
+					}
 				}
 			}
 
@@ -278,18 +299,24 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 		if (ev->dst_agent) p += _snprintf_s(p, 400, _TRUNCATE, "target agent: %s (%0llx:%u, %lx:%lx); %u\n", dst->name, ev->dst_agent, ev->dst_instid, dst->prof, dst->elite, dst->id);
 		else p += _snprintf_s(p, 400, _TRUNCATE, "target agent: n/a\n");
 
-		std::string name_glenna = "Priory Scholar";
+		
+		for (int i = 0; i < num_of_npcs; i++) {
+			if (npc_names[i].compare(0, npc_names[i].size(), dst->name, 0, npc_names[i].size()) == 0) {
+				p += _snprintf_s(p, 400, _TRUNCATE, "NPC event %s\n", dst->name);
+				// it's one of the tracked npcs (at least the name)
+				//if (!npc_registered[i]) {
+					p += _snprintf_s(p, 400, _TRUNCATE, "Added %s\n", dst->name);
+					npc_registered[i] = true;
+					npc_ids[i] = dst->id;
+					tracker.addPlayer(dst->id,
+						10,
+						PROF_UNKNOWN,
+						dst->name,
+						"NPC"
+					);
 
-		if (!addedGlenna && name_glenna.compare(dst->name) == 0) {
-			p += _snprintf_s(p, 400, _TRUNCATE, "Added Priory Scholar\n");
-			addedGlenna = true;
-			tracker.addPlayer(dst->id,
-				1,
-				PROF_UNKNOWN,
-				dst->name,
-				"NPC"
-			);
-			glenna_id = dst->id;
+				//}
+			}
 		}
 
 		if(ev->time > 0) current_time = ev->time;
@@ -307,11 +334,16 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 					chart.needSort = true;
 
 					if(src->self) {
-						if (current_player = tracker.getPlayer(glenna_id))
-						{
-							current_player->combatEnter(ev);
-							tracker.bakeCombatData();
-							chart.needSort = true;
+						//all npcs enter combat with the player
+						for (int i = 0; i < num_of_npcs; i++) {
+							if (npc_registered[i]) {
+								if (current_player = tracker.getPlayer(npc_ids[i]))
+								{
+									current_player->combatEnter(ev);
+									tracker.bakeCombatData();
+									chart.needSort = true;
+								}
+							}
 						}
 					}
 				}
@@ -323,9 +355,14 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 					current_player->combatExit(ev);
 
 					if (src->self) {
-						if (current_player = tracker.getPlayer(glenna_id))
-						{
-							current_player->combatExit(ev);
+						//all npcs leave combat with the player
+						for (int i = 0; i < num_of_npcs; i++) {
+							if (npc_registered[i]) {
+								if (current_player = tracker.getPlayer(npc_ids[i]))
+								{
+									current_player->combatExit(ev);
+								}
+							}
 						}
 					}
 				}

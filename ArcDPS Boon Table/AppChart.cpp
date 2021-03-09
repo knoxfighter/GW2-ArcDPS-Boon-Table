@@ -152,7 +152,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 		// Show players
 		if (bShowPlayers()) {
 			for (Player player : tracker.players) {
-				ImVec4 player_color = player.getProfessionColor();
+				ImVec4 player_color = player.getColor();
 
 				// charname
 				ImGui::TableNextRow();
@@ -315,7 +315,7 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, const Player& player) const {
 	switch (show_colored) {
 	case ProgressBarColoringMode::ByProfession:
-		buffProgressBar(current_buff, current_boon_uptime, width, player.getProfessionColor());
+		buffProgressBar(current_buff, current_boon_uptime, width, player.getColor());
 		break;
 	case ProgressBarColoringMode::ByPercentage:
 	{
