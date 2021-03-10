@@ -18,8 +18,10 @@ public:
 
 	Player(uintptr_t new_id, const std::string& new_name, const std::string& new_account_name, uint8_t new_subgroup, prof new_profession);
 
-	bool operator==(std::string other_name) const;
-
 	void combatEnter(cbtevent* ev);
 	ImVec4 getColor() const;
+
+	bool operator==(uintptr_t other_id) const;
+	bool operator==(std::string other_name) const;
+	bool operator==(const Entity& other) const;
 };

@@ -230,7 +230,7 @@ uintptr_t npc_ids[num_of_npcs];
 /* one participant will be party/squad, or minion of. no spawn statechange events. despawn statechange only on marked boss npcs */
 uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t id, uint64_t revision)
 {
-	Player* current_player = nullptr;
+	Entity* current_player = nullptr;
 	char buff[4096];
 	char* p = &buff[0];
 
@@ -268,7 +268,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 							if (npc_registered[i]) {
 								if (current_player = tracker.getPlayer(npc_ids[i]))
 								{
-									tracker.removePlayer(current_player);
+									tracker.removeEntity(current_player);
 								}
 							}
 						}

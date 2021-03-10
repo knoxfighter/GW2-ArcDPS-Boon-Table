@@ -22,6 +22,13 @@ bool Player::operator==(std::string other_name) const {
 		|| account_name == other_name;
 }
 
+bool Player::operator==(uintptr_t other_id) const {
+    return id == other_id;
+}
+
+bool Player::operator==(const Entity& other) const {
+    return id == other.id && name == other.name;
+}
 
 void Player::combatEnter(cbtevent* ev) {
     subgroup = ev->dst_agent;

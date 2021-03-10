@@ -13,6 +13,8 @@ public:
 
 	mutable std::mutex players_mtx;
 	std::list<Player> players;
+	//mutable std::mutex npcs_mtx;
+	//std::list<NPC> npcs;
 
 	std::mutex subgroups_mtx;
 	std::list<uint8_t> subgroups;
@@ -23,7 +25,8 @@ public:
 	void addPlayer(uintptr_t id, uint8_t subgroup, prof profession, std::string characterName, std::string accountName);
 	void addNewPlayer(uintptr_t id, uint8_t subgroup, prof profession, std::string characterName, std::string accountName);
 	void removePlayer(ag* src);
-	void removePlayer(Player* player);
+	void removeEntity(Entity* entity);
+	void removeEntity(Player* player);
 	void clearPlayers();//marks all players as not in squad
 	void bakeCombatData();
 
