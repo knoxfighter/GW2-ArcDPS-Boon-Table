@@ -37,7 +37,7 @@ public:
 
 	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, ImVec4 color) const;
 	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width);
-	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, const Player& player) const;
+	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, const Entity& entity) const;
 	void AlignedTextColumn(const char* text, ...) const;
 	void CustomProgressBar(float fraction, const ImVec2& size_arg, const char* overlay) const;
 
@@ -59,5 +59,5 @@ public:
 	[[nodiscard]] bool bAlternatingRowBg() const;
 	[[nodiscard]] ProgressBarColoringMode getShowColored() const;
 	[[nodiscard]] Alignment getAlignment() const;
-	float getPlayerDisplayValue(const Tracker& tracker, const Player& player, const BoonDef& boon);
+	float getEntityDisplayValue(const Tracker& tracker, const Entity& entity, const BoonDef& boon);
 };

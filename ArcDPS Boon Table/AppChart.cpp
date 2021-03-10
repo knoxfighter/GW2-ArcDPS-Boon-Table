@@ -168,7 +168,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 				// buffs
 				for (const BoonDef& trackedBuff : tracked_buffs) {
 					if (ImGui::TableNextColumn()) {
-						const float boonUptime = getPlayerDisplayValue(tracker, player, trackedBuff);
+						const float boonUptime = getEntityDisplayValue(tracker, player, trackedBuff);
 
 						buffProgressBar(trackedBuff, boonUptime, ImGui::GetColumnWidth(), player);
 					}
@@ -210,7 +210,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
 
 			ImGui::TableNextRow();
-			
+
 			// charname
 			ImGui::TableNextColumn();
 			ImGui::Text("TOTAL");
@@ -228,6 +228,35 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 				}
 			}
 		}
+
+		// Show npcs
+		if (true) {
+		//if (bShowPlayers()) {
+			for (NPC npc : tracker.npcs) {
+				ImVec4 npc_color = npc.getColor();
+
+				// charname
+				ImGui::TableNextRow();
+				ImGui::TableNextColumn();
+				std::string name_string = npc.name + "(" + std::to_string(npc.id) + ")";
+				ImGui::Text(name_string.c_str());
+
+				// subgroup
+				if (ImGui::TableNextColumn()) {
+					AlignedTextColumn("NONE");
+				}
+
+				// buffs
+				for (const BoonDef& trackedBuff : tracked_buffs) {
+					if (ImGui::TableNextColumn()) {
+						const float boonUptime = getEntityDisplayValue(tracker, npc, trackedBuff);
+
+						buffProgressBar(trackedBuff, boonUptime, ImGui::GetColumnWidth(), npc);
+					}
+				}
+			}
+		}
+
 
 		ImGui::EndTable();
 	}
@@ -312,10 +341,10 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 	}
 }
 
-void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, const Player& player) const {
+void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, const Entity& entity) const {
 	switch (show_colored) {
 	case ProgressBarColoringMode::ByProfession:
-		buffProgressBar(current_buff, current_boon_uptime, width, player.getColor());
+		buffProgressBar(current_buff, current_boon_uptime, width, entity.getColor());
 		break;
 	case ProgressBarColoringMode::ByPercentage:
 	{
@@ -421,9 +450,9 @@ void AppChart::CustomProgressBar(float fraction, const ImVec2& size_arg, const c
 	}
 }
 
-float AppChart::getPlayerDisplayValue(const Tracker& tracker, const Player& player, const BoonDef& boon)
+float AppChart::getEntityDisplayValue(const Tracker& tracker, const Entity& entity, const BoonDef& boon)
 {
-	return player.getBoonUptime(boon);
+	return entity.getBoonUptime(boon);
 }
 
 

@@ -5,6 +5,7 @@
 
 #include "ArcdpsDataStructures.h"
 #include "Player.h"
+#include "NPC.h"
 
 class Tracker
 {
@@ -13,8 +14,8 @@ public:
 
 	mutable std::mutex players_mtx;
 	std::list<Player> players;
-	//mutable std::mutex npcs_mtx;
-	//std::list<NPC> npcs;
+	mutable std::mutex npcs_mtx;
+	std::list<NPC> npcs;
 
 	std::mutex subgroups_mtx;
 	std::list<uint8_t> subgroups;
@@ -27,6 +28,7 @@ public:
 	void removePlayer(ag* src);
 	void removeEntity(Entity* entity);
 	void removeEntity(Player* player);
+	void removeEntity(NPC* player);
 	void clearPlayers();//marks all players as not in squad
 	void bakeCombatData();
 

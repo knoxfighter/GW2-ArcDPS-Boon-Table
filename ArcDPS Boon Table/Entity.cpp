@@ -248,6 +248,6 @@ ImVec4 Entity::getColor() const {
 	ImVec4* arc_colors[5];
 	arc_export_e5(arc_colors);
 
-	//all npcs are mesmers now!
+	//all unknown entities are mesmers now!
 	return arc_colors[2][PROF_MESMER];
 }

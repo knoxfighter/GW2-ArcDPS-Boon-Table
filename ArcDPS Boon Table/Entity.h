@@ -38,7 +38,7 @@ public:
 	uint64_t exit_combat_time = getCurrentTime();;
 	bool in_combat = false;
 
-	ImVec4 getColor() const;
+	virtual ImVec4 getColor() const;
 };
 
 extern std::mutex boons_mtx;
