@@ -28,6 +28,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 		ImGui::MenuItem("Players", nullptr, &show_players);
 		ImGui::MenuItem("Subgroups", nullptr, &show_subgroups);
 		ImGui::MenuItem("Total", nullptr, &show_total);
+		ImGui::MenuItem("NPCs", nullptr, &show_players);
 		ImGui::MenuItem("Show value as progress bar", nullptr, &show_boon_as_progress_bar);
 		ImGui::MenuItem("Always resize window to content", nullptr, &size_to_content);
 		ImGui::MenuItem("Alternating Row Background", nullptr, &alternating_row_bg);
@@ -230,8 +231,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 		}
 
 		// Show npcs
-		if (true) {
-		//if (bShowPlayers()) {
+		if (bShowNPCs()) {
 			ImGui::TableNextRow();
 			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
 			for (NPC npc : tracker.npcs) {
@@ -498,6 +498,11 @@ void AppChart::setAlignment(Alignment new_alignment) {
 bool AppChart::bShowPlayers() const {
 	return show_players;
 }
+
+bool AppChart::bShowNPCs() const {
+	return show_npcs;
+}
+
 
 bool AppChart::bShowSubgroups(const Tracker& tracker) const {
 	return show_subgroups

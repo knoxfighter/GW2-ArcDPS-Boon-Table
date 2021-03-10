@@ -13,6 +13,7 @@ protected:
 	const uintptr_t INDEX_HIDE_ALL = -4;
 
 	bool show_players = true;
+	bool show_npcs = true;
 	bool show_subgroups = true;
 	bool show_total = true;
 	bool show_boon_as_progress_bar = true;
@@ -57,6 +58,7 @@ public:
 	[[nodiscard]] bool bShowBoonAsProgressBar() const;
 	[[nodiscard]] bool bSizeToContent() const;
 	[[nodiscard]] bool bAlternatingRowBg() const;
+	[[nodiscard]] bool bShowNPCs() const;
 	[[nodiscard]] ProgressBarColoringMode getShowColored() const;
 	[[nodiscard]] Alignment getAlignment() const;
 	float getEntityDisplayValue(const Tracker& tracker, const Entity& entity, const BoonDef& boon);
