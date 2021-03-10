@@ -230,7 +230,7 @@ uintptr_t npc_ids[num_of_npcs];
 /* one participant will be party/squad, or minion of. no spawn statechange events. despawn statechange only on marked boss npcs */
 uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t id, uint64_t revision)
 {
-	Entity* current_player = nullptr;
+	Entity* current_entity = nullptr;
 	char buff[4096];
 	char* p = &buff[0];
 
@@ -266,9 +266,9 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 						//all npcs removed with the player (i.e. swapping wings)
 						for (int i = 0; i < num_of_npcs; i++) {
 							if (npc_registered[i]) {
-								if (current_player = tracker.getPlayer(npc_ids[i]))
+								if (current_entity = tracker.getNPC(npc_ids[i]))
 								{
-									tracker.removeEntity(current_player);
+									tracker.removeEntity(current_entity);
 								}
 							}
 						}
@@ -294,7 +294,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 		if (!dst->name || !strlen(dst->name)) dst->name = (char*)"(area)";
 		
 		/* common */
-		p += _snprintf_s(p, 400, _TRUNCATE, "combatdemo: ==== cbtevent %u at %llu ====\n", cbtcount, ev->time);
+		p += _snprintf_s(p, 400, _TRUNCATE, "combatdemo: ==== cbtevent %u at %llu ====\n", cbtcount++, ev->time);
 		p += _snprintf_s(p, 400, _TRUNCATE, "source agent: %s (%0llx:%u, %lx:%lx), master: %u; %u\n", src->name, ev->src_agent, ev->src_instid, src->prof, src->elite, ev->src_master_instid, src->id);
 		if (ev->dst_agent) p += _snprintf_s(p, 400, _TRUNCATE, "target agent: %s (%0llx:%u, %lx:%lx); %u\n", dst->name, ev->dst_agent, ev->dst_instid, dst->prof, dst->elite, dst->id);
 		else p += _snprintf_s(p, 400, _TRUNCATE, "target agent: n/a\n");
@@ -308,12 +308,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 					p += _snprintf_s(p, 400, _TRUNCATE, "Added %s\n", dst->name);
 					npc_registered[i] = true;
 					npc_ids[i] = dst->id;
-					tracker.addPlayer(dst->id,
-						10,
-						PROF_UNKNOWN,
-						dst->name,
-						"NPC"
-					);
+					tracker.addNPC(dst->id, dst->name, ev);
 
 				//}
 			}
@@ -327,43 +322,46 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 			p += _snprintf_s(p, 400, _TRUNCATE, "is_statechange: %u\n", ev->is_statechange);
 			if (ev->is_statechange == CBTS_ENTERCOMBAT)
 			{
-				if (current_player = tracker.getPlayer(src->id))
+				if (current_entity = tracker.getPlayer(src->id))
 				{
-					current_player->combatEnter(ev);
-					tracker.bakeCombatData();
-					chart.needSort = true;
+					current_entity->combatEnter(ev);
 
 					if(src->self) {
 						//all npcs enter combat with the player
 						for (int i = 0; i < num_of_npcs; i++) {
-							if (npc_registered[i]) {
-								if (current_player = tracker.getPlayer(npc_ids[i]))
+							//if (npc_registered[i]) {
+								if (current_entity = tracker.getNPC(npc_ids[i]))
 								{
-									current_player->combatEnter(ev);
-									tracker.bakeCombatData();
-									chart.needSort = true;
+									current_entity->combatEnter(ev);
 								}
-							}
+							//}
 						}
 					}
+					tracker.bakeCombatData();
+					chart.needSort = true;
 				}
 			}
 			else if (ev->is_statechange == CBTS_EXITCOMBAT)
 			{
-				if (current_player = tracker.getPlayer(src->id))
+				if (current_entity = tracker.getEntity(src->id))
 				{
-					current_player->combatExit(ev);
+					current_entity->combatExit(ev);
 
 					if (src->self) {
+
+						for (std::list<NPC>::iterator it = tracker.npcs.begin(); it != tracker.npcs.end(); ++it) {
+							it->combatExit(ev);
+						}
+						/*
 						//all npcs leave combat with the player
 						for (int i = 0; i < num_of_npcs; i++) {
-							if (npc_registered[i]) {
-								if (current_player = tracker.getPlayer(npc_ids[i]))
+							//if (npc_registered[i]) {
+								if (current_entity = tracker.getNPC(npc_ids[i]))
 								{
-									current_player->combatExit(ev);
+									current_entity->combatExit(ev);
 								}
-							}
-						}
+							//}
+						}*/
 					}
 				}
 			}
@@ -387,9 +385,9 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 			p += _snprintf_s(p, 400, _TRUNCATE, "ms_intensity: %d\n", ev->buff_dmg);
 			if (ev->is_buffremove == CBTB_MANUAL)//TODO: move to tracker
 			{
-				if (current_player = tracker.getPlayer(src->id))
+				if (current_entity = tracker.getEntity(src->id))
 				{
-					current_player->removeBoon(ev);
+					current_entity->removeBoon(ev);
 					chart.needSort = true;
 				}
 			}
@@ -438,7 +436,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 		/* common */
 		p += _snprintf_s(p, 400, _TRUNCATE, "iff: %u\n", ev->iff);
 		p += _snprintf_s(p, 400, _TRUNCATE, "result: %u\n", ev->result);
-		cbtcount += 1;
+		//cbtcount += 1;
 	}
 	log_arc(&buff[0]);
 	return 0;

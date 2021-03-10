@@ -17,8 +17,7 @@ void Tracker::addPlayer(uintptr_t id,
 	uint8_t subgroup,
 	prof profession,
 	std::string characterName,
-	std::string accountName
-	)
+	std::string accountName)
 {
 	// remove ':' from accountName if it is there
 	if (accountName.at(0) == ':') {
@@ -48,10 +47,56 @@ void Tracker::addNewPlayer(uintptr_t id,
 	uint8_t subgroup,
 	prof profession,
 	std::string characterName,
-	std::string accountName) {
-
+	std::string accountName)
+{
 	std::unique_lock<std::mutex> lock(players_mtx);
 	players.emplace_back(id, characterName, accountName, subgroup, profession);
+	lock.unlock();
+
+	bakeCombatData();
+
+	//self has always the id 2000, not sure why, but this is easier than adding a new parameter to everything
+	if (id == 2000) {
+		self_player = getPlayer(id);
+	}
+}
+
+void Tracker::addNPC(uintptr_t id,
+	std::string name,
+	cbtevent* ev)
+{
+	addNPC(id, name);
+	if(ev)
+	if (self_player) {
+		if (self_player->in_combat) {
+			getNPC(id)->combatEnter(ev);
+		}
+	}
+}
+
+void Tracker::addNPC(uintptr_t id,
+	std::string name)
+{
+	NPC* current_npc = getNPC(name);
+
+	// if npc already tracked, just update it
+	// npcs get tracked by their name, not their id (respawned npcs get new ids)
+	if (current_npc)
+	{
+		current_npc->id = id;
+		//current_npc->name = name;
+	}
+	else
+	{
+		addNewNPC(id, name);
+	}
+}
+
+void Tracker::addNewNPC(uintptr_t id,
+	std::string name)
+{
+	std::unique_lock<std::mutex> lock(npcs_mtx);
+	npcs.emplace_back(id, name);
 	lock.unlock();
 
 	bakeCombatData();
@@ -119,6 +164,47 @@ Player* Tracker::getPlayer(uintptr_t new_player)
 	}
 }
 
+Entity* Tracker::getEntity(uintptr_t new_entity) {
+	Entity* entity = getPlayer(new_entity);
+	if (entity != nullptr) return entity;
+	return getNPC(new_entity);
+
+}
+
+NPC* Tracker::getNPC(uintptr_t new_npc)
+{
+	if (!new_npc) return nullptr;
+	std::lock_guard<std::mutex> lock(npcs_mtx);
+	const auto& it = std::find(npcs.begin(), npcs.end(), new_npc);
+
+	//player not tracked yet
+	if (it == npcs.end())
+	{
+		return nullptr;
+	}
+	else//npc tracked
+	{
+		return &*it;
+	}
+}
+
+NPC* Tracker::getNPC(std::string new_name)
+{
+	if (new_name.empty()) return nullptr;
+	std::lock_guard<std::mutex> lock(npcs_mtx);
+	auto it = std::find(npcs.begin(), npcs.end(), new_name);
+
+	//player not tracked yet
+	if (it == npcs.end())
+	{
+		return nullptr;
+	}
+	else//player tracked
+	{
+		return &*it;
+	}
+}
+
 Player* Tracker::getPlayer(std::string new_player)
 {
 	if (new_player.empty()) return nullptr;
@@ -138,13 +224,13 @@ Player* Tracker::getPlayer(std::string new_player)
 
 void Tracker::applyBoon(ag* src, ag* dst, cbtevent* ev)
 {
-	Player* current_player = nullptr;
+	Entity* current_player = nullptr;
 
-	if ((current_player = getPlayer(src->id)) && is_player(dst))
+	if ((current_player = getEntity(src->id)) && is_player(dst))
 	{
 		current_player->gaveBoon(ev);
 	}
-	if (current_player = getPlayer(dst->id))
+	if (current_player = getEntity(dst->id))
 	{
 		current_player->applyBoon(ev);
 	}
