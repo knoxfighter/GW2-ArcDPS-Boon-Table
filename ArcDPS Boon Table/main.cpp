@@ -442,7 +442,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 		p += _snprintf_s(p, 400, _TRUNCATE, "result: %u\n", ev->result);
 		//cbtcount += 1;
 	}
-	log_arc(&buff[0]);
+	//log_arc(&buff[0]);
 	return 0;
 }
 

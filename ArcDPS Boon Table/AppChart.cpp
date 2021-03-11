@@ -158,7 +158,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 				// charname
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
-				std::string name_string = player.name + (player.in_combat?"*":"") + + " (" + std::to_string(player.id) + ")";
+				std::string name_string = player.name;// +(player.in_combat ? "*" : "") + +" (" + std::to_string(player.id) + ")";
 				ImGui::Text(name_string.c_str());
 
 				// subgroup
@@ -240,7 +240,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 				// charname
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
-				std::string name_string = npc.name + (npc.in_combat ? "*" : "") + " (" + std::to_string(npc.id) + ")";
+				std::string name_string = npc.name;// +(npc.in_combat ? "*" : "") + " (" + std::to_string(npc.id) + ")";
 				ImGui::Text(name_string.c_str());
 
 				// subgroup
