@@ -45,6 +45,7 @@ public:
 	void setShowPlayers(bool new_show);
 	void setShowSubgroups(bool new_show);
 	void setShowTotal(bool new_show);
+	void setShowNPCs(bool new_show);
 	void setShowBoonAsProgressBar(bool new_show);
 	void setSizeToContent(bool new_size_to_content);
 	void setShowColored(ProgressBarColoringMode new_colored);

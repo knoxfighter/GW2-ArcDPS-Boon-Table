@@ -326,6 +326,8 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 			p += _snprintf_s(p, 400, _TRUNCATE, "is_statechange: %u\n", ev->is_statechange);
 			if (ev->is_statechange == CBTS_ENTERCOMBAT)
 			{
+				p += _snprintf_s(p, 400, _TRUNCATE, "name: %s, prof: %u\n", src->name, src->prof);
+				
 				if (current_entity = tracker.getPlayer(src->id))
 				{
 					current_entity->combatEnter(ev);
@@ -442,7 +444,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 		p += _snprintf_s(p, 400, _TRUNCATE, "result: %u\n", ev->result);
 		//cbtcount += 1;
 	}
-	//log_arc(&buff[0]);
+	log_arc(&buff[0]);
 	return 0;
 }
 
@@ -515,6 +517,9 @@ void parseIni()
 	pszValueString = table_ini.GetValue("table", "show_total", "1");
 	chart.setShowTotal(std::stoi(pszValueString));
 
+	pszValueString = table_ini.GetValue("table", "show_npcs", "1");
+	chart.setShowNPCs(std::stoi(pszValueString));
+
 	pszValueString = table_ini.GetValue("table", "show_uptime_as_progress_bar", "1");
 	chart.setShowBoonAsProgressBar(std::stoi(pszValueString));
 
@@ -539,6 +544,7 @@ void writeIni()
 	rc = table_ini.SetValue("table", "show_players", std::to_string(chart.bShowPlayers()).c_str());
 	rc = table_ini.SetValue("table", "show_subgroups", std::to_string(chart.getShowSubgroups()).c_str());
 	rc = table_ini.SetValue("table", "show_total", std::to_string(chart.bShowTotal()).c_str());
+	rc = table_ini.SetValue("table", "show_npcs", std::to_string(chart.bShowNPCs()).c_str());
 	rc = table_ini.SetValue("table", "show_uptime_as_progress_bar", std::to_string(chart.bShowBoonAsProgressBar()).c_str());
 	rc = table_ini.SetLongValue("table", "show_colored", static_cast<long>(chart.getShowColored()));
 	rc = table_ini.SetBoolValue("table", "size_to_content", chart.bSizeToContent());
