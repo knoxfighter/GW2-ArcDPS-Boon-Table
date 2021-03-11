@@ -28,7 +28,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 		ImGui::MenuItem("Players", nullptr, &show_players);
 		ImGui::MenuItem("Subgroups", nullptr, &show_subgroups);
 		ImGui::MenuItem("Total", nullptr, &show_total);
-		ImGui::MenuItem("NPCs", nullptr, &show_players);
+		ImGui::MenuItem("NPCs", nullptr, &show_npcs);
 		ImGui::MenuItem("Show value as progress bar", nullptr, &show_boon_as_progress_bar);
 		ImGui::MenuItem("Always resize window to content", nullptr, &size_to_content);
 		ImGui::MenuItem("Alternating Row Background", nullptr, &alternating_row_bg);
@@ -471,6 +471,11 @@ void AppChart::setShowSubgroups(bool new_show)
 void AppChart::setShowTotal(bool new_show)
 {
 	show_total = new_show;
+}
+
+void AppChart::setShowNPCs(bool new_show)
+{
+	show_npcs = new_show;
 }
 
 void AppChart::setShowBoonAsProgressBar(bool new_show)
