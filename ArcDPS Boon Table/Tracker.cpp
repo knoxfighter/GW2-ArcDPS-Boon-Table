@@ -65,11 +65,22 @@ void Tracker::addNPC(uintptr_t id,
 	std::string name,
 	cbtevent* ev)
 {
+	NPC* old_npc = getNPC(name);
+	if (old_npc && old_npc->id != id && old_npc->in_combat) {
+		//If there is a new npc id it means that a new instance was spawned, and the combat timer ran for the old instance without it beeing spawned
+		// this removes the npc from combat, if its actually in combat it will be set later in this function
+		// worst set the combat start to a later point, when the npc got its first buff, which might be later during the fight than you actually could buff it
+		getNPC(name)->combatExit(ev);
+	}
+
 	addNPC(id, name);
 	if(ev)
-	if (self_player && self_player->in_combat && getNPC(id) && !getNPC(id)->in_combat) {
-		getNPC(id)->combatEnter(ev);
-	}
+		if (self_player && self_player->in_combat && getNPC(id)) {
+			NPC* npc = getNPC(id);
+			if (!npc->in_combat) {
+				npc->combatEnter(ev);
+			}
+		}
 }
 
 void Tracker::addNPC(uintptr_t id,
