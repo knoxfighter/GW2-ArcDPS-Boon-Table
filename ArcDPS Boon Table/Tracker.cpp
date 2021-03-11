@@ -77,7 +77,7 @@ void Tracker::addNPC(uintptr_t id,
 	if(ev)
 		if (self_player && self_player->in_combat && getNPC(id)) {
 			NPC* npc = getNPC(id);
-			if (!npc->in_combat) {
+			if (npc && !npc->in_combat) {
 				npc->combatEnter(ev);
 			}
 		}
