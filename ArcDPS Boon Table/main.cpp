@@ -299,13 +299,24 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 		
 		/* common */
 		p += _snprintf_s(p, 400, _TRUNCATE, "combatdemo: ==== cbtevent %u at %llu ====\n", cbtcount++, ev->time);
-		p += _snprintf_s(p, 400, _TRUNCATE, "source agent: %s (%0llx:%u, %lx:%lx), master: %u; %u\n", src->name, ev->src_agent, ev->src_instid, src->prof, src->elite, ev->src_master_instid, src->id);
-		if (ev->dst_agent) p += _snprintf_s(p, 400, _TRUNCATE, "target agent: %s (%0llx:%u, %lx:%lx); %u\n", dst->name, ev->dst_agent, ev->dst_instid, dst->prof, dst->elite, dst->id);
+		p += _snprintf_s(p, 400, _TRUNCATE, "source agent: %s (%0llx:%u, %lx:%lx, team: %d), master: %u; %u\n", src->name, ev->src_agent, ev->src_instid, src->prof, src->elite, src->team, ev->src_master_instid, src->id);
+		if (ev->dst_agent) p += _snprintf_s(p, 400, _TRUNCATE, "target agent: %s (%0llx:%u, %lx:%lx, team: %d); %u\n", dst->name, ev->dst_agent, ev->dst_instid, dst->prof, dst->elite, dst->team, dst->id);
 		else p += _snprintf_s(p, 400, _TRUNCATE, "target agent: n/a\n");
 
 		
 		for (int i = 0; i < num_of_npcs; i++) {
-			if (npc_names[i].compare(0, npc_names[i].size(), dst->name, 0, npc_names[i].size()) == 0) {
+			//Player
+			// Self: 200
+			// Own Illusion: 200
+			// Other players: 200
+			//Friendly
+			// Glenna: 194
+			// w7 Djins: 194
+			// Priory Arcanist: 194
+			//Enemy:
+			// w7 trash: 199
+			// undead eagle in orr: 263
+			if (dst->team == 194 && npc_names[i].compare(0, npc_names[i].size(), dst->name, 0, npc_names[i].size()) == 0) {
 				p += _snprintf_s(p, 400, _TRUNCATE, "NPC event %s\n", dst->name);
 				// it's one of the tracked npcs (at least the name)
 				//if (!npc_registered[i]) {
