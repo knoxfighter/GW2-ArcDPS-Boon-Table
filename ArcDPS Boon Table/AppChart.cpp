@@ -69,7 +69,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 	const int nameColumnId = columnCount - 2;
 	const int subgroupColumnId = columnCount - 1;
 
-	std::scoped_lock<std::mutex, std::mutex> lock(tracker.players_mtx, boons_mtx);
+	std::scoped_lock<std::mutex, std::mutex, std::mutex> lock(tracker.players_mtx, tracker.npcs_mtx, boons_mtx);
 
 	int tableFlags = ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_Sortable | ImGuiTableFlags_ContextMenuInBody |
 		ImGuiTableFlags_BordersInnerH |
