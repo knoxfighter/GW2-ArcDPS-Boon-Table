@@ -188,13 +188,16 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return uMsg;
 }
 
-constexpr auto num_of_npcs = 3;
+constexpr auto num_of_npcs = 6;
 
 
 //TODO: Figure something better out, maybe some id, like for bosses, is shown somewhere?
 // this array only needs to contain the beginning of the name
 const std::string npc_names[num_of_npcs] = {
 	"Priory Scholar", //Glenna (Wing 3, 1st encounter: Escort)
+	"Abtei-Gelehrte", // GER
+	"Erudite du Prieuré", // FR
+	"Erudita del Priorato", //ES
 	"Saul", //Saul D'Alessio (Wing 4, 4th encounter: Deimos)
 	"Desmina" //Desmina?, River of Souls
 };
