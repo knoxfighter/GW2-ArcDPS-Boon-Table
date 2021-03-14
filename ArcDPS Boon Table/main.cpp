@@ -206,8 +206,6 @@ uintptr_t npc_ids[num_of_npcs];
 /* one participant will be party/squad, or minion of. no spawn statechange events. despawn statechange only on marked boss npcs */
 uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t id, uint64_t revision)
 {
-	Entity* current_entity = nullptr;
-
 	/* ev is null. dst will only be valid on tracking add. skillname will also be null */
 	if (!ev)
 	{
@@ -235,9 +233,11 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 						//all npcs removed with the player (i.e. swapping wings)
 						for (int i = 0; i < num_of_npcs; i++) {
 							if (npc_registered[i]) {
-								if (current_entity = tracker.getNPC(npc_ids[i]))
+								NPC* npc = tracker.getNPC(npc_ids[i]);
+								if (npc)
 								{
-									tracker.removeEntity(current_entity);
+									tracker.removeEntity(npc);
+									npc_registered[i] = false;
 								}
 							}
 						}
@@ -288,18 +288,20 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 		/* statechange */
 		if (ev->is_statechange)
 		{
+			Player* player = tracker.getPlayer(src->id);
 			if (ev->is_statechange == CBTS_ENTERCOMBAT)
 			{
-				if (current_entity = tracker.getPlayer(src->id))
+				if (player = tracker.getPlayer(src->id))
 				{
-					current_entity->combatEnter(ev);
+					player->combatEnter(ev);
 
 					if(src->self) {
 						//all npcs enter combat with the player
 						for (int i = 0; i < num_of_npcs; i++) {
-							if (current_entity = tracker.getNPC(npc_ids[i]))
+							NPC* npc = tracker.getNPC(npc_ids[i]);
+							if (npc)
 							{
-								current_entity->combatEnter(ev);
+								npc->combatEnter(ev);
 							}
 						}
 					}
@@ -309,9 +311,9 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 			}
 			else if (ev->is_statechange == CBTS_EXITCOMBAT)
 			{
-				if (current_entity = tracker.getEntity(src->id))
+				if (player)
 				{
-					current_entity->combatExit(ev);
+					player->combatExit(ev);
 
 					if (src->self) {
 
@@ -333,9 +335,10 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 		{
 			if (ev->is_buffremove == CBTB_MANUAL)//TODO: move to tracker
 			{
-				if (current_entity = tracker.getEntity(src->id))
+				Entity* entity = tracker.getEntity(src->id);
+				if (entity)
 				{
-					current_entity->removeBoon(ev);
+					entity->removeBoon(ev);
 					chart.needSort = true;
 				}
 			}
