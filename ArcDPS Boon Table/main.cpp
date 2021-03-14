@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include <string>
 #include <iostream>
+#include <regex>
 
 #include "imgui\imgui.h"
 #include "simpleini\SimpleIni.h"
@@ -188,25 +189,18 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return uMsg;
 }
 
-constexpr auto num_of_npcs = 6;
-
+constexpr auto num_of_npcs = 3;
 
 //TODO: Figure something better out, maybe some id, like for bosses, is shown somewhere?
-// this array only needs to contain the beginning of the name
-const std::string npc_names[num_of_npcs] = {
-	"Priory Scholar", //Glenna (Wing 3, 1st encounter: Escort)
-	"Abtei-Gelehrte", // GER
-	"Erudite du Prieuré", // FR
-	"Erudita del Priorato", //ES
-	"Saul", //Saul D'Alessio (Wing 4, 4th encounter: Deimos)
-	"Desmina" //Desmina?, River of Souls
+const std::regex npc_names[3] = {
+	std::basic_regex("(Priory Scholar)|(Abtei-Gelehrte)|(Erudite du Prieur.)|(Erudita del Priorato)"), //Glenna (Wing 3, 1st encounter: Escort)
+	std::basic_regex("(Saul.*)"), //Saul D'Alessio (Wing 4, 4th encounter: Deimos)
+	std::basic_regex("(Desmina)") //Desmina, River of Souls
 };
+
 bool npc_registered[num_of_npcs] = { false };
 
 uintptr_t npc_ids[num_of_npcs];
-
-
-
 
 /* combat callback -- may be called asynchronously. return ignored */
 /* one participant will be party/squad, or minion of. no spawn statechange events. despawn statechange only on marked boss npcs */
@@ -282,7 +276,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 			//Enemy:
 			// w7 trash: 199
 			// undead eagle in orr: 263
-			if (dst->team == 194 && npc_names[i].compare(0, npc_names[i].size(), dst->name, 0, npc_names[i].size()) == 0) {
+			if (dst->team == 194 && std::regex_match(dst->name, npc_names[i])) {
 				npc_registered[i] = true;
 				npc_ids[i] = dst->id;
 				tracker.addNPC(dst->id, dst->name, ev);
