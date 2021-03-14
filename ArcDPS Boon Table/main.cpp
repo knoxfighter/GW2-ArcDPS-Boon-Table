@@ -198,8 +198,6 @@ const std::regex npc_names[3] = {
 	std::basic_regex("(Desmina)") //Desmina, River of Souls
 };
 
-bool npc_registered[num_of_npcs] = { false };
-
 uintptr_t npc_ids[num_of_npcs];
 
 /* combat callback -- may be called asynchronously. return ignored */
@@ -229,18 +227,10 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 				{
 					tracker.removePlayer(src);
 
-					if (src->self) {
+					//src->self is not set here
+					if (src->id == 2000) {
 						//all npcs removed with the player (i.e. swapping wings)
-						for (int i = 0; i < num_of_npcs; i++) {
-							if (npc_registered[i]) {
-								NPC* npc = tracker.getNPC(npc_ids[i]);
-								if (npc)
-								{
-									tracker.removeEntity(npc);
-									npc_registered[i] = false;
-								}
-							}
-						}
+						tracker.clearNPCs();
 					}
 				}
 			}
@@ -277,7 +267,6 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 			// w7 trash: 199
 			// undead eagle in orr: 263
 			if (dst->team == 194 && std::regex_match(dst->name, npc_names[i])) {
-				npc_registered[i] = true;
 				npc_ids[i] = dst->id;
 				tracker.addNPC(dst->id, dst->name, ev);
 			}
@@ -295,14 +284,12 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 				{
 					player->combatEnter(ev);
 
-					if(src->self) {
-						//all npcs enter combat with the player
-						for (int i = 0; i < num_of_npcs; i++) {
-							NPC* npc = tracker.getNPC(npc_ids[i]);
-							if (npc)
-							{
-								npc->combatEnter(ev);
-							}
+					if(src->self)
+					{
+
+						for (std::list<NPC>::iterator it = tracker.npcs.begin(); it != tracker.npcs.end(); ++it)
+						{
+							it->combatEnter(ev);
 						}
 					}
 					tracker.bakeCombatData();
@@ -315,9 +302,10 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 				{
 					player->combatExit(ev);
 
-					if (src->self) {
-
-						for (std::list<NPC>::iterator it = tracker.npcs.begin(); it != tracker.npcs.end(); ++it) {
+					if (src->self)
+					{
+						for (std::list<NPC>::iterator it = tracker.npcs.begin(); it != tracker.npcs.end(); ++it)
+						{
 							it->combatExit(ev);
 						}
 					}

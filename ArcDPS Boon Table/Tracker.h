@@ -34,6 +34,7 @@ public:
 	void removeEntity(Player* player);
 	void removeEntity(NPC* player);
 	void clearPlayers();//marks all players as not in squad
+	void clearNPCs();//marks all npcs as not in squad
 	void bakeCombatData();
 
 	Player* getPlayer(uintptr_t new_player);

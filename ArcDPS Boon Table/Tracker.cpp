@@ -124,6 +124,8 @@ void Tracker::removePlayer(ag* src)
 void Tracker::removeEntity(Entity* entity) {
 	//TODO: implement
 }
+
+
 void Tracker::removeEntity(NPC* npc) {
 	std::unique_lock<std::mutex> lock(npcs_mtx);
 	npcs.remove(*npc);
@@ -143,6 +145,15 @@ void Tracker::clearPlayers()
 {
 	std::unique_lock<std::mutex> lock(players_mtx);
 	players.clear();
+	lock.unlock();
+
+	bakeCombatData();
+}
+
+void Tracker::clearNPCs()
+{
+	std::unique_lock<std::mutex> lock(npcs_mtx);
+	npcs.clear();
 	lock.unlock();
 
 	bakeCombatData();
