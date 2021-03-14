@@ -193,7 +193,7 @@ constexpr auto num_of_npcs = 3;
 
 //TODO: Figure something better out, maybe some id, like for bosses, is shown somewhere?
 const std::regex npc_names[3] = {
-	std::basic_regex("(Priory Scholar)|(Abtei-Gelehrte)|(Erudite du Prieur.)|(Erudita del Priorato)"), //Glenna (Wing 3, 1st encounter: Escort)
+	std::basic_regex("(Priory Scholar)|(Abtei-Gelehrte)|(Erudite du Prieur.*)|(Erudita del Priorato)"), //Glenna (Wing 3, 1st encounter: Escort)
 	std::basic_regex("(Saul.*)"), //Saul D'Alessio (Wing 4, 4th encounter: Deimos)
 	std::basic_regex("(Desmina)") //Desmina, River of Souls
 };
