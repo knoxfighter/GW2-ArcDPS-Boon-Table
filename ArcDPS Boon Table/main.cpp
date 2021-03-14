@@ -246,10 +246,6 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 	/* combat event. skillname may be null. non-null skillname will remain static until module is unloaded. refer to evtc notes for complete detail */
 	else
 	{
-		/* default names */
-		if (!src->name || !strlen(src->name)) src->name = (char*)"(area)";
-		if (!dst->name || !strlen(dst->name)) dst->name = (char*)"(area)";
-		
 		/* common */
 
 		
