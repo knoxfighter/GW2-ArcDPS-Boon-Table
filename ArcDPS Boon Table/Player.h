@@ -1,22 +1,21 @@
 #pragma once
 
 #include <string>
-#include <map>
 #include <mutex>
-#include "ArcdpsDataStructures.h"
+
+#include "extension/arcdps_structs.h"
 #include "Helpers.h"
 #include "Boon.h"
-#include "BuffIds.h"
 #include "Entity.h"
 
 class Player : public Entity
 {
 public:
 	std::string account_name;
-	prof profession;
+	Prof profession;
 	uint8_t subgroup;
 
-	Player(uintptr_t new_id, const std::string& new_name, const std::string& new_account_name, uint8_t new_subgroup, prof new_profession);
+	Player(uintptr_t new_id, const std::string& new_name, const std::string& new_account_name, uint8_t new_subgroup, Prof new_profession);
 
 	void combatEnter(cbtevent* ev);
 	ImVec4 getColor() const;

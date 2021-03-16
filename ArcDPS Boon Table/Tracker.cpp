@@ -6,7 +6,7 @@ void Tracker::addPlayer(ag* src, ag* dst)
 
 	uintptr_t id = src->id;
 	uint8_t subgroup = dst->team;
-	prof profession = dst->prof;
+	Prof profession = dst->prof;
 	std::string characterName = std::string(src->name);
 	std::string accountName = std::string(dst->name);
 
@@ -15,7 +15,7 @@ void Tracker::addPlayer(ag* src, ag* dst)
 
 void Tracker::addPlayer(uintptr_t id,
 	uint8_t subgroup,
-	prof profession,
+	Prof profession,
 	std::string characterName,
 	std::string accountName)
 {
@@ -45,7 +45,7 @@ void Tracker::addPlayer(uintptr_t id,
 
 void Tracker::addNewPlayer(uintptr_t id,
 	uint8_t subgroup,
-	prof profession,
+	Prof profession,
 	std::string characterName,
 	std::string accountName)
 {

@@ -5,13 +5,12 @@
 #include <cstdint>
 #include <Windows.h>
 #include <string>
-#include <iostream>
 #include <regex>
 
 #include "imgui\imgui.h"
 #include "simpleini\SimpleIni.h"
 
-#include "ArcdpsDataStructures.h"
+#include "extension/arcdps_structs.h"
 #include "Player.h"
 #include "Tracker.h"
 #include "AppChart.h"

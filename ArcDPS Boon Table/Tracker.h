@@ -3,7 +3,7 @@
 #include <string>
 #include <mutex>
 
-#include "ArcdpsDataStructures.h"
+#include "extension/arcdps_structs.h"
 #include "Player.h"
 #include "NPC.h"
 
@@ -24,8 +24,8 @@ public:
 	Tracker() = default;
 
 	void addPlayer(ag* src, ag* dst);
-	void addPlayer(uintptr_t id, uint8_t subgroup, prof profession, std::string characterName, std::string accountName);
-	void addNewPlayer(uintptr_t id, uint8_t subgroup, prof profession, std::string characterName, std::string accountName);
+	void addPlayer(uintptr_t id, uint8_t subgroup, Prof profession, std::string characterName, std::string accountName);
+	void addNewPlayer(uintptr_t id, uint8_t subgroup, Prof profession, std::string characterName, std::string accountName);
 	void addNPC(uintptr_t id, std::string name);
 	void addNPC(uintptr_t id, std::string name, cbtevent* ev);
 	void addNewNPC(uintptr_t id, std::string name);

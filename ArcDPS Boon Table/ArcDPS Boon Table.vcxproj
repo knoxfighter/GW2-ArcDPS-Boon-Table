@@ -137,16 +137,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AppChart.cpp" />
-    <ClCompile Include="ArcdpsDataStructures.cpp" />
     <ClCompile Include="Boon.cpp" />
     <ClCompile Include="BuffIds.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="extension\arcdps_structs.cpp" />
+    <ClCompile Include="extension\Icon.cpp" />
+    <ClCompile Include="extension\Widgets.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Lang.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -155,10 +158,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppChart.h" />
-    <ClInclude Include="ArcdpsDataStructures.h" />
     <ClInclude Include="Boon.h" />
     <ClInclude Include="BuffIds.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="extension\arcdps_structs.h" />
+    <ClInclude Include="extension\Icon.h" />
+    <ClInclude Include="extension\Widgets.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
@@ -166,6 +171,7 @@
     <ClInclude Include="imgui\stb_rect_pack.h" />
     <ClInclude Include="imgui\stb_textedit.h" />
     <ClInclude Include="imgui\stb_truetype.h" />
+    <ClInclude Include="Lang.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />

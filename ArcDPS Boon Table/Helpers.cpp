@@ -34,3 +34,14 @@ bool floatCmp(float a, float b)
 		return false;
 	return aa < bb;
 }
+
+std::string to_string(ProgressBarColoringMode coloringMode) {
+	switch (coloringMode) {
+	case ProgressBarColoringMode::Uncolored:
+		return "Default";
+	case ProgressBarColoringMode::ByProfession:
+		return "By Profession";
+	case ProgressBarColoringMode::ByPercentage:
+		return "By Percentage";
+	}
+}
