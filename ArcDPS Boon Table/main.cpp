@@ -215,7 +215,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 				/* add */
 				if (src->prof)
 				{
-					if (dst || dst->name)
+					if (dst && dst->name)
 					{
 						tracker.addPlayer(src,dst);
 						chart.needSort = true;
