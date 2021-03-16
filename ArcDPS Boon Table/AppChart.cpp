@@ -231,7 +231,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 		}
 
 		// Show npcs
-		if (bShowNPCs()) {
+		if (bShowNPCs() && !tracker.npcs.empty()) {
 			ImGui::TableNextRow();
 			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
 			for (NPC npc : tracker.npcs) {
