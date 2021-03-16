@@ -5,6 +5,8 @@
 #include <cstdint>
 #include <Windows.h>
 #include <string>
+#include <iostream>
+#include <regex>
 
 #include "imgui\imgui.h"
 #include "simpleini\SimpleIni.h"
@@ -187,12 +189,21 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return uMsg;
 }
 
+constexpr auto num_of_npcs = 3;
+
+//TODO: Figure something better out, maybe some id, like for bosses, is shown somewhere?
+const std::regex npc_names[3] = {
+	std::basic_regex("(Priory Scholar)|(Abtei-Gelehrte)|(Erudite du Prieur.*)|(Erudita del Priorato)"), //Glenna (Wing 3, 1st encounter: Escort)
+	std::basic_regex("(Saul.*)"), //Saul D'Alessio (Wing 4, 4th encounter: Deimos)
+	std::basic_regex("(Desmina)") //Desmina, River of Souls
+};
+
+uintptr_t npc_ids[num_of_npcs];
+
 /* combat callback -- may be called asynchronously. return ignored */
 /* one participant will be party/squad, or minion of. no spawn statechange events. despawn statechange only on marked boss npcs */
 uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t id, uint64_t revision)
 {
-	Player* current_player = nullptr;
-
 	/* ev is null. dst will only be valid on tracking add. skillname will also be null */
 	if (!ev)
 	{
@@ -204,7 +215,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 				/* add */
 				if (src->prof)
 				{
-					if (dst)
+					if (dst || dst->name)
 					{
 						tracker.addPlayer(src,dst);
 						chart.needSort = true;
@@ -215,6 +226,12 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 				else
 				{
 					tracker.removePlayer(src);
+
+					//src->self is not set here
+					if (src->id == 2000) {
+						//all npcs removed with the player (i.e. swapping wings)
+						tracker.clearNPCs();
+					}
 				}
 			}
 
@@ -229,25 +246,65 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 	/* combat event. skillname may be null. non-null skillname will remain static until module is unloaded. refer to evtc notes for complete detail */
 	else
 	{
+		/* common */
+
+		
+		for (int i = 0; i < num_of_npcs; i++) {
+			//Player
+			// Self: 200
+			// Own Illusion: 200
+			// Other players: 200
+			//Friendly
+			// Glenna: 194
+			// w7 Djins: 194
+			// Priory Arcanist: 194
+			// Saul: 194
+			//Enemy:
+			// w7 trash: 199
+			// undead eagle in orr: 263
+			if (dst->team == 194 && std::regex_match(dst->name, npc_names[i])) {
+				npc_ids[i] = dst->id;
+				tracker.addNPC(dst->id, dst->name, ev);
+			}
+		}
+
 		if(ev->time > 0) current_time = ev->time;
 
 		/* statechange */
 		if (ev->is_statechange)
 		{
+			Player* player = tracker.getPlayer(src->id);
 			if (ev->is_statechange == CBTS_ENTERCOMBAT)
 			{
-				if (current_player = tracker.getPlayer(src->id))
+				if (player = tracker.getPlayer(src->id))
 				{
-					current_player->combatEnter(ev);
+					player->combatEnter(ev);
+
+					if(src->self)
+					{
+
+						for (std::list<NPC>::iterator it = tracker.npcs.begin(); it != tracker.npcs.end(); ++it)
+						{
+							it->combatEnter(ev);
+						}
+					}
 					tracker.bakeCombatData();
 					chart.needSort = true;
 				}
 			}
 			else if (ev->is_statechange == CBTS_EXITCOMBAT)
 			{
-				if (current_player = tracker.getPlayer(src->id))
+				if (player)
 				{
-					current_player->combatExit(ev);
+					player->combatExit(ev);
+
+					if (src->self)
+					{
+						for (std::list<NPC>::iterator it = tracker.npcs.begin(); it != tracker.npcs.end(); ++it)
+						{
+							it->combatExit(ev);
+						}
+					}
 				}
 			}
 		}
@@ -255,7 +312,6 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 		/* activation */
 		else if (ev->is_activation)
 		{
-
 		}
 
 		/* buff remove */
@@ -263,9 +319,10 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 		{
 			if (ev->is_buffremove == CBTB_MANUAL)//TODO: move to tracker
 			{
-				if (current_player = tracker.getPlayer(src->id))
+				Entity* entity = tracker.getEntity(src->id);
+				if (entity)
 				{
-					current_player->removeBoon(ev);
+					entity->removeBoon(ev);
 					chart.needSort = true;
 				}
 			}
@@ -278,7 +335,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 			/* damage */
 			if (ev->buff_dmg)
 			{
-				
+
 			}
 
 			/* application */
@@ -369,6 +426,9 @@ void parseIni()
 	pszValueString = table_ini.GetValue("table", "show_total", "1");
 	chart.setShowTotal(std::stoi(pszValueString));
 
+	pszValueString = table_ini.GetValue("table", "show_npcs", "1");
+	chart.setShowNPCs(std::stoi(pszValueString));
+
 	pszValueString = table_ini.GetValue("table", "show_uptime_as_progress_bar", "1");
 	chart.setShowBoonAsProgressBar(std::stoi(pszValueString));
 
@@ -393,6 +453,7 @@ void writeIni()
 	rc = table_ini.SetValue("table", "show_players", std::to_string(chart.bShowPlayers()).c_str());
 	rc = table_ini.SetValue("table", "show_subgroups", std::to_string(chart.getShowSubgroups()).c_str());
 	rc = table_ini.SetValue("table", "show_total", std::to_string(chart.bShowTotal()).c_str());
+	rc = table_ini.SetValue("table", "show_npcs", std::to_string(chart.bShowNPCs()).c_str());
 	rc = table_ini.SetValue("table", "show_uptime_as_progress_bar", std::to_string(chart.bShowBoonAsProgressBar()).c_str());
 	rc = table_ini.SetLongValue("table", "show_colored", static_cast<long>(chart.getShowColored()));
 	rc = table_ini.SetBoolValue("table", "size_to_content", chart.bSizeToContent());
