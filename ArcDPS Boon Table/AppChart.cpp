@@ -8,17 +8,15 @@
 
 void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 {
-	// min height: font_size * 3 + 5 -> header, self, TOTAL
-	// max height: font_size * 14 + 2*5 + 5
-	// ImGui::SetNextWindowSize(ImVec2(ImGui::GetFontSize() * 3 + 5, 500)/*, ImGuiCond_FirstUseEver*/);
-	// ImGui::SetNextWindowSizeConstraints(ImVec2(180, 180), ImVec2(500,500));
-	// flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	ImGui::PushFont(ImGui::GetIO().Fonts->Fonts.back());
 	
 	flags |= ImGuiWindowFlags_NoCollapse;
 	if (bSizeToContent()) {
 		flags |= ImGuiWindowFlags_AlwaysAutoResize;
 	}
-	ImGui::Begin(lang.translate(LangKey::WindowHeader).c_str(), p_open, flags);
+	std::string windowName = lang.translate(LangKey::WindowHeader);
+	windowName.append("##Boon Table");
+	ImGui::Begin(windowName.c_str(), p_open, flags);
 
 	// Settings on right-click-menu
 	if (ImGui::BeginPopupContextWindow()) {
@@ -261,6 +259,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 	}
 
 	ImGui::End();
+	ImGui::PopFont();
 }
 
 void AppChart::showColorSelectable(ProgressBarColoringMode select_coloring_mode) {
