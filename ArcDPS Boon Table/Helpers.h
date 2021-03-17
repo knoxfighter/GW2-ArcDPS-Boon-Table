@@ -1,6 +1,6 @@
 #pragma once
 #include <cstdint>
-#include "ArcdpsDataStructures.h"
+#include "extension/arcdps_structs.h"
 #include "imgui/imgui.h"
 
 extern uint64_t current_time;
@@ -24,3 +24,12 @@ bool floatCmp(float a, float b);
 
 typedef void(*arc_color_func)(ImVec4**);
 extern arc_color_func arc_export_e5;
+
+// additional enum for progressbar color
+enum class ProgressBarColoringMode {
+	Uncolored,
+	ByProfession,
+	ByPercentage
+};
+
+std::string to_string(ProgressBarColoringMode coloringMode);

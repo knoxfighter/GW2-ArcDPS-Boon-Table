@@ -25,6 +25,12 @@
     <Filter Include="Header Files\simpleini">
       <UniqueIdentifier>{64104c97-0448-43a5-b9ca-3872e9266c87}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\extension">
+      <UniqueIdentifier>{7e3c8b45-262a-4d67-a61a-03ff680c9916}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\extension">
+      <UniqueIdentifier>{6320364a-059b-4af3-94a0-83ce70b2f352}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -37,9 +43,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Tracker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ArcdpsDataStructures.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BuffIds.cpp">
@@ -69,6 +72,24 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>Source Files\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="extension\arcdps_structs.cpp">
+      <Filter>Source Files\extension</Filter>
+    </ClCompile>
+    <ClCompile Include="extension\Icon.cpp">
+      <Filter>Source Files\extension</Filter>
+    </ClCompile>
+    <ClCompile Include="extension\Widgets.cpp">
+      <Filter>Source Files\extension</Filter>
+    </ClCompile>
+    <ClCompile Include="Lang.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -81,9 +102,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tracker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ArcdpsDataStructures.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BuffIds.h">
@@ -118,6 +136,24 @@
     </ClInclude>
     <ClInclude Include="simpleini\ConvertUTF.h">
       <Filter>Header Files\simpleini</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="extension\arcdps_structs.h">
+      <Filter>Header Files\extension</Filter>
+    </ClInclude>
+    <ClInclude Include="extension\Icon.h">
+      <Filter>Header Files\extension</Filter>
+    </ClInclude>
+    <ClInclude Include="extension\Widgets.h">
+      <Filter>Header Files\extension</Filter>
+    </ClInclude>
+    <ClInclude Include="Lang.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
