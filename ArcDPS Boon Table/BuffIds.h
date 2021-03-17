@@ -36,3 +36,4 @@ struct BoonDef
 BoonDef* getTrackedBoon(uint32_t new_id);
 
 extern std::vector<BoonDef> tracked_buffs;
+void init_tracked_buffs();

@@ -1,5 +1,7 @@
 #include "Helpers.h"
 
+#include "Lang.h"
+
 uint64_t getCurrentTime()
 {
 	return current_time;
@@ -38,10 +40,10 @@ bool floatCmp(float a, float b)
 std::string to_string(ProgressBarColoringMode coloringMode) {
 	switch (coloringMode) {
 	case ProgressBarColoringMode::Uncolored:
-		return "Default";
+		return lang.translate(LangKey::ColoringModeDefault);
 	case ProgressBarColoringMode::ByProfession:
-		return "By Profession";
+		return lang.translate(LangKey::ColoringModeByProfession);
 	case ProgressBarColoringMode::ByPercentage:
-		return "By Percentage";
+		return lang.translate(LangKey::ColoringModeByPercentage);
 	}
 }

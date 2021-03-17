@@ -155,5 +155,8 @@
     <ClInclude Include="Lang.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="extension\map.h">
+      <Filter>Header Files\extension</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

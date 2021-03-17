@@ -3,10 +3,7 @@
 #include <algorithm>
 #include <mutex>
 
-// Includes/Defines to use, when enabling the custom aligned progressbar text.
-#ifndef IMGUI_DEFINE_MATH_OPERATORS
-#define IMGUI_DEFINE_MATH_OPERATORS
-#endif
+#include "Lang.h"
 #include "imgui/imgui_internal.h"
 
 void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
@@ -21,22 +18,22 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 	if (bSizeToContent()) {
 		flags |= ImGuiWindowFlags_AlwaysAutoResize;
 	}
-	ImGui::Begin("Boon Table", p_open, flags);
+	ImGui::Begin(lang.translate(LangKey::WindowHeader).c_str(), p_open, flags);
 
 	// Settings on right-click-menu
 	if (ImGui::BeginPopupContextWindow()) {
-		ImGui::MenuItem("Players", nullptr, &show_players);
-		ImGui::MenuItem("Subgroups", nullptr, &show_subgroups);
-		ImGui::MenuItem("Total", nullptr, &show_total);
-		ImGui::MenuItem("NPCs", nullptr, &show_npcs);
-		ImGui::MenuItem("Show value as progress bar", nullptr, &show_boon_as_progress_bar);
-		ImGui::MenuItem("Always resize window to content", nullptr, &size_to_content);
-		ImGui::MenuItem("Alternating Row Background", nullptr, &alternating_row_bg);
+		ImGui::MenuItem(lang.translate(LangKey::SettingsPlayers).c_str(), nullptr, &show_players);
+		ImGui::MenuItem(lang.translate(LangKey::SettingsSubgroups).c_str(), nullptr, &show_subgroups);
+		ImGui::MenuItem(lang.translate(LangKey::SettingsTotal).c_str(), nullptr, &show_total);
+		ImGui::MenuItem(lang.translate(LangKey::SettingsNPC).c_str(), nullptr, &show_npcs);
+		ImGui::MenuItem(lang.translate(LangKey::SettingsShowProgressBar).c_str(), nullptr, &show_boon_as_progress_bar);
+		ImGui::MenuItem(lang.translate(LangKey::SettingsAlwaysResize).c_str(), nullptr, &size_to_content);
+		ImGui::MenuItem(lang.translate(LangKey::SettingsAlternatingRow).c_str(), nullptr, &alternating_row_bg);
 
 
 		float cursorPosY = ImGui::GetCursorPosY();
 		ImGui::SetCursorPosY(cursorPosY + 4);
-		ImGui::Text("Coloring Mode");
+		ImGui::Text(lang.translate(LangKey::SettingsColoringMode).c_str());
 		ImGui::SameLine();
 		ImGui::SetCursorPosY(cursorPosY);
 		if (ImGui::BeginCombo("###ShowColored", to_string(show_colored).c_str())) {
@@ -49,10 +46,10 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 		
 		cursorPosY = ImGui::GetCursorPosY();
 		ImGui::SetCursorPosY(cursorPosY + 4);
-		ImGui::Text("Alignment");
+		ImGui::Text(lang.translate(LangKey::SettingsAlignment).c_str());
 		ImGui::SameLine();
 		ImGui::SetCursorPosY(cursorPosY);
-		if (ImGui::BeginCombo("###Alignment", alignment_text.c_str())) {
+		if (ImGui::BeginCombo("###Alignment", to_string(alignment).c_str())) {
 			alignmentSelectable(Alignment::Unaligned);
 			alignmentSelectable(Alignment::Left);
 			alignmentSelectable(Alignment::Center);
@@ -80,8 +77,8 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 	}
 	
 	if (ImGui::BeginTable("Table", columnCount, tableFlags)) {
-		ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide | ImGuiTableColumnFlags_NoReorder, 0, nameColumnId);
-		ImGui::TableSetupColumn("Sub", 0, 0, subgroupColumnId);
+		ImGui::TableSetupColumn(lang.translate(LangKey::NameColumnHeader).c_str(), ImGuiTableColumnFlags_NoHide | ImGuiTableColumnFlags_NoReorder, 0, nameColumnId);
+		ImGui::TableSetupColumn(lang.translate(LangKey::SubgroupColumnHeader).c_str(), 0, 0, subgroupColumnId);
 
 		ImU32 i = 0;
 		for (const BoonDef& trackedBuff : tracked_buffs) {
@@ -187,7 +184,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 
 				// charname
 				ImGui::TableNextColumn();
-				ImGui::Text("Subgroup");
+				ImGui::Text(lang.translate(LangKey::SubgroupNameColumnValue).c_str());
 
 				// subgroup
 				if (ImGui::TableNextColumn()) {
@@ -214,11 +211,11 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 
 			// charname
 			ImGui::TableNextColumn();
-			ImGui::Text("TOTAL");
+			ImGui::Text(lang.translate(LangKey::TotalNameColumnValue).c_str());
 
 			// subgroup
 			if (ImGui::TableNextColumn()) {
-				AlignedTextColumn("ALL");
+				AlignedTextColumn(lang.translate(LangKey::TotalSubgroupColumnValue).c_str());
 			}
 
 			// buffs
@@ -245,7 +242,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 
 				// subgroup
 				if (ImGui::TableNextColumn()) {
-					AlignedTextColumn("NPC");
+					AlignedTextColumn(lang.translate(LangKey::NPCSubgroupColumnValue).c_str());
 				}
 
 				// buffs
@@ -277,7 +274,6 @@ void AppChart::alignmentSelectable(Alignment select_alignment) {
 	std::string new_alignment_text = to_string(select_alignment);
 	if (ImGui::Selectable(new_alignment_text.c_str())) {
 		alignment = select_alignment;
-		alignment_text = new_alignment_text;
 	}
 }
 
@@ -401,8 +397,7 @@ void AppChart::AlignedTextColumn(const char* text, ...) const {
 	ImGui::TextUnformatted(buf);
 }
 
-// This code can be used to make the text over the progressBar centered.
-// Moving from there, left/right alignment would be also easy to implement.
+// This code can be used to make the text over the progressBar aligned.
 // This also uses imgui internals, which are likely to change between versions.
 void AppChart::CustomProgressBar(float fraction, const ImVec2& size_arg, const char* overlay) const {
 	ImGuiWindow* window = ImGui::GetCurrentWindow();
@@ -497,7 +492,6 @@ void AppChart::setAlternatingRowBg(bool new_alternating_row_bg) {
 
 void AppChart::setAlignment(Alignment new_alignment) {
 	alignment = new_alignment;
-	alignment_text = to_string(new_alignment);
 }
 
 bool AppChart::bShowPlayers() const {

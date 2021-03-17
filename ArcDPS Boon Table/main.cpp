@@ -15,6 +15,7 @@
 #include "Tracker.h"
 #include "AppChart.h"
 #include "Helpers.h"
+#include "Lang.h"
 
 /* proto/globals */
 arcdps_exports arc_exports;
@@ -36,7 +37,6 @@ bool modsPressed();
 bool canMoveWindows();
 
 Tracker tracker;
-
 AppChart chart;
 bool show_chart = false;
 
@@ -91,6 +91,8 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 	ImGui::SetAllocatorFunctions((void* (*)(size_t, void*))mallocfn, (void (*)(void*, void*))freefn);
 
 	parseIni();
+
+	init_tracked_buffs();
 	
 	return mod_init;
 }
@@ -380,7 +382,7 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 }
 uintptr_t mod_options()
 {
-	ImGui::Checkbox("Boon Table", &show_chart);
+	ImGui::Checkbox(lang.translate(LangKey::ShowChart).c_str(), &show_chart);
 	return 0;
 }
 

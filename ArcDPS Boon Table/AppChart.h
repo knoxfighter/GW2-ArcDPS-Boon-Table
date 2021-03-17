@@ -1,5 +1,6 @@
 #pragma once
 
+#include "extension/arcdps_structs.h"
 #include "imgui\imgui.h"
 #include "Tracker.h"
 #include "BuffIds.h"
@@ -21,7 +22,6 @@ protected:
 	bool alternating_row_bg = true;
 	ProgressBarColoringMode show_colored = ProgressBarColoringMode::Uncolored;
 	Alignment alignment = Alignment::Right;
-	std::string alignment_text = to_string(Alignment::Right);
 
 	int current_column = 0;
 public:
