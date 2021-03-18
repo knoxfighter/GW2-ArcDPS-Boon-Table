@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include <string>
 #include <regex>
+#include <d3d9.h>
 
 #include "imgui/imgui.h"
 #include "simpleini/SimpleIni.h"
@@ -19,9 +20,7 @@
 /* proto/globals */
 arcdps_exports arc_exports;
 char* arcvers;
-void dll_init(HANDLE hModule);
-void dll_exit();
-extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, void* id3dd9, HMODULE arcdll, void* mallocfn, void* freefn);
+extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, IDirect3DDevice9* id3dd9, HMODULE arcdll, void* mallocfn, void* freefn);
 extern "C" __declspec(dllexport) void* get_release_addr();
 arcdps_exports* mod_init();
 uintptr_t mod_release();
@@ -43,6 +42,7 @@ typedef uint64_t(*arc_export_func_u64)();
 typedef void(*log_func)(char* str);
 
 HMODULE arc_dll;
+HMODULE self_dll;
 
 // get exports
 arc_color_func arc_export_e5;
@@ -65,9 +65,10 @@ WPARAM table_key;
 
 
 /* dll main -- winapi */
-BOOL APIENTRY DllMain(HANDLE hModule, DWORD ulReasonForCall, LPVOID lpReserved) {
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved) {
 	switch (ulReasonForCall) {
 	case DLL_PROCESS_ATTACH:
+		self_dll = hModule;
 	case DLL_PROCESS_DETACH:
 	case DLL_THREAD_ATTACH:
 	case DLL_THREAD_DETACH:
@@ -77,7 +78,7 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ulReasonForCall, LPVOID lpReserved) 
 }
 
 /* export -- arcdps looks for this exported function and calls the address it returns */
-extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, void* id3dd9, HMODULE new_arcdll, void* mallocfn, void* freefn) {
+extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, IDirect3DDevice9* id3dd9, HMODULE new_arcdll, void* mallocfn, void* freefn) {
 	// set all arcdps stuff
 	arcvers = arcversionstr;
 	arc_dll = new_arcdll;
@@ -91,7 +92,7 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 
 	parseIni();
 
-	init_tracked_buffs();
+	init_tracked_buffs(id3dd9);
 	
 	return mod_init;
 }
@@ -442,6 +443,9 @@ void parseIni()
 	bool alternating_row_bg = table_ini.GetBoolValue("table", "alternating_row_bg", true);
 	chart.setAlternatingRowBg(alternating_row_bg);
 
+	bool show_label = table_ini.GetBoolValue("table", "show_label");
+	chart.setShowLabel(show_label);
+
 	long pszValueLong = table_ini.GetLongValue("table", "alignment", static_cast<long>(Alignment::Right));
 	chart.setAlignment(static_cast<Alignment>(pszValueLong));
 }
@@ -457,6 +461,7 @@ void writeIni()
 	rc = table_ini.SetValue("table", "show_uptime_as_progress_bar", std::to_string(chart.bShowBoonAsProgressBar()).c_str());
 	rc = table_ini.SetLongValue("table", "show_colored", static_cast<long>(chart.getShowColored()));
 	rc = table_ini.SetBoolValue("table", "size_to_content", chart.bSizeToContent());
+	rc = table_ini.SetBoolValue("table", "show_label", chart.bShowLabel());
 	rc = table_ini.SetBoolValue("table", "alternating_row_bg", chart.bAlternatingRowBg());
 	rc = table_ini.SetLongValue("table", "alignment", static_cast<long>(chart.getAlignment()));
 

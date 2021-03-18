@@ -98,9 +98,6 @@
     <ClInclude Include="Boon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Tracker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -158,5 +155,108 @@
     <ClInclude Include="extension\map.h">
       <Filter>Header Files\extension</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ArcDPS Boon Table.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icons\Might.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Fury.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Regeneration.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Protection.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Quickness.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Alacrity.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Retaliation.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Vigor.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Stability.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Aegis.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Swiftness.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Resistance.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Empower_Allies.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Pinpoint_Distribution.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Assassin%27s_Presence.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Spotter.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Soothing_Mist.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Vampiric_Presence.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Strength_in_Numbers.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Banner_of_Strength.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Banner_of_Discipline.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Banner_of_Tactics.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Banner_of_Defense.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Frost_Spirit.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Sun_Spirit.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Stone_Spirit.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Storm_Spirit.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Water_Spirit.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Signet_of_Inspiration.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Stealth.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Super_Speed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

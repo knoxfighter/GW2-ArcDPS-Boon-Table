@@ -40,6 +40,7 @@ BUILD_ENUM_INI_NAMES(
 	ColoringModeByProfession,
 	ColoringModeByPercentage,
 	SettingsAlignment,
+	SettingsShowLabel,
 
 	NameColumnHeader,
 	SubgroupColumnHeader,
@@ -104,6 +105,7 @@ static const std::map<LangKey, std::string> langDefaults = {
 		{LangKey::ColoringModeByProfession, "By Profession"},
 		{LangKey::ColoringModeByPercentage, "By Percentage"},
 		{LangKey::SettingsAlignment, "Alignment"},
+		{LangKey::SettingsShowLabel, "Show header with text instead of images"},
 		{LangKey::NameColumnHeader, "Name"},
 		{LangKey::SubgroupColumnHeader, "Sub"},
 		{LangKey::SubgroupNameColumnValue, "Subgroup"},

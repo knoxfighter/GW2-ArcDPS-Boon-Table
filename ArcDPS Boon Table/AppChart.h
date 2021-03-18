@@ -15,6 +15,7 @@ protected:
 	bool show_boon_as_progress_bar = true;
 	bool size_to_content = true;
 	bool alternating_row_bg = true;
+	bool show_label = false;
 	ProgressBarColoringMode show_colored = ProgressBarColoringMode::Uncolored;
 	Alignment alignment = Alignment::Right;
 public:
@@ -37,6 +38,7 @@ public:
 	void setShowColored(ProgressBarColoringMode new_colored);
 	void setAlternatingRowBg(bool new_alternating_row_bg);
 	void setAlignment(Alignment new_alignment);
+	void setShowLabel(bool new_show);
 
 	[[nodiscard]] bool bShowPlayers() const;
 	[[nodiscard]] bool bShowSubgroups(const Tracker& tracker) const;
@@ -46,6 +48,7 @@ public:
 	[[nodiscard]] bool bSizeToContent() const;
 	[[nodiscard]] bool bAlternatingRowBg() const;
 	[[nodiscard]] bool bShowNPCs() const;
+	[[nodiscard]] bool bShowLabel() const;
 	[[nodiscard]] ProgressBarColoringMode getShowColored() const;
 	[[nodiscard]] Alignment getAlignment() const;
 	float getEntityDisplayValue(const Tracker& tracker, const Entity& entity, const BoonDef& boon);

@@ -16,7 +16,7 @@ Sort by column by clicking on the header, it is sorted by character name by defa
 ### options
 - Players: Show/Hide all players in the table (Default: ON)
 - Subgroups: Show/Hide subgroup average (Default: ON)
-- Total: Shoe/Hide groupt/squad average (Default: ON)
+- Total: Show/Hide groupt/squad average (Default: ON)
 - Show value as progress bar: Show the values as progressbar additional to the actual number. (Default: ON)
 - Always resize window to content: Will always make the window as big as it has to be to show all boons. This will disable the possibility to resize the window manually. (Default: ON)
 - Alternating Row Background: Show/Hide background colors, to better distinguish rows. (Default: ON)

@@ -1,0 +1,129 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// German (Germany) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
+LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
+#pragma code_page(1252)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+
+ID_Might                PNG                     "icons\\Might.png"
+
+ID_Fury                 PNG                     "icons\\Fury.png"
+
+ID_Regeneration         PNG                     "icons\\Regeneration.png"
+
+ID_Protection           PNG                     "icons\\Protection.png"
+
+ID_Quickness            PNG                     "icons\\Quickness.png"
+
+ID_Alacrity             PNG                     "icons\\Alacrity.png"
+
+ID_Retaliation          PNG                     "icons\\Retaliation.png"
+
+ID_Vigor                PNG                     "icons\\Vigor.png"
+
+ID_Stability            PNG                     "icons\\Stability.png"
+
+ID_Aegis                PNG                     "icons\\Aegis.png"
+
+ID_Swiftness            PNG                     "icons\\Swiftness.png"
+
+ID_Resistance           PNG                     "icons\\Resistance.png"
+
+ID_Empower_Allies       PNG                     "icons\\Empower_Allies.png"
+
+ID_Pinpoint_Distribution PNG                     "icons\\Pinpoint_Distribution.png"
+
+ID_Assassins_Presence   PNG                     "icons\\Assassin's_Presence.png"
+
+ID_Spotter              PNG                     "icons\\Spotter.png"
+
+ID_Soothing_Mist        PNG                     "icons\\Soothing_Mist.png"
+
+ID_Vampiric_Presence    PNG                     "icons\\Vampiric_Presence.png"
+
+ID_Strength_in_Numbers  PNG                     "icons\\Strength_in_Numbers.png"
+
+ID_Banner_of_Strength   PNG                     "icons\\Banner_of_Strength.png"
+
+ID_Banner_of_Discipline PNG                     "icons\\Banner_of_Discipline.png"
+
+ID_Banner_of_Tactics    PNG                     "icons\\Banner_of_Tactics.png"
+
+ID_Banner_of_Defense    PNG                     "icons\\Banner_of_Defense.png"
+
+ID_Frost_Spirit         PNG                     "icons\\Frost_Spirit.png"
+
+ID_Sun_Spirit           PNG                     "icons\\Sun_Spirit.png"
+
+ID_Stone_Spirit         PNG                     "icons\\Stone_Spirit.png"
+
+ID_Storm_Spirit         PNG                     "icons\\Storm_Spirit.png"
+
+ID_Water_Spirit         PNG                     "icons\\Water_Spirit.png"
+
+ID_Signet_of_Inspiration PNG                     "icons\\Signet_of_Inspiration.png"
+
+ID_Stealth              PNG                     "icons\\Stealth.png"
+
+ID_Super_Speed          PNG                     "icons\\Super_Speed.png"
+
+#endif    // German (Germany) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

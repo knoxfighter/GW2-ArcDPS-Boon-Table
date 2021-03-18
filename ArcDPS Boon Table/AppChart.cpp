@@ -28,7 +28,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 		ImGui::MenuItem(lang.translate(LangKey::SettingsShowProgressBar).c_str(), nullptr, &show_boon_as_progress_bar);
 		ImGui::MenuItem(lang.translate(LangKey::SettingsAlwaysResize).c_str(), nullptr, &size_to_content);
 		ImGui::MenuItem(lang.translate(LangKey::SettingsAlternatingRow).c_str(), nullptr, &alternating_row_bg);
-
+		ImGui::MenuItem(lang.translate(LangKey::SettingsShowLabel).c_str(), nullptr, &show_label);
 
 		float cursorPosY = ImGui::GetCursorPosY();
 		ImGui::SetCursorPosY(cursorPosY + 4);
@@ -76,8 +76,15 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 	}
 	
 	if (ImGui::BeginTable("Table", columnCount, tableFlags)) {
-		ImGui::TableSetupColumn(lang.translate(LangKey::NameColumnHeader).c_str(), ImGuiTableColumnFlags_NoHide | ImGuiTableColumnFlags_NoReorder, 0, nameColumnId);
-		ImGui::TableSetupColumn(lang.translate(LangKey::SubgroupColumnHeader).c_str(), 0, 0, subgroupColumnId);
+		/*
+		 * HEADER
+		 */
+		std::string charName = lang.translate(LangKey::NameColumnHeader);
+		std::string subgroupName = lang.translate(LangKey::SubgroupColumnHeader);
+
+		
+		ImGui::TableSetupColumn(charName.c_str(), 0, 0, nameColumnId);
+		ImGui::TableSetupColumn(subgroupName.c_str(), 0, 0, subgroupColumnId);
 
 		ImU32 i = 0;
 		for (const BoonDef& trackedBuff : tracked_buffs) {
@@ -93,9 +100,26 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 			++i;
 		}
 
-		ImGui::TableHeadersRow();
+		ImGui::TableNextRow(ImGuiTableRowFlags_Headers);
 
-		// sorting
+		// accountname header
+		if (ImGui::TableNextColumn())
+			ImGuiEx::TableHeader(charName.c_str(), true, nullptr);
+
+		// subgroup header
+		if (ImGui::TableNextColumn())
+			ImGuiEx::TableHeader(subgroupName.c_str(), true, nullptr);
+
+		for (const BoonDef& trackedBuff : tracked_buffs) {
+			if (ImGui::TableNextColumn()) {
+				ImGuiEx::TableHeader(trackedBuff.name.c_str(), show_label, trackedBuff.icon->texture, alignment);
+			}
+		}
+
+		
+		/*
+		 * SORTING
+		 */
 		if (ImGuiTableSortSpecs* sorts_specs = ImGui::TableGetSortSpecs()) {
 			// Sort our data if sort specs have been changed!
 			if (sorts_specs->SpecsDirty)
@@ -133,8 +157,8 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 				else {
 					// sort by buff
 					const ImGuiID buffId = sorts_specs->Specs->ColumnUserID;
-					BoonDef buff = tracked_buffs[buffId];
-					tracker.players.sort([descend, buff](const Player& player1, const Player& player2) {
+					const BoonDef& buff = tracked_buffs[buffId];
+					tracker.players.sort([descend, &buff](const Player& player1, const Player& player2) {
 						if (descend) {
 							return player1.getBoonUptime(buff) < player2.getBoonUptime(buff);
 						} else {
@@ -146,7 +170,9 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 			}
 		}
 		
-		// Show players
+		/*
+		 * PLAYERS
+		 */
 		if (bShowPlayers()) {
 			for (Player player : tracker.players) {
 				ImVec4 player_color = player.getColor();
@@ -173,6 +199,9 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 			}
 		}
 
+		/*
+		 * SUBGROUPS
+		 */
 		if (bShowSubgroups(tracker))
 		{
 			ImGui::TableNextRow();
@@ -201,6 +230,9 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 			}
 		}
 
+		/*
+		 * TOTALS
+		 */
 		if (bShowTotal())
 		{
 			ImGui::TableNextRow();
@@ -226,7 +258,9 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 			}
 		}
 
-		// Show npcs
+		/*
+		 * NPCs
+		 */
 		if (bShowNPCs() && !tracker.npcs.empty()) {
 			ImGui::TableNextRow();
 			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
@@ -395,12 +429,20 @@ void AppChart::setAlignment(Alignment new_alignment) {
 	alignment = new_alignment;
 }
 
+void AppChart::setShowLabel(bool new_show) {
+	show_label = new_show;
+}
+
 bool AppChart::bShowPlayers() const {
 	return show_players;
 }
 
 bool AppChart::bShowNPCs() const {
 	return show_npcs;
+}
+
+bool AppChart::bShowLabel() const {
+	return show_label;
 }
 
 

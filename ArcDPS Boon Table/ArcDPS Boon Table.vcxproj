@@ -182,6 +182,42 @@
     <ClInclude Include="simpleini\SimpleIni.h" />
     <ClInclude Include="Tracker.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ArcDPS Boon Table.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icons\Aegis.png" />
+    <Image Include="icons\Alacrity.png" />
+    <Image Include="icons\Assassin%27s_Presence.png" />
+    <Image Include="icons\Banner_of_Defense.png" />
+    <Image Include="icons\Banner_of_Discipline.png" />
+    <Image Include="icons\Banner_of_Strength.png" />
+    <Image Include="icons\Banner_of_Tactics.png" />
+    <Image Include="icons\Empower_Allies.png" />
+    <Image Include="icons\Frost_Spirit.png" />
+    <Image Include="icons\Fury.png" />
+    <Image Include="icons\Might.png" />
+    <Image Include="icons\Pinpoint_Distribution.png" />
+    <Image Include="icons\Protection.png" />
+    <Image Include="icons\Quickness.png" />
+    <Image Include="icons\Regeneration.png" />
+    <Image Include="icons\Resistance.png" />
+    <Image Include="icons\Retaliation.png" />
+    <Image Include="icons\Signet_of_Inspiration.png" />
+    <Image Include="icons\Soothing_Mist.png" />
+    <Image Include="icons\Spotter.png" />
+    <Image Include="icons\Stability.png" />
+    <Image Include="icons\Stealth.png" />
+    <Image Include="icons\Stone_Spirit.png" />
+    <Image Include="icons\Storm_Spirit.png" />
+    <Image Include="icons\Strength_in_Numbers.png" />
+    <Image Include="icons\Sun_Spirit.png" />
+    <Image Include="icons\Super_Speed.png" />
+    <Image Include="icons\Swiftness.png" />
+    <Image Include="icons\Vampiric_Presence.png" />
+    <Image Include="icons\Vigor.png" />
+    <Image Include="icons\Water_Spirit.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
