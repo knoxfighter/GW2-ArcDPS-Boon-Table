@@ -4,6 +4,7 @@
 #include <mutex>
 
 #include "Lang.h"
+#include "extension/Widgets.h"
 #include "imgui/imgui_internal.h"
 
 void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
@@ -35,9 +36,9 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 		ImGui::SameLine();
 		ImGui::SetCursorPosY(cursorPosY);
 		if (ImGui::BeginCombo("###ShowColored", to_string(show_colored).c_str())) {
-			showColorSelectable(ProgressBarColoringMode::Uncolored);
-			showColorSelectable(ProgressBarColoringMode::ByProfession);
-			showColorSelectable(ProgressBarColoringMode::ByPercentage);
+			ImGuiEx::Selectable(show_colored, ProgressBarColoringMode::Uncolored);
+			ImGuiEx::Selectable(show_colored, ProgressBarColoringMode::ByProfession);
+			ImGuiEx::Selectable(show_colored, ProgressBarColoringMode::ByPercentage);
 
 			ImGui::EndCombo();
 		}
@@ -48,10 +49,10 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 		ImGui::SameLine();
 		ImGui::SetCursorPosY(cursorPosY);
 		if (ImGui::BeginCombo("###Alignment", to_string(alignment).c_str())) {
-			alignmentSelectable(Alignment::Unaligned);
-			alignmentSelectable(Alignment::Left);
-			alignmentSelectable(Alignment::Center);
-			alignmentSelectable(Alignment::Right);
+			ImGuiEx::Selectable(alignment, Alignment::Unaligned);
+			ImGuiEx::Selectable(alignment, Alignment::Left);
+			ImGuiEx::Selectable(alignment, Alignment::Center);
+			ImGuiEx::Selectable(alignment, Alignment::Right);
 			
 			ImGui::EndCombo();
 		}
@@ -158,7 +159,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 
 				// subgroup
 				if (ImGui::TableNextColumn()) {
-					AlignedTextColumn("%d", player.subgroup);
+					ImGuiEx::AlignedTextColumn(alignment, "%d", player.subgroup);
 				}
 
 				// buffs
@@ -186,7 +187,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 
 				// subgroup
 				if (ImGui::TableNextColumn()) {
-					AlignedTextColumn("%d", subgroup);
+					ImGuiEx::AlignedTextColumn(alignment, "%d", subgroup);
 				}
 
 				// buffs
@@ -213,7 +214,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 
 			// subgroup
 			if (ImGui::TableNextColumn()) {
-				AlignedTextColumn(lang.translate(LangKey::TotalSubgroupColumnValue).c_str());
+				ImGuiEx::AlignedTextColumn(alignment, lang.translate(LangKey::TotalSubgroupColumnValue).c_str());
 			}
 
 			// buffs
@@ -240,7 +241,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 
 				// subgroup
 				if (ImGui::TableNextColumn()) {
-					AlignedTextColumn(lang.translate(LangKey::NPCSubgroupColumnValue).c_str());
+					ImGuiEx::AlignedTextColumn(alignment, lang.translate(LangKey::NPCSubgroupColumnValue).c_str());
 				}
 
 				// buffs
@@ -262,20 +263,6 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 	ImGui::PopFont();
 }
 
-void AppChart::showColorSelectable(ProgressBarColoringMode select_coloring_mode) {
-	std::string new_coloring_text = to_string(select_coloring_mode);
-	if (ImGui::Selectable(new_coloring_text.c_str())) {
-		show_colored = select_coloring_mode;
-	}
-}
-
-void AppChart::alignmentSelectable(Alignment select_alignment) {
-	std::string new_alignment_text = to_string(select_alignment);
-	if (ImGui::Selectable(new_alignment_text.c_str())) {
-		alignment = select_alignment;
-	}
-}
-
 void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, ImVec4 color) const {
 	bool hidden_color = false;
 	if (color.w == 0.f) hidden_color = true;
@@ -289,13 +276,13 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 			sprintf(label, "%.1f", current_boon_uptime);
 			current_boon_uptime /= 25;
 			// ImGui::ProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label);
-			CustomProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label);
+			ImGuiEx::AlignedProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label, alignment);
 		}
 		else
 		{
 			sprintf(label, "%.0f%%", 100*current_boon_uptime);
 			// ImGui::ProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label);
-			CustomProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label);
+			ImGuiEx::AlignedProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label, alignment);
 		}
 
 		if (show_colored != ProgressBarColoringMode::Uncolored && !hidden_color) ImGui::PopStyleColor();
@@ -307,11 +294,11 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 		if (current_buff.stacking_type == StackingType_intensity)
 		{
 			//don't show the % for intensity stacking buffs
-			AlignedTextColumn("%.1f", current_boon_uptime);
+			ImGuiEx::AlignedTextColumn(alignment, "%.1f", current_boon_uptime);
 		}
 		else
 		{
-			AlignedTextColumn("%.0f%%", 100 * current_boon_uptime);
+			ImGuiEx::AlignedTextColumn(alignment, "%.0f%%", 100 * current_boon_uptime);
 		}
 
 		if (show_colored != ProgressBarColoringMode::Uncolored && !hidden_color) ImGui::PopStyleColor();
@@ -358,91 +345,6 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 	}
 	default: 
 		buffProgressBar(current_buff, current_boon_uptime, width, ImVec4(0, 0, 0, 0));
-	}
-}
-
-void AppChart::AlignedTextColumn(const char* text, ...) const {
-	va_list args;
-	va_start(args, text);
-	char buf[4096];
-	ImFormatStringV(buf, 4096, text, args);
-	va_end(args);
-
-	const float posX = ImGui::GetCursorPosX();
-	float newX = posX;
-	float textWidth = ImGui::CalcTextSize(buf).x;
-	float columnWidth = ImGui::GetColumnWidth();
-
-	switch (alignment) {
-
-	case Alignment::Unaligned:
-	case Alignment::Left:
-		break;
-	case Alignment::Center: 
-		newX = posX + columnWidth / 2 - textWidth / 2;
-		break;
-	case Alignment::Right:
-		newX = posX + columnWidth - textWidth;
-		break;
-	}
-
-	// Clip to left, if text is bigger than current column
-	if (newX < posX) {
-		newX = posX;
-	}
-	
-	ImGui::SetCursorPosX(newX);
-	
-	ImGui::TextUnformatted(buf);
-}
-
-// This code can be used to make the text over the progressBar aligned.
-// This also uses imgui internals, which are likely to change between versions.
-void AppChart::CustomProgressBar(float fraction, const ImVec2& size_arg, const char* overlay) const {
-	ImGuiWindow* window = ImGui::GetCurrentWindow();
-	if (window->SkipItems)
-		return;
-
-	ImGuiContext& g = *GImGui;
-	const ImGuiStyle& style = g.Style;
-
-	ImVec2 pos = window->DC.CursorPos;
-	ImVec2 size = ImGui::CalcItemSize(size_arg, ImGui::CalcItemWidth(), g.FontSize + style.FramePadding.y * 2.0f);
-	ImRect bb(pos, pos + size);
-	ImGui::ItemSize(size, style.FramePadding.y);
-	if (!ImGui::ItemAdd(bb, 0))
-		return;
-
-	// Render
-	fraction = ImSaturate(fraction);
-	ImGui::RenderFrame(bb.Min, bb.Max, ImGui::GetColorU32(ImGuiCol_FrameBg), true, style.FrameRounding);
-	bb.Expand(ImVec2(-style.FrameBorderSize, -style.FrameBorderSize));
-	const ImVec2 fill_br = ImVec2(ImLerp(bb.Min.x, bb.Max.x, fraction), bb.Max.y);
-	ImGui::RenderRectFilledRangeH(window->DrawList, bb, ImGui::GetColorU32(ImGuiCol_PlotHistogram), 0.0f, fraction, style.FrameRounding);
-
-	// Default displaying the fraction as percentage string, but user can override it
-	char overlay_buf[32];
-	if (!overlay)
-	{
-		ImFormatString(overlay_buf, IM_ARRAYSIZE(overlay_buf), "%.0f%%", fraction * 100 + 0.01f);
-		overlay = overlay_buf;
-	}
-
-	ImVec2 overlay_size = ImGui::CalcTextSize(overlay, NULL);
-	if (overlay_size.x > 0.0f) {
-		switch (alignment) {
-		case Alignment::Left:
-			ImGui::RenderTextClipped(bb.Min, bb.Max, overlay, NULL, &overlay_size, ImVec2(0.f, 0.f), &bb);
-			break;
-		case Alignment::Center:
-			ImGui::RenderTextClipped(bb.Min, bb.Max, overlay, NULL, &overlay_size, ImVec2(0.5f, 0.5f), &bb);
-			break;
-		case Alignment::Right: 
-			ImGui::RenderTextClipped(bb.Min, bb.Max, overlay, NULL, &overlay_size, ImVec2(1.f, 0.f), &bb);
-			break;
-		default: 
-			ImGui::RenderTextClipped(ImVec2(ImClamp(fill_br.x + style.ItemSpacing.x, bb.Min.x, bb.Max.x - overlay_size.x - style.ItemInnerSpacing.x), bb.Min.y), bb.Max, overlay, NULL, &overlay_size, ImVec2(0.0f, 0.5f), &bb);
-		}
 	}
 }
 
