@@ -23,21 +23,11 @@ Sort by column by clicking on the header, it is sorted by character name by defa
 - Coloring Mode: How to color the text/progress bars. Can be Default (Gray), By percentage (red to green), By Profession. (Default: Default)
 - Alignment: Align the text to the column. Can be Left, Right, Center and Unaligned. Unaligned means, that it is most left as possible, without beeing on top of the progress bar. (Default: Right)
 
-## TODO:
+## Translations
+Translations can be added by creating a file in `<Guild Wars 2>/addons/arcdps` called `arcdps_table_lang.ini`.
+To create your own translation you can take the example file in [localization](/localization).
 
-    show in/out of combat
-    add profession column
-    add scholar uptime
-    add seaweed salad uptime
-    add condi generation/uptime
-    add style options similar to Arc
-    look into self being 1st player in list
-    make the subgroups bake use a tuple for (subgroup number,<players in subgroup>)
-    Add signet uptime
-    stances
-    guardian signet share
-
-    Write me on discord or in an issue what of those should be added.
+- [Chinese Translation by Snowy](https://github.com/Snowy1794/Arcdps-boon-table-translation-Chinese-simplified)
 
 ## Changelog
     
