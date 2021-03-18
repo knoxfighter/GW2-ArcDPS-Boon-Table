@@ -7,10 +7,9 @@
 #include "extension/Widgets.h"
 #include "imgui/imgui_internal.h"
 
-void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
-{
+void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) {
 	ImGui::PushFont(ImGui::GetIO().Fonts->Fonts.back());
-	
+
 	flags |= ImGuiWindowFlags_NoCollapse;
 	if (bSizeToContent()) {
 		flags |= ImGuiWindowFlags_AlwaysAutoResize;
@@ -42,7 +41,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 
 			ImGui::EndCombo();
 		}
-		
+
 		cursorPosY = ImGui::GetCursorPosY();
 		ImGui::SetCursorPosY(cursorPosY + 4);
 		ImGui::Text(lang.translate(LangKey::SettingsAlignment).c_str());
@@ -53,7 +52,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 			ImGuiEx::Selectable(alignment, Alignment::Left);
 			ImGuiEx::Selectable(alignment, Alignment::Center);
 			ImGuiEx::Selectable(alignment, Alignment::Right);
-			
+
 			ImGui::EndCombo();
 		}
 
@@ -74,7 +73,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 	if (bAlternatingRowBg()) {
 		tableFlags |= ImGuiTableFlags_RowBg;
 	}
-	
+
 	if (ImGui::BeginTable("Table", columnCount, tableFlags)) {
 		/*
 		 * HEADER
@@ -82,7 +81,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 		std::string charName = lang.translate(LangKey::NameColumnHeader);
 		std::string subgroupName = lang.translate(LangKey::SubgroupColumnHeader);
 
-		
+
 		ImGui::TableSetupColumn(charName.c_str(), 0, 0, nameColumnId);
 		ImGui::TableSetupColumn(subgroupName.c_str(), 0, 0, subgroupColumnId);
 
@@ -116,7 +115,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 			}
 		}
 
-		
+
 		/*
 		 * SORTING
 		 */
@@ -153,8 +152,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 							return player1.subgroup > player2.subgroup;
 						}
 					});
-				}
-				else {
+				} else {
 					// sort by buff
 					const ImGuiID buffId = sorts_specs->Specs->ColumnUserID;
 					const BoonDef& buff = tracked_buffs[buffId];
@@ -169,7 +167,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 				sorts_specs->SpecsDirty = false;
 			}
 		}
-		
+
 		/*
 		 * PLAYERS
 		 */
@@ -180,7 +178,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 				// charname
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
-				std::string name_string = player.name;// +(player.in_combat ? "*" : "") + +" (" + std::to_string(player.id) + ")";
+				std::string name_string = player.name; // +(player.in_combat ? "*" : "") + +" (" + std::to_string(player.id) + ")";
 				ImGui::Text(name_string.c_str());
 
 				// subgroup
@@ -202,8 +200,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 		/*
 		 * SUBGROUPS
 		 */
-		if (bShowSubgroups(tracker))
-		{
+		if (bShowSubgroups(tracker)) {
 			ImGui::TableNextRow();
 			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
 
@@ -233,8 +230,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 		/*
 		 * TOTALS
 		 */
-		if (bShowTotal())
-		{
+		if (bShowTotal()) {
 			ImGui::TableNextRow();
 			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
 
@@ -270,7 +266,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 				// charname
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
-				std::string name_string = npc.name;// +(npc.in_combat ? "*" : "") + " (" + std::to_string(npc.id) + ")";
+				std::string name_string = npc.name; // +(npc.in_combat ? "*" : "") + " (" + std::to_string(npc.id) + ")";
 				ImGui::Text(name_string.c_str());
 
 				// subgroup
@@ -300,38 +296,29 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0)
 void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, ImVec4 color) const {
 	bool hidden_color = false;
 	if (color.w == 0.f) hidden_color = true;
-	if (show_boon_as_progress_bar)
-	{
+	if (show_boon_as_progress_bar) {
 		if (show_colored != ProgressBarColoringMode::Uncolored && !hidden_color) ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
-		
+
 		char label[10];
-		if (current_buff.stacking_type == StackingType_intensity)
-		{
+		if (current_buff.stacking_type == StackingType_intensity) {
 			sprintf(label, "%.1f", current_boon_uptime);
 			current_boon_uptime /= 25;
 			// ImGui::ProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label);
 			ImGuiEx::AlignedProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label, alignment);
-		}
-		else
-		{
-			sprintf(label, "%.0f%%", 100*current_boon_uptime);
+		} else {
+			sprintf(label, "%.0f%%", 100 * current_boon_uptime);
 			// ImGui::ProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label);
 			ImGuiEx::AlignedProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label, alignment);
 		}
 
 		if (show_colored != ProgressBarColoringMode::Uncolored && !hidden_color) ImGui::PopStyleColor();
-	}
-	else
-	{
+	} else {
 		if (show_colored != ProgressBarColoringMode::Uncolored && !hidden_color) ImGui::PushStyleColor(ImGuiCol_Text, color);
 
-		if (current_buff.stacking_type == StackingType_intensity)
-		{
+		if (current_buff.stacking_type == StackingType_intensity) {
 			//don't show the % for intensity stacking buffs
 			ImGuiEx::AlignedTextColumn(alignment, "%.1f", current_boon_uptime);
-		}
-		else
-		{
+		} else {
 			ImGuiEx::AlignedTextColumn(alignment, "%.0f%%", 100 * current_boon_uptime);
 		}
 
@@ -342,19 +329,18 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width) {
 	switch (show_colored) {
 	case ProgressBarColoringMode::ByPercentage:
-	{
-		float percentage = 0;
-		if (current_buff.stacking_type == StackingType_intensity) {
-			percentage = current_boon_uptime / 25;
+		{
+			float percentage = 0;
+			if (current_buff.stacking_type == StackingType_intensity) {
+				percentage = current_boon_uptime / 25;
+			} else {
+				percentage = current_boon_uptime;
+			}
+			// ImVec4 color((1 - percentage) * 255, 125/*percentage * 255*/, 0, 1);
+			ImVec4 color(1 - percentage, percentage, 0, 0.75);
+			buffProgressBar(current_buff, current_boon_uptime, width, color);
+			break;
 		}
-		else {
-			percentage = current_boon_uptime;
-		}
-		// ImVec4 color((1 - percentage) * 255, 125/*percentage * 255*/, 0, 1);
-		ImVec4 color(1 - percentage,percentage,0,0.75);
-		buffProgressBar(current_buff, current_boon_uptime, width, color);
-		break;
-	}
 	default: buffProgressBar(current_buff, current_boon_uptime, width, ImVec4(0, 0, 0, 0));
 	}
 }
@@ -365,51 +351,44 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 		buffProgressBar(current_buff, current_boon_uptime, width, entity.getColor());
 		break;
 	case ProgressBarColoringMode::ByPercentage:
-	{
-		float percentage = 0;
-		if (current_buff.stacking_type == StackingType_intensity) {
-			percentage = current_boon_uptime / 25;
+		{
+			float percentage = 0;
+			if (current_buff.stacking_type == StackingType_intensity) {
+				percentage = current_boon_uptime / 25;
+			} else {
+				percentage = current_boon_uptime;
+			}
+			ImVec4 color(1 - percentage, percentage, 0, 0.75);
+			buffProgressBar(current_buff, current_boon_uptime, width, color);
+			break;
 		}
-		else {
-			percentage = current_boon_uptime;
-		}
-		ImVec4 color(1 - percentage, percentage, 0, 0.75);
-		buffProgressBar(current_buff, current_boon_uptime, width, color);
-		break;
-	}
-	default: 
+	default:
 		buffProgressBar(current_buff, current_boon_uptime, width, ImVec4(0, 0, 0, 0));
 	}
 }
 
-float AppChart::getEntityDisplayValue(const Tracker& tracker, const Entity& entity, const BoonDef& boon)
-{
+float AppChart::getEntityDisplayValue(const Tracker& tracker, const Entity& entity, const BoonDef& boon) {
 	return entity.getBoonUptime(boon);
 }
 
 
-void AppChart::setShowPlayers(bool new_show)
-{
+void AppChart::setShowPlayers(bool new_show) {
 	show_players = new_show;
 }
 
-void AppChart::setShowSubgroups(bool new_show)
-{
+void AppChart::setShowSubgroups(bool new_show) {
 	show_subgroups = new_show;
 }
 
-void AppChart::setShowTotal(bool new_show)
-{
+void AppChart::setShowTotal(bool new_show) {
 	show_total = new_show;
 }
 
-void AppChart::setShowNPCs(bool new_show)
-{
+void AppChart::setShowNPCs(bool new_show) {
 	show_npcs = new_show;
 }
 
-void AppChart::setShowBoonAsProgressBar(bool new_show)
-{
+void AppChart::setShowBoonAsProgressBar(bool new_show) {
 	show_boon_as_progress_bar = new_show;
 }
 
