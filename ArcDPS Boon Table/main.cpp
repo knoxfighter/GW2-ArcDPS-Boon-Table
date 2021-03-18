@@ -7,9 +7,8 @@
 #include <string>
 #include <regex>
 
-#include "imgui\imgui.h"
-#include "simpleini\SimpleIni.h"
-
+#include "imgui/imgui.h"
+#include "simpleini/SimpleIni.h"
 #include "extension/arcdps_structs.h"
 #include "Player.h"
 #include "Tracker.h"

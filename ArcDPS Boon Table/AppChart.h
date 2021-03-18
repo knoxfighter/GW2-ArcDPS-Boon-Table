@@ -1,7 +1,7 @@
 #pragma once
 
 #include "extension/arcdps_structs.h"
-#include "imgui\imgui.h"
+#include "imgui/imgui.h"
 #include "Tracker.h"
 #include "BuffIds.h"
 
