@@ -20,7 +20,6 @@
 #define ID_Soothing_Mist                117
 #define ID_Vampiric_Presence            118
 #define ID_Strength_in_Numbers          119
-#define ID_Banner_of_Strength           120
 #define ID_Banner_of_Discipline         121
 #define ID_Banner_of_Tactics            122
 #define ID_Banner_of_Defense            123
@@ -33,13 +32,25 @@
 #define ID_Stealth                      130
 #define IDB_PNG2                        131
 #define ID_Super_Speed                  131
+#define ID_Banner_of_Strength2          132
+#define ID_Banner_of_Discipline2        133
+#define ID_Banner_of_Tactics2           135
+#define ID_Banner_of_Defense2           136
+#define ID_Frost_Spirit2                137
+#define ID_Sun_Spirit2                  138
+#define ID_Stone_Spirit2                139
+#define ID_Storm_Spirit2                140
+#define ID_Signet_of_Inspiration2       141
+#define ID_Stealth2                     142
+#define IDB_PNG1                        143
+#define ID_Super_Speed2                 143
 #define ID_Assassins_Presence           65535
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        132
+#define _APS_NEXT_RESOURCE_VALUE        144
 #define _APS_NEXT_COMMAND_VALUE         40001
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           101

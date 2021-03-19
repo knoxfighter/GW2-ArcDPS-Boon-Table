@@ -3,8 +3,6 @@
 #include <string>
 #include <vector>
 #include <d3d9.h>
-#include <memory>
-
 
 #include "extension/Icon.h"
 
