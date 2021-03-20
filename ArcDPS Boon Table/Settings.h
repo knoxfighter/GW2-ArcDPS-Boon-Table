@@ -31,7 +31,6 @@ public:
 	[[nodiscard]] bool isShowTotal() const;
 	[[nodiscard]] bool isShowBoonAsProgressBar() const;
 	[[nodiscard]] ProgressBarColoringMode getShowColored() const;
-	[[nodiscard]] bool isSizeToContent() const;
 	[[nodiscard]] bool isAlternatingRowBg() const;
 	[[nodiscard]] bool isShowLabel() const;
 	[[nodiscard]] bool isHideHeader() const;
@@ -54,7 +53,6 @@ private:
 	bool show_total = true;
 	bool show_boon_as_progress_bar = true;
 	ProgressBarColoringMode show_colored = ProgressBarColoringMode::Uncolored;
-	bool size_to_content = true;
 	bool alternating_row_bg = true;
 	bool show_label = false;
 	Alignment alignment = Alignment::Right;

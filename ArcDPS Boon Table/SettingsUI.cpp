@@ -12,7 +12,6 @@ void SettingsUI::Draw() {
 	ImGui::Checkbox(lang.translate(LangKey::SettingsTotal).c_str(), &settings.show_total);
 	ImGui::Checkbox(lang.translate(LangKey::SettingsNPC).c_str(), &settings.show_npcs);
 	ImGui::Checkbox(lang.translate(LangKey::SettingsShowProgressBar).c_str(), &settings.show_boon_as_progress_bar);
-	ImGui::Checkbox(lang.translate(LangKey::SettingsAlwaysResize).c_str(), &settings.size_to_content);
 	ImGui::Checkbox(lang.translate(LangKey::SettingsAlternatingRow).c_str(), &settings.alternating_row_bg);
 	ImGui::Checkbox(lang.translate(LangKey::SettingsShowLabel).c_str(), &settings.show_label);
 	ImGui::Checkbox(lang.translate(LangKey::SettingsHideHeader).c_str(), &settings.hide_header);

@@ -55,10 +55,6 @@ ProgressBarColoringMode Settings::getShowColored() const {
 	return show_colored;
 }
 
-bool Settings::isSizeToContent() const {
-	return size_to_content;
-}
-
 bool Settings::isAlternatingRowBg() const {
 	return alternating_row_bg;
 }
@@ -106,8 +102,6 @@ void Settings::readFromFile() {
 	long show_colored_num = table_ini.GetLongValue("table", "show_colored", static_cast<long>(ProgressBarColoringMode::Uncolored));
 	show_colored = static_cast<ProgressBarColoringMode>(show_colored_num);
 
-	size_to_content = table_ini.GetBoolValue("table", "size_to_content", true);
-
 	alternating_row_bg = table_ini.GetBoolValue("table", "alternating_row_bg", true);
 
 	show_label = table_ini.GetBoolValue("table", "show_label");
@@ -116,6 +110,11 @@ void Settings::readFromFile() {
 	alignment = static_cast<Alignment>(pszValueLong);
 
 	hide_header = table_ini.GetBoolValue("table", "hide_header", false);
+
+	pszValueLong = table_ini.GetLongValue("table", "sizing_policy", static_cast<long>(SizingPolicy::SizeToContent));
+	sizingPolicy = static_cast<SizingPolicy>(pszValueLong);
+
+	boon_column_width = table_ini.GetDoubleValue("table", "boon_column_width", 80);
 }
 
 void Settings::saveToFile() {
@@ -127,11 +126,12 @@ void Settings::saveToFile() {
 	rc = table_ini.SetBoolValue("table", "show_npcs", show_npcs);
 	rc = table_ini.SetValue("table", "show_uptime_as_progress_bar", std::to_string(show_boon_as_progress_bar).c_str());
 	rc = table_ini.SetLongValue("table", "show_colored", static_cast<long>(show_colored));
-	rc = table_ini.SetBoolValue("table", "size_to_content", size_to_content);
 	rc = table_ini.SetBoolValue("table", "show_label", show_label);
 	rc = table_ini.SetBoolValue("table", "alternating_row_bg", alternating_row_bg);
 	rc = table_ini.SetLongValue("table", "alignment", static_cast<long>(alignment));
 	rc = table_ini.SetBoolValue("table", "hide_header", hide_header);
+	rc = table_ini.SetLongValue("table", "sizing_policy", static_cast<long>(sizingPolicy));
+	rc = table_ini.SetDoubleValue("table", "boon_column_width", boon_column_width);
 
 	rc = table_ini.SaveFile("addons\\arcdps\\arcdps_table.ini");
 }
