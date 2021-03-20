@@ -59,5 +59,5 @@ ImVec4 Player::getColor() const {
     ImVec4* arc_colors[5];
     arc_export_e5(arc_colors);
 
-    return arc_colors[2][profession];
+    return arc_colors[1][profession];
 }

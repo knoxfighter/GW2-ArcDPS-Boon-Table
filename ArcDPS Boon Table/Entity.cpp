@@ -249,5 +249,5 @@ ImVec4 Entity::getColor() const {
 	arc_export_e5(arc_colors);
 
 	//all unknown entities are mesmers now!
-	return arc_colors[2][PROF_MESMER];
+	return arc_colors[1][PROF_MESMER];
 }
