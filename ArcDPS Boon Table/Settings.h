@@ -27,6 +27,7 @@ public:
 	[[nodiscard]] bool isSizeToContent() const;
 	[[nodiscard]] bool isAlternatingRowBg() const;
 	[[nodiscard]] bool isShowLabel() const;
+	[[nodiscard]] bool isHideHeader() const;
 	
 	// delete copy/move
 	Settings(const Settings& other) = delete;
@@ -48,7 +49,9 @@ private:
 	bool alternating_row_bg = true;
 	bool show_label = false;
 	Alignment alignment = Alignment::Right;
+	bool hide_header = false;
 
+private:
 	void readFromFile();
 	void saveToFile();
 };

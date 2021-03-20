@@ -56,6 +56,10 @@ bool Settings::isShowLabel() const {
 	return show_label;
 }
 
+bool Settings::isHideHeader() const {
+	return hide_header;
+}
+
 void Settings::readFromFile() {
 	SI_Error rc = table_ini.LoadFile("addons\\arcdps\\arcdps_table.ini");
 
@@ -91,6 +95,8 @@ void Settings::readFromFile() {
 
 	long pszValueLong = table_ini.GetLongValue("table", "alignment", static_cast<long>(Alignment::Right));
 	alignment = static_cast<Alignment>(pszValueLong);
+
+	hide_header = table_ini.GetBoolValue("table", "hide_header", false);
 }
 
 void Settings::saveToFile() {
@@ -106,6 +112,7 @@ void Settings::saveToFile() {
 	rc = table_ini.SetBoolValue("table", "show_label", show_label);
 	rc = table_ini.SetBoolValue("table", "alternating_row_bg", alternating_row_bg);
 	rc = table_ini.SetLongValue("table", "alignment", static_cast<long>(alignment));
+	rc = table_ini.SetBoolValue("table", "hide_header", hide_header);
 
 	rc = table_ini.SaveFile("addons\\arcdps\\arcdps_table.ini");
 }

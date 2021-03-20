@@ -15,6 +15,9 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 	if (settings.isSizeToContent()) {
 		flags |= ImGuiWindowFlags_AlwaysAutoResize;
 	}
+	if (settings.isHideHeader()) {
+		flags |= ImGuiWindowFlags_NoTitleBar;
+	}
 	std::string windowName = lang.translate(LangKey::WindowHeader);
 	windowName.append("##Boon Table");
 	ImGui::Begin(windowName.c_str(), p_open, flags);
