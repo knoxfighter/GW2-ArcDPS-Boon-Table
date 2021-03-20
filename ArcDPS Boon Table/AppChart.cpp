@@ -11,9 +11,13 @@
 void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) {
 	ImGui::PushFont(ImGui::GetIO().Fonts->Fonts.back());
 
-	flags |= ImGuiWindowFlags_NoCollapse;
-	if (settings.isSizeToContent()) {
+	flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+
+	SizingPolicy sizingPolicy = settings.getSizingPolicy();
+	switch (sizingPolicy) {
+	case SizingPolicy::SizeToContent:
 		flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		break;
 	}
 	if (settings.isHideHeader()) {
 		flags |= ImGuiWindowFlags_NoTitleBar;
@@ -30,9 +34,18 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 
 	std::scoped_lock<std::mutex, std::mutex, std::mutex> lock(tracker.players_mtx, tracker.npcs_mtx, boons_mtx);
 
-	int tableFlags = ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_Sortable | ImGuiTableFlags_ContextMenuInBody |
-		ImGuiTableFlags_BordersInnerH |
-		ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX | ImGuiTableFlags_ScrollY;
+	int tableFlags = ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_Sortable | ImGuiTableFlags_Resizable |
+		ImGuiTableFlags_ContextMenuInBody | ImGuiTableFlags_BordersInnerH;
+
+	switch (sizingPolicy) {
+	case SizingPolicy::ManualWindowSize:
+	case SizingPolicy::SizeToContent:
+		tableFlags |= ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX | ImGuiTableFlags_ScrollY;
+		break;
+	case SizingPolicy::SizeContentToWindow:
+		tableFlags |= ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_ScrollY;
+		break;
+	}
 
 	if (settings.isAlternatingRowBg()) {
 		tableFlags |= ImGuiTableFlags_RowBg;
@@ -47,20 +60,24 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		std::string charName = lang.translate(LangKey::NameColumnHeader);
 		std::string subgroupName = lang.translate(LangKey::SubgroupColumnHeader);
 
-
-		ImGui::TableSetupColumn(charName.c_str(), 0, 0, nameColumnId);
-		ImGui::TableSetupColumn(subgroupName.c_str(), 0, 0, subgroupColumnId);
+		ImGuiTableColumnFlags columnFlags = ImGuiTableColumnFlags_WidthFixed;
+		ImGui::TableSetupColumn(charName.c_str(), columnFlags, 0, nameColumnId);
+		ImGui::TableSetupColumn(subgroupName.c_str(), columnFlags, 0, subgroupColumnId);
 
 		ImU32 i = 0;
 		for (const BoonDef& trackedBuff : tracked_buffs) {
-			int bufFlags = ImGuiTableColumnFlags_WidthFixed;
+			int bufFlags = ImGuiTableColumnFlags_NoResize;
 			if (!trackedBuff.is_relevant) {
 				bufFlags |= ImGuiTableColumnFlags_DefaultHide;
 			}
 			if (i == 0) {
 				bufFlags |= ImGuiTableColumnFlags_DefaultSort;
 			}
-			ImGui::TableSetupColumn(trackedBuff.name.c_str(), bufFlags, 80, i);
+			float init_width = 80.f;
+			if (sizingPolicy == SizingPolicy::SizeToContent || sizingPolicy == SizingPolicy::ManualWindowSize) {
+				init_width = settings.getBoonColumnWidth();
+			}
+			ImGui::TableSetupColumn(trackedBuff.name.c_str(), bufFlags, init_width, i);
 
 			++i;
 		}

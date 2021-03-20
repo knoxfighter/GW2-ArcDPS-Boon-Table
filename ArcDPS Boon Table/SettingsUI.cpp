@@ -43,4 +43,21 @@ void SettingsUI::Draw() {
 		ImGui::EndCombo();
 	}
 	ImGui::PopItemWidth();
+
+	SizingPolicy& sizingPolicy = settings.sizingPolicy;
+	std::string sizingPolicyText = lang.translate(LangKey::SettingsSizingPolicy);
+	sizingPolicyText.append("###SizingPolicy");
+	if (ImGui::BeginCombo(sizingPolicyText.c_str(), to_string(sizingPolicy).c_str())) {
+		ImGuiEx::Selectable(sizingPolicy, SizingPolicy::SizeContentToWindow);
+		ImGuiEx::Selectable(sizingPolicy, SizingPolicy::ManualWindowSize);
+		ImGuiEx::Selectable(sizingPolicy, SizingPolicy::SizeToContent);
+
+		ImGui::EndCombo();
+	}
+	if (sizingPolicy == SizingPolicy::SizeToContent || sizingPolicy == SizingPolicy::ManualWindowSize) {
+		ImGui::Indent(20.f);
+		std::string column_width_label = lang.translate(LangKey::SettingsBoonColumnWidth);
+		column_width_label.append("###BoonColumnWidth");
+		ImGui::SliderFloat(column_width_label.c_str(), &settings.boon_column_width, 20, 200);
+	}
 }

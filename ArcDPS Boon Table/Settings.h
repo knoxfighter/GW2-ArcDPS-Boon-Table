@@ -6,6 +6,13 @@
 
 class SettingsUI;
 
+enum class SizingPolicy {
+	SizeToContent,
+	SizeContentToWindow,
+	ManualWindowSize
+};
+std::string to_string(SizingPolicy sizingPolicy);
+
 class Settings {
 	friend SettingsUI;
 	
@@ -28,7 +35,9 @@ public:
 	[[nodiscard]] bool isAlternatingRowBg() const;
 	[[nodiscard]] bool isShowLabel() const;
 	[[nodiscard]] bool isHideHeader() const;
-	
+	[[nodiscard]] SizingPolicy getSizingPolicy() const;
+	[[nodiscard]] float getBoonColumnWidth() const;
+
 	// delete copy/move
 	Settings(const Settings& other) = delete;
 	Settings(Settings&& other) noexcept = delete;
@@ -50,8 +59,9 @@ private:
 	bool show_label = false;
 	Alignment alignment = Alignment::Right;
 	bool hide_header = false;
+	SizingPolicy sizingPolicy = SizingPolicy::SizeToContent;
+	float boon_column_width = 80.f;
 
-private:
 	void readFromFile();
 	void saveToFile();
 };

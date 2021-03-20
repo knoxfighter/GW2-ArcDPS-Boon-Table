@@ -42,6 +42,12 @@ BUILD_ENUM_INI_NAMES(
 	SettingsAlignment,
 	SettingsShowLabel,
 	SettingsHideHeader,
+	SettingsSizingPolicy,
+	SettingsBoonColumnWidth,
+
+	SizingPolicySizeToContent,
+	SizingPolicySizeContentToWindow,
+	SizingPolicyManualWindowSize,
 
 	NameColumnHeader,
 	SubgroupColumnHeader,
@@ -108,12 +114,20 @@ static const std::map<LangKey, std::string> langDefaults = {
 		{LangKey::SettingsAlignment, "Alignment"},
 		{LangKey::SettingsShowLabel, "Show header with text instead of images"},
 		{LangKey::SettingsHideHeader, "Hide window header"},
+		{LangKey::SettingsSizingPolicy, "Sizing Policy"},
+
+		{LangKey::SizingPolicySizeToContent, "Autoresize window to content"},
+		{LangKey::SizingPolicySizeContentToWindow, "Size content to window"},
+		{LangKey::SizingPolicyManualWindowSize, "Manual window sizing"},
+		{LangKey::SettingsBoonColumnWidth, "Boon column width"},
+
 		{LangKey::NameColumnHeader, "Name"},
 		{LangKey::SubgroupColumnHeader, "Sub"},
 		{LangKey::SubgroupNameColumnValue, "Subgroup"},
 		{LangKey::TotalNameColumnValue, "TOTAL"},
 		{LangKey::TotalSubgroupColumnValue, "ALL"},
 		{LangKey::NPCSubgroupColumnValue, "NPC"},
+	
 		{LangKey::BuffMight, "Might"},
 		{LangKey::BuffFury, "Fury"},
 		{LangKey::BuffRegeneration, "Regen"},

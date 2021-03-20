@@ -1,6 +1,17 @@
 #include "Settings.h"
 
+#include "Lang.h"
+
 Settings settings;
+
+std::string to_string(SizingPolicy sizingPolicy) {
+	switch (sizingPolicy) {
+	case SizingPolicy::SizeToContent: return lang.translate(LangKey::SizingPolicySizeToContent);
+	case SizingPolicy::SizeContentToWindow: return lang.translate(LangKey::SizingPolicySizeContentToWindow);
+	case SizingPolicy::ManualWindowSize: return lang.translate(LangKey::SizingPolicyManualWindowSize);
+	default: return "Unknown";
+	}
+}
 
 Settings::Settings() : table_ini(true) {
 	readFromFile();
@@ -58,6 +69,14 @@ bool Settings::isShowLabel() const {
 
 bool Settings::isHideHeader() const {
 	return hide_header;
+}
+
+SizingPolicy Settings::getSizingPolicy() const {
+	return sizingPolicy;
+}
+
+float Settings::getBoonColumnWidth() const {
+	return boon_column_width;
 }
 
 void Settings::readFromFile() {
