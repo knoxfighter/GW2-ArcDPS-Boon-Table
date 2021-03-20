@@ -155,6 +155,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="SettingsUI.cpp" />
     <ClCompile Include="simpleini\ConvertUTF.c" />
     <ClCompile Include="Tracker.cpp" />
   </ItemGroup>
@@ -178,6 +180,8 @@
     <ClInclude Include="NPC.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Settings.h" />
+    <ClInclude Include="SettingsUI.h" />
     <ClInclude Include="simpleini\ConvertUTF.h" />
     <ClInclude Include="simpleini\SimpleIni.h" />
     <ClInclude Include="Tracker.h" />

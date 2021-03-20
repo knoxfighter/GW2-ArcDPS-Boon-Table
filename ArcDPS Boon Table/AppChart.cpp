@@ -4,6 +4,7 @@
 #include <mutex>
 
 #include "Lang.h"
+#include "Settings.h"
 #include "extension/Widgets.h"
 #include "imgui/imgui_internal.h"
 
@@ -11,53 +12,13 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 	ImGui::PushFont(ImGui::GetIO().Fonts->Fonts.back());
 
 	flags |= ImGuiWindowFlags_NoCollapse;
-	if (bSizeToContent()) {
+	if (settings.isSizeToContent()) {
 		flags |= ImGuiWindowFlags_AlwaysAutoResize;
 	}
 	std::string windowName = lang.translate(LangKey::WindowHeader);
 	windowName.append("##Boon Table");
 	ImGui::Begin(windowName.c_str(), p_open, flags);
 
-	// Settings on right-click-menu
-	if (ImGui::BeginPopupContextWindow()) {
-		ImGui::MenuItem(lang.translate(LangKey::SettingsPlayers).c_str(), nullptr, &show_players);
-		ImGui::MenuItem(lang.translate(LangKey::SettingsSubgroups).c_str(), nullptr, &show_subgroups);
-		ImGui::MenuItem(lang.translate(LangKey::SettingsTotal).c_str(), nullptr, &show_total);
-		ImGui::MenuItem(lang.translate(LangKey::SettingsNPC).c_str(), nullptr, &show_npcs);
-		ImGui::MenuItem(lang.translate(LangKey::SettingsShowProgressBar).c_str(), nullptr, &show_boon_as_progress_bar);
-		ImGui::MenuItem(lang.translate(LangKey::SettingsAlwaysResize).c_str(), nullptr, &size_to_content);
-		ImGui::MenuItem(lang.translate(LangKey::SettingsAlternatingRow).c_str(), nullptr, &alternating_row_bg);
-		ImGui::MenuItem(lang.translate(LangKey::SettingsShowLabel).c_str(), nullptr, &show_label);
-
-		float cursorPosY = ImGui::GetCursorPosY();
-		ImGui::SetCursorPosY(cursorPosY + 4);
-		ImGui::Text(lang.translate(LangKey::SettingsColoringMode).c_str());
-		ImGui::SameLine();
-		ImGui::SetCursorPosY(cursorPosY);
-		if (ImGui::BeginCombo("###ShowColored", to_string(show_colored).c_str())) {
-			ImGuiEx::Selectable(show_colored, ProgressBarColoringMode::Uncolored);
-			ImGuiEx::Selectable(show_colored, ProgressBarColoringMode::ByProfession);
-			ImGuiEx::Selectable(show_colored, ProgressBarColoringMode::ByPercentage);
-
-			ImGui::EndCombo();
-		}
-
-		cursorPosY = ImGui::GetCursorPosY();
-		ImGui::SetCursorPosY(cursorPosY + 4);
-		ImGui::Text(lang.translate(LangKey::SettingsAlignment).c_str());
-		ImGui::SameLine();
-		ImGui::SetCursorPosY(cursorPosY);
-		if (ImGui::BeginCombo("###Alignment", to_string(alignment).c_str())) {
-			ImGuiEx::Selectable(alignment, Alignment::Unaligned);
-			ImGuiEx::Selectable(alignment, Alignment::Left);
-			ImGuiEx::Selectable(alignment, Alignment::Center);
-			ImGuiEx::Selectable(alignment, Alignment::Right);
-
-			ImGui::EndCombo();
-		}
-
-		ImGui::EndPopup();
-	}
 
 	// columns: charname | subgroup | tracked_buffs
 	const int columnCount = tracked_buffs.size() + 2;
@@ -70,11 +31,13 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		ImGuiTableFlags_BordersInnerH |
 		ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX | ImGuiTableFlags_ScrollY;
 
-	if (bAlternatingRowBg()) {
+	if (settings.isAlternatingRowBg()) {
 		tableFlags |= ImGuiTableFlags_RowBg;
 	}
 
 	if (ImGui::BeginTable("Table", columnCount, tableFlags)) {
+		Alignment alignment = settings.getAlignment();
+		
 		/*
 		 * HEADER
 		 */
@@ -111,7 +74,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 
 		for (const BoonDef& trackedBuff : tracked_buffs) {
 			if (ImGui::TableNextColumn()) {
-				ImGuiEx::TableHeader(trackedBuff.name.c_str(), show_label, trackedBuff.icon->texture, alignment);
+				ImGuiEx::TableHeader(trackedBuff.name.c_str(), settings.isShowLabel(), trackedBuff.icon->texture, alignment);
 			}
 		}
 
@@ -171,7 +134,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		/*
 		 * PLAYERS
 		 */
-		if (bShowPlayers()) {
+		if (settings.isShowPlayers()) {
 			for (Player player : tracker.players) {
 				ImVec4 player_color = player.getColor();
 
@@ -200,7 +163,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		/*
 		 * SUBGROUPS
 		 */
-		if (bShowSubgroups(tracker)) {
+		if (settings.isShowSubgroups(tracker)) {
 			ImGui::TableNextRow();
 			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
 
@@ -230,7 +193,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		/*
 		 * TOTALS
 		 */
-		if (bShowTotal()) {
+		if (settings.isShowTotal()) {
 			ImGui::TableNextRow();
 			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
 
@@ -257,7 +220,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		/*
 		 * NPCs
 		 */
-		if (bShowNPCs() && !tracker.npcs.empty()) {
+		if (settings.isShowNpcs() && !tracker.npcs.empty()) {
 			ImGui::TableNextRow();
 			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
 			for (NPC npc : tracker.npcs) {
@@ -294,9 +257,13 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 }
 
 void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, ImVec4 color) const {
+	ProgressBarColoringMode show_colored = settings.getShowColored();
+	Alignment alignment = settings.getAlignment();
+
 	bool hidden_color = false;
 	if (color.w == 0.f) hidden_color = true;
-	if (show_boon_as_progress_bar) {
+
+	if (settings.isShowBoonAsProgressBar()) {
 		if (show_colored != ProgressBarColoringMode::Uncolored && !hidden_color) ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
 
 		char label[10];
@@ -327,7 +294,7 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 }
 
 void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width) {
-	switch (show_colored) {
+	switch (settings.getShowColored()) {
 	case ProgressBarColoringMode::ByPercentage:
 		{
 			float percentage = 0;
@@ -346,7 +313,7 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 }
 
 void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, const Entity& entity) const {
-	switch (show_colored) {
+	switch (settings.getShowColored()) {
 	case ProgressBarColoringMode::ByProfession:
 		buffProgressBar(current_buff, current_boon_uptime, width, entity.getColor());
 		break;
@@ -369,96 +336,4 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 
 float AppChart::getEntityDisplayValue(const Tracker& tracker, const Entity& entity, const BoonDef& boon) {
 	return entity.getBoonUptime(boon);
-}
-
-
-void AppChart::setShowPlayers(bool new_show) {
-	show_players = new_show;
-}
-
-void AppChart::setShowSubgroups(bool new_show) {
-	show_subgroups = new_show;
-}
-
-void AppChart::setShowTotal(bool new_show) {
-	show_total = new_show;
-}
-
-void AppChart::setShowNPCs(bool new_show) {
-	show_npcs = new_show;
-}
-
-void AppChart::setShowBoonAsProgressBar(bool new_show) {
-	show_boon_as_progress_bar = new_show;
-}
-
-void AppChart::setShowColored(ProgressBarColoringMode new_colored) {
-	show_colored = new_colored;
-}
-
-void AppChart::setSizeToContent(bool new_size_to_content) {
-	size_to_content = new_size_to_content;
-}
-
-void AppChart::setAlternatingRowBg(bool new_alternating_row_bg) {
-	alternating_row_bg = new_alternating_row_bg;
-}
-
-void AppChart::setAlignment(Alignment new_alignment) {
-	alignment = new_alignment;
-}
-
-void AppChart::setShowLabel(bool new_show) {
-	show_label = new_show;
-}
-
-bool AppChart::bShowPlayers() const {
-	return show_players;
-}
-
-bool AppChart::bShowNPCs() const {
-	return show_npcs;
-}
-
-bool AppChart::bShowLabel() const {
-	return show_label;
-}
-
-
-bool AppChart::bShowSubgroups(const Tracker& tracker) const {
-	return show_subgroups
-		&& tracker.is_squad
-		&& tracker.subgroups.size() > 1;
-}
-
-/**
- * DO NOT USE THIS. Use `AppChart::bShowSubgroups` instead.
- * This function is only to be used when writing the ini
- */
-bool AppChart::getShowSubgroups() const {
-	return show_subgroups;
-}
-
-bool AppChart::bShowTotal() const {
-	return show_total;
-}
-
-bool AppChart::bShowBoonAsProgressBar() const {
-	return show_boon_as_progress_bar;
-}
-
-ProgressBarColoringMode AppChart::getShowColored() const {
-	return show_colored;
-}
-
-bool AppChart::bSizeToContent() const {
-	return size_to_content;
-}
-
-bool AppChart::bAlternatingRowBg() const {
-	return alternating_row_bg;
-}
-
-Alignment AppChart::getAlignment() const {
-	return alignment;
 }
