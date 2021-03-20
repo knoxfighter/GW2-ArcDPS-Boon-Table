@@ -88,31 +88,11 @@ ID_Vampiric_Presence    PNG                     "icons\\Vampiric_Presence.png"
 
 ID_Strength_in_Numbers  PNG                     "icons\\Strength_in_Numbers.png"
 
-ID_Banner_of_Discipline PNG                     "icons\\Banner_of_Discipline.png"
-
-ID_Banner_of_Tactics    PNG                     "icons\\Banner_of_Tactics.png"
-
-ID_Banner_of_Defense    PNG                     "icons\\Banner_of_Defense.png"
-
-ID_Frost_Spirit         PNG                     "icons\\Frost_Spirit.png"
-
-ID_Sun_Spirit           PNG                     "icons\\Sun_Spirit.png"
-
-ID_Stone_Spirit         PNG                     "icons\\Stone_Spirit.png"
-
-ID_Storm_Spirit         PNG                     "icons\\Storm_Spirit.png"
-
 ID_Water_Spirit         PNG                     "icons\\Water_Spirit.png"
-
-ID_Signet_of_Inspiration PNG                     "icons\\Signet_of_Inspiration.png"
-
-ID_Stealth              PNG                     "icons\\Stealth.png"
-
-ID_Super_Speed          PNG                     "icons\\Super_Speed.png"
 
 ID_Banner_of_Strength2  PNG                     "icons\\bannerStrength.png"
 
-ID_Banner_of_Discipline2 PNG                     "C:\\Users\\knox\\Desktop\\Programme\\C++\\GW2-ArcDPS-Boon-Table\\boon_table\\ArcDPS Boon Table\\icons\\Banner_of_Discipline2.png"
+ID_Banner_of_Discipline2 PNG                     "icons\\Banner_of_Discipline2.png"
 
 ID_Banner_of_Tactics2   PNG                     "icons\\Banner_of_Tactics2.png"
 
