@@ -20,7 +20,7 @@
 #include "SettingsUI.h"
 
 /* proto/globals */
-arcdps_exports arc_exports;
+arcdps_exports arc_exports{};
 char* arcvers;
 extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, IDirect3DDevice9* id3dd9, HMODULE arcdll, void* mallocfn, void* freefn);
 extern "C" __declspec(dllexport) void* get_release_addr();
@@ -30,6 +30,7 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t id, uint64_t revision);
 uintptr_t mod_imgui(uint32_t not_charsel_or_loading); /* id3dd9::present callback, before imgui::render, fn(uint32_t not_charsel_or_loading) */
 uintptr_t mod_options(); /* id3dd9::present callback, appending to the end of options window in arcdps, fn() */
+bool mod_options_windows(char* windowname); // fn(char* windowname) 
 void readArcExports();
 bool modsPressed();
 bool canMoveWindows();
@@ -104,7 +105,6 @@ extern "C" __declspec(dllexport) void* get_release_addr() {
 arcdps_exports* mod_init()
 {
 	/* for arcdps */
-	memset(&arc_exports, 0, sizeof(arcdps_exports));
 	arc_exports.sig = 0x64003268;//from random.org
 	arc_exports.imguivers = IMGUI_VERSION_NUM;
 	arc_exports.size = sizeof(arcdps_exports);
@@ -114,6 +114,7 @@ arcdps_exports* mod_init()
 	arc_exports.combat = mod_combat;
 	arc_exports.imgui = mod_imgui;
 	arc_exports.options_end = mod_options;
+	// arc_exports.options_windows = mod_options_windows;
 	return &arc_exports;
 }
 
@@ -356,6 +357,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 
 uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 {
+	ImGui::ShowDemoWindow();
 	readArcExports();
 
 	if (!not_charsel_or_loading) return 0;
@@ -387,6 +389,19 @@ uintptr_t mod_options()
 	}
 	ImGui::EndChild();
 	return 0;
+}
+
+/**
+ * @return true to disable this option
+ */
+bool mod_options_windows(char* windowname) {
+	arc_log(windowname);
+	if (!windowname) {
+		if (strcmp(windowname, "bufftable") == 0) {
+			return true;
+		}
+	}
+	return false;
 }
 
 void readArcExports()
