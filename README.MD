@@ -39,6 +39,19 @@ Sort by column by clicking on the header, it is sorted by character name by defa
 
     Write me on discord or in an issue what of those should be added.
 
+## Local paths when building the project
+If you want to build the project and copy the resulting files into your gw2 directory you need to create a "ArcDPS Boon Table.vcxproj.user" next to the "ArcDPS Boon Table.vcxproj" with the following content:
+```
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <LocalDebuggerCommand>C:\Program Files\Guild Wars 2\Gw2-64.exe</LocalDebuggerCommand>
+    <OutDir>C:\Program Files\Guild Wars 2\bin64\</OutDir>
+  </PropertyGroup>
+</Project>
+```
+Don't forget to change the path to your local path!
+
 ## Changelog
     
     February 22 2021
