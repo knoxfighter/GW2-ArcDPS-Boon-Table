@@ -268,7 +268,6 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 			}
 		}
 
-
 		ImGui::EndTable();
 	}
 

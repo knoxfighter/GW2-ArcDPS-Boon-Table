@@ -48,6 +48,8 @@ HMODULE self_dll;
 arc_color_func arc_export_e5;
 arc_export_func_u64 arc_export_e6;
 arc_export_func_u64 arc_export_e7;
+arc_log_func_ptr arc_log_file;
+arc_log_func_ptr arc_log;
 
 // arc globals
 WPARAM arc_global_mod1;
@@ -80,6 +82,8 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 	arc_export_e5 = (arc_color_func)GetProcAddress(arc_dll, "e5");
 	arc_export_e6 = (arc_export_func_u64)GetProcAddress(arc_dll, "e6");
 	arc_export_e7 = (arc_export_func_u64)GetProcAddress(arc_dll, "e7");
+	arc_log_file = (arc_log_func_ptr)GetProcAddress(arc_dll, "e3");
+	arc_log = (arc_log_func_ptr)GetProcAddress(arc_dll, "e8");
 
 	// set imgui context && allocation for arcdps dll space
 	ImGui::SetCurrentContext(static_cast<ImGuiContext*>(imguicontext));

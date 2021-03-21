@@ -25,6 +25,10 @@ bool floatCmp(float a, float b);
 typedef void(*arc_color_func)(ImVec4**);
 extern arc_color_func arc_export_e5;
 
+typedef void(*arc_log_func_ptr)(const char* str);
+extern arc_log_func_ptr arc_log_file;
+extern arc_log_func_ptr arc_log;
+
 // additional enum for progressbar color
 enum class ProgressBarColoringMode {
 	Uncolored,
