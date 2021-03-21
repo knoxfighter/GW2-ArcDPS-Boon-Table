@@ -323,7 +323,7 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 				percentage = current_boon_uptime;
 			}
 			// ImVec4 color((1 - percentage) * 255, 125/*percentage * 255*/, 0, 1);
-			ImVec4 color(1 - percentage, percentage, 0, 110 / 255);
+			ImVec4 color(1 - percentage, percentage, 0, 110.f / 255.f);
 			buffProgressBar(current_buff, current_boon_uptime, width, color);
 			break;
 		}
