@@ -113,8 +113,8 @@ arcdps_exports* mod_init()
 	arc_exports.wnd_nofilter = mod_wnd;
 	arc_exports.combat = mod_combat;
 	arc_exports.imgui = mod_imgui;
-	arc_exports.options_end = mod_options;
-	// arc_exports.options_windows = mod_options_windows;
+	// arc_exports.options_end = mod_options;
+	arc_exports.options_windows = mod_options_windows;
 	return &arc_exports;
 }
 
@@ -395,9 +395,10 @@ uintptr_t mod_options()
  * @return true to disable this option
  */
 bool mod_options_windows(char* windowname) {
-	arc_log(windowname);
-	if (!windowname) {
-		if (strcmp(windowname, "bufftable") == 0) {
+	if (windowname) {
+		if (strstr(windowname, "bufftable")) {
+			// return true;
+			mod_options();
 			return true;
 		}
 	}
