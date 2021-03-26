@@ -44,6 +44,7 @@ BUILD_ENUM_INI_NAMES(
 	SettingsHideHeader,
 	SettingsSizingPolicy,
 	SettingsBoonColumnWidth,
+	SettingsShowOnlySubgroup,
 
 	SizingPolicySizeToContent,
 	SizingPolicySizeContentToWindow,
@@ -115,6 +116,7 @@ static const std::map<LangKey, std::string> langDefaults = {
 		{LangKey::SettingsShowLabel, "Show header with text instead of images"},
 		{LangKey::SettingsHideHeader, "Hide window header"},
 		{LangKey::SettingsSizingPolicy, "Sizing Policy"},
+		{LangKey::SettingsShowOnlySubgroup, "Show only your Subgroup"},
 
 		{LangKey::SizingPolicySizeToContent, "Autoresize window to content"},
 		{LangKey::SizingPolicySizeContentToWindow, "Size content to window"},

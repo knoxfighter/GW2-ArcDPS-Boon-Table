@@ -36,6 +36,7 @@ public:
 	[[nodiscard]] bool isHideHeader() const;
 	[[nodiscard]] SizingPolicy getSizingPolicy() const;
 	[[nodiscard]] float getBoonColumnWidth() const;
+	[[nodiscard]] bool isShowOnlySubgroup() const;
 
 	// delete copy/move
 	Settings(const Settings& other) = delete;
@@ -59,6 +60,7 @@ private:
 	bool hide_header = false;
 	SizingPolicy sizingPolicy = SizingPolicy::SizeToContent;
 	float boon_column_width = 80.f;
+	bool show_only_subgroup;
 
 	void readFromFile();
 	void saveToFile();

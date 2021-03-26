@@ -9,7 +9,6 @@
 #include <d3d9.h>
 
 #include "imgui/imgui.h"
-#include "simpleini/SimpleIni.h"
 #include "extension/arcdps_structs.h"
 #include "Player.h"
 #include "Tracker.h"
@@ -357,7 +356,6 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 
 uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 {
-	ImGui::ShowDemoWindow();
 	readArcExports();
 
 	if (!not_charsel_or_loading) return 0;

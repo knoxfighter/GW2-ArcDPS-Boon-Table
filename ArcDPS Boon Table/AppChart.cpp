@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <mutex>
+#include <ranges>
 
 #include "Lang.h"
 #include "Settings.h"
@@ -155,7 +156,15 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		 * PLAYERS
 		 */
 		if (settings.isShowPlayers()) {
-			for (Player player : tracker.players) {
+			bool onlySubgroup = settings.isShowOnlySubgroup();
+			auto group_filter = [&tracker, onlySubgroup](const Player& player) {
+				if (tracker.self_player && onlySubgroup) {
+					uint8_t subgroup = tracker.self_player->subgroup;
+					return player.subgroup == subgroup;
+				}
+				return true;
+			};
+			for (Player player : tracker.players | std::views::filter(group_filter)) {
 				ImVec4 player_color = player.getColor();
 
 				// charname
@@ -187,7 +196,15 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 			ImGui::TableNextRow();
 			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
 
-			for (uint8_t subgroup : tracker.subgroups) {
+			bool onlySubgroup = settings.isShowOnlySubgroup();
+			auto group_filter = [&tracker, onlySubgroup](const uint8_t& subgroup) {
+				if (tracker.self_player && onlySubgroup) {
+					return subgroup == tracker.self_player->subgroup;
+				}
+				return true;
+			};
+			
+			for (uint8_t subgroup : tracker.subgroups | std::views::filter(group_filter)) {
 				ImGui::TableNextRow();
 
 				// charname

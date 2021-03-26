@@ -75,6 +75,10 @@ float Settings::getBoonColumnWidth() const {
 	return boon_column_width;
 }
 
+bool Settings::isShowOnlySubgroup() const {
+	return show_only_subgroup;
+}
+
 void Settings::readFromFile() {
 	SI_Error rc = table_ini.LoadFile("addons\\arcdps\\arcdps_table.ini");
 
@@ -115,6 +119,8 @@ void Settings::readFromFile() {
 	sizingPolicy = static_cast<SizingPolicy>(pszValueLong);
 
 	boon_column_width = table_ini.GetDoubleValue("table", "boon_column_width", 80);
+
+	show_only_subgroup = table_ini.GetBoolValue("table", "show_only_subgroup", false);
 }
 
 void Settings::saveToFile() {
@@ -132,6 +138,7 @@ void Settings::saveToFile() {
 	rc = table_ini.SetBoolValue("table", "hide_header", hide_header);
 	rc = table_ini.SetLongValue("table", "sizing_policy", static_cast<long>(sizingPolicy));
 	rc = table_ini.SetDoubleValue("table", "boon_column_width", boon_column_width);
+	rc = table_ini.SetBoolValue("table", "show_only_subgroup", show_only_subgroup);
 
 	rc = table_ini.SaveFile("addons\\arcdps\\arcdps_table.ini");
 }
