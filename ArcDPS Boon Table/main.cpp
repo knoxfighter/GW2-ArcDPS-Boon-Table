@@ -393,7 +393,6 @@ uintptr_t mod_options()
 	}
 	ImGui::EndChild();
 
-	// ImGui::EndChild();
 	return 0;
 }
 
@@ -401,12 +400,8 @@ uintptr_t mod_options()
  * @return true to disable this option
  */
 bool mod_options_windows(char* windowname) {
-	if (windowname) {
-		if (strstr(windowname, "bufftable")) {
-			// return true;
-			mod_options();
-			return true;
-		}
+	if (!windowname) {
+		mod_options();
 	}
 	return false;
 }
