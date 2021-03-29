@@ -383,12 +383,16 @@ uintptr_t mod_options()
 	ImGui::Checkbox(lang.translate(LangKey::ShowChart).c_str(), &settings.show_chart);
 	ImGui::SameLine();
 	ImGui::BeginChild("boonTableSettings", ImVec2(0, ImGui::GetTextLineHeight()));
-	bool hovered = ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_ChildWindows);
+	bool hoveredChild = ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_ChildWindows);
+
 	if (ImGui::BeginMenu("##boon-table-settings")) {
-		if (!hovered) {
+		settingsUi.Draw();
+
+		bool hovoredMenu = ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_ChildWindows);
+		
+		if (!hoveredChild && !hovoredMenu && !ImGui::IsAnyMouseDown()) {
 			ImGui::CloseCurrentPopup();
 		}
-		settingsUi.Draw();
 		ImGui::EndMenu();
 	}
 	ImGui::EndChild();
