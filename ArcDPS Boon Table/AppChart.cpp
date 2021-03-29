@@ -165,8 +165,6 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 				return true;
 			};
 			for (Player player : tracker.players | std::views::filter(group_filter)) {
-				ImVec4 player_color = player.getColor();
-
 				// charname
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
@@ -361,7 +359,7 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 			} else {
 				percentage = current_boon_uptime;
 			}
-			ImVec4 color(1 - percentage, percentage, 0, 0.75);
+			ImVec4 color(1 - percentage, percentage, 0, (float)125/255);
 			buffProgressBar(current_buff, current_boon_uptime, width, color);
 			break;
 		}

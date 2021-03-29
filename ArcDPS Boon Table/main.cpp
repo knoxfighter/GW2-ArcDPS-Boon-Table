@@ -382,9 +382,7 @@ uintptr_t mod_options()
 {
 	ImGui::Checkbox(lang.translate(LangKey::ShowChart).c_str(), &settings.show_chart);
 	ImGui::SameLine();
-	ImGuiEx::BeginMenuChild("boonTableSettings", "##boon-table-settings", [] {settingsUi.Draw(); });
-	
-	// ImGuiEx::BeginMenu("boon-table-settings", [] {settingsUi.Draw(); });
+	ImGuiEx::BeginMenuChild("boonTableSettings", "##boon-table-settings", [] { settingsUi.Draw(); });
 
 	return 0;
 }
