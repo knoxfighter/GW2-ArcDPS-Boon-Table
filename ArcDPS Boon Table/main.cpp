@@ -17,6 +17,8 @@
 #include "Lang.h"
 #include "Settings.h"
 #include "SettingsUI.h"
+#include "extension/Widgets.h"
+#include "imgui/imgui_internal.h"
 
 /* proto/globals */
 arcdps_exports arc_exports{};
@@ -381,11 +383,17 @@ uintptr_t mod_options()
 	ImGui::Checkbox(lang.translate(LangKey::ShowChart).c_str(), &settings.show_chart);
 	ImGui::SameLine();
 	ImGui::BeginChild("boonTableSettings", ImVec2(0, ImGui::GetTextLineHeight()));
+	bool hovered = ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_ChildWindows);
 	if (ImGui::BeginMenu("##boon-table-settings")) {
+		if (!hovered) {
+			ImGui::CloseCurrentPopup();
+		}
 		settingsUi.Draw();
 		ImGui::EndMenu();
 	}
 	ImGui::EndChild();
+
+	// ImGui::EndChild();
 	return 0;
 }
 
