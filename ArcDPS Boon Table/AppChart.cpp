@@ -314,7 +314,10 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 
 		if (show_colored != ProgressBarColoringMode::Uncolored && !hidden_color) ImGui::PopStyleColor();
 	} else {
-		if (show_colored != ProgressBarColoringMode::Uncolored && !hidden_color) ImGui::PushStyleColor(ImGuiCol_Text, color);
+		if (show_colored != ProgressBarColoringMode::Uncolored && !hidden_color) {
+			color.w = 1;
+			ImGui::PushStyleColor(ImGuiCol_Text, color);
+		}
 
 		if (current_buff.stacking_type == StackingType_intensity) {
 			//don't show the % for intensity stacking buffs
