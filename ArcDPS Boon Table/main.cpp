@@ -31,7 +31,7 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t id, uint64_t revision);
 uintptr_t mod_imgui(uint32_t not_charsel_or_loading); /* id3dd9::present callback, before imgui::render, fn(uint32_t not_charsel_or_loading) */
 uintptr_t mod_options(); /* id3dd9::present callback, appending to the end of options window in arcdps, fn() */
-bool mod_options_windows(char* windowname); // fn(char* windowname) 
+uint64_t mod_options_windows(char* windowname); // fn(char* windowname) 
 void readArcExports();
 bool modsPressed();
 bool canMoveWindows();
@@ -403,11 +403,11 @@ uintptr_t mod_options()
 /**
  * @return true to disable this option
  */
-bool mod_options_windows(char* windowname) {
+uint64_t mod_options_windows(char* windowname) {
 	if (!windowname) {
 		mod_options();
 	}
-	return false;
+	return 0;
 }
 
 void readArcExports()
