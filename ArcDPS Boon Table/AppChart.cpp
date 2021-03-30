@@ -166,6 +166,9 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 			};
 			for (Player player : tracker.players | std::views::filter(group_filter)) {
 				// charname
+				if (player.self) {
+					ImGui::PushStyleColor(ImGuiCol_Text, settings.getSelfColor());
+				}
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
 				std::string name_string = player.name; // +(player.in_combat ? "*" : "") + +" (" + std::to_string(player.id) + ")";
@@ -174,6 +177,10 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 				// subgroup
 				if (ImGui::TableNextColumn()) {
 					ImGuiEx::AlignedTextColumn(alignment, "%d", player.subgroup);
+				}
+
+				if (player.self) {
+					ImGui::PopStyleColor();
 				}
 
 				// buffs

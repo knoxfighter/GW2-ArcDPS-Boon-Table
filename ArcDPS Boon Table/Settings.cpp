@@ -1,6 +1,7 @@
 #include "Settings.h"
 
 #include "Lang.h"
+#include "Helpers.h"
 
 Settings settings;
 
@@ -14,7 +15,6 @@ std::string to_string(SizingPolicy sizingPolicy) {
 }
 
 Settings::Settings() : table_ini(true) {
-	readFromFile();
 }
 
 Settings::~Settings() {
@@ -79,6 +79,16 @@ bool Settings::isShowOnlySubgroup() const {
 	return show_only_subgroup;
 }
 
+const ImVec4& Settings::getSelfColor() const {
+	if (self_color) {
+		return self_color.value();
+	} else {
+		ImVec4* colors[5];
+		arc_export_e5(colors);
+		return colors[0][CCOL_LYELLOW];
+	}
+}
+
 void Settings::readFromFile() {
 	SI_Error rc = table_ini.LoadFile("addons\\arcdps\\arcdps_table.ini");
 
@@ -121,6 +131,9 @@ void Settings::readFromFile() {
 	boon_column_width = table_ini.GetDoubleValue("table", "boon_column_width", 80);
 
 	show_only_subgroup = table_ini.GetBoolValue("table", "show_only_subgroup", false);
+
+	const char* value = table_ini.GetValue("colors", "self_color", "");
+	self_color = ImVec4_color_from_string(value);
 }
 
 void Settings::saveToFile() {
@@ -139,6 +152,10 @@ void Settings::saveToFile() {
 	rc = table_ini.SetLongValue("table", "sizing_policy", static_cast<long>(sizingPolicy));
 	rc = table_ini.SetDoubleValue("table", "boon_column_width", boon_column_width);
 	rc = table_ini.SetBoolValue("table", "show_only_subgroup", show_only_subgroup);
+
+	if (self_color) {
+		table_ini.SetValue("colors", "self_color", to_string(self_color.value()).c_str());
+	}
 
 	rc = table_ini.SaveFile("addons\\arcdps\\arcdps_table.ini");
 }

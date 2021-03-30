@@ -1,5 +1,7 @@
 #include "Helpers.h"
 
+#include <sstream>
+
 #include "Lang.h"
 
 uint64_t getCurrentTime()
@@ -46,4 +48,34 @@ std::string to_string(ProgressBarColoringMode coloringMode) {
 	case ProgressBarColoringMode::ByPercentage:
 		return lang.translate(LangKey::ColoringModeByPercentage);
 	}
+}
+
+std::string to_string(const ImVec4& vec4) {
+	std::string colorCombined;
+	colorCombined.append(std::to_string(vec4.x));
+	colorCombined.append("|");
+	colorCombined.append(std::to_string(vec4.y));
+	colorCombined.append("|");
+	colorCombined.append(std::to_string(vec4.z));
+	colorCombined.append("|");
+	colorCombined.append(std::to_string(vec4.w));
+	return colorCombined;
+}
+
+std::optional<ImVec4> ImVec4_color_from_string(const std::string& vec4str) {
+	// check if string is suitable
+	size_t count = std::count(vec4str.begin(), vec4str.end(), '|');
+	if (count < 3) {
+		// read color invalid
+		return std::nullopt;
+	}
+	
+	std::stringstream stream(vec4str);
+	std::string buf;
+	float val[4]{};
+	// Iterate over 4 first sections split by '|'
+	for (int i = 0; std::getline(stream, buf, '|') && i < 4; ++i) {
+		val[i] = std::stof(buf);
+	}
+	return ImVec4(val[0], val[1], val[2], val[3]);
 }

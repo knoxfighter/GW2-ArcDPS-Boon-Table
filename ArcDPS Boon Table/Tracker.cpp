@@ -58,6 +58,7 @@ void Tracker::addNewPlayer(uintptr_t id,
 	//self has always the id 2000, not sure why, but this is easier than adding a new parameter to everything
 	if (id == 2000) {
 		self_player = getPlayer(id);
+		self_player->self = true;
 	}
 }
 

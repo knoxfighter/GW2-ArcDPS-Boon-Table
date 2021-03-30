@@ -14,6 +14,7 @@ public:
 	std::string account_name;
 	Prof profession;
 	uint8_t subgroup;
+	bool self = false;
 
 	Player(uintptr_t new_id, const std::string& new_name, const std::string& new_account_name, uint8_t new_subgroup, Prof new_profession);
 

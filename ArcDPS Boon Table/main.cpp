@@ -91,8 +91,12 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 	ImGui::SetCurrentContext(static_cast<ImGuiContext*>(imguicontext));
 	ImGui::SetAllocatorFunctions((void* (*)(size_t, void*))mallocfn, (void (*)(void*, void*))freefn);
 
+	// load settings
+	settings.readFromFile();
+
+	// init buffs, this will load the icons into RAM
 	init_tracked_buffs(id3dd9);
-	
+
 	return mod_init;
 }
 
@@ -358,6 +362,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 
 uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 {
+	ImGui::ShowDemoWindow();
 	readArcExports();
 
 	if (!not_charsel_or_loading) return 0;

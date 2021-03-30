@@ -22,6 +22,7 @@ public:
 	
 	Settings();
 	~Settings();
+	void readFromFile();
 
 	[[nodiscard]] Alignment getAlignment() const;
 	[[nodiscard]] bool isShowSubgroups(const Tracker& tracker) const;
@@ -37,6 +38,7 @@ public:
 	[[nodiscard]] SizingPolicy getSizingPolicy() const;
 	[[nodiscard]] float getBoonColumnWidth() const;
 	[[nodiscard]] bool isShowOnlySubgroup() const;
+	[[nodiscard]] const ImVec4& getSelfColor() const;
 
 	// delete copy/move
 	Settings(const Settings& other) = delete;
@@ -60,9 +62,9 @@ private:
 	bool hide_header = false;
 	SizingPolicy sizingPolicy = SizingPolicy::SizeToContent;
 	float boon_column_width = 80.f;
-	bool show_only_subgroup;
+	bool show_only_subgroup = false;
+	std::optional<ImVec4> self_color;
 
-	void readFromFile();
 	void saveToFile();
 };
 
