@@ -36,7 +36,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 	std::scoped_lock<std::mutex, std::mutex, std::mutex> lock(tracker.players_mtx, tracker.npcs_mtx, boons_mtx);
 
 	int tableFlags = ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_Sortable | ImGuiTableFlags_Resizable |
-		ImGuiTableFlags_ContextMenuInBody | ImGuiTableFlags_BordersInnerH;
+		ImGuiTableFlags_ContextMenuInBody | ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_NoBordersInBody;
 
 	switch (sizingPolicy) {
 	case SizingPolicy::ManualWindowSize:
