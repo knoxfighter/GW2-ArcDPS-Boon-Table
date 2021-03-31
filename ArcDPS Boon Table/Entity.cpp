@@ -153,8 +153,7 @@ void Entity::combatEnter(cbtevent* ev)
 	std::lock_guard<std::mutex> lock(boons_mtx);
 	boons_uptime.clear();
 
-	for (auto current_initial_boon = boons_uptime_initial.begin(); current_initial_boon != boons_uptime_initial.end(); ++current_initial_boon)
-	{
+	for (auto current_initial_boon = boons_uptime_initial.begin(); current_initial_boon != boons_uptime_initial.end(); ++current_initial_boon) {
 		duration_remaining = current_initial_boon->second.getDurationRemaining(ev->time, 0);
 		if (duration_remaining > 0)
 		{

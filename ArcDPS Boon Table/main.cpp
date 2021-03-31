@@ -276,19 +276,17 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 		/* statechange */
 		if (ev->is_statechange)
 		{
-			Player* player = tracker.getPlayer(src->id);
 			if (ev->is_statechange == CBTS_ENTERCOMBAT)
 			{
-				if (player = tracker.getPlayer(src->id))
+				Player* player = tracker.getPlayer(src->id);
+				if (player)
 				{
 					player->combatEnter(ev);
 
 					if(src->self)
 					{
-
-						for (std::list<NPC>::iterator it = tracker.npcs.begin(); it != tracker.npcs.end(); ++it)
-						{
-							it->combatEnter(ev);
+						for (NPC& npc : tracker.npcs) {
+							npc.combatEnter(ev);
 						}
 					}
 					tracker.bakeCombatData();
@@ -297,17 +295,25 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 			}
 			else if (ev->is_statechange == CBTS_EXITCOMBAT)
 			{
+				Player* player = tracker.getPlayer(src->id);
 				if (player)
 				{
 					player->combatExit(ev);
 
 					if (src->self)
 					{
-						for (std::list<NPC>::iterator it = tracker.npcs.begin(); it != tracker.npcs.end(); ++it)
-						{
-							it->combatExit(ev);
+						for (NPC& npc : tracker.npcs) {
+							npc.combatExit(ev);
 						}
 					}
+				}
+			}
+			else if (ev->is_statechange == CBTS_STATRESET)
+			{
+				for (Player& player : tracker.players) {
+					player.combatExit(ev);
+					// do not call combatEnter on Player, cause ev->dst_agent (subgroup) is not set
+					player.Entity::combatEnter(ev);
 				}
 			}
 		}
