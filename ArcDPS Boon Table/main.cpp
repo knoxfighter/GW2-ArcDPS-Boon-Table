@@ -229,12 +229,6 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t i
 				else
 				{
 					tracker.removePlayer(src);
-
-					//src->self is not set here
-					if (src->id == 2000) {
-						//all npcs removed with the player (i.e. swapping wings)
-						tracker.clearNPCs();
-					}
 				}
 			}
 

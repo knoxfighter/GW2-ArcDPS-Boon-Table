@@ -6,18 +6,6 @@ NPC::NPC(uintptr_t new_id = 0,
 	name = new_name;
 }
 
-bool NPC::operator==(std::string other_name) const {
-    return name == other_name;
-}
-
-bool NPC::operator==(uintptr_t other_id) const {
-	return id == other_id;
-}
-
-bool NPC::operator==(const Entity& other) const {
-	return id == other.id && name == other.name;
-}
-
 ImVec4 NPC::getColor() const {
     /* e5 writes out colour array ptrs, sizeof(out) == sizeof(ImVec4*) * 5.  [ void e5(ImVec4** out) ]
        out[0] = core cols

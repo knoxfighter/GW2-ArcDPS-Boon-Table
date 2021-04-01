@@ -33,6 +33,8 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 	const int nameColumnId = columnCount - 2;
 	const int subgroupColumnId = columnCount - 1;
 
+	Player* self_player = tracker.getPlayer(2000);
+
 	std::scoped_lock<std::mutex, std::mutex, std::mutex> lock(tracker.players_mtx, tracker.npcs_mtx, boons_mtx);
 
 	int tableFlags = ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_Sortable | ImGuiTableFlags_Resizable |
@@ -157,9 +159,9 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		 */
 		if (settings.isShowPlayers()) {
 			bool onlySubgroup = settings.isShowOnlySubgroup();
-			auto group_filter = [&tracker, onlySubgroup](const Player& player) {
-				if (tracker.self_player && onlySubgroup) {
-					uint8_t subgroup = tracker.self_player->subgroup;
+			auto group_filter = [&self_player, onlySubgroup](const Player& player) {
+				if (self_player && onlySubgroup) {
+					uint8_t subgroup = self_player->subgroup;
 					return player.subgroup == subgroup;
 				}
 				return true;
@@ -202,9 +204,9 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
 
 			bool onlySubgroup = settings.isShowOnlySubgroup();
-			auto group_filter = [&tracker, onlySubgroup](const uint8_t& subgroup) {
-				if (tracker.self_player && onlySubgroup) {
-					return subgroup == tracker.self_player->subgroup;
+			auto group_filter = [&self_player, onlySubgroup](const uint8_t& subgroup) {
+				if (self_player && onlySubgroup) {
+					return subgroup == self_player->subgroup;
 				}
 				return true;
 			};

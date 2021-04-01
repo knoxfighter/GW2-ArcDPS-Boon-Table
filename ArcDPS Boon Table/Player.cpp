@@ -13,6 +13,14 @@ Player::Player(uintptr_t new_id = 0,
 	in_combat = false;
 	subgroup = new_subgroup;
 	profession = new_profession;
+
+	if (id == 2000) {
+        self = true;
+	}
+}
+
+bool Player::operator==(uintptr_t other_id) const {
+    return Entity::operator==(other_id);
 }
 
 bool Player::operator==(std::string other_name) const {
@@ -20,12 +28,8 @@ bool Player::operator==(std::string other_name) const {
 		|| account_name == other_name;
 }
 
-bool Player::operator==(uintptr_t other_id) const {
-    return id == other_id;
-}
-
 bool Player::operator==(const Entity& other) const {
-    return id == other.id && name == other.name;
+    return id == other.id && this->operator==(other.name);
 }
 
 void Player::combatEnter(cbtevent* ev) {
