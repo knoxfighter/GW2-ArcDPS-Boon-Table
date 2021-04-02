@@ -68,7 +68,7 @@ void SettingsUI::Draw() {
 		column_width_label.append("###BoonColumnWidth");
 		ImGui::SliderFloat(column_width_label.c_str(), &settings.boon_column_width, 20, 200);
 		if (ImGui::IsItemHovered()) {
-			ImGui::SetTooltip("Press CTRL+Leftclick to manually input the number.");
+			ImGui::SetTooltip(lang.translate(LangKey::SettingsWidthSlideTooltip).c_str());
 		}
 		ImGui::Unindent(20.f);
 	}
@@ -76,7 +76,7 @@ void SettingsUI::Draw() {
 	ImGui::Separator();
 
 	// ImGui::ColorPicker4()
-	if (ImGui::ColorEdit4("Self Color", self_color)) {
+	if (ImGui::ColorEdit4(lang.translate(LangKey::SettingsSelfColor).c_str(), self_color)) {
 		// i think the color changed
 		if (settings.self_color) {
 			settings.self_color->x = self_color[0];

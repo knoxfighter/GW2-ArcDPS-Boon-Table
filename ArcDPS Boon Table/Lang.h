@@ -45,6 +45,8 @@ BUILD_ENUM_INI_NAMES(
 	SettingsSizingPolicy,
 	SettingsBoonColumnWidth,
 	SettingsShowOnlySubgroup,
+	SettingsSelfColor,
+	SettingsWidthSlideTooltip,
 
 	SizingPolicySizeToContent,
 	SizingPolicySizeContentToWindow,
@@ -117,6 +119,8 @@ static const std::map<LangKey, std::string> langDefaults = {
 		{LangKey::SettingsHideHeader, "Hide window header"},
 		{LangKey::SettingsSizingPolicy, "Sizing Policy"},
 		{LangKey::SettingsShowOnlySubgroup, "Show only your Subgroup"},
+		{LangKey::SettingsSelfColor, "Self Color"},
+		{LangKey::SettingsWidthSlideTooltip, "Press CTRL+Leftclick to manually input the number."},
 
 		{LangKey::SizingPolicySizeToContent, "Autoresize window to content"},
 		{LangKey::SizingPolicySizeContentToWindow, "Size content to window"},
