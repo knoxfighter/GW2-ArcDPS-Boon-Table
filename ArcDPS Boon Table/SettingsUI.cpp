@@ -67,6 +67,9 @@ void SettingsUI::Draw() {
 		std::string column_width_label = lang.translate(LangKey::SettingsBoonColumnWidth);
 		column_width_label.append("###BoonColumnWidth");
 		ImGui::SliderFloat(column_width_label.c_str(), &settings.boon_column_width, 20, 200);
+		if (ImGui::IsItemHovered()) {
+			ImGui::SetTooltip("Press CTRL+Leftclick to manually input the number.");
+		}
 		ImGui::Unindent(20.f);
 	}
 
