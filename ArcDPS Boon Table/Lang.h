@@ -47,6 +47,7 @@ BUILD_ENUM_INI_NAMES(
 	SettingsShowOnlySubgroup,
 	SettingsSelfColor,
 	SettingsWidthSlideTooltip,
+	SettingsColumnSetup,
 
 	SizingPolicySizeToContent,
 	SizingPolicySizeContentToWindow,
@@ -58,6 +59,14 @@ BUILD_ENUM_INI_NAMES(
 	TotalNameColumnValue,
 	TotalSubgroupColumnValue,
 	NPCSubgroupColumnValue,
+
+	BoonTypeBoon,
+	BoonTypeTrait,
+	BoonTypeBanner,
+	BoonTypeSprit,
+	BoonTypeSkill,
+	BoonTypeSignet,
+	BoonTypeOther,
 
 	BuffMight,
 	BuffFury,
@@ -121,6 +130,7 @@ static const std::map<LangKey, std::string> langDefaults = {
 		{LangKey::SettingsShowOnlySubgroup, "Show only your Subgroup"},
 		{LangKey::SettingsSelfColor, "Self Color"},
 		{LangKey::SettingsWidthSlideTooltip, "Press CTRL+Leftclick to manually input the number."},
+		{LangKey::SettingsColumnSetup, "Column Setup"},
 
 		{LangKey::SizingPolicySizeToContent, "Autoresize window to content"},
 		{LangKey::SizingPolicySizeContentToWindow, "Size content to window"},
@@ -133,6 +143,14 @@ static const std::map<LangKey, std::string> langDefaults = {
 		{LangKey::TotalNameColumnValue, "TOTAL"},
 		{LangKey::TotalSubgroupColumnValue, "ALL"},
 		{LangKey::NPCSubgroupColumnValue, "NPC"},
+	
+		{LangKey::BoonTypeBoon, "Boons"},
+		{LangKey::BoonTypeTrait, "Traits"},
+		{LangKey::BoonTypeBanner, "Banners"},
+		{LangKey::BoonTypeSprit, "Spirits"},
+		{LangKey::BoonTypeSkill, "Skill"},
+		{LangKey::BoonTypeSignet, "Signets"},
+		{LangKey::BoonTypeOther, "Others"},
 	
 		{LangKey::BuffMight, "Might"},
 		{LangKey::BuffFury, "Fury"},

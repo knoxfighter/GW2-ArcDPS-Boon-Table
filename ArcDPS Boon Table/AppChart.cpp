@@ -6,8 +6,8 @@
 
 #include "Lang.h"
 #include "Settings.h"
+#include "SettingsUI.h"
 #include "extension/Widgets.h"
-#include "imgui/imgui_internal.h"
 
 void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) {
 	ImGui::PushFont(ImGui::GetIO().Fonts->Fonts.back());
@@ -23,22 +23,32 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 	if (settings.isHideHeader()) {
 		flags |= ImGuiWindowFlags_NoTitleBar;
 	}
+
 	std::string windowName = lang.translate(LangKey::WindowHeader);
 	windowName.append("##Boon Table");
 	ImGui::Begin(windowName.c_str(), p_open, flags);
 
+	/**
+	 * Settings UI
+	 */
+	if (ImGuiEx::BeginPopupContextWindow(0, 1, ImGuiHoveredFlags_ChildWindows)) {
+		settingsUi.Draw(imGuiTable);
+
+		ImGui::EndPopup();
+	}
 
 	// columns: charname | subgroup | tracked_buffs
 	const int columnCount = tracked_buffs.size() + 2;
 	const int nameColumnId = columnCount - 2;
 	const int subgroupColumnId = columnCount - 1;
 
+	// we have to get it here, cause it will lock tracker.players_mtx itself (which causes a crash, when it is already locked)
 	Player* self_player = tracker.getPlayer(2000);
 
 	std::scoped_lock<std::mutex, std::mutex, std::mutex> lock(tracker.players_mtx, tracker.npcs_mtx, boons_mtx);
 
 	int tableFlags = ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_Sortable | ImGuiTableFlags_Resizable |
-		ImGuiTableFlags_ContextMenuInBody | ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_NoBordersInBody;
+		ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_NoBordersInBody;
 
 	switch (sizingPolicy) {
 	case SizingPolicy::ManualWindowSize:
@@ -55,6 +65,9 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 	}
 
 	if (ImGui::BeginTable("Table", columnCount, tableFlags)) {
+		ImGuiContext& imGuiContext = *GImGui;
+		imGuiTable = imGuiContext.CurrentTable;
+		
 		Alignment alignment = settings.getAlignment();
 		
 		/*
@@ -296,6 +309,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 	}
 
 	ImGui::End();
+
 	ImGui::PopFont();
 }
 

@@ -4,14 +4,43 @@
 #include "Lang.h"
 #include "Settings.h"
 #include "extension/Widgets.h"
-#include "imgui/imgui.h"
 
-void SettingsUI::Draw() {
+SettingsUI settingsUi;
+
+void SettingsUI::Draw(ImGuiTable* table) {
 	if (!init) {
 		init = true;
 		initialize();
 	}
-	
+
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.f, 0.f));
+
+	if (table) {
+		if (ImGui::BeginMenu(lang.translate(LangKey::SettingsColumnSetup).c_str())) {
+			ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+
+			// username
+			ImGuiEx::MenuItemTableColumnVisibility(table, 0);
+			// subgroup
+			ImGuiEx::MenuItemTableColumnVisibility(table, 1);
+
+			// Submenus for controlling visibility
+			tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeBoon).c_str(), BoonType_boon);
+			tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeTrait).c_str(), BoonType_trait);
+			tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeBanner).c_str(), BoonType_banner);
+			tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeSprit).c_str(), BoonType_spirit);
+			// tableColumnSubMenu(imGuiTable, lang.translate(LangKey::BoonTypeSkill).c_str(),", BoonType_skill); // this boontype is empty
+			tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeSignet).c_str(), BoonType_signet);
+			tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeOther).c_str(), BoonType_other);
+
+			ImGui::PopItemFlag();
+
+			ImGui::EndMenu();
+		}
+	}
+
+	ImGui::Separator();
+
 	ImGui::Checkbox(lang.translate(LangKey::SettingsPlayers).c_str(), &settings.show_players);
 	ImGui::Checkbox(lang.translate(LangKey::SettingsSubgroups).c_str(), &settings.show_subgroups);
 	ImGui::Checkbox(lang.translate(LangKey::SettingsTotal).c_str(), &settings.show_total);
@@ -95,6 +124,8 @@ void SettingsUI::Draw() {
 		self_color[2] = imVec4.z;
 		self_color[3] = imVec4.w;
 	}
+
+	ImGui::PopStyleVar();
 }
 
 void SettingsUI::initialize() {
@@ -103,4 +134,18 @@ void SettingsUI::initialize() {
 	self_color[1] = imVec4.y;
 	self_color[2] = imVec4.z;
 	self_color[3] = imVec4.w;
+}
+
+void SettingsUI::tableColumnSubMenu(ImGuiTable* table, const char* label, BoonType type) const {
+	if (ImGui::BeginMenu(label)) {
+		int i = 2;
+		for (const BoonDef& trackedBuff : tracked_buffs) {
+			if (trackedBuff.category == type) {
+				ImGuiEx::MenuItemTableColumnVisibility(table, i);
+			}
+			++i;
+		}
+
+		ImGui::EndMenu();
+	}
 }

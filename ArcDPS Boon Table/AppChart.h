@@ -1,6 +1,7 @@
 #pragma once
 
 #include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
 #include "Tracker.h"
 #include "BuffIds.h"
 
@@ -18,4 +19,7 @@ public:
 	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, const Entity& entity) const;
 
 	float getEntityDisplayValue(const Tracker& tracker, const Entity& entity, const BoonDef& boon);
+
+private:
+	ImGuiTable* imGuiTable = nullptr;
 };

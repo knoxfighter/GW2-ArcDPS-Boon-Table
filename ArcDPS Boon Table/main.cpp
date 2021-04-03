@@ -16,7 +16,6 @@
 #include "Helpers.h"
 #include "Lang.h"
 #include "Settings.h"
-#include "SettingsUI.h"
 #include "extension/Widgets.h"
 #include "imgui/imgui_internal.h"
 
@@ -38,7 +37,6 @@ bool canMoveWindows();
 
 Tracker tracker;
 AppChart chart;
-SettingsUI settingsUi;
 
 typedef uint64_t(*arc_export_func_u64)();
 typedef void(*log_func)(char* str);
@@ -386,8 +384,6 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 uintptr_t mod_options()
 {
 	ImGui::Checkbox(lang.translate(LangKey::ShowChart).c_str(), &settings.show_chart);
-	ImGui::SameLine();
-	ImGuiEx::BeginMenuChild("boonTableSettings", "##boon-table-settings", [] { settingsUi.Draw(); });
 
 	return 0;
 }
