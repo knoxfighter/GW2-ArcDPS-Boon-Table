@@ -27,10 +27,10 @@ extern "C" __declspec(dllexport) void* get_release_addr();
 arcdps_exports* mod_init();
 uintptr_t mod_release();
 uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t id, uint64_t revision);
+uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision);
 uintptr_t mod_imgui(uint32_t not_charsel_or_loading); /* id3dd9::present callback, before imgui::render, fn(uint32_t not_charsel_or_loading) */
 uintptr_t mod_options(); /* id3dd9::present callback, appending to the end of options window in arcdps, fn() */
-uint64_t mod_options_windows(char* windowname); // fn(char* windowname) 
+uintptr_t mod_options_windows(const char* windowname); // fn(char* windowname) 
 void readArcExports();
 bool modsPressed();
 bool canMoveWindows();
@@ -39,7 +39,6 @@ Tracker tracker;
 AppChart chart;
 
 typedef uint64_t(*arc_export_func_u64)();
-typedef void(*log_func)(char* str);
 
 HMODULE arc_dll;
 HMODULE self_dll;
@@ -203,7 +202,7 @@ uintptr_t npc_ids[num_of_npcs];
 
 /* combat callback -- may be called asynchronously. return ignored */
 /* one participant will be party/squad, or minion of. no spawn statechange events. despawn statechange only on marked boss npcs */
-uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, char* skillname, uint64_t id, uint64_t revision)
+uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision)
 {
 	/* ev is null. dst will only be valid on tracking add. skillname will also be null */
 	if (!ev)
@@ -391,7 +390,7 @@ uintptr_t mod_options()
 /**
  * @return true to disable this option
  */
-uint64_t mod_options_windows(char* windowname) {
+uintptr_t mod_options_windows(const char* windowname) {
 	if (!windowname) {
 		mod_options();
 	}
