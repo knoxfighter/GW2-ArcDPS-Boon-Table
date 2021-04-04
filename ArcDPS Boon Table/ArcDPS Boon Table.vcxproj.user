@@ -9,8 +9,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Mock|x64'">
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerAttach>false</LocalDebuggerAttach>
-    <LocalDebuggerCommand>C:\Program Files\Guild Wars 2\Gw2-64.exe</LocalDebuggerCommand>
-    <LocalDebuggerCommandArguments>-autologin</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommand>C:\Users\knox\Desktop\Programme\C++\arcdps_mock\x64\Debug\arcdps_mock.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommandArguments>"$(OutDirFullPath)$(TargetFileName)"</LocalDebuggerCommandArguments>
+    <LocalDebuggerWorkingDirectory>$(OutDirFullPath)</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LocalDebuggerAttach>false</LocalDebuggerAttach>

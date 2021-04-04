@@ -42,6 +42,7 @@ typedef uint64_t(*arc_export_func_u64)();
 
 HMODULE arc_dll;
 HMODULE self_dll;
+IDirect3DDevice9* id3dd9;
 
 // get exports
 arc_color_func arc_export_e5;
@@ -74,7 +75,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 }
 
 /* export -- arcdps looks for this exported function and calls the address it returns */
-extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, IDirect3DDevice9* id3dd9, HMODULE new_arcdll, void* mallocfn, void* freefn) {
+extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, IDirect3DDevice9* new_id3dd9, HMODULE new_arcdll, void* mallocfn, void* freefn) {
 	// set all arcdps stuff
 	arcvers = arcversionstr;
 	arc_dll = new_arcdll;
@@ -88,11 +89,7 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 	ImGui::SetCurrentContext(static_cast<ImGuiContext*>(imguicontext));
 	ImGui::SetAllocatorFunctions((void* (*)(size_t, void*))mallocfn, (void (*)(void*, void*))freefn);
 
-	// load settings
-	settings.readFromFile();
-
-	// init buffs, this will load the icons into RAM
-	init_tracked_buffs(id3dd9);
+	id3dd9 = new_id3dd9;
 
 	return mod_init;
 }
@@ -106,17 +103,41 @@ extern "C" __declspec(dllexport) void* get_release_addr() {
 /* initialize mod -- return table that arcdps will use for callbacks */
 arcdps_exports* mod_init()
 {
+	bool loading_successful = true;
+	std::string error_message = "Unknown error";
+	
+	try {
+		// load settings
+		settings.readFromFile();
+
+		// init buffs, this will load the icons into RAM
+		init_tracked_buffs(id3dd9);
+	} catch (std::exception& e) {
+		loading_successful = false;
+		error_message = "Error starting up: ";
+		error_message.append(e.what());
+	}
+	
 	/* for arcdps */
-	arc_exports.sig = 0x64003268;//from random.org
 	arc_exports.imguivers = IMGUI_VERSION_NUM;
-	arc_exports.size = sizeof(arcdps_exports);
 	arc_exports.out_name = "Boon Table";
 	arc_exports.out_build = __VERSION__;
-	arc_exports.wnd_nofilter = mod_wnd;
-	arc_exports.combat = mod_combat;
-	arc_exports.imgui = mod_imgui;
-	// arc_exports.options_end = mod_options;
-	arc_exports.options_windows = mod_options_windows;
+
+	if (loading_successful) {
+		arc_exports.size = sizeof(arcdps_exports);
+		arc_exports.sig = 0x64003268;//from random.org
+		arc_exports.wnd_nofilter = mod_wnd;
+		arc_exports.combat = mod_combat;
+		arc_exports.imgui = mod_imgui;
+		// arc_exports.options_end = mod_options;
+		arc_exports.options_windows = mod_options_windows;
+	} else {
+		arc_exports.sig = 0;
+		const std::string::size_type size = error_message.size();
+		char* buffer = new char[size + 1]; //we need extra char for NUL
+		memcpy(buffer, error_message.c_str(), size + 1);
+		arc_exports.size = (uintptr_t)buffer;
+	}
 	return &arc_exports;
 }
 
