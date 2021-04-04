@@ -55,42 +55,29 @@ void SettingsUI::Draw(ImGuiTable* table) {
 	std::string showColoredText = lang.translate(LangKey::SettingsColoringMode);
 	showColoredText.append("###ShowColored");
 	ImGui::PushItemWidth(120);
-	if (ImGui::BeginCombo(showColoredText.c_str(), to_string(show_colored).c_str())) {
-		ImGuiEx::Selectable(show_colored, ProgressBarColoringMode::Uncolored);
-		ImGuiEx::Selectable(show_colored, ProgressBarColoringMode::ByProfession);
-		ImGuiEx::Selectable(show_colored, ProgressBarColoringMode::ByPercentage);
-
-		ImGui::EndCombo();
-	}
+	ImGuiEx::EnumCombo(showColoredText.c_str(), show_colored, {
+		                   ProgressBarColoringMode::Uncolored, ProgressBarColoringMode::ByProfession, ProgressBarColoringMode::ByPercentage
+	                   });
 	ImGui::PopItemWidth();
 
 	Alignment& alignment = settings.alignment;
 	std::string alignmentText = lang.translate(LangKey::SettingsAlignment);
 	alignmentText.append("###Alignment");
 	ImGui::PushItemWidth(120);
-	if (ImGui::BeginCombo(alignmentText.c_str(), to_string(alignment).c_str())) {
-		ImGuiEx::Selectable(alignment, Alignment::Unaligned);
-		ImGuiEx::Selectable(alignment, Alignment::Left);
-		ImGuiEx::Selectable(alignment, Alignment::Center);
-		ImGuiEx::Selectable(alignment, Alignment::Right);
-
-		ImGui::EndCombo();
-	}
+	ImGuiEx::EnumCombo(alignmentText.c_str(), alignment, {
+		                   Alignment::Unaligned, Alignment::Left, Alignment::Center, Alignment::Right
+	                   });
 	ImGui::PopItemWidth();
 
 	SizingPolicy& sizingPolicy = settings.sizingPolicy;
 	std::string sizingPolicyText = lang.translate(LangKey::SettingsSizingPolicy);
 	sizingPolicyText.append("###SizingPolicy");
-	if (ImGui::BeginCombo(sizingPolicyText.c_str(), to_string(sizingPolicy).c_str())) {
-		ImGuiEx::Selectable(sizingPolicy, SizingPolicy::SizeContentToWindow);
-		ImGuiEx::Selectable(sizingPolicy, SizingPolicy::ManualWindowSize);
-		ImGuiEx::Selectable(sizingPolicy, SizingPolicy::SizeToContent);
-
-		ImGui::EndCombo();
-	}
+	ImGuiEx::EnumCombo(sizingPolicyText.c_str(), sizingPolicy, {
+		                   SizingPolicy::SizeContentToWindow, SizingPolicy::ManualWindowSize, SizingPolicy::SizeToContent
+	                   });
 
 	ImGui::Separator();
-	
+
 	if (sizingPolicy == SizingPolicy::SizeToContent || sizingPolicy == SizingPolicy::ManualWindowSize) {
 		ImGui::Indent(20.f);
 		std::string column_width_label = lang.translate(LangKey::SettingsBoonColumnWidth);
