@@ -55,26 +55,20 @@ void SettingsUI::Draw(ImGuiTable* table) {
 	std::string showColoredText = lang.translate(LangKey::SettingsColoringMode);
 	showColoredText.append("###ShowColored");
 	ImGui::PushItemWidth(120);
-	ImGuiEx::EnumCombo(showColoredText.c_str(), show_colored, {
-		                   ProgressBarColoringMode::Uncolored, ProgressBarColoringMode::ByProfession, ProgressBarColoringMode::ByPercentage
-	                   });
+	ImGuiEx::EnumCombo(showColoredText.c_str(), show_colored, ProgressBarColoringMode::LAST_ENTRY);
 	ImGui::PopItemWidth();
 
 	Alignment& alignment = settings.alignment;
 	std::string alignmentText = lang.translate(LangKey::SettingsAlignment);
 	alignmentText.append("###Alignment");
 	ImGui::PushItemWidth(120);
-	ImGuiEx::EnumCombo(alignmentText.c_str(), alignment, {
-		                   Alignment::Unaligned, Alignment::Left, Alignment::Center, Alignment::Right
-	                   });
+	ImGuiEx::EnumCombo(alignmentText.c_str(), alignment, Alignment::FINAL_ENTRY);
 	ImGui::PopItemWidth();
 
 	SizingPolicy& sizingPolicy = settings.sizingPolicy;
 	std::string sizingPolicyText = lang.translate(LangKey::SettingsSizingPolicy);
 	sizingPolicyText.append("###SizingPolicy");
-	ImGuiEx::EnumCombo(sizingPolicyText.c_str(), sizingPolicy, {
-		                   SizingPolicy::SizeContentToWindow, SizingPolicy::ManualWindowSize, SizingPolicy::SizeToContent
-	                   });
+	ImGuiEx::EnumCombo(sizingPolicyText.c_str(), sizingPolicy, SizingPolicy::FINAL_ENTRY);
 
 	ImGui::Separator();
 

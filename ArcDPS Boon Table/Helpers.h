@@ -37,7 +37,9 @@ extern arc_log_func_ptr arc_log;
 enum class ProgressBarColoringMode {
 	Uncolored,
 	ByProfession,
-	ByPercentage
+	ByPercentage,
+
+	LAST_ENTRY
 };
 
 std::string to_string(ProgressBarColoringMode coloringMode);

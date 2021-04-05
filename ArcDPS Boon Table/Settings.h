@@ -9,7 +9,8 @@ class SettingsUI;
 enum class SizingPolicy {
 	SizeToContent,
 	SizeContentToWindow,
-	ManualWindowSize
+	ManualWindowSize,
+	FINAL_ENTRY
 };
 std::string to_string(SizingPolicy sizingPolicy);
 
