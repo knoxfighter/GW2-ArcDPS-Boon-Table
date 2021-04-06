@@ -6,7 +6,7 @@
 
 class SettingsUI {
 public:
-	void Draw(ImGuiTable* table);
+	void Draw(ImGuiTable* table, int tableIndex);
 
 private:
 	float self_color[4]{};

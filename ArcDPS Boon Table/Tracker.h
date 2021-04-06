@@ -1,9 +1,9 @@
 #pragma once
+
 #include <list>
 #include <string>
 #include <mutex>
 #include <set>
-
 
 #include "extension/arcdps_structs.h"
 #include "Player.h"
@@ -15,7 +15,7 @@ public:
 	bool is_squad = false;
 
 	mutable std::mutex players_mtx;
-	std::list<Player> players;
+	std::vector<Player> players;
 	mutable std::mutex npcs_mtx;
 	std::list<NPC> npcs;
 

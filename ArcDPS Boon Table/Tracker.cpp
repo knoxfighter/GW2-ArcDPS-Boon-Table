@@ -91,7 +91,7 @@ void Tracker::removePlayer(ag* src) {
 
 	// remove player from tracked list at all
 	std::unique_lock<std::mutex> lock(players_mtx);
-	players.remove_if([&id](const Player& player) {
+	std::erase_if(players, [&id](const Player& player) {
 		return player.id == id;
 	});
 	lock.unlock();

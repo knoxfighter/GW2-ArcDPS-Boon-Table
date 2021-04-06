@@ -21,12 +21,16 @@ Settings::~Settings() {
 	saveToFile();
 }
 
-Alignment Settings::getAlignment() const {
-	return alignment;
+bool& Settings::isShowChart(int tableIndex) {
+	return tables[tableIndex].show_chart;
 }
 
-bool Settings::isShowSubgroups(const Tracker& tracker) const {
-	return show_subgroups
+Alignment Settings::getAlignment(int tableIndex) const {
+	return tables[tableIndex].alignment;
+}
+
+bool Settings::isShowSubgroups(const Tracker& tracker, int tableIndex) const {
+	return tables[tableIndex].show_subgroups
 		&& tracker.is_squad
 		&& tracker.subgroups.size() > 1;
 }
@@ -35,48 +39,48 @@ WPARAM Settings::getTableKey() const {
 	return table_key;
 }
 
-bool Settings::isShowPlayers() const {
-	return show_players;
+bool Settings::isShowPlayers(int tableIndex) const {
+	return tables[tableIndex].show_players;
 }
 
-bool Settings::isShowNpcs() const {
-	return show_npcs;
+bool Settings::isShowNpcs(int tableIndex) const {
+	return tables[tableIndex].show_npcs;
 }
 
-bool Settings::isShowTotal() const {
-	return show_total;
+bool Settings::isShowTotal(int tableIndex) const {
+	return tables[tableIndex].show_total;
 }
 
-bool Settings::isShowBoonAsProgressBar() const {
-	return show_boon_as_progress_bar;
+bool Settings::isShowBoonAsProgressBar(int tableIndex) const {
+	return tables[tableIndex].show_boon_as_progress_bar;
 }
 
-ProgressBarColoringMode Settings::getShowColored() const {
-	return show_colored;
+ProgressBarColoringMode Settings::getShowColored(int tableIndex) const {
+	return tables[tableIndex].show_colored;
 }
 
-bool Settings::isAlternatingRowBg() const {
-	return alternating_row_bg;
+bool Settings::isAlternatingRowBg(int tableIndex) const {
+	return tables[tableIndex].alternating_row_bg;
 }
 
-bool Settings::isShowLabel() const {
-	return show_label;
+bool Settings::isShowLabel(int tableIndex) const {
+	return tables[tableIndex].show_label;
 }
 
-bool Settings::isHideHeader() const {
-	return hide_header;
+bool Settings::isHideHeader(int tableIndex) const {
+	return tables[tableIndex].hide_header;
 }
 
-SizingPolicy Settings::getSizingPolicy() const {
-	return sizingPolicy;
+SizingPolicy Settings::getSizingPolicy(int tableIndex) const {
+	return tables[tableIndex].sizingPolicy;
 }
 
-float Settings::getBoonColumnWidth() const {
-	return boon_column_width;
+float Settings::getBoonColumnWidth(int tableIndex) const {
+	return tables[tableIndex].boon_column_width;
 }
 
-bool Settings::isShowOnlySubgroup() const {
-	return show_only_subgroup;
+bool Settings::isShowOnlySubgroup(int tableIndex) const {
+	return tables[tableIndex].show_only_subgroup;
 }
 
 const ImVec4& Settings::getSelfColor() const {
@@ -89,73 +93,86 @@ const ImVec4& Settings::getSelfColor() const {
 	}
 }
 
+void Settings::setShowChart(int tableIndex, bool status) {
+	tables[tableIndex].show_chart = status;
+}
+
 void Settings::readFromFile() {
-	SI_Error rc = table_ini.LoadFile("addons\\arcdps\\arcdps_table.ini");
+	table_ini.LoadFile("addons\\arcdps\\arcdps_table.ini");
 
-	std::string pszValueString = table_ini.GetValue("table", "show", "0");
-	show_chart = std::stoi(pszValueString);
-
-	pszValueString = table_ini.GetValue("table", "key", "66");
+	std::string pszValueString = table_ini.GetValue("general", "key", "66");
 	table_key = std::stoi(pszValueString);
-
-	pszValueString = table_ini.GetValue("table", "show_players", "1");
-	show_players = std::stoi(pszValueString);
-
-	pszValueString = table_ini.GetValue("table", "show_subgroups", "1");
-	show_subgroups = std::stoi(pszValueString);
-
-	pszValueString = table_ini.GetValue("table", "show_total", "1");
-	show_total = std::stoi(pszValueString);
-
-	show_npcs = table_ini.GetBoolValue("table", "show_npcs", true);
-
-	pszValueString = table_ini.GetValue("table", "show_uptime_as_progress_bar", "1");
-	show_boon_as_progress_bar = std::stoi(pszValueString);
-
-	pszValueString = table_ini.GetValue("table", "show_colored", "0");
-	long show_colored_num = table_ini.GetLongValue("table", "show_colored", static_cast<long>(ProgressBarColoringMode::Uncolored));
-	show_colored = static_cast<ProgressBarColoringMode>(show_colored_num);
-
-	alternating_row_bg = table_ini.GetBoolValue("table", "alternating_row_bg", true);
-
-	show_label = table_ini.GetBoolValue("table", "show_label");
-
-	long pszValueLong = table_ini.GetLongValue("table", "alignment", static_cast<long>(Alignment::Right));
-	alignment = static_cast<Alignment>(pszValueLong);
-
-	hide_header = table_ini.GetBoolValue("table", "hide_header", false);
-
-	pszValueLong = table_ini.GetLongValue("table", "sizing_policy", static_cast<long>(SizingPolicy::SizeToContent));
-	sizingPolicy = static_cast<SizingPolicy>(pszValueLong);
-
-	boon_column_width = table_ini.GetDoubleValue("table", "boon_column_width", 80);
-
-	show_only_subgroup = table_ini.GetBoolValue("table", "show_only_subgroup", false);
 
 	const char* value = table_ini.GetValue("colors", "self_color", "");
 	self_color = ImVec4_color_from_string(value);
+
+	for (int i = 0; i < MaxTableWindowAmount; ++i) {
+		readTable(i);
+	}
+}
+
+void Settings::readTable(int tableIndex) {
+	Table& table = tables[tableIndex];
+	std::string sectionName = "table";
+
+	if (tableIndex > 0) {
+		sectionName.append(std::to_string(tableIndex));
+	}
+
+	table.show_chart = table_ini.GetBoolValue(sectionName.c_str(), "show");
+	table.show_players = table_ini.GetBoolValue(sectionName.c_str(), "show_players", true);
+	table.show_subgroups = table_ini.GetBoolValue(sectionName.c_str(), "show_subgroups", true);
+	table.show_total = table_ini.GetBoolValue(sectionName.c_str(), "show_total", true);
+	table.show_npcs = table_ini.GetBoolValue(sectionName.c_str(), "show_npcs", true);
+	table.show_boon_as_progress_bar = table_ini.GetBoolValue(sectionName.c_str(), "show_uptime_as_progress_bar", true);
+	long show_colored_num = table_ini.GetLongValue(sectionName.c_str(), "show_colored", static_cast<long>(ProgressBarColoringMode::Uncolored));
+	table.show_colored = static_cast<ProgressBarColoringMode>(show_colored_num);
+	table.alternating_row_bg = table_ini.GetBoolValue(sectionName.c_str(), "alternating_row_bg", true);
+	table.show_label = table_ini.GetBoolValue(sectionName.c_str(), "show_label");
+	long pszValueLong = table_ini.GetLongValue(sectionName.c_str(), "alignment", static_cast<long>(Alignment::Right));
+	table.alignment = static_cast<Alignment>(pszValueLong);
+	table.hide_header = table_ini.GetBoolValue(sectionName.c_str(), "hide_header", false);
+	pszValueLong = table_ini.GetLongValue(sectionName.c_str(), "sizing_policy", static_cast<long>(SizingPolicy::SizeToContent));
+	table.sizingPolicy = static_cast<SizingPolicy>(pszValueLong);
+	table.boon_column_width = table_ini.GetDoubleValue(sectionName.c_str(), "boon_column_width", 80);
+	table.show_only_subgroup = table_ini.GetBoolValue(sectionName.c_str(), "show_only_subgroup", false);
 }
 
 void Settings::saveToFile() {
-	SI_Error rc = table_ini.SetValue("table", "show", std::to_string(show_chart).c_str());
-
-	rc = table_ini.SetValue("table", "show_players", std::to_string(show_players).c_str());
-	rc = table_ini.SetValue("table", "show_subgroups", std::to_string(show_subgroups).c_str());
-	rc = table_ini.SetValue("table", "show_total", std::to_string(show_total).c_str());
-	rc = table_ini.SetBoolValue("table", "show_npcs", show_npcs);
-	rc = table_ini.SetValue("table", "show_uptime_as_progress_bar", std::to_string(show_boon_as_progress_bar).c_str());
-	rc = table_ini.SetLongValue("table", "show_colored", static_cast<long>(show_colored));
-	rc = table_ini.SetBoolValue("table", "show_label", show_label);
-	rc = table_ini.SetBoolValue("table", "alternating_row_bg", alternating_row_bg);
-	rc = table_ini.SetLongValue("table", "alignment", static_cast<long>(alignment));
-	rc = table_ini.SetBoolValue("table", "hide_header", hide_header);
-	rc = table_ini.SetLongValue("table", "sizing_policy", static_cast<long>(sizingPolicy));
-	rc = table_ini.SetDoubleValue("table", "boon_column_width", boon_column_width);
-	rc = table_ini.SetBoolValue("table", "show_only_subgroup", show_only_subgroup);
+	table_ini.SetValue("general", "key", std::to_string(table_key).c_str());
 
 	if (self_color) {
 		table_ini.SetValue("colors", "self_color", to_string(self_color.value()).c_str());
 	}
 
-	rc = table_ini.SaveFile("addons\\arcdps\\arcdps_table.ini");
+	for (int i = 0; i < MaxTableWindowAmount; ++i) {
+		saveTable(i);
+	}
+
+	table_ini.SaveFile("addons\\arcdps\\arcdps_table.ini");
 }
+
+void Settings::saveTable(int tableIndex) {
+	const Table& table = tables[tableIndex];
+	std::string sectionName = "table";
+
+	if (tableIndex > 0) {
+		sectionName.append(std::to_string(tableIndex));
+	}
+
+	table_ini.SetBoolValue(sectionName.c_str(), "show", table.show_chart);
+	table_ini.SetBoolValue(sectionName.c_str(), "show_players", table.show_players);
+	table_ini.SetBoolValue(sectionName.c_str(), "show_subgroups", table.show_subgroups);
+	table_ini.SetBoolValue(sectionName.c_str(), "show_total", table.show_total);
+	table_ini.SetBoolValue(sectionName.c_str(), "show_npcs", table.show_npcs);
+	table_ini.SetBoolValue(sectionName.c_str(), "show_uptime_as_progress_bar", table.show_boon_as_progress_bar);
+	table_ini.SetLongValue(sectionName.c_str(), "show_colored", static_cast<long>(table.show_colored));
+	table_ini.SetBoolValue(sectionName.c_str(), "show_label", table.show_label);
+	table_ini.SetBoolValue(sectionName.c_str(), "alternating_row_bg", table.alternating_row_bg);
+	table_ini.SetLongValue(sectionName.c_str(), "alignment", static_cast<long>(table.alignment));
+	table_ini.SetBoolValue(sectionName.c_str(), "hide_header", table.hide_header);
+	table_ini.SetLongValue(sectionName.c_str(), "sizing_policy", static_cast<long>(table.sizingPolicy));
+	table_ini.SetDoubleValue(sectionName.c_str(), "boon_column_width", table.boon_column_width);
+	table_ini.SetBoolValue(sectionName.c_str(), "show_only_subgroup", table.show_only_subgroup);
+}
+

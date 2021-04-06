@@ -7,7 +7,7 @@
 
 SettingsUI settingsUi;
 
-void SettingsUI::Draw(ImGuiTable* table) {
+void SettingsUI::Draw(ImGuiTable* table, int tableIndex) {
 	if (!init) {
 		init = true;
 		initialize();
@@ -15,10 +15,10 @@ void SettingsUI::Draw(ImGuiTable* table) {
 
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.f, 0.f));
 
-	ImGui::Checkbox(lang.translate(LangKey::SettingsPlayers).c_str(), &settings.show_players);
-	ImGui::Checkbox(lang.translate(LangKey::SettingsSubgroups).c_str(), &settings.show_subgroups);
-	ImGui::Checkbox(lang.translate(LangKey::SettingsTotal).c_str(), &settings.show_total);
-	ImGui::Checkbox(lang.translate(LangKey::SettingsNPC).c_str(), &settings.show_npcs);
+	ImGui::Checkbox(lang.translate(LangKey::SettingsPlayers).c_str(), &settings.tables[tableIndex].show_players);
+	ImGui::Checkbox(lang.translate(LangKey::SettingsSubgroups).c_str(), &settings.tables[tableIndex].show_subgroups);
+	ImGui::Checkbox(lang.translate(LangKey::SettingsTotal).c_str(), &settings.tables[tableIndex].show_total);
+	ImGui::Checkbox(lang.translate(LangKey::SettingsNPC).c_str(), &settings.tables[tableIndex].show_npcs);
 
 	ImGui::Separator();
 	if (ImGui::BeginMenu(lang.translate(LangKey::SettingsColumnSetup).c_str(), table != nullptr)) {
@@ -44,27 +44,27 @@ void SettingsUI::Draw(ImGuiTable* table) {
 	}
 
 	if (ImGui::BeginMenu(lang.translate(LangKey::SettingsStyle).c_str())) {
-		ImGui::Checkbox(lang.translate(LangKey::SettingsShowProgressBar).c_str(), &settings.show_boon_as_progress_bar);
-		ImGui::Checkbox(lang.translate(LangKey::SettingsAlternatingRow).c_str(), &settings.alternating_row_bg);
-		ImGui::Checkbox(lang.translate(LangKey::SettingsShowLabel).c_str(), &settings.show_label);
-		ImGui::Checkbox(lang.translate(LangKey::SettingsHideHeader).c_str(), &settings.hide_header);
-		ImGui::Checkbox(lang.translate(LangKey::SettingsShowOnlySubgroup).c_str(), &settings.show_only_subgroup);
+		ImGui::Checkbox(lang.translate(LangKey::SettingsShowProgressBar).c_str(), &settings.tables[tableIndex].show_boon_as_progress_bar);
+		ImGui::Checkbox(lang.translate(LangKey::SettingsAlternatingRow).c_str(), &settings.tables[tableIndex].alternating_row_bg);
+		ImGui::Checkbox(lang.translate(LangKey::SettingsShowLabel).c_str(), &settings.tables[tableIndex].show_label);
+		ImGui::Checkbox(lang.translate(LangKey::SettingsHideHeader).c_str(), &settings.tables[tableIndex].hide_header);
+		ImGui::Checkbox(lang.translate(LangKey::SettingsShowOnlySubgroup).c_str(), &settings.tables[tableIndex].show_only_subgroup);
 
-		ProgressBarColoringMode& show_colored = settings.show_colored;
+		ProgressBarColoringMode& show_colored = settings.tables[tableIndex].show_colored;
 		std::string showColoredText = lang.translate(LangKey::SettingsColoringMode);
 		showColoredText.append("###ShowColored");
 		ImGui::PushItemWidth(120);
 		ImGuiEx::EnumCombo(showColoredText.c_str(), show_colored, ProgressBarColoringMode::LAST_ENTRY);
 		ImGui::PopItemWidth();
 
-		Alignment& alignment = settings.alignment;
+		Alignment& alignment = settings.tables[tableIndex].alignment;
 		std::string alignmentText = lang.translate(LangKey::SettingsAlignment);
 		alignmentText.append("###Alignment");
 		ImGui::PushItemWidth(120);
 		ImGuiEx::EnumCombo(alignmentText.c_str(), alignment, Alignment::FINAL_ENTRY);
 		ImGui::PopItemWidth();
 
-		SizingPolicy& sizingPolicy = settings.sizingPolicy;
+		SizingPolicy& sizingPolicy = settings.tables[tableIndex].sizingPolicy;
 		std::string sizingPolicyText = lang.translate(LangKey::SettingsSizingPolicy);
 		sizingPolicyText.append("###SizingPolicy");
 		ImGuiEx::EnumCombo(sizingPolicyText.c_str(), sizingPolicy, SizingPolicy::FINAL_ENTRY);
@@ -73,7 +73,7 @@ void SettingsUI::Draw(ImGuiTable* table) {
 			ImGui::Indent(20.f);
 			std::string column_width_label = lang.translate(LangKey::SettingsBoonColumnWidth);
 			column_width_label.append("###BoonColumnWidth");
-			ImGui::SliderFloat(column_width_label.c_str(), &settings.boon_column_width, 20, 200);
+			ImGui::SliderFloat(column_width_label.c_str(), &settings.tables[tableIndex].boon_column_width, 20, 200);
 			if (ImGui::IsItemHovered()) {
 				ImGui::SetTooltip(lang.translate(LangKey::SettingsWidthSlideTooltip).c_str());
 			}

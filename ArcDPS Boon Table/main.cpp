@@ -36,7 +36,6 @@ bool modsPressed();
 bool canMoveWindows();
 
 Tracker tracker;
-AppChart chart;
 
 typedef uint64_t(*arc_export_func_u64)();
 
@@ -239,7 +238,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 					if (dst && dst->name)
 					{
 						tracker.addPlayer(src,dst);
-						chart.needSort = true;
+						charts.sortNeeded();
 					}
 				}
 
@@ -302,7 +301,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 						}
 					}
 					tracker.bakeCombatData();
-					chart.needSort = true;
+					charts.sortNeeded();
 				}
 			}
 			else if (ev->is_statechange == CBTS_EXITCOMBAT)
@@ -344,7 +343,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 				if (entity)
 				{
 					entity->removeBoon(ev);
-					chart.needSort = true;
+					charts.sortNeeded();
 				}
 			}
 		}
@@ -363,7 +362,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 			else
 			{
 				tracker.applyBoon(src, dst, ev);
-				chart.needSort = true;
+				charts.sortNeeded();
 			}
 		}
 
@@ -391,19 +390,22 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 	{
 		if (ImGui::IsKeyPressed(settings.getTableKey()))
 		{
-			settings.show_chart = !settings.show_chart;
+			settings.setShowChart(0, !settings.isShowChart(0));
 		}
 	}
 
-	if (settings.show_chart)
-	{
-		chart.Draw(&settings.show_chart, tracker, !canMoveWindows() ? ImGuiWindowFlags_NoMove : 0);
-	}
+	charts.drawAll(tracker, !canMoveWindows() ? ImGuiWindowFlags_NoMove : 0);
 	return 0;
 }
 uintptr_t mod_options()
 {
-	ImGui::Checkbox(lang.translate(LangKey::ShowChart).c_str(), &settings.show_chart);
+	ImGui::Checkbox(lang.translate(LangKey::ShowChart).c_str(), &settings.isShowChart(0));
+	ImGui::SameLine();
+	ImGuiEx::BeginMenuChild("optionsBoonSubmenu", "", []() {
+		for (int i = 1; i < MaxTableWindowAmount; ++i) {
+			ImGui::Checkbox(std::to_string(i).c_str(), &settings.isShowChart(i));
+		}
+	});
 
 	return 0;
 }
