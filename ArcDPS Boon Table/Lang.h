@@ -48,6 +48,7 @@ BUILD_ENUM_INI_NAMES(
 	SettingsSelfColor,
 	SettingsWidthSlideTooltip,
 	SettingsColumnSetup,
+	SettingsStyle,
 
 	SizingPolicySizeToContent,
 	SizingPolicySizeContentToWindow,
@@ -131,6 +132,7 @@ static const std::map<LangKey, std::string> langDefaults = {
 		{LangKey::SettingsSelfColor, "Self Color"},
 		{LangKey::SettingsWidthSlideTooltip, "Press CTRL+Leftclick to manually input the number."},
 		{LangKey::SettingsColumnSetup, "Column Setup"},
+		{LangKey::SettingsStyle, "Style"},
 
 		{LangKey::SizingPolicySizeToContent, "Autoresize window to content"},
 		{LangKey::SizingPolicySizeContentToWindow, "Size content to window"},
