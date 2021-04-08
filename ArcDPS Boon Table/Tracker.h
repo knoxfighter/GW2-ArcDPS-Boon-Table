@@ -20,6 +20,7 @@ public:
 	std::list<NPC> npcs;
 
 	std::mutex subgroups_mtx;
+
 	std::set<uint8_t> subgroups;
 
 	Tracker() = default;
@@ -42,9 +43,13 @@ public:
 	Entity* getEntity(uintptr_t new_npc);
 
 	void applyBoon(ag* src, ag* dst, cbtevent* ev);
+	void dealtDamage(ag* src, cbtevent* ev);
 	
 	std::set<uint8_t> getSubgroups();
 	float getSubgroupBoonUptime(const BoonDef& boon, uint8_t subgroup) const;
+	float getSubgroupOver90(uint8_t subgroup) const;
+	
 	float getAverageBoonUptime(const BoonDef& boon) const;
+	float getAverageOver90() const;
 };
 

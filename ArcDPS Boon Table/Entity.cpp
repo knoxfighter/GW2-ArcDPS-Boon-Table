@@ -64,7 +64,7 @@ void Entity::gaveBoon(cbtevent* ev)
 {
 	if (!ev) return;
 	if (ev->value == 0) return;
-	if (ev->is_offcycle) return;//don't track boon extensions until they have a proper src
+	if (ev->is_offcycle) return; //don't track boon extensions until they have a proper src
 
 	BoonDef* current_def = getTrackedBoon(ev->skillid);
 	if (!current_def) return;
@@ -93,6 +93,15 @@ void Entity::flushAllBoons()
 	boons_uptime.clear();
 	boons_generation_initial.clear();
 	boons_generation.clear();
+}
+
+void Entity::dealtDamage(cbtevent* ev) {
+	BoonDef* trackedBoon = getTrackedBoon(-1);
+	if (!trackedBoon) return;
+	if (!in_combat) return;
+
+	++damageEvents;
+	if (ev->is_ninety) ++damageEventsOver90;
 }
 
 float Entity::getBoonUptime(const BoonDef& boon) const {
@@ -149,6 +158,9 @@ void Entity::combatEnter(cbtevent* ev)
 	enter_combat_time = ev->time;
 	in_combat = true;
 	uint64_t duration_remaining = 0;
+
+	damageEvents = 0;
+	damageEventsOver90 = 0;
 
 	std::lock_guard<std::mutex> lock(boons_mtx);
 	boons_uptime.clear();
@@ -219,6 +231,11 @@ uint64_t Entity::getCombatDuration() const {
 	{
 		return exit_combat_time - enter_combat_time;
 	}
+}
+
+float Entity::getOver90() const {
+	if (damageEvents == 0) return 0.f;
+	return float(damageEventsOver90) / float(damageEvents);
 }
 
 ImVec4 Entity::getColor() const {

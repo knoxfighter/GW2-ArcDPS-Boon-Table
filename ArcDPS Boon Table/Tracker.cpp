@@ -200,6 +200,14 @@ void Tracker::applyBoon(ag* src, ag* dst, cbtevent* ev) {
 	}
 }
 
+void Tracker::dealtDamage(ag* src, cbtevent* ev) {
+	Entity* entity = getEntity(src->id);
+
+	if (entity) {
+		entity->dealtDamage(ev);
+	}
+}
+
 std::set<uint8_t> Tracker::getSubgroups() {
 	std::lock_guard<std::mutex> lock(players_mtx);
 	std::set<uint8_t> out;
@@ -230,12 +238,46 @@ float Tracker::getSubgroupBoonUptime(const BoonDef& boon, uint8_t subgroup) cons
 	}
 }
 
+float Tracker::getSubgroupOver90(uint8_t subgroup) const {
+	float out = 0.0f;
+	uint8_t player_num = 0;
+
+	for (const Player& player : players) {
+		if (player.subgroup != subgroup) continue;
+
+		out += player.getOver90();
+
+		// count players in this subgroup
+		++player_num;
+	}
+
+	if (player_num == 0) {
+		return out;
+	}
+	else {
+		return out / player_num;
+	}
+}
+
 float Tracker::getAverageBoonUptime(const BoonDef& boon) const {
 	float out = 0.0f;
 	uint8_t player_num = 0;
 
 	for (const Player& player : players) {
 		out += player.getBoonUptime(boon);
+		player_num++;
+	}
+	if (isnan(out)) return 0.0f;
+	if (player_num == 0) return out;
+	return out / player_num;
+}
+
+float Tracker::getAverageOver90() const {
+	float out = 0.0f;
+	uint8_t player_num = 0;
+
+	for (const Player& player : players) {
+		out += player.getOver90();
 		player_num++;
 	}
 	if (isnan(out)) return 0.0f;

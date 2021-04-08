@@ -42,9 +42,10 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 	}
 
 	// columns: charname | subgroup | tracked_buffs
-	const int columnCount = tracked_buffs.size() + 2;
-	const unsigned int nameColumnId = columnCount - 2;
-	const unsigned int subgroupColumnId = columnCount - 1;
+	const int columnCount = tracked_buffs.size() + 3;
+	const unsigned int nameColumnId = columnCount - 3;
+	const unsigned int subgroupColumnId = columnCount - 2;
+	const unsigned int above90ColumnId = columnCount - 1;
 
 	// we have to get it here, cause it will lock tracker.players_mtx itself (which causes a crash, when it is already locked)
 	Player* self_player = tracker.getPlayer(2000);
@@ -73,7 +74,8 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		imGuiTable = imGuiContext.CurrentTable;
 		
 		Alignment alignment = settings.getAlignment(index);
-		
+		bool showLabel = settings.isShowLabel(index);
+
 		/*
 		 * HEADER
 		 */
@@ -84,6 +86,11 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		ImGui::TableSetupColumn(charName.c_str(), columnFlags, 0, nameColumnId);
 		ImGui::TableSetupColumn(subgroupName.c_str(), columnFlags, 0, subgroupColumnId);
 
+		float init_width = 80.f;
+		if (sizingPolicy == SizingPolicy::SizeToContent || sizingPolicy == SizingPolicy::ManualWindowSize) {
+			init_width = settings.getBoonColumnWidth(index);
+		}
+		
 		ImU32 i = 0;
 		for (const BoonDef& trackedBuff : tracked_buffs) {
 			int bufFlags = ImGuiTableColumnFlags_NoResize;
@@ -93,14 +100,13 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 			if (i == 0) {
 				bufFlags |= ImGuiTableColumnFlags_DefaultSort;
 			}
-			float init_width = 80.f;
-			if (sizingPolicy == SizingPolicy::SizeToContent || sizingPolicy == SizingPolicy::ManualWindowSize) {
-				init_width = settings.getBoonColumnWidth(index);
-			}
+			
 			ImGui::TableSetupColumn(trackedBuff.name.c_str(), bufFlags, init_width, i);
 
 			++i;
 		}
+
+		ImGui::TableSetupColumn(above90BoonDef->name.c_str(), ImGuiTableColumnFlags_NoResize | ImGuiTableColumnFlags_DefaultHide, init_width, above90ColumnId);
 
 		ImGui::TableNextRow(ImGuiTableRowFlags_Headers);
 
@@ -112,10 +118,16 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		if (ImGui::TableNextColumn())
 			ImGuiEx::TableHeader(subgroupName.c_str(), true, nullptr);
 
+		// buff headers
 		for (const BoonDef& trackedBuff : tracked_buffs) {
 			if (ImGui::TableNextColumn()) {
-				ImGuiEx::TableHeader(trackedBuff.name.c_str(), settings.isShowLabel(index), trackedBuff.icon->texture, alignment);
+				ImGuiEx::TableHeader(trackedBuff.name.c_str(), showLabel, trackedBuff.icon->texture, alignment);
 			}
+		}
+
+		// above90 header
+		if (ImGui::TableNextColumn()) {
+			ImGuiEx::TableHeader(above90BoonDef->name.c_str(), showLabel, above90BoonDef->icon->texture, alignment);
 		}
 
 
@@ -158,6 +170,18 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 							return player1.subgroup > player2.subgroup;
 						}
 					});
+				} else if (sorts_specs->Specs->ColumnUserID == above90ColumnId) {
+					// sort by above 90% hp
+					std::sort(playerOrder.begin(), playerOrder.end(), [descend, &tracker](const size_t& playerIdx1, const size_t& playerIdx2) {
+						const Player& player1 = tracker.players.at(playerIdx1);
+						const Player& player2 = tracker.players.at(playerIdx2);
+						if (descend) {
+							return player1.getOver90() < player2.getOver90();
+						}
+						else {
+							return player1.getOver90() > player2.getOver90();
+						}
+					});
 				} else {
 					// sort by buff
 					const ImGuiID buffId = sorts_specs->Specs->ColumnUserID;
@@ -188,7 +212,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 				}
 				return true;
 			};
-			for (Player player : tracker.players | std::views::filter(group_filter)) {
+			for (const Player& player : tracker.players | std::views::filter(group_filter)) {
 				// charname
 				if (player.self) {
 					ImGui::PushStyleColor(ImGuiCol_Text, settings.getSelfColor());
@@ -214,6 +238,12 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 
 						buffProgressBar(trackedBuff, boonUptime, ImGui::GetColumnWidth(), player);
 					}
+				}
+
+				// over90
+				if (ImGui::TableNextColumn()) {
+					const float above90 = player.getOver90();
+					buffProgressBar(*above90BoonDef, above90, ImGui::GetColumnWidth(), player);
 				}
 			}
 		}
@@ -253,6 +283,12 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 						buffProgressBar(trackedBuff, boonUptime, ImGui::GetColumnWidth());
 					}
 				}
+
+				// above 90
+				if (ImGui::TableNextColumn()) {
+					const float above90 = tracker.getSubgroupOver90(subgroup);
+					buffProgressBar(*above90BoonDef, above90, ImGui::GetColumnWidth());
+				}
 			}
 		}
 
@@ -281,6 +317,12 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 					buffProgressBar(trackedBuff, averageBoonUptime, ImGui::GetColumnWidth());
 				}
 			}
+
+			// above90
+			if (ImGui::TableNextColumn()) {
+				const float above90 = tracker.getAverageOver90();
+				buffProgressBar(*above90BoonDef, above90, ImGui::GetColumnWidth());
+			}
 		}
 
 		/*
@@ -289,27 +331,33 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		if (settings.isShowNpcs(index) && !tracker.npcs.empty()) {
 			ImGui::TableNextRow();
 			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
-			for (NPC npc : tracker.npcs) {
+			for (const NPC& npc : tracker.npcs) {
 				ImVec4 npc_color = npc.getColor();
-
+		
 				// charname
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
 				std::string name_string = npc.name; // +(npc.in_combat ? "*" : "") + " (" + std::to_string(npc.id) + ")";
 				ImGui::Text(name_string.c_str());
-
+		
 				// subgroup
 				if (ImGui::TableNextColumn()) {
 					ImGuiEx::AlignedTextColumn(alignment, lang.translate(LangKey::NPCSubgroupColumnValue).c_str());
 				}
-
+		
 				// buffs
 				for (const BoonDef& trackedBuff : tracked_buffs) {
 					if (ImGui::TableNextColumn()) {
 						const float boonUptime = getEntityDisplayValue(tracker, npc, trackedBuff);
-
+		
 						buffProgressBar(trackedBuff, boonUptime, ImGui::GetColumnWidth(), npc);
 					}
+				}
+		
+				// above 90
+				if (ImGui::TableNextColumn()) {
+					const float above90 = npc.getOver90();
+					buffProgressBar(*above90BoonDef, above90, ImGui::GetColumnWidth());
 				}
 			}
 		}

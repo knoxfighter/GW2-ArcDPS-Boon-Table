@@ -222,44 +222,32 @@ uintptr_t npc_ids[num_of_npcs];
 
 /* combat callback -- may be called asynchronously. return ignored */
 /* one participant will be party/squad, or minion of. no spawn statechange events. despawn statechange only on marked boss npcs */
-uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision)
-{
+uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision) {
 	/* ev is null. dst will only be valid on tracking add. skillname will also be null */
-	if (!ev)
-	{
-		if (src)
-		{
+	if (!ev) {
+		if (src) {
 			/* notify tracking change */
-			if (!src->elite)
-			{
+			if (!src->elite) {
 				/* add */
-				if (src->prof)
-				{
-					if (dst && dst->name)
-					{
+				if (src->prof) {
+					if (dst && dst->name) {
 						tracker.addPlayer(src,dst);
 						charts.sortNeeded();
 					}
 				}
-
 				/* remove */
-				else
-				{
+				else {
 					tracker.removePlayer(src);
 				}
 			}
-
 			/* notify target change */
-			else if (src->elite == 1)
-			{
+			else if (src->elite == 1) {
 
 			}
 		}
 	}
-
 	/* combat event. skillname may be null. non-null skillname will remain static until module is unloaded. refer to evtc notes for complete detail */
-	else
-	{
+	else {
 		/* common */
 
 		
@@ -285,17 +273,13 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 		if(ev->time > 0) current_time = ev->time;
 
 		/* statechange */
-		if (ev->is_statechange)
-		{
-			if (ev->is_statechange == CBTS_ENTERCOMBAT)
-			{
+		if (ev->is_statechange) {
+			if (ev->is_statechange == CBTS_ENTERCOMBAT) {
 				Player* player = tracker.getPlayer(src->id);
-				if (player)
-				{
+				if (player) {
 					player->combatEnter(ev);
 
-					if(src->self)
-					{
+					if(src->self) {
 						for (NPC& npc : tracker.npcs) {
 							npc.combatEnter(ev);
 						}
@@ -304,8 +288,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 					charts.sortNeeded();
 				}
 			}
-			else if (ev->is_statechange == CBTS_EXITCOMBAT)
-			{
+			else if (ev->is_statechange == CBTS_EXITCOMBAT) {
 				Player* player = tracker.getPlayer(src->id);
 				if (player)
 				{
@@ -319,8 +302,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 					}
 				}
 			}
-			else if (ev->is_statechange == CBTS_STATRESET)
-			{
+			else if (ev->is_statechange == CBTS_STATRESET) {
 				for (Player& player : tracker.players) {
 					player.combatExit(ev);
 					// do not call combatEnter on Player, cause ev->dst_agent (subgroup) is not set
@@ -328,48 +310,36 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 				}
 			}
 		}
-
 		/* activation */
-		else if (ev->is_activation)
-		{
+		else if (ev->is_activation) {
 		}
 
 		/* buff remove */
-		else if (ev->is_buffremove)
-		{
-			if (ev->is_buffremove == CBTB_MANUAL)//TODO: move to tracker
-			{
+		else if (ev->is_buffremove) {
+			if (ev->is_buffremove == CBTB_MANUAL) { //TODO: move to tracker
 				Entity* entity = tracker.getEntity(src->id);
-				if (entity)
-				{
+				if (entity) {
 					entity->removeBoon(ev);
 					charts.sortNeeded();
 				}
 			}
 		}
-
 		/* buff */
-		else if (ev->buff)
-		{
-
+		else if (ev->buff) {
 			/* damage */
-			if (ev->buff_dmg)
-			{
+			if (ev->buff_dmg) {
 
 			}
-
 			/* application */
-			else
-			{
+			else {
 				tracker.applyBoon(src, dst, ev);
 				charts.sortNeeded();
 			}
 		}
-
 		/* physical */
-		else
-		{
-			
+		else {
+			// read out if players are above 90% health
+			tracker.dealtDamage(src, ev);
 		}
 
 		/* common */

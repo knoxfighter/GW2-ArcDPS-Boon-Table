@@ -100,6 +100,7 @@ BUILD_ENUM_INI_NAMES(
 	BuffSignetInspiration,
 	BuffStealth,
 	BuffSuperspeed,
+	Above90Hp,
 
 	// always last element
 	// ALWAYS UPDATE AFTER CHANGING THE ENUM
@@ -185,6 +186,7 @@ static const std::map<LangKey, std::string> langDefaults = {
 		{LangKey::BuffSignetInspiration, "Inspiration"},
 		{LangKey::BuffStealth, "Stealth"},
 		{LangKey::BuffSuperspeed, "Superspeed"},
+		{LangKey::Above90Hp, "above 90% HP"},
 };
 
 class Lang {
