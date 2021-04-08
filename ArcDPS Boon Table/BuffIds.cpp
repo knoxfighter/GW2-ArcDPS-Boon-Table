@@ -40,7 +40,7 @@ void init_tracked_buffs(IDirect3DDevice9* d3d9device) {
 	tracked_buffs.emplace_back(std::vector<uint32_t>{5974}, lang.translate(LangKey::BuffSuperspeed), StackingType_single, false, BoonType_other, new Icon(ID_Super_Speed2, self_dll, d3d9device));
 
 	// above 90
-	above90BoonDef = std::make_shared<BoonDef>(std::vector<uint32_t>{static_cast<uint32_t>(-1)}, lang.translate(LangKey::Above90Hp), StackingType_single, false, BoonType_other, new Icon(ID_Super_Speed2, self_dll, d3d9device)); // above 90% hp (e.g. scholar)
+	above90BoonDef = std::make_shared<BoonDef>(std::vector<uint32_t>{static_cast<uint32_t>(-1)}, lang.translate(LangKey::Above90Hp), StackingType_single, false, BoonType_other, new Icon(ID_Rune_Scholar, self_dll, d3d9device)); // above 90% hp (e.g. scholar)
 }
 
 BoonDef* getTrackedBoon(uint32_t new_id) {

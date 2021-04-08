@@ -260,6 +260,7 @@
     <Image Include="icons\Regeneration.png" />
     <Image Include="icons\Resistance.png" />
     <Image Include="icons\Retaliation.png" />
+    <Image Include="icons\Rune_of_the_Scholar.png" />
     <Image Include="icons\Signet_of_Inspiration2.png" />
     <Image Include="icons\Soothing_Mist.png" />
     <Image Include="icons\Spotter.png" />

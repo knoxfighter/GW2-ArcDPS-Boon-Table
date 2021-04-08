@@ -270,5 +270,8 @@
     <Image Include="icons\Super_Speed2.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="icons\Rune_of_the_Scholar.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

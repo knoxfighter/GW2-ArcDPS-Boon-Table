@@ -112,6 +112,8 @@ ID_Stealth2             PNG                     "icons\\Stealth2.png"
 
 ID_Super_Speed2         PNG                     "icons\\Super_Speed2.png"
 
+ID_Rune_Scholar         PNG                     "icons\\Rune_of_the_Scholar.png"
+
 #endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
