@@ -96,8 +96,6 @@ void Entity::flushAllBoons()
 }
 
 void Entity::dealtDamage(cbtevent* ev) {
-	BoonDef* trackedBoon = getTrackedBoon(-1);
-	if (!trackedBoon) return;
 	if (!in_combat) return;
 
 	++damageEvents;

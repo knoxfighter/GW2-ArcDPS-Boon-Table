@@ -30,13 +30,21 @@ void SettingsUI::Draw(ImGuiTable* table, int tableIndex) {
 		ImGuiEx::MenuItemTableColumnVisibility(table, 1);
 
 		// Submenus for controlling visibility
-		tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeBoon).c_str(), BoonType_boon);
-		tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeTrait).c_str(), BoonType_trait);
-		tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeBanner).c_str(), BoonType_banner);
-		tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeSprit).c_str(), BoonType_spirit);
+		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeBoon).c_str(), BoonType_boon, 2))
+			ImGui::EndMenu();
+		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeTrait).c_str(), BoonType_trait, 2))
+			ImGui::EndMenu();
+		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeBanner).c_str(), BoonType_banner, 2))
+			ImGui::EndMenu();
+		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeSprit).c_str(), BoonType_spirit, 2))
+			ImGui::EndMenu();
 		// tableColumnSubMenu(imGuiTable, lang.translate(LangKey::BoonTypeSkill).c_str(),", BoonType_skill); // this boontype is empty
-		tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeSignet).c_str(), BoonType_signet);
-		tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeOther).c_str(), BoonType_other);
+		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeSignet).c_str(), BoonType_signet, 2))
+			ImGui::EndMenu();
+		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeOther).c_str(), BoonType_other, 2)) {
+			ImGuiEx::MenuItemTableColumnVisibility(table, tracked_buffs.size() + 2);
+			ImGui::EndMenu();
+		}
 
 		ImGui::PopItemFlag();
 
@@ -116,16 +124,17 @@ void SettingsUI::initialize() {
 	self_color[3] = imVec4.w;
 }
 
-void SettingsUI::tableColumnSubMenu(ImGuiTable* table, const char* label, BoonType type) const {
+bool SettingsUI::tableColumnSubMenu(ImGuiTable* table, const char* label, BoonType type, int beginId) const {
 	if (ImGui::BeginMenu(label)) {
-		int i = 2;
 		for (const BoonDef& trackedBuff : tracked_buffs) {
 			if (trackedBuff.category == type) {
-				ImGuiEx::MenuItemTableColumnVisibility(table, i);
+				ImGuiEx::MenuItemTableColumnVisibility(table, beginId);
 			}
-			++i;
+			++beginId;
 		}
 
-		ImGui::EndMenu();
+		return true;
 	}
+
+	return false;
 }

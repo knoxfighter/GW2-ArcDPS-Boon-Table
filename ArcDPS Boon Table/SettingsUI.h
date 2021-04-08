@@ -13,7 +13,7 @@ private:
 	bool init = false;
 	
 	void initialize();
-	void tableColumnSubMenu(ImGuiTable* table, const char* label, BoonType type) const;
+	bool tableColumnSubMenu(ImGuiTable* table, const char* label, BoonType type, int beginId) const;
 };
 
 extern SettingsUI settingsUi;
