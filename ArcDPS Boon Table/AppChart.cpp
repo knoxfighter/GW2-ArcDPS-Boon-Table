@@ -186,7 +186,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 					// sort by buff
 					const ImGuiID buffId = sorts_specs->Specs->ColumnUserID;
 					const BoonDef& buff = tracked_buffs[buffId];
-					std::sort(playerOrder.begin(), playerOrder.end(), [descend, &tracker, &buff](const size_t& playerIdx1, const size_t& playerIdx2) {
+					std::sort(playerOrder.begin(), playerOrder.end(), [descend, &tracker, &buff, this](const size_t& playerIdx1, const size_t& playerIdx2) {
 						const Player& player1 = tracker.players.at(playerIdx1);
 						const Player& player2 = tracker.players.at(playerIdx2);
 						if (descend) {
@@ -205,14 +205,18 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		 */
 		if (settings.isShowPlayers(index)) {
 			bool onlySubgroup = settings.isShowOnlySubgroup(index);
-			auto group_filter = [&self_player, onlySubgroup](const Player& player) {
+			auto group_filter = [&self_player, onlySubgroup, &tracker](const size_t& playerIdx) {
 				if (self_player && onlySubgroup) {
 					uint8_t subgroup = self_player->subgroup;
+					const Player& player = tracker.players.at(playerIdx);
 					return player.subgroup == subgroup;
 				}
 				return true;
 			};
-			for (const Player& player : tracker.players | std::views::filter(group_filter)) {
+			for (const size_t& playerIdx : playerOrder | std::views::filter(group_filter)) {
+			// for (const Player& player : tracker.players | std::views::filter(group_filter)) {
+				const Player& player = tracker.players.at(playerIdx);
+				
 				// charname
 				if (player.self) {
 					ImGui::PushStyleColor(ImGuiCol_Text, settings.getSelfColor());
@@ -455,23 +459,32 @@ float AppChart::getEntityDisplayValue(const Tracker& tracker, const Entity& enti
 	return entity.getBoonUptime(boon);
 }
 
-void AppChart::removePlayer(size_t playerIndex) {
-	playerOrder.erase(std::remove(playerOrder.begin(), playerOrder.end(), playerIndex), playerOrder.end());
+void AppChart::removePlayer(size_t playerId) {
+	auto s = playerOrder.size();
+	std::erase_if(playerOrder, [&playerId](const size_t& idx) {
+		return idx == playerId;
+	});
 }
 
-void AppChart::addPlayer(size_t playerIndex) {
-	playerOrder.emplace_back(playerIndex);
+void AppChart::addPlayer(size_t playerId) {
+	playerOrder.emplace_back(playerId);
 }
 
-void AppChartsContainer::removePlayer(size_t playerIndex) {
+void AppChartsContainer::removePlayer(uintptr_t playerId) {
 	for (AppChart& chart : charts) {
-		chart.removePlayer(playerIndex);
+		chart.removePlayer(playerId);
 	}
 }
 
-void AppChartsContainer::addPlayer(size_t playerIndex) {
+void AppChartsContainer::addPlayer(uintptr_t playerId) {
 	for (AppChart& chart : charts) {
-		chart.addPlayer(playerIndex);
+		chart.addPlayer(playerId);
+	}
+}
+
+void AppChartsContainer::clearPlayers() {
+	for (AppChart& chart : charts) {
+		chart.playerOrder.clear();
 	}
 }
 

@@ -1,5 +1,7 @@
 #include "Tracker.h"
 
+#include "AppChart.h"
+
 void Tracker::addPlayer(ag* src, ag* dst) {
 	if (!is_player(src)) return;
 
@@ -44,7 +46,9 @@ void Tracker::addNewPlayer(uintptr_t id,
                            std::string characterName,
                            std::string accountName) {
 	std::unique_lock<std::mutex> lock(players_mtx);
-	players.emplace_back(id, characterName, accountName, subgroup, profession);
+	players.try_emplace(id, id, characterName, accountName, subgroup, profession);
+	// give charts index to newly player
+	charts.addPlayer(id);
 	lock.unlock();
 
 	bakeCombatData();
@@ -89,11 +93,12 @@ void Tracker::removePlayer(ag* src) {
 	uintptr_t id = src->id;
 	std::string characterName = std::string(src->name);
 
-	// remove player from tracked list at all
 	std::unique_lock<std::mutex> lock(players_mtx);
-	std::erase_if(players, [&id](const Player& player) {
-		return player.id == id;
-	});
+
+	charts.removePlayer(id);
+
+	// remove player from tracked list at all
+	players.erase(id);
 	lock.unlock();
 
 	bakeCombatData();
@@ -102,6 +107,8 @@ void Tracker::removePlayer(ag* src) {
 void Tracker::clearPlayers() {
 	std::unique_lock<std::mutex> lock(players_mtx);
 	players.clear();
+
+	charts.clearPlayers();
 	lock.unlock();
 
 	bakeCombatData();
@@ -125,14 +132,14 @@ void Tracker::bakeCombatData() {
 Player* Tracker::getPlayer(uintptr_t new_player) {
 	if (!new_player) return nullptr;
 	std::lock_guard<std::mutex> lock(players_mtx);
-	const auto& it = std::find(players.begin(), players.end(), new_player);
+	const auto& it = players.find(new_player);
 
 	//player not tracked yet
 	if (it == players.end()) {
 		return nullptr;
 	} else //player tracked
 	{
-		return &*it;
+		return &it->second;
 	}
 }
 
@@ -174,14 +181,16 @@ NPC* Tracker::getNPC(std::string new_name) {
 Player* Tracker::getPlayer(std::string new_player) {
 	if (new_player.empty()) return nullptr;
 	std::lock_guard<std::mutex> lock(players_mtx);
-	auto it = std::find(players.begin(), players.end(), new_player);
+	auto it = std::find_if(players.begin(), players.end(), [&new_player](const auto& player) {
+		return player.second == new_player;
+	});
 
 	//player not tracked yet
 	if (it == players.end()) {
 		return nullptr;
 	} else //player tracked
 	{
-		return &*it;
+		return &it->second;
 	}
 }
 
@@ -212,8 +221,8 @@ std::set<uint8_t> Tracker::getSubgroups() {
 	std::lock_guard<std::mutex> lock(players_mtx);
 	std::set<uint8_t> out;
 
-	for (const Player& player : players) {
-		out.emplace(player.subgroup);
+	for (auto& player : players) {
+		out.emplace(player.second.subgroup);
 	}
 	return out;
 }
@@ -222,7 +231,8 @@ float Tracker::getSubgroupBoonUptime(const BoonDef& boon, uint8_t subgroup) cons
 	float out = 0.0f;
 	uint8_t player_num = 0;
 
-	for (const Player& player : players) {
+	for (auto& pair : players) {
+		const Player& player = pair.second;
 		if (player.subgroup != subgroup) continue;
 
 		out += player.getBoonUptime(boon);
@@ -242,7 +252,8 @@ float Tracker::getSubgroupOver90(uint8_t subgroup) const {
 	float out = 0.0f;
 	uint8_t player_num = 0;
 
-	for (const Player& player : players) {
+	for (auto& pair : players) {
+		const Player& player = pair.second;
 		if (player.subgroup != subgroup) continue;
 
 		out += player.getOver90();
@@ -263,7 +274,8 @@ float Tracker::getAverageBoonUptime(const BoonDef& boon) const {
 	float out = 0.0f;
 	uint8_t player_num = 0;
 
-	for (const Player& player : players) {
+	for (auto& pair : players) {
+		const Player& player = pair.second;
 		out += player.getBoonUptime(boon);
 		player_num++;
 	}
@@ -276,7 +288,8 @@ float Tracker::getAverageOver90() const {
 	float out = 0.0f;
 	uint8_t player_num = 0;
 
-	for (const Player& player : players) {
+	for (auto& pair : players) {
+		const Player& player = pair.second;
 		out += player.getOver90();
 		player_num++;
 	}

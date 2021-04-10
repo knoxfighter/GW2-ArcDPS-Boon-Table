@@ -238,6 +238,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 				/* remove */
 				else {
 					tracker.removePlayer(src);
+					charts.sortNeeded();
 				}
 			}
 			/* notify target change */
@@ -303,7 +304,8 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 				}
 			}
 			else if (ev->is_statechange == CBTS_STATRESET) {
-				for (Player& player : tracker.players) {
+				for (auto& pair :tracker.players) {
+					Player& player = pair.second;
 					player.combatExit(ev);
 					// do not call combatEnter on Player, cause ev->dst_agent (subgroup) is not set
 					player.Entity::combatEnter(ev);

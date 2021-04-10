@@ -4,6 +4,8 @@
 #include <string>
 #include <mutex>
 #include <set>
+#include <unordered_map>
+
 
 #include "extension/arcdps_structs.h"
 #include "Player.h"
@@ -15,7 +17,7 @@ public:
 	bool is_squad = false;
 
 	mutable std::mutex players_mtx;
-	std::vector<Player> players;
+	std::unordered_map<uintptr_t, Player> players;
 	mutable std::mutex npcs_mtx;
 	std::list<NPC> npcs;
 

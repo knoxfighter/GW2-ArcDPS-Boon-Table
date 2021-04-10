@@ -22,8 +22,8 @@ public:
 
 	float getEntityDisplayValue(const Tracker& tracker, const Entity& entity, const BoonDef& boon);
 
-	void removePlayer(size_t playerIndex);
-	void addPlayer(size_t playerIndex);
+	void removePlayer(size_t playerId);
+	void addPlayer(size_t playerId);
 
 private:
 	ImGuiTable* imGuiTable = nullptr;
@@ -33,8 +33,9 @@ private:
 
 class AppChartsContainer {
 public:
-	void removePlayer(size_t playerIndex);
-	void addPlayer(size_t playerIndex);
+	void removePlayer(uintptr_t playerId);
+	void addPlayer(uintptr_t playerId);
+	void clearPlayers();
 	void sortNeeded();
 	void drawAll(Tracker& tracker, ImGuiWindowFlags flags);
 	
