@@ -8,20 +8,32 @@
 
 Alt+Shift+B (overwrites Arc’s default boon table hotkey) or checkbox in the arc options
 
-Right-click on the header for options menu.  
-Right-click on the table to change visible columns.  
+Right-click for options to change column visible and other settings.  
 Table columns can be reordered by dragging the column header.  
 Sort by column by clicking on the header, it is sorted by character name by default.
 
 ### options
 - Players: Show/Hide all players in the table (Default: ON)
 - Subgroups: Show/Hide subgroup average (Default: ON)
-- Total: Show/Hide groupt/squad average (Default: ON)
-- Show value as progress bar: Show the values as progressbar additional to the actual number. (Default: ON)
-- Always resize window to content: Will always make the window as big as it has to be to show all boons. This will disable the possibility to resize the window manually. (Default: ON)
-- Alternating Row Background: Show/Hide background colors, to better distinguish rows. (Default: ON)
-- Coloring Mode: How to color the text/progress bars. Can be Default (Gray), By percentage (red to green), By Profession. (Default: Default)
-- Alignment: Align the text to the column. Can be Left, Right, Center and Unaligned. Unaligned means, that it is most left as possible, without beeing on top of the progress bar. (Default: Right)
+- Total: Show/Hide group/squad average (Default: ON)
+- NPCs: Show/Hide boons of NPCs (Default: ON)
+    - only available for 3 encounters (Deimos, Escort and River of souls)
+- Column Setup: Show/Hide the columns of the table.
+- Style: Styling option for this window
+    - Show value as progress bar: Show the values as progressbar additional to the actual number. (Default: ON)
+    - Alternating Row Background: Show/Hide background colors, to better distinguish rows. (Default: ON)
+    - Show header with text instead of images: Change the header images back into normal text (Default: OFF)
+    - Hide window header: Hider the header of the imgui window. The table header will still be there (Default: OFF)
+    - Show only your subgroup: In the player section show only the players that are in your subgroup. (Default: OFF)
+    - SHow only yourself: In the player section show only yourself (Default: OFF)
+    - Coloring Mode: How to color the text/progress bars. Can be Default (Gray), By percentage (red to green) and By Profession. (Default: Default)
+    - Alignment: Align the text to the column. Can be Left, Right, Center and Unaligned. Unaligned means, that it is most left as possible, without beeing on top of the progress bar. (Default: Right)
+    - Sizing Policy: Change how the window is resized.
+        - Autoresize window to content: This will automatically resize the window all the times, Name and Subgroup colomns can be resized by dragging.
+        - Size content to window: Change the window size by dragging the bottom left/right corner. The columns will automatically resize to fit into the window.
+        - Manual window resizing: Change the window size by dragging the bottom left/right corner. When the table is larger than the window allows, a scrollbar will be added.
+    - Boon column width: Change the width of boon columns, all boon columns have the same width. Not available when "Size content to window" is active. (Default: 80)
+    - Self Color: Change the color of yourself in the list. (Default: arcdps CCOL_YELLOW)
 
 ## Translations
 Translations can be added by creating a file in `<Guild Wars 2>/addons/arcdps` called `arcdps_table_lang.ini`.
@@ -31,6 +43,24 @@ To create your own translation you can take the example file in [localization](/
 
 ## Changelog
     
+    April 12 2021
+        Added tracking of NPCs
+            Desmina at River of Souls
+            Saul D'Alessio at Deimos
+            Glenna at Escort
+        Added possibility to open up to 5 boon table windows
+        localization (activate by creating a file called `arcdps_table_lang.ini`, english translation can be found in localization in this repo)
+        added icons in the table header
+        added option to hide window header
+        added mutliple sizing policies
+        added slider to change column width
+        made by percentage color darker for better readability
+        colors in text mode are brighter for readability
+        added option to only show players in your subgroup
+        added option to only show yourself as player
+        maked yourself yellow
+        header will respond to alignment setting
+        Removed different contextmenus. It is now only one menu that allows to change everything about one window
     February 22 2021
         Add compatibility to new arcdps with ImGui 1.80.
         Change table to use modern ImGui table instead of old one.
