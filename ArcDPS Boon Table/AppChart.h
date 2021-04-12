@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
 #include "Tracker.h"
@@ -15,6 +17,8 @@ public:
 	AppChart(int new_index) : index(new_index) {};
 
 	void Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags);
+	void DrawRow(Alignment alignment, const char* charnameText, const char* subgroupText, std::function<float(const BoonDef&)> uptimeFunc, std::function<float()>
+	             above90Func, bool hasEntity = false, const Entity& entity = Entity(), bool hasColor = false, const ImVec4& color = ImVec4(0, 0, 0, 0));
 
 	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, ImVec4 color) const;
 	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width);

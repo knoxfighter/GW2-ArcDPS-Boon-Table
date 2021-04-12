@@ -83,6 +83,10 @@ bool Settings::isShowOnlySubgroup(int tableIndex) const {
 	return tables[tableIndex].show_only_subgroup;
 }
 
+bool Settings::isShowOnlySelf(int tableIndex) const {
+	return tables[tableIndex].show_only_self;
+}
+
 const ImVec4& Settings::getSelfColor() const {
 	if (self_color) {
 		return self_color.value();
@@ -136,6 +140,7 @@ void Settings::readTable(int tableIndex) {
 	table.sizingPolicy = static_cast<SizingPolicy>(pszValueLong);
 	table.boon_column_width = table_ini.GetDoubleValue(sectionName.c_str(), "boon_column_width", 80);
 	table.show_only_subgroup = table_ini.GetBoolValue(sectionName.c_str(), "show_only_subgroup", false);
+	table.show_only_self= table_ini.GetBoolValue(sectionName.c_str(), "show_only_self", false);
 }
 
 void Settings::saveToFile() {
@@ -174,5 +179,6 @@ void Settings::saveTable(int tableIndex) {
 	table_ini.SetLongValue(sectionName.c_str(), "sizing_policy", static_cast<long>(table.sizingPolicy));
 	table_ini.SetDoubleValue(sectionName.c_str(), "boon_column_width", table.boon_column_width);
 	table_ini.SetBoolValue(sectionName.c_str(), "show_only_subgroup", table.show_only_subgroup);
+	table_ini.SetBoolValue(sectionName.c_str(), "show_only_self", table.show_only_self);
 }
 

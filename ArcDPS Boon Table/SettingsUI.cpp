@@ -57,6 +57,7 @@ void SettingsUI::Draw(ImGuiTable* table, int tableIndex) {
 		ImGui::Checkbox(lang.translate(LangKey::SettingsShowLabel).c_str(), &settings.tables[tableIndex].show_label);
 		ImGui::Checkbox(lang.translate(LangKey::SettingsHideHeader).c_str(), &settings.tables[tableIndex].hide_header);
 		ImGui::Checkbox(lang.translate(LangKey::SettingsShowOnlySubgroup).c_str(), &settings.tables[tableIndex].show_only_subgroup);
+		ImGui::Checkbox(lang.translate(LangKey::SettingsShowOnlySelf).c_str(), &settings.tables[tableIndex].show_only_self);
 
 		ProgressBarColoringMode& show_colored = settings.tables[tableIndex].show_colored;
 		std::string showColoredText = lang.translate(LangKey::SettingsColoringMode);
