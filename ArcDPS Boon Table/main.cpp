@@ -16,6 +16,7 @@
 #include "Helpers.h"
 #include "Lang.h"
 #include "Settings.h"
+#include "UpdateChecker.h"
 #include "extension/Widgets.h"
 #include "imgui/imgui_internal.h"
 
@@ -111,6 +112,8 @@ arcdps_exports* mod_init()
 
 		// init buffs, this will load the icons into RAM
 		init_tracked_buffs(id3dd9);
+
+		updateChecker.checkForUpdate(self_dll);
 	} catch (std::exception& e) {
 		loading_successful = false;
 		error_message = "Error starting up: ";
@@ -367,6 +370,8 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 	}
 
 	charts.drawAll(tracker, !canMoveWindows() ? ImGuiWindowFlags_NoMove : 0);
+
+	updateChecker.Draw();
 	return 0;
 }
 uintptr_t mod_options()

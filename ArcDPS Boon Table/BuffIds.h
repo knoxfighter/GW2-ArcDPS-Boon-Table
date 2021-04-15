@@ -5,7 +5,6 @@
 #include <d3d9.h>
 #include <memory>
 
-
 #include "extension/Icon.h"
 
 enum BoonType
@@ -44,4 +43,3 @@ extern std::vector<BoonDef> tracked_buffs;
 extern std::shared_ptr<BoonDef> above90BoonDef;
 
 void init_tracked_buffs(IDirect3DDevice9* d3d9device);
-extern HMODULE self_dll;

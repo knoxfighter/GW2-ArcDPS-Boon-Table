@@ -96,6 +96,12 @@
     <ClCompile Include="SettingsUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UpdateChecker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="extension\UpdateCheckerBase.cpp">
+      <Filter>Source Files\extension</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -169,6 +175,15 @@
     </ClInclude>
     <ClInclude Include="SettingsUI.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UpdateChecker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="extension\UpdateCheckerBase.h">
+      <Filter>Header Files\extension</Filter>
+    </ClInclude>
+    <ClInclude Include="extension\json.hpp">
+      <Filter>Header Files\extension</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

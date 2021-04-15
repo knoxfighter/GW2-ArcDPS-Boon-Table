@@ -121,6 +121,18 @@
     <TargetExt>.dll</TargetExt>
     <OutDir>C:\Program Files\Guild Wars 2\bin64\</OutDir>
   </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <VcpkgUseStatic>true</VcpkgUseStatic>
+    <VcpkgTriplet>x64-windows-static-md</VcpkgTriplet>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug Mock|x64'">
+    <VcpkgUseStatic>true</VcpkgUseStatic>
+    <VcpkgTriplet>x64-windows-static-md</VcpkgTriplet>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <VcpkgUseStatic>true</VcpkgUseStatic>
+    <VcpkgTriplet>x64-windows-static-md</VcpkgTriplet>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -147,6 +159,9 @@
     <PostBuildEvent>
       <Command>powershell -noprofile -command  "(Get-FileHash '$(OutDirFullPath)$(TargetFileName)').Hash  &gt; '$(OutDirFullPath)$(TargetName).sha'"</Command>
     </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>version.lib;crypt32.lib;Ws2_32.lib;Wldap32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Mock|x64'">
     <ClCompile>
@@ -158,6 +173,9 @@
     <PostBuildEvent>
       <Command>powershell -noprofile -command  "(Get-FileHash '$(OutDirFullPath)$(TargetFileName)').Hash  &gt; '$(OutDirFullPath)$(TargetName).sha'"</Command>
     </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>version.lib;crypt32.lib;Ws2_32.lib;Wldap32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -185,6 +203,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>version.lib;crypt32.lib;Ws2_32.lib;Wldap32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>powershell -noprofile -command  "(Get-FileHash '$(OutDirFullPath)$(TargetFileName)').Hash  &gt; '$(OutDirFullPath)$(TargetName).sha'"</Command>
@@ -197,6 +216,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="extension\arcdps_structs.cpp" />
     <ClCompile Include="extension\Icon.cpp" />
+    <ClCompile Include="extension\UpdateCheckerBase.cpp" />
     <ClCompile Include="extension\Widgets.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
@@ -212,6 +232,7 @@
     <ClCompile Include="SettingsUI.cpp" />
     <ClCompile Include="simpleini\ConvertUTF.c" />
     <ClCompile Include="Tracker.cpp" />
+    <ClCompile Include="UpdateChecker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppChart.h" />
@@ -220,7 +241,9 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="extension\arcdps_structs.h" />
     <ClInclude Include="extension\Icon.h" />
+    <ClInclude Include="extension\json.hpp" />
     <ClInclude Include="extension\map.h" />
+    <ClInclude Include="extension\UpdateCheckerBase.h" />
     <ClInclude Include="extension\Widgets.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="imgui\imconfig.h" />
@@ -238,6 +261,7 @@
     <ClInclude Include="simpleini\ConvertUTF.h" />
     <ClInclude Include="simpleini\SimpleIni.h" />
     <ClInclude Include="Tracker.h" />
+    <ClInclude Include="UpdateChecker.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ArcDPS Boon Table.rc" />

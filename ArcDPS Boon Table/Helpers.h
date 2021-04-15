@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <optional>
 
-
 #include "extension/arcdps_structs.h"
 #include "imgui/imgui.h"
 
@@ -46,3 +45,5 @@ std::string to_string(ProgressBarColoringMode coloringMode);
 
 std::string to_string(const ImVec4& vec4);
 std::optional<ImVec4> ImVec4_color_from_string(const std::string& vec4str);
+
+extern HMODULE self_dll;

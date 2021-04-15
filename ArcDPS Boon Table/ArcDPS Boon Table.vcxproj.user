@@ -19,4 +19,7 @@
     <LocalDebuggerCommand>C:\Program Files\Guild Wars 2\Gw2-64.exe</LocalDebuggerCommand>
     <LocalDebuggerCommandArguments>-autologin</LocalDebuggerCommandArguments>
   </PropertyGroup>
+  <PropertyGroup>
+    <ShowAllFiles>false</ShowAllFiles>
+  </PropertyGroup>
 </Project>

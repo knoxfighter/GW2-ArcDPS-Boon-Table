@@ -1,5 +1,6 @@
 #include "BuffIds.h"
 
+#include "Helpers.h"
 #include "Lang.h"
 #include "resource.h"
 
