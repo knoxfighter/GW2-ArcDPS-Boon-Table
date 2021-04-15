@@ -103,6 +103,11 @@ BUILD_ENUM_INI_NAMES(
 	BuffSuperspeed,
 	Above90Hp,
 
+	UpdateWindowHeader,
+	UpdateDesc,
+	UpdateCurrentVersion,
+	UpdateNewVersion,
+
 	// always last element
 	// ALWAYS UPDATE AFTER CHANGING THE ENUM
 	FINAL_ENTRY
@@ -189,6 +194,11 @@ static const std::map<LangKey, std::string> langDefaults = {
 		{LangKey::BuffStealth, "Stealth"},
 		{LangKey::BuffSuperspeed, "Superspeed"},
 		{LangKey::Above90Hp, "above 90% HP"},
+
+		{LangKey::UpdateWindowHeader, "Arcdps Boon Table Plugin Update"},
+		{LangKey::UpdateDesc, "A new update for the Boon Table plugin is available."},
+		{LangKey::UpdateCurrentVersion, "Current version"},	
+		{LangKey::UpdateNewVersion, "New version"},
 };
 
 class Lang {
