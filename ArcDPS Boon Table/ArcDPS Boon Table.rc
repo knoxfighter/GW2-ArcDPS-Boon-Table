@@ -78,8 +78,6 @@ ID_Empower_Allies       PNG                     "icons\\Empower_Allies.png"
 
 ID_Pinpoint_Distribution PNG                     "icons\\Pinpoint_Distribution.png"
 
-ID_Assassins_Presence   PNG                     "icons\\Assassin's_Presence.png"
-
 ID_Spotter              PNG                     "icons\\Spotter.png"
 
 ID_Soothing_Mist        PNG                     "icons\\Soothing_Mist.png"
@@ -114,6 +112,8 @@ ID_Super_Speed2         PNG                     "icons\\Super_Speed2.png"
 
 ID_Rune_Scholar         PNG                     "icons\\Rune_of_the_Scholar.png"
 
+ID_Assassins_Presence   PNG                     "icons\\Assassin's_Presence.png"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -121,8 +121,8 @@ ID_Rune_Scholar         PNG                     "icons\\Rune_of_the_Scholar.png"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,1,0,0
- PRODUCTVERSION 2,1,0,0
+ FILEVERSION 2,1,0,1
+ PRODUCTVERSION 2,1,0,1
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -137,12 +137,12 @@ BEGIN
     BEGIN
         BLOCK "000004b0"
         BEGIN
-            VALUE "FileVersion", "2.1.0.0"
+            VALUE "FileVersion", "2.1.0.1"
             VALUE "InternalName", "d3d9_arcdps_table.dll"
             VALUE "LegalCopyright", "Copyright (C) 2021"
             VALUE "OriginalFilename", "d3d9_arcdps_table.dll"
             VALUE "ProductName", "Arcdps Boon table plugin"
-            VALUE "ProductVersion", "2.1.0.0"
+            VALUE "ProductVersion", "2.1.0.1"
         END
     END
     BLOCK "VarFileInfo"

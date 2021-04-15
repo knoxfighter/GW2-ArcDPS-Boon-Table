@@ -234,9 +234,6 @@
     <Image Include="icons\Pinpoint_Distribution.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="icons\Assassin%27s_Presence.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="icons\Spotter.png">
       <Filter>Resource Files</Filter>
     </Image>
@@ -286,6 +283,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="icons\Rune_of_the_Scholar.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Assassin%27s_Presence.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

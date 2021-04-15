@@ -45,13 +45,14 @@
 #define IDB_PNG1                        143
 #define ID_Super_Speed2                 143
 #define ID_Rune_Scholar                 144
+#define IDB_PNG3                        146
 #define ID_Assassins_Presence           65535
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        145
+#define _APS_NEXT_RESOURCE_VALUE        147
 #define _APS_NEXT_COMMAND_VALUE         40001
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           101

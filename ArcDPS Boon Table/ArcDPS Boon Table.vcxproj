@@ -267,6 +267,7 @@
     <ResourceCompile Include="ArcDPS Boon Table.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="icon1.ico" />
     <Image Include="icons\Aegis.png" />
     <Image Include="icons\Alacrity.png" />
     <Image Include="icons\Assassin%27s_Presence.png" />
