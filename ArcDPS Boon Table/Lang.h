@@ -111,6 +111,13 @@ BUILD_ENUM_INI_NAMES(
 	BuffStealth, "Stealth",
 	BuffSuperspeed, "Superspeed",
 	Above90Hp, "above 90% HP",
+	BuffSignetResolve, "Signet of Resolve",
+	BuffSignetBane, "Bane Signet",
+	BuffSignetJudgment, "Signet of Judgment",
+	BuffSignetMercy, "Signet of Mercy",
+	BuffSignetWrath, "Signet of Wrath",
+	BuffSignetCourage, "Signet of Courage",
+	BuffAshesOfTheJust, "Ashes of the Just",
 
 	UpdateWindowHeader, "Arcdps Boon Table Plugin Update",
 	UpdateDesc, "A new update for the Boon Table plugin is available.",
