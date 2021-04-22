@@ -8,6 +8,7 @@ std::vector<BoonDef> tracked_buffs;
 std::shared_ptr<BoonDef> above90BoonDef;
 
 void init_tracked_buffs(IDirect3DDevice9* d3d9device) {
+	// Gereral Buffs
 	tracked_buffs.emplace_back(std::vector<uint32_t>{740}, lang.translate(LangKey::BuffMight), StackingType_intensity, true, BoonType_boon, new Icon(ID_Might, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{725}, lang.translate(LangKey::BuffFury), StackingType_duration, true, BoonType_boon, new Icon(ID_Fury, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{718}, lang.translate(LangKey::BuffRegeneration), StackingType_duration, false, BoonType_boon, new Icon(ID_Regeneration, self_dll, d3d9device));
@@ -20,32 +21,52 @@ void init_tracked_buffs(IDirect3DDevice9* d3d9device) {
 	tracked_buffs.emplace_back(std::vector<uint32_t>{743}, lang.translate(LangKey::BuffAegis), StackingType_duration, false, BoonType_boon, new Icon(ID_Aegis, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{719}, lang.translate(LangKey::BuffSwiftness), StackingType_duration, false, BoonType_boon, new Icon(ID_Swiftness, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{26980}, lang.translate(LangKey::BuffResistance), StackingType_duration, false, BoonType_boon, new Icon(ID_Resistance, self_dll, d3d9device));
-	tracked_buffs.emplace_back(std::vector<uint32_t>{14222}, lang.translate(LangKey::BuffEmpowerAllies), StackingType_single, false, BoonType_trait, new Icon(ID_Empower_Allies, self_dll, d3d9device));
-	tracked_buffs.emplace_back(std::vector<uint32_t>{38333}, lang.translate(LangKey::BuffPinpointDistribution), StackingType_single, false, BoonType_trait, new Icon(ID_Pinpoint_Distribution, self_dll, d3d9device));
-	tracked_buffs.emplace_back(std::vector<uint32_t>{26854}, lang.translate(LangKey::BuffAssassinsPresence), StackingType_single, false, BoonType_trait, new Icon(ID_Assassins_Presence, self_dll, d3d9device));
-	tracked_buffs.emplace_back(std::vector<uint32_t>{14055}, lang.translate(LangKey::BuffSpotter), StackingType_single, false, BoonType_trait, new Icon(ID_Spotter, self_dll, d3d9device));
-	tracked_buffs.emplace_back(std::vector<uint32_t>{5587}, lang.translate(LangKey::BuffSoothingMist), StackingType_single, false, BoonType_trait, new Icon(ID_Soothing_Mist, self_dll, d3d9device));
-	tracked_buffs.emplace_back(std::vector<uint32_t>{30285}, lang.translate(LangKey::BuffVampiricAura), StackingType_single, false, BoonType_trait, new Icon(ID_Vampiric_Presence, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{13017, 26142, 10269 }, lang.translate(LangKey::BuffStealth), StackingType_duration, false, BoonType_other, new Icon(ID_Stealth2, self_dll, d3d9device)); //stealth + Hide in Shadows 
+	tracked_buffs.emplace_back(std::vector<uint32_t>{5974}, lang.translate(LangKey::BuffSuperspeed), StackingType_single, false, BoonType_other, new Icon(ID_Super_Speed2, self_dll, d3d9device));
+	// Guardian
 	tracked_buffs.emplace_back(std::vector<uint32_t>{13796}, lang.translate(LangKey::BuffStrengthInNumbers), StackingType_single, false, BoonType_trait, new Icon(ID_Strength_in_Numbers, self_dll, d3d9device));
-	tracked_buffs.emplace_back(std::vector<uint32_t>{14417}, lang.translate(LangKey::BuffStrength), StackingType_single, false, BoonType_banner, new Icon(ID_Banner_of_Strength2, self_dll, d3d9device));
-	tracked_buffs.emplace_back(std::vector<uint32_t>{14449}, lang.translate(LangKey::BuffBannerDiscipline), StackingType_single, false, BoonType_banner, new Icon(ID_Banner_of_Discipline2, self_dll, d3d9device));
-	tracked_buffs.emplace_back(std::vector<uint32_t>{14450}, lang.translate(LangKey::BuffBannerTactics), StackingType_single, false, BoonType_banner, new Icon(ID_Banner_of_Tactics2, self_dll, d3d9device));
-	tracked_buffs.emplace_back(std::vector<uint32_t>{14543}, lang.translate(LangKey::BuffBannerDefense), StackingType_single, false, BoonType_banner, new Icon(ID_Banner_of_Defense2, self_dll, d3d9device));
+	// Guardian Signets
+	tracked_buffs.emplace_back(std::vector<uint32_t>{9220, 46554}, lang.translate(LangKey::BuffSignetResolve), StackingType_single, false, BoonType_skill, new Icon(ID_Signet_Resolve, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{9029, 9240}, lang.translate(LangKey::BuffSignetBane), StackingType_single, false, BoonType_skill, new Icon(ID_Signet_Bane, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{9156, 9239}, lang.translate(LangKey::BuffSignetJudgment), StackingType_single, false, BoonType_skill, new Icon(ID_Signet_Judgment, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{9162, 9238}, lang.translate(LangKey::BuffSignetMercy), StackingType_single, false, BoonType_skill, new Icon(ID_Signet_Mercy, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{9100, 9237}, lang.translate(LangKey::BuffSignetWrath), StackingType_single, false, BoonType_skill, new Icon(ID_Signet_Wrath, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{29633, 43487}, lang.translate(LangKey::BuffSignetCourage), StackingType_single, false, BoonType_skill, new Icon(ID_Signet_Courage, self_dll, d3d9device));
+	// Ranger
+	tracked_buffs.emplace_back(std::vector<uint32_t>{14055}, lang.translate(LangKey::BuffSpotter), StackingType_single, false, BoonType_trait, new Icon(ID_Spotter, self_dll, d3d9device));
+	// Ranger Spirits
 	tracked_buffs.emplace_back(std::vector<uint32_t>{50421}, lang.translate(LangKey::BuffSpiritFrost), StackingType_single, false, BoonType_spirit, new Icon(ID_Frost_Spirit2, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{50413}, lang.translate(LangKey::BuffSpiritSun), StackingType_single, false, BoonType_spirit, new Icon(ID_Sun_Spirit2, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{50415}, lang.translate(LangKey::BuffSpiritStone), StackingType_single, false, BoonType_spirit, new Icon(ID_Stone_Spirit2, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{50381}, lang.translate(LangKey::BuffSpiritStorm), StackingType_single, false, BoonType_spirit, new Icon(ID_Storm_Spirit2, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{50386}, lang.translate(LangKey::BuffSpiritWater), StackingType_single, false, BoonType_spirit, new Icon(ID_Water_Spirit, self_dll, d3d9device));
+	// Souelbeast stances
+	tracked_buffs.emplace_back(std::vector<uint32_t>{41815}, lang.translate(LangKey::BuffDolyakStance), StackingType_duration, false, BoonType_skill, new Icon());
+	tracked_buffs.emplace_back(std::vector<uint32_t>{46280}, lang.translate(LangKey::BuffGriffonStance), StackingType_duration, false, BoonType_skill, new Icon());
+	tracked_buffs.emplace_back(std::vector<uint32_t>{45038}, lang.translate(LangKey::BuffMoaStance), StackingType_duration, false, BoonType_skill, new Icon());
+	tracked_buffs.emplace_back(std::vector<uint32_t>{44651}, lang.translate(LangKey::BuffVultureStance), StackingType_duration, false, BoonType_skill, new Icon());
+	tracked_buffs.emplace_back(std::vector<uint32_t>{40045}, lang.translate(LangKey::BuffBearStance), StackingType_duration, false, BoonType_skill, new Icon());
+	tracked_buffs.emplace_back(std::vector<uint32_t>{44139}, lang.translate(LangKey::BuffOneWolfPack), StackingType_duration, false, BoonType_skill, new Icon());
+	// Warrior
+	tracked_buffs.emplace_back(std::vector<uint32_t>{14222}, lang.translate(LangKey::BuffEmpowerAllies), StackingType_single, false, BoonType_trait, new Icon(ID_Empower_Allies, self_dll, d3d9device));
+	// Warrior Banners
+	tracked_buffs.emplace_back(std::vector<uint32_t>{14417}, lang.translate(LangKey::BuffStrength), StackingType_single, false, BoonType_banner, new Icon(ID_Banner_of_Strength2, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{14449}, lang.translate(LangKey::BuffBannerDiscipline), StackingType_single, false, BoonType_banner, new Icon(ID_Banner_of_Discipline2, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{14450}, lang.translate(LangKey::BuffBannerTactics), StackingType_single, false, BoonType_banner, new Icon(ID_Banner_of_Tactics2, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{14543}, lang.translate(LangKey::BuffBannerDefense), StackingType_single, false, BoonType_banner, new Icon(ID_Banner_of_Defense2, self_dll, d3d9device));
+	// Revenant
+	tracked_buffs.emplace_back(std::vector<uint32_t>{26854}, lang.translate(LangKey::BuffAssassinsPresence), StackingType_single, false, BoonType_trait, new Icon(ID_Assassins_Presence, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{45026}, lang.translate(LangKey::BuffSoulcleavesSummit), StackingType_single, false, BoonType_skill, new Icon());
+	tracked_buffs.emplace_back(std::vector<uint32_t>{41016}, lang.translate(LangKey::BuffRazorclawsRage), StackingType_single, false, BoonType_skill, new Icon());
+	tracked_buffs.emplace_back(std::vector<uint32_t>{44682}, lang.translate(LangKey::BuffBreakrazorsBastion), StackingType_single, false, BoonType_skill, new Icon());
+	// Engineer
+	tracked_buffs.emplace_back(std::vector<uint32_t>{38333}, lang.translate(LangKey::BuffPinpointDistribution), StackingType_single, false, BoonType_trait, new Icon(ID_Pinpoint_Distribution, self_dll, d3d9device));
+	// Elementalist
+	tracked_buffs.emplace_back(std::vector<uint32_t>{5587}, lang.translate(LangKey::BuffSoothingMist), StackingType_single, false, BoonType_trait, new Icon(ID_Soothing_Mist, self_dll, d3d9device));
+	// Necromancer
+	tracked_buffs.emplace_back(std::vector<uint32_t>{30285}, lang.translate(LangKey::BuffVampiricAura), StackingType_single, false, BoonType_trait, new Icon(ID_Vampiric_Presence, self_dll, d3d9device));
+	//Mesmer
 	tracked_buffs.emplace_back(std::vector<uint32_t>{10235}, lang.translate(LangKey::BuffSignetInspiration), StackingType_single, false, BoonType_signet, new Icon(ID_Signet_of_Inspiration2, self_dll, d3d9device));
-	tracked_buffs.emplace_back(std::vector<uint32_t>{13017, 26142, 10269 }, lang.translate(LangKey::BuffStealth), StackingType_duration, false, BoonType_other, new Icon(ID_Stealth2, self_dll, d3d9device)); //stealth + Hide in Shadows 
-	tracked_buffs.emplace_back(std::vector<uint32_t>{5974}, lang.translate(LangKey::BuffSuperspeed), StackingType_single, false, BoonType_other, new Icon(ID_Super_Speed2, self_dll, d3d9device));
-	tracked_buffs.emplace_back(std::vector<uint32_t>{9220, 46554}, lang.translate(LangKey::BuffSignetResolve), StackingType_single, false, BoonType_skill, new Icon());
-	tracked_buffs.emplace_back(std::vector<uint32_t>{9240}, lang.translate(LangKey::BuffSignetBane), StackingType_single, false, BoonType_skill, new Icon());
-	tracked_buffs.emplace_back(std::vector<uint32_t>{9242}, lang.translate(LangKey::BuffSignetJudgment), StackingType_single, false, BoonType_skill, new Icon());
-	tracked_buffs.emplace_back(std::vector<uint32_t>{9243}, lang.translate(LangKey::BuffSignetMercy), StackingType_single, false, BoonType_skill, new Icon());
-	tracked_buffs.emplace_back(std::vector<uint32_t>{9244}, lang.translate(LangKey::BuffSignetWrath), StackingType_single, false, BoonType_skill, new Icon());
-	tracked_buffs.emplace_back(std::vector<uint32_t>{}, lang.translate(LangKey::BuffSignetCourage), StackingType_single, false, BoonType_skill, new Icon());
-	tracked_buffs.emplace_back(std::vector<uint32_t>{}, lang.translate(LangKey::BuffAshesOfTheJust), StackingType_single, false, BoonType_skill, new Icon());
 	
 	// above 90
 	above90BoonDef = std::make_shared<BoonDef>(std::vector<uint32_t>{static_cast<uint32_t>(-1)}, lang.translate(LangKey::Above90Hp), StackingType_single, false, BoonType_other, new Icon(ID_Rune_Scholar, self_dll, d3d9device)); // above 90% hp (e.g. scholar)

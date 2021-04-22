@@ -288,6 +288,27 @@
     <Image Include="icon1.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="icons\Signet_of_Resolve.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Bane_Signet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Signet_Judgment.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Signet_Mercy.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Signet_Wrath.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Signet_of_Courage.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Unbroken_Lines.png">
+      <Filter>Resource Files</Filter>
+    </Image>
     <Image Include="icons\Assassin%27s_Presence.png">
       <Filter>Resource Files</Filter>
     </Image>

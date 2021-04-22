@@ -46,13 +46,22 @@
 #define ID_Super_Speed2                 143
 #define ID_Rune_Scholar                 144
 #define IDB_PNG3                        146
+#define ID_Signet_Resolve               149
+#define ID_Signet_Bane                  150
+#define ID_Signet_Judgment              151
+#define ID_Signet_Mercy                 152
+#define ID_Signet_Wrath                 153
+#define ID_Signet_Courage               154
+#define IDB_PNG4                        155
+#define ID_Unbroken_Lines               155
+#define IDB_PNG5                        156
 #define ID_Assassins_Presence           65535
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        147
+#define _APS_NEXT_RESOURCE_VALUE        157
 #define _APS_NEXT_COMMAND_VALUE         40001
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           101

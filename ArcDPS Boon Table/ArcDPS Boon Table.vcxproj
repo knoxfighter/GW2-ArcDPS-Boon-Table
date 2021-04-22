@@ -271,6 +271,7 @@
     <Image Include="icons\Aegis.png" />
     <Image Include="icons\Alacrity.png" />
     <Image Include="icons\Assassin%27s_Presence.png" />
+    <Image Include="icons\Bane_Signet.png" />
     <Image Include="icons\bannerStrength.png" />
     <Image Include="icons\Banner_of_Defense2.png" />
     <Image Include="icons\Banner_of_Discipline2.png" />
@@ -286,7 +287,12 @@
     <Image Include="icons\Resistance.png" />
     <Image Include="icons\Retaliation.png" />
     <Image Include="icons\Rune_of_the_Scholar.png" />
+    <Image Include="icons\Signet_Judgment.png" />
+    <Image Include="icons\Signet_Mercy.png" />
+    <Image Include="icons\Signet_of_Courage.png" />
     <Image Include="icons\Signet_of_Inspiration2.png" />
+    <Image Include="icons\Signet_of_Resolve.png" />
+    <Image Include="icons\Signet_Wrath.png" />
     <Image Include="icons\Soothing_Mist.png" />
     <Image Include="icons\Spotter.png" />
     <Image Include="icons\Stability.png" />
@@ -297,6 +303,7 @@
     <Image Include="icons\Sun_Spirit2.png" />
     <Image Include="icons\Super_Speed2.png" />
     <Image Include="icons\Swiftness.png" />
+    <Image Include="icons\Unbroken_Lines.png" />
     <Image Include="icons\Vampiric_Presence.png" />
     <Image Include="icons\Vigor.png" />
     <Image Include="icons\Water_Spirit.png" />

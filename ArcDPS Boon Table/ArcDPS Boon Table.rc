@@ -112,6 +112,20 @@ ID_Super_Speed2         PNG                     "icons\\Super_Speed2.png"
 
 ID_Rune_Scholar         PNG                     "icons\\Rune_of_the_Scholar.png"
 
+ID_Signet_Resolve       PNG                     "icons\\Signet_of_Resolve.png"
+
+ID_Signet_Bane          PNG                     "icons\\Bane_Signet.png"
+
+ID_Signet_Judgment      PNG                     "icons\\Signet_Judgment.png"
+
+ID_Signet_Mercy         PNG                     "icons\\Signet_Mercy.png"
+
+ID_Signet_Wrath         PNG                     "icons\\Signet_Wrath.png"
+
+ID_Signet_Courage       PNG                     "icons\\Signet_of_Courage.png"
+
+ID_Unbroken_Lines       PNG                     "icons\\Unbroken_Lines.png"
+
 ID_Assassins_Presence   PNG                     "icons\\Assassin's_Presence.png"
 
 
