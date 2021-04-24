@@ -355,23 +355,6 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 {
 	// ImGui::ShowDemoWindow();
-	ImGui::Begin("testWindow");
-	if (ImGui::BeginTable("testTable", 3, ImGuiTableFlags_Hideable)) {
-		ImGui::TableSetupColumn("col1");
-		ImGui::TableSetupColumn("col2", ImGuiTableColumnFlags_DefaultHide);
-		ImGui::TableSetupColumn("col3", ImGuiTableColumnFlags_DefaultHide);
-
-		ImGui::TableNextRow(ImGuiTableRowFlags_Headers);
-		if (ImGui::TableNextColumn()) 
-			ImGui::TableHeader("col1");
-		if (ImGui::TableNextColumn()) 
-			ImGui::TableHeader("col2");
-		if (ImGui::TableNextColumn()) 
-			ImGui::TableHeader("col3");
-
-		ImGui::EndTable();
-	}
-	ImGui::End();
 	
 	readArcExports();
 
