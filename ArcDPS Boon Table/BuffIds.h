@@ -10,11 +10,14 @@
 enum BoonType
 {
 	BoonType_boon,
-	BoonType_trait,
-	BoonType_banner,
-	BoonType_spirit,
-	BoonType_skill,
-	BoonType_signet,
+	BoonType_Guardian,
+	BoonType_Ranger,
+	BoonType_Warrior,
+	BoonType_Revenant,
+	BoonType_Engineer,
+	BoonType_Elementalist,
+	BoonType_Necromancer,
+	BoonType_Mesmer,
 	BoonType_other,
 };
 

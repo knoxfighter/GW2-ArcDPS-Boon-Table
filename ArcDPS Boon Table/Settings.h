@@ -39,6 +39,7 @@ public:
 	[[nodiscard]] float getBoonColumnWidth(int tableIndex) const;
 	[[nodiscard]] bool isShowOnlySubgroup(int tableIndex) const;
 	[[nodiscard]] bool isShowOnlySelf(int tableIndex) const;
+	std::string& getResetVersion(int tableIndex);
 
 	[[nodiscard]] WPARAM getTableKey() const;
 	[[nodiscard]] const ImVec4& getSelfColor() const;
@@ -68,6 +69,7 @@ private:
 		float boon_column_width = 80.f;
 		bool show_only_subgroup = false;
 		bool show_only_self = false;
+		std::string reset_version = "";
 	};
 	
 	CSimpleIniA table_ini;

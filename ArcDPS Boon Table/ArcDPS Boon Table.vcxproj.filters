@@ -309,6 +309,33 @@
     <Image Include="icons\Unbroken_Lines.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="icons\Dolyak_Stance.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Griffon_Stance.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Moa_Stance.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Vulture_Stance.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Bear_Stance.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\One_Wolf_Pack.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Soulcleaves_Summit.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Razorclaws_Rage.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Breakrazors_Bastion.png">
+      <Filter>Resource Files</Filter>
+    </Image>
     <Image Include="icons\Assassin%27s_Presence.png">
       <Filter>Resource Files</Filter>
     </Image>

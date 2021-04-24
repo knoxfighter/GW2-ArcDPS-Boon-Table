@@ -126,7 +126,25 @@ ID_Signet_Courage       PNG                     "icons\\Signet_of_Courage.png"
 
 ID_Unbroken_Lines       PNG                     "icons\\Unbroken_Lines.png"
 
-ID_Assassins_Presence   PNG                     "icons\\Assassin's_Presence.png"
+ID_Dolyak_Stance        PNG                     "icons\\Dolyak_Stance.png"
+
+ID_Griffon_Stance       PNG                     "icons\\Griffon_Stance.png"
+
+ID_Moa_Stance           PNG                     "icons\\Moa_Stance.png"
+
+ID_Vulture_Stance       PNG                     "icons\\Vulture_Stance.png"
+
+ID_Bear_Stance          PNG                     "icons\\Bear_Stance.png"
+
+ID_One_Wolf_Pack        PNG                     "icons\\One_Wolf_Pack.png"
+
+ID_Soulcleaves_Summit   PNG                     "icons\\Soulcleaves_Summit.png"
+
+ID_Razorclaws_Rage      PNG                     "icons\\Razorclaws_Rage.png"
+
+ID_Breakrazors_Bastion  PNG                     "icons\\Breakrazors_Bastion.png"
+
+ID_Assassins_Presence2  PNG                     "icons\\Assassin's_Presence.png"
 
 
 /////////////////////////////////////////////////////////////////////////////

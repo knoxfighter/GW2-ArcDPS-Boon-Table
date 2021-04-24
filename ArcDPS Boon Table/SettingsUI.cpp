@@ -32,14 +32,21 @@ void SettingsUI::Draw(ImGuiTable* table, int tableIndex) {
 		// Submenus for controlling visibility
 		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeBoon).c_str(), BoonType_boon, 2))
 			ImGui::EndMenu();
-		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeTrait).c_str(), BoonType_trait, 2))
+		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeWarrior).c_str(), BoonType_Warrior, 2))
 			ImGui::EndMenu();
-		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeBanner).c_str(), BoonType_banner, 2))
+		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeRevenant).c_str(), BoonType_Revenant, 2))
 			ImGui::EndMenu();
-		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeSprit).c_str(), BoonType_spirit, 2))
+		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeGuardian).c_str(), BoonType_Guardian, 2))
 			ImGui::EndMenu();
-		// tableColumnSubMenu(imGuiTable, lang.translate(LangKey::BoonTypeSkill).c_str(),", BoonType_skill); // this boontype is empty
-		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeSignet).c_str(), BoonType_signet, 2))
+		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeEngineer).c_str(), BoonType_Engineer, 2))
+			ImGui::EndMenu();
+		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeRanger).c_str(), BoonType_Ranger, 2))
+			ImGui::EndMenu();
+		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeElementalist).c_str(), BoonType_Elementalist, 2))
+			ImGui::EndMenu();
+		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeMesmer).c_str(), BoonType_Mesmer, 2))
+			ImGui::EndMenu();
+		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeNecromancer).c_str(), BoonType_Necromancer, 2))
 			ImGui::EndMenu();
 		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeOther).c_str(), BoonType_other, 2)) {
 			ImGuiEx::MenuItemTableColumnVisibility(table, tracked_buffs.size() + 2);

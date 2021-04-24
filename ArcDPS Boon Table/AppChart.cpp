@@ -43,9 +43,10 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 
 	// columns: charname | subgroup | tracked_buffs
 	const int columnCount = tracked_buffs.size() + 3;
-	const unsigned int nameColumnId = columnCount - 3;
-	const unsigned int subgroupColumnId = columnCount - 2;
-	const unsigned int above90ColumnId = columnCount - 1;
+	// last 3 possible elements are hardcoded ones
+	const unsigned int nameColumnId = 64 - 1;
+	const unsigned int subgroupColumnId = 64 - 2;
+	const unsigned int above90ColumnId = 64 - 3;
 
 	// we have to get it here, cause it will lock tracker.players_mtx itself (which causes a crash, when it is already locked)
 	Player* self_player = tracker.getPlayer(2000);
@@ -69,9 +70,17 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		tableFlags |= ImGuiTableFlags_RowBg;
 	}
 
-	if (ImGui::BeginTable("Table", columnCount, tableFlags)) {
+	std::string tableId = "BoonTable";
+	tableId.append(std::to_string(index));
+	if (ImGui::BeginTable(tableId.c_str(), columnCount, tableFlags)) {
 		ImGuiContext& imGuiContext = *GImGui;
 		imGuiTable = imGuiContext.CurrentTable;
+
+		std::string& resetVersion = settings.getResetVersion(index);
+		if (resetVersion != "2.2.0") {
+			ImGui::TableResetSettings(imGuiTable);
+			resetVersion = "2.2.0";
+		}
 
 		Alignment alignment = settings.getAlignment(index);
 		bool showLabel = settings.isShowLabel(index);
@@ -129,7 +138,6 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		if (ImGui::TableNextColumn()) {
 			ImGuiEx::TableHeader(above90BoonDef->name.c_str(), showLabel, above90BoonDef->icon->texture, alignment);
 		}
-
 
 		/*
 		 * SORTING

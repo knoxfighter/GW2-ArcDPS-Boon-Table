@@ -276,13 +276,20 @@
     <Image Include="icons\Banner_of_Defense2.png" />
     <Image Include="icons\Banner_of_Discipline2.png" />
     <Image Include="icons\Banner_of_Tactics2.png" />
+    <Image Include="icons\Bear_Stance.png" />
+    <Image Include="icons\Breakrazors_Bastion.png" />
+    <Image Include="icons\Dolyak_Stance.png" />
     <Image Include="icons\Empower_Allies.png" />
     <Image Include="icons\Frost_Spirit2.png" />
     <Image Include="icons\Fury.png" />
+    <Image Include="icons\Griffon_Stance.png" />
     <Image Include="icons\Might.png" />
+    <Image Include="icons\Moa_Stance.png" />
+    <Image Include="icons\One_Wolf_Pack.png" />
     <Image Include="icons\Pinpoint_Distribution.png" />
     <Image Include="icons\Protection.png" />
     <Image Include="icons\Quickness.png" />
+    <Image Include="icons\Razorclaws_Rage.png" />
     <Image Include="icons\Regeneration.png" />
     <Image Include="icons\Resistance.png" />
     <Image Include="icons\Retaliation.png" />
@@ -294,6 +301,7 @@
     <Image Include="icons\Signet_of_Resolve.png" />
     <Image Include="icons\Signet_Wrath.png" />
     <Image Include="icons\Soothing_Mist.png" />
+    <Image Include="icons\Soulcleaves_Summit.png" />
     <Image Include="icons\Spotter.png" />
     <Image Include="icons\Stability.png" />
     <Image Include="icons\Stealth2.png" />
@@ -306,6 +314,7 @@
     <Image Include="icons\Unbroken_Lines.png" />
     <Image Include="icons\Vampiric_Presence.png" />
     <Image Include="icons\Vigor.png" />
+    <Image Include="icons\Vulture_Stance.png" />
     <Image Include="icons\Water_Spirit.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

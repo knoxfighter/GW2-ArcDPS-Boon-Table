@@ -55,13 +55,25 @@
 #define IDB_PNG4                        155
 #define ID_Unbroken_Lines               155
 #define IDB_PNG5                        156
+#define ID_Dolyak_Stance                157
+#define ID_Griffon_Stance               158
+#define ID_Moa_Stance                   159
+#define ID_Vulture_Stance               160
+#define ID_Bear_Stance                  161
+#define ID_One_Wolf_Pack                162
+#define ID_Soulcleaves_Summit           163
+#define ID_Razorclaws_Rage              164
+#define IDB_PNG6                        165
+#define ID_Breakrazors_Bastion          165
 #define ID_Assassins_Presence           65535
+#define ID_Assassins_Precense2          65535
+#define ID_Assassins_Presence2          65535
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        157
+#define _APS_NEXT_RESOURCE_VALUE        167
 #define _APS_NEXT_COMMAND_VALUE         40001
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           101
