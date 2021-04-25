@@ -336,7 +336,7 @@
     <Image Include="icons\Breakrazors_Bastion.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="icons\Assassin%27s_Presence.png">
+    <Image Include="icons\Assassin%27s_Presence2.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

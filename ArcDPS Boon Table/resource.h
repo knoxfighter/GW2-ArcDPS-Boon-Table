@@ -65,6 +65,7 @@
 #define ID_Razorclaws_Rage              164
 #define IDB_PNG6                        165
 #define ID_Breakrazors_Bastion          165
+#define IDB_PNG7                        167
 #define ID_Assassins_Presence           65535
 #define ID_Assassins_Precense2          65535
 #define ID_Assassins_Presence2          65535
@@ -73,7 +74,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        167
+#define _APS_NEXT_RESOURCE_VALUE        168
 #define _APS_NEXT_COMMAND_VALUE         40001
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           101
