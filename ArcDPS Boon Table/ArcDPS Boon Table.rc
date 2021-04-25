@@ -124,7 +124,7 @@ ID_Signet_Wrath         PNG                     "icons\\Signet_Wrath.png"
 
 ID_Signet_Courage       PNG                     "icons\\Signet_of_Courage.png"
 
-ID_Unbroken_Lines       PNG                     "icons\\Unbroken_Lines.png"
+ID_Unbroken_Lines       PNG                     "C:\\Users\\knox\\Desktop\\Programme\\C++\\GW2-ArcDPS-Boon-Table\\boon_table\\ArcDPS Boon Table\\icons\\Unbroken_Lines.png"
 
 ID_Dolyak_Stance        PNG                     "icons\\Dolyak_Stance.png"
 
@@ -159,6 +159,26 @@ ID_Light_Aura           PNG                     "icons\\Light_Aura.png"
 ID_Magnetic_Aura        PNG                     "icons\\Magnetic_Aura.png"
 
 ID_Shocking_Aura        PNG                     "icons\\Shocking_Aura.png"
+
+ID_Soul_Barbs           PNG                     "icons\\Soul_Barbs.png"
+
+ID_Spectral_Armor       PNG                     "icons\\Spectral_Armor.png"
+
+ID_Inspiring_Virtue     PNG                     "icons\\Inspiring_Virtue.png"
+
+ID_Eternal_Oasis        PNG                     "icons\\Eternal_Oasis.png"
+
+ID_Rite_of_the_Great_Dwarf PNG                     "icons\\Rite_of_the_Great_Dwarf.png"
+
+ID_Bulwark_Gyro         PNG                     "icons\\Bulwark_Gyro.png"
+
+ID_Symbolic_Avenger     PNG                     "icons\\Symbolic_Avenger.png"
+
+ID_Invigorated_Bulwark  PNG                     "icons\\Invigorated_Bulwark.png"
+
+ID_Sticking_Together    PNG                     "icons\\Sticking_Together.png"
+
+ID_Rigorous_Certainty   PNG                     "icons\\Rigorous_Certainty.png"
 
 
 /////////////////////////////////////////////////////////////////////////////

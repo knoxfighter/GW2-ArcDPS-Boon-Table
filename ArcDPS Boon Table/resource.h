@@ -74,12 +74,23 @@
 #define ID_Shocking_Aura                174
 #define ID_Assassins_Presence2          175
 #define ID_Chaos_Aura                   176
+#define ID_Soul_Barbs                   177
+#define ID_Spectral_Armor               178
+#define ID_Inspiring_Virtue             179
+#define ID_Eternal_Oasis                180
+#define ID_Rite_of_the_Great_Dwarf      182
+#define ID_Bulwark_Gyro                 183
+#define ID_Symbolic_Avenger             184
+#define ID_Invigorated_Bulwark          185
+#define ID_Sticking_Together            186
+#define IDB_PNG8                        187
+#define ID_Rigorous_Certainty           187
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        177
+#define _APS_NEXT_RESOURCE_VALUE        188
 #define _APS_NEXT_COMMAND_VALUE         40001
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           101

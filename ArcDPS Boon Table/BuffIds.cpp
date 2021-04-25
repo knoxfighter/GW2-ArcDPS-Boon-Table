@@ -28,15 +28,18 @@ void init_tracked_buffs(IDirect3DDevice9* d3d9device) {
 	tracked_buffs.emplace_back(std::vector<uint32_t>{5587}, lang.translate(LangKey::BuffSoothingMist), StackingType_single, false, BoonType_Elementalist, new Icon(ID_Soothing_Mist, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{30285}, lang.translate(LangKey::BuffVampiricAura), StackingType_single, false, BoonType_Necromancer, new Icon(ID_Vampiric_Presence, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{13796}, lang.translate(LangKey::BuffStrengthInNumbers), StackingType_single, false, BoonType_Guardian, new Icon(ID_Strength_in_Numbers, self_dll, d3d9device));
+	// warrior banners
 	tracked_buffs.emplace_back(std::vector<uint32_t>{14417}, lang.translate(LangKey::BuffStrength) /*Banner of Strength*/, StackingType_single, false, BoonType_Warrior, new Icon(ID_Banner_of_Strength2, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{14449}, lang.translate(LangKey::BuffBannerDiscipline), StackingType_single, false, BoonType_Warrior, new Icon(ID_Banner_of_Discipline2, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{14450}, lang.translate(LangKey::BuffBannerTactics), StackingType_single, false, BoonType_Warrior, new Icon(ID_Banner_of_Tactics2, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{14543}, lang.translate(LangKey::BuffBannerDefense), StackingType_single, false, BoonType_Warrior, new Icon(ID_Banner_of_Defense2, self_dll, d3d9device));
+	// ranger spirits
 	tracked_buffs.emplace_back(std::vector<uint32_t>{50421}, lang.translate(LangKey::BuffSpiritFrost), StackingType_single, false, BoonType_Ranger, new Icon(ID_Frost_Spirit2, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{50413}, lang.translate(LangKey::BuffSpiritSun), StackingType_single, false, BoonType_Ranger, new Icon(ID_Sun_Spirit2, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{50415}, lang.translate(LangKey::BuffSpiritStone), StackingType_single, false, BoonType_Ranger, new Icon(ID_Stone_Spirit2, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{50381}, lang.translate(LangKey::BuffSpiritStorm), StackingType_single, false, BoonType_Ranger, new Icon(ID_Storm_Spirit2, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{50386}, lang.translate(LangKey::BuffSpiritWater), StackingType_single, false, BoonType_Ranger, new Icon(ID_Water_Spirit, self_dll, d3d9device));
+	// general
 	tracked_buffs.emplace_back(std::vector<uint32_t>{10235}, lang.translate(LangKey::BuffSignetInspiration), StackingType_single, false, BoonType_Mesmer, new Icon(ID_Signet_of_Inspiration2, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{13017, 26142, 10269 }, lang.translate(LangKey::BuffStealth), StackingType_duration, false, BoonType_other, new Icon(ID_Stealth2, self_dll, d3d9device)); //stealth + Hide in Shadows 
 	tracked_buffs.emplace_back(std::vector<uint32_t>{5974}, lang.translate(LangKey::BuffSuperspeed), StackingType_single, false, BoonType_other, new Icon(ID_Super_Speed2, self_dll, d3d9device));
@@ -66,6 +69,18 @@ void init_tracked_buffs(IDirect3DDevice9* d3d9device) {
 	tracked_buffs.emplace_back(std::vector<uint32_t>{25518}, lang.translate(LangKey::BuffLightAura), StackingType_single, false, BoonType_Aura, new Icon(ID_Light_Aura, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{5684}, lang.translate(LangKey::BuffMagneticAura), StackingType_single, false, BoonType_Aura, new Icon(ID_Magnetic_Aura, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{5577}, lang.translate(LangKey::BuffShockingAura), StackingType_single, false, BoonType_Aura, new Icon(ID_Shocking_Aura, self_dll, d3d9device));
+	
+	tracked_buffs.emplace_back(std::vector<uint32_t>{53489}, lang.translate(LangKey::BuffSoulBarbs), StackingType_duration, false, BoonType_Necromancer, new Icon(ID_Soul_Barbs, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{10582}, lang.translate(LangKey::BuffSpectralArmor), StackingType_single, false, BoonType_Necromancer, new Icon(ID_Spectral_Armor, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{59592}, lang.translate(LangKey::BuffInspiringVirtue), StackingType_single, false, BoonType_Guardian, new Icon(ID_Inspiring_Virtue, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{44871}, lang.translate(LangKey::BuffEternalOasis), StackingType_single, false, BoonType_Guardian, new Icon(ID_Eternal_Oasis, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{43194}, lang.translate(LangKey::BuffUnbrokenLines), StackingType_single, false, BoonType_Guardian, new Icon(ID_Unbroken_Lines, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{26596, 33330}, lang.translate(LangKey::BuffRiteOfTheGreatDwarf), StackingType_single, false, BoonType_Revenant, new Icon(ID_Rite_of_the_Great_Dwarf, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{31229, 46910}, lang.translate(LangKey::BuffBulwarkGyro), StackingType_single, false, BoonType_Engineer, new Icon(ID_Bulwark_Gyro, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{56890}, lang.translate(LangKey::BuffSymbolicAvenger), StackingType_single, false, BoonType_Guardian, new Icon(ID_Symbolic_Avenger, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{30207}, lang.translate(LangKey::BuffInvigoratedBulwark), StackingType_single, false, BoonType_Guardian, new Icon(ID_Invigorated_Bulwark, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{53932}, lang.translate(LangKey::BuffStickingTogether), StackingType_single, false, BoonType_other, new Icon(ID_Sticking_Together, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{33652}, lang.translate(LangKey::BuffRigorousCertainty), StackingType_single, false, BoonType_other, new Icon(ID_Rigorous_Certainty, self_dll, d3d9device));
 	
 	// above 90
 	above90BoonDef = std::make_shared<BoonDef>(std::vector<uint32_t>{static_cast<uint32_t>(-1)}, lang.translate(LangKey::Above90Hp), StackingType_single, false, BoonType_other, new Icon(ID_Rune_Scholar, self_dll, d3d9device)); // above 90% hp (e.g. scholar)

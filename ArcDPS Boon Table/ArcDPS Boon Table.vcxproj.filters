@@ -357,5 +357,35 @@
     <Image Include="icons\Shocking_Aura.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="icons\Soul_Barbs.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Spectral_Armor.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Inspiring_Virtue.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Eternal_Oasis.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Rite_of_the_Great_Dwarf.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Bulwark_Gyro.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Symbolic_Avenger.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Invigorated_Bulwark.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Sticking_Together.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Rigorous_Certainty.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
