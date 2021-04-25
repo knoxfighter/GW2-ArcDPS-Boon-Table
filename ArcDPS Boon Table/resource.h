@@ -66,15 +66,20 @@
 #define IDB_PNG6                        165
 #define ID_Breakrazors_Bastion          165
 #define IDB_PNG7                        167
-#define ID_Assassins_Presence           65535
-#define ID_Assassins_Precense2          65535
-#define ID_Assassins_Presence2          65535
+#define ID_Dark_Aura                    169
+#define ID_Fire_Aura                    170
+#define ID_Frost_Aura                   171
+#define ID_Light_Aura                   172
+#define ID_Magnetic_Aura                173
+#define ID_Shocking_Aura                174
+#define ID_Assassins_Presence2          175
+#define ID_Chaos_Aura                   176
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        168
+#define _APS_NEXT_RESOURCE_VALUE        177
 #define _APS_NEXT_COMMAND_VALUE         40001
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           101

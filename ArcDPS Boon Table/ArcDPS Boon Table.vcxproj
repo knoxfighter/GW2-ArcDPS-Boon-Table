@@ -267,7 +267,6 @@
     <ResourceCompile Include="ArcDPS Boon Table.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="icon1.ico" />
     <Image Include="icons\Aegis.png" />
     <Image Include="icons\Alacrity.png" />
     <Image Include="icons\Assassin%27s_Presence2.png" />
@@ -278,11 +277,17 @@
     <Image Include="icons\Banner_of_Tactics2.png" />
     <Image Include="icons\Bear_Stance.png" />
     <Image Include="icons\Breakrazors_Bastion.png" />
+    <Image Include="icons\Chaos_Aura.png" />
+    <Image Include="icons\Dark_Aura.png" />
     <Image Include="icons\Dolyak_Stance.png" />
     <Image Include="icons\Empower_Allies.png" />
+    <Image Include="icons\Fire_Aura.png" />
+    <Image Include="icons\Frost_Aura.png" />
     <Image Include="icons\Frost_Spirit2.png" />
     <Image Include="icons\Fury.png" />
     <Image Include="icons\Griffon_Stance.png" />
+    <Image Include="icons\Light_Aura.png" />
+    <Image Include="icons\Magnetic_Aura.png" />
     <Image Include="icons\Might.png" />
     <Image Include="icons\Moa_Stance.png" />
     <Image Include="icons\One_Wolf_Pack.png" />
@@ -294,6 +299,7 @@
     <Image Include="icons\Resistance.png" />
     <Image Include="icons\Retaliation.png" />
     <Image Include="icons\Rune_of_the_Scholar.png" />
+    <Image Include="icons\Shocking_Aura.png" />
     <Image Include="icons\Signet_Judgment.png" />
     <Image Include="icons\Signet_Mercy.png" />
     <Image Include="icons\Signet_of_Courage.png" />

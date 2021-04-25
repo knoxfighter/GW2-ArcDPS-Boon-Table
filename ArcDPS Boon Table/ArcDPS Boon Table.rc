@@ -146,6 +146,20 @@ ID_Breakrazors_Bastion  PNG                     "icons\\Breakrazors_Bastion.png"
 
 ID_Assassins_Presence2  PNG                     "icons\\Assassin's_Presence2.png"
 
+ID_Chaos_Aura           PNG                     "icons\\Chaos_Aura.png"
+
+ID_Dark_Aura            PNG                     "icons\\Dark_Aura.png"
+
+ID_Fire_Aura            PNG                     "icons\\Fire_Aura.png"
+
+ID_Frost_Aura           PNG                     "icons\\Frost_Aura.png"
+
+ID_Light_Aura           PNG                     "icons\\Light_Aura.png"
+
+ID_Magnetic_Aura        PNG                     "icons\\Magnetic_Aura.png"
+
+ID_Shocking_Aura        PNG                     "icons\\Shocking_Aura.png"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -80,6 +80,7 @@ BUILD_ENUM_INI_NAMES(
 	BoonTypeElementalist, "Elementalist",
 	BoonTypeMesmer, "Mesmer",
 	BoonTypeNecromancer, "Necromancer",
+	BoonTypeAura, "Auras",
 	BoonTypeOther, "Other",
 
 	BuffMight, "Might",
@@ -129,6 +130,13 @@ BUILD_ENUM_INI_NAMES(
 	BuffSoulcleavesSummit, "Soulcleave's Summit",
 	BuffRazorclawsRage, "Razorclaw's Rage",
 	BuffBreakrazorsBastion, "Breakrazor's Bastion",
+	BuffChaosAura, "Chaos Aura",
+	BuffDarkAura, "Dark Aura",
+	BuffFireAura, "Fire Aura",
+	BuffFrostAura, "Frost Aura",
+	BuffLightAura, "Light Aura",
+	BuffMagneticAura, "Magnetic Aura",
+	BuffShockingAura, "Shocking Aura",
 
 	UpdateWindowHeader, "Arcdps Boon Table Plugin Update",
 	UpdateDesc, "A new update for the Boon Table plugin is available.",

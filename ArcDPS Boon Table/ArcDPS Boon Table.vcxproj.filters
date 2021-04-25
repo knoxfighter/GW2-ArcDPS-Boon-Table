@@ -285,9 +285,6 @@
     <Image Include="icons\Rune_of_the_Scholar.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="icon1.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="icons\Signet_of_Resolve.png">
       <Filter>Resource Files</Filter>
     </Image>
@@ -337,6 +334,27 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="icons\Assassin%27s_Presence2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Chaos_Aura.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Dark_Aura.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Fire_Aura.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Frost_Aura.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Light_Aura.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Magnetic_Aura.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Shocking_Aura.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

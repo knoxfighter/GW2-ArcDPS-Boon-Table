@@ -48,6 +48,8 @@ void SettingsUI::Draw(ImGuiTable* table, int tableIndex) {
 			ImGui::EndMenu();
 		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeNecromancer).c_str(), BoonType_Necromancer, 2))
 			ImGui::EndMenu();
+		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeAura).c_str(), BoonType_Aura, 2))
+			ImGui::EndMenu();
 		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeOther).c_str(), BoonType_other, 2)) {
 			ImGuiEx::MenuItemTableColumnVisibility(table, tracked_buffs.size() + 2);
 			ImGui::EndMenu();

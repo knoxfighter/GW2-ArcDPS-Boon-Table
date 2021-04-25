@@ -18,6 +18,7 @@ enum BoonType
 	BoonType_Elementalist,
 	BoonType_Necromancer,
 	BoonType_Mesmer,
+	BoonType_Aura,
 	BoonType_other,
 };
 
