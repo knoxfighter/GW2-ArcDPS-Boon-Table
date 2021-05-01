@@ -18,7 +18,13 @@ Settings::Settings() : table_ini(true) {
 }
 
 Settings::~Settings() {
-	saveToFile();
+	try {
+		saveToFile();
+	} catch(const std::exception& e) {
+		std::string err = "BoonTable: Error saving settings to file";
+		err.append(e.what());
+		arc_log_file(err.c_str());
+	}
 }
 
 bool& Settings::isShowChart(int tableIndex) {
