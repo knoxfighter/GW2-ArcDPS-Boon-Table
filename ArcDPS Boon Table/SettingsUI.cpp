@@ -7,7 +7,9 @@
 
 SettingsUI settingsUi;
 
-void SettingsUI::Draw(ImGuiTable* table, int tableIndex) {
+namespace Table = ImGuiEx::BigTable;
+
+void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex) {
 	if (!init) {
 		init = true;
 		initialize();
@@ -25,9 +27,9 @@ void SettingsUI::Draw(ImGuiTable* table, int tableIndex) {
 		ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
 
 		// username
-		ImGuiEx::MenuItemTableColumnVisibility(table, 0);
+		Table::MenuItemTableColumnVisibility(table, 0);
 		// subgroup
-		ImGuiEx::MenuItemTableColumnVisibility(table, 1);
+		Table::MenuItemTableColumnVisibility(table, 1);
 
 		// Submenus for controlling visibility
 		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeBoon).c_str(), BoonType_boon, 2))
@@ -51,7 +53,7 @@ void SettingsUI::Draw(ImGuiTable* table, int tableIndex) {
 		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeAura).c_str(), BoonType_Aura, 2))
 			ImGui::EndMenu();
 		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeOther).c_str(), BoonType_other, 2)) {
-			ImGuiEx::MenuItemTableColumnVisibility(table, tracked_buffs.size() + 2);
+			Table::MenuItemTableColumnVisibility(table, tracked_buffs.size() + 2);
 			ImGui::EndMenu();
 		}
 
@@ -134,11 +136,11 @@ void SettingsUI::initialize() {
 	self_color[3] = imVec4.w;
 }
 
-bool SettingsUI::tableColumnSubMenu(ImGuiTable* table, const char* label, BoonType type, int beginId) const {
+bool SettingsUI::tableColumnSubMenu(Table::ImGuiTable* table, const char* label, BoonType type, int beginId) const {
 	if (ImGui::BeginMenu(label)) {
 		for (const BoonDef& trackedBuff : tracked_buffs) {
 			if (trackedBuff.category == type) {
-				ImGuiEx::MenuItemTableColumnVisibility(table, beginId);
+				Table::MenuItemTableColumnVisibility(table, beginId);
 			}
 			++beginId;
 		}

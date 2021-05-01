@@ -7,6 +7,7 @@
 #include "Tracker.h"
 #include "BuffIds.h"
 #include "Settings.h"
+#include "extension/BigTable.h"
 
 class AppChart
 {
@@ -30,7 +31,7 @@ public:
 	void addPlayer(size_t playerId);
 
 private:
-	ImGuiTable* imGuiTable = nullptr;
+	ImGuiEx::BigTable::ImGuiTable* imGuiTable = nullptr;
 	int index = 0;
 	std::vector<size_t> playerOrder;
 };

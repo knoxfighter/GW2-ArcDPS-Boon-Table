@@ -113,7 +113,11 @@ arcdps_exports* mod_init()
 		// init buffs, this will load the icons into RAM
 		init_tracked_buffs(id3dd9);
 
+		// check for new version on github
 		updateChecker.checkForUpdate(self_dll);
+
+		// load my table loader into imgui
+		ImGuiEx::BigTable::RegisterSettingsHandler("BigTable-BoonTable");
 	} catch (std::exception& e) {
 		loading_successful = false;
 		error_message = "Error starting up: ";

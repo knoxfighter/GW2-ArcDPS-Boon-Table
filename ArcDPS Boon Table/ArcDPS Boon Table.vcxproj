@@ -215,6 +215,7 @@
     <ClCompile Include="BuffIds.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="extension\arcdps_structs.cpp" />
+    <ClCompile Include="extension\BigTable.cpp" />
     <ClCompile Include="extension\Icon.cpp" />
     <ClCompile Include="extension\UpdateCheckerBase.cpp" />
     <ClCompile Include="extension\Widgets.cpp" />
@@ -240,6 +241,7 @@
     <ClInclude Include="BuffIds.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="extension\arcdps_structs.h" />
+    <ClInclude Include="extension\BigTable.h" />
     <ClInclude Include="extension\Icon.h" />
     <ClInclude Include="extension\json.hpp" />
     <ClInclude Include="extension\map.h" />

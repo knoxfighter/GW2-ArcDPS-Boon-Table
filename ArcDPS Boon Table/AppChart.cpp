@@ -11,6 +11,8 @@
 
 AppChartsContainer charts;
 
+namespace Table = ImGuiEx::BigTable;
+
 void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) {
 	ImGui::PushFont(ImGui::GetIO().Fonts->Fonts.back());
 
@@ -44,9 +46,9 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 	// columns: charname | subgroup | tracked_buffs
 	const int columnCount = tracked_buffs.size() + 3;
 	// last 3 possible elements are hardcoded ones
-	const unsigned int nameColumnId = 64 - 1;
-	const unsigned int subgroupColumnId = 64 - 2;
-	const unsigned int above90ColumnId = 64 - 3;
+	const unsigned int nameColumnId = 128 - 1;
+	const unsigned int subgroupColumnId = 128 - 2;
+	const unsigned int above90ColumnId = 128 - 3;
 
 	// we have to get it here, cause it will lock tracker.players_mtx itself (which causes a crash, when it is already locked)
 	Player* self_player = tracker.getPlayer(2000);
@@ -72,13 +74,12 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 
 	std::string tableId = "BoonTable";
 	tableId.append(std::to_string(index));
-	if (ImGui::BeginTable(tableId.c_str(), columnCount, tableFlags)) {
-		ImGuiContext& imGuiContext = *GImGui;
-		imGuiTable = imGuiContext.CurrentTable;
-
+	if (Table::BeginTable(tableId.c_str(), columnCount, tableFlags)) {
+		imGuiTable = Table::CurrentTable;
+		
 		std::string& resetVersion = settings.getResetVersion(index);
 		if (resetVersion != "2.2.0") {
-			ImGui::TableResetSettings(imGuiTable);
+			Table::TableResetSettings(imGuiTable);
 			resetVersion = "2.2.0";
 		}
 
@@ -92,8 +93,8 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		std::string subgroupName = lang.translate(LangKey::SubgroupColumnHeader);
 
 		ImGuiTableColumnFlags columnFlags = ImGuiTableColumnFlags_WidthFixed;
-		ImGui::TableSetupColumn(charName.c_str(), columnFlags, 0, nameColumnId);
-		ImGui::TableSetupColumn(subgroupName.c_str(), columnFlags, 0, subgroupColumnId);
+		Table::TableSetupColumn(charName.c_str(), columnFlags, 0, nameColumnId);
+		Table::TableSetupColumn(subgroupName.c_str(), columnFlags, 0, subgroupColumnId);
 
 		float init_width = 80.f;
 		if (sizingPolicy == SizingPolicy::SizeToContent || sizingPolicy == SizingPolicy::ManualWindowSize) {
@@ -110,39 +111,39 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 				bufFlags |= ImGuiTableColumnFlags_DefaultSort;
 			}
 
-			ImGui::TableSetupColumn(trackedBuff.name.c_str(), bufFlags, init_width, i);
+			Table::TableSetupColumn(trackedBuff.name.c_str(), bufFlags, init_width, i);
 
 			++i;
 		}
 
-		ImGui::TableSetupColumn(above90BoonDef->name.c_str(), ImGuiTableColumnFlags_NoResize | ImGuiTableColumnFlags_DefaultHide, init_width, above90ColumnId);
+		Table::TableSetupColumn(above90BoonDef->name.c_str(), ImGuiTableColumnFlags_NoResize | ImGuiTableColumnFlags_DefaultHide, init_width, above90ColumnId);
 
-		ImGui::TableNextRow(ImGuiTableRowFlags_Headers);
+		Table::TableNextRow(ImGuiTableRowFlags_Headers);
 
 		// accountname header
-		if (ImGui::TableNextColumn())
-			ImGuiEx::TableHeader(charName.c_str(), true, nullptr);
+		if (Table::TableNextColumn())
+			Table::TableHeader(charName.c_str(), true, nullptr);
 
 		// subgroup header
-		if (ImGui::TableNextColumn())
-			ImGuiEx::TableHeader(subgroupName.c_str(), true, nullptr);
+		if (Table::TableNextColumn())
+			Table::TableHeader(subgroupName.c_str(), true, nullptr);
 
 		// buff headers
 		for (const BoonDef& trackedBuff : tracked_buffs) {
-			if (ImGui::TableNextColumn()) {
-				ImGuiEx::TableHeader(trackedBuff.name.c_str(), showLabel, trackedBuff.icon->texture, alignment);
+			if (Table::TableNextColumn()) {
+				Table::TableHeader(trackedBuff.name.c_str(), showLabel, trackedBuff.icon->texture, alignment);
 			}
 		}
 
 		// above90 header
-		if (ImGui::TableNextColumn()) {
-			ImGuiEx::TableHeader(above90BoonDef->name.c_str(), showLabel, above90BoonDef->icon->texture, alignment);
+		if (Table::TableNextColumn()) {
+			Table::TableHeader(above90BoonDef->name.c_str(), showLabel, above90BoonDef->icon->texture, alignment);
 		}
 
 		/*
 		 * SORTING
 		 */
-		if (ImGuiTableSortSpecs* sorts_specs = ImGui::TableGetSortSpecs()) {
+		if (ImGuiTableSortSpecs* sorts_specs = Table::TableGetSortSpecs()) {
 			// Sort our data if sort specs have been changed!
 			if (sorts_specs->SpecsDirty)
 				needSort = true;
@@ -245,8 +246,8 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		 * SUBGROUPS
 		 */
 		if (settings.isShowSubgroups(tracker, index)) {
-			ImGui::TableNextRow();
-			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
+			Table::TableNextRow();
+			Table::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
 
 			bool onlySubgroup = settings.isShowOnlySubgroup(index);
 			auto group_filter = [&self_player, onlySubgroup](const uint8_t& subgroup) {
@@ -282,8 +283,8 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		 * NPCs
 		 */
 		if (settings.isShowNpcs(index) && !tracker.npcs.empty()) {
-			ImGui::TableNextRow();
-			ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
+			Table::TableNextRow();
+			Table::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
 			for (const NPC& npc : tracker.npcs) {
 				DrawRow(alignment, npc.name.c_str(), lang.translate(LangKey::NPCSubgroupColumnValue).c_str(),
 					[&](const BoonDef& boonDef) {
@@ -294,7 +295,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 			}
 		}
 
-		ImGui::EndTable();
+		Table::EndTable();
 	}
 
 	ImGui::End();
@@ -305,19 +306,19 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 
 void AppChart::DrawRow(Alignment alignment, const char* charnameText, const char* subgroupText, std::function<float(const BoonDef&)> uptimeFunc,
                        std::function<float()> above90Func, bool hasEntity, const Entity& entity, bool hasColor, const ImVec4& color) {
-	ImGui::TableNextRow();
+	Table::TableNextRow();
 
 	if (hasColor) {
 		ImGui::PushStyleColor(ImGuiCol_Text, color);
 	}
 
 	// charname
-	ImGui::TableNextColumn();
+	Table::TableNextColumn();
 	ImGui::TextUnformatted(charnameText);
 
 	// subgroup
-	if (ImGui::TableNextColumn()) {
-		ImGuiEx::AlignedTextColumn(alignment, subgroupText);
+	if (Table::TableNextColumn()) {
+		Table::AlignedTextColumn(alignment, subgroupText);
 	}
 
 	if (hasColor) {
@@ -326,18 +327,18 @@ void AppChart::DrawRow(Alignment alignment, const char* charnameText, const char
 
 	// buffs
 	for (const BoonDef& trackedBuff : tracked_buffs) {
-		if (ImGui::TableNextColumn()) {
+		if (Table::TableNextColumn()) {
 			float averageBoonUptime = uptimeFunc(trackedBuff);
 			if (hasEntity) {
-				buffProgressBar(trackedBuff, averageBoonUptime, ImGui::GetColumnWidth(), entity);
+				buffProgressBar(trackedBuff, averageBoonUptime, Table::GetColumnWidth(), entity);
 			} else {
-				buffProgressBar(trackedBuff, averageBoonUptime, ImGui::GetColumnWidth());
+				buffProgressBar(trackedBuff, averageBoonUptime, Table::GetColumnWidth());
 			}
 		}
 	}
 
 	// above90
-	if (ImGui::TableNextColumn()) {
+	if (Table::TableNextColumn()) {
 		const float above90 = above90Func();
 		if (hasEntity) {
 			buffProgressBar(*above90BoonDef, above90, ImGui::GetColumnWidth(), entity);
@@ -378,9 +379,9 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 
 		if (current_buff.stacking_type == StackingType_intensity) {
 			//don't show the % for intensity stacking buffs
-			ImGuiEx::AlignedTextColumn(alignment, "%.1f", current_boon_uptime);
+			Table::AlignedTextColumn(alignment, "%.1f", current_boon_uptime);
 		} else {
-			ImGuiEx::AlignedTextColumn(alignment, "%.0f%%", 100 * current_boon_uptime);
+			Table::AlignedTextColumn(alignment, "%.0f%%", 100 * current_boon_uptime);
 		}
 
 		if (show_colored != ProgressBarColoringMode::Uncolored && !hidden_color) ImGui::PopStyleColor();

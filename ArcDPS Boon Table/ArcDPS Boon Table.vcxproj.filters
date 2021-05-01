@@ -102,6 +102,9 @@
     <ClCompile Include="extension\UpdateCheckerBase.cpp">
       <Filter>Source Files\extension</Filter>
     </ClCompile>
+    <ClCompile Include="extension\BigTable.cpp">
+      <Filter>Source Files\extension</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -183,6 +186,9 @@
       <Filter>Header Files\extension</Filter>
     </ClInclude>
     <ClInclude Include="extension\json.hpp">
+      <Filter>Header Files\extension</Filter>
+    </ClInclude>
+    <ClInclude Include="extension\BigTable.h">
       <Filter>Header Files\extension</Filter>
     </ClInclude>
   </ItemGroup>
