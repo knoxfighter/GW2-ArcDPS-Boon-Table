@@ -77,12 +77,6 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 	if (Table::BeginTable(tableId.c_str(), columnCount, tableFlags)) {
 		imGuiTable = Table::CurrentTable;
 		
-		std::string& resetVersion = settings.getResetVersion(index);
-		if (resetVersion != "2.2.0") {
-			Table::TableResetSettings(imGuiTable);
-			resetVersion = "2.2.0";
-		}
-
 		Alignment alignment = settings.getAlignment(index);
 		bool showLabel = settings.isShowLabel(index);
 
