@@ -191,6 +191,9 @@
     <ClInclude Include="extension\BigTable.h">
       <Filter>Header Files\extension</Filter>
     </ClInclude>
+    <ClInclude Include="extension\ImGui_Math.h">
+      <Filter>Header Files\extension</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ArcDPS Boon Table.rc">

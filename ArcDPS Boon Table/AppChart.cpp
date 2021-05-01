@@ -1,3 +1,4 @@
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include "AppChart.h"
 
 #include <algorithm>
@@ -8,6 +9,7 @@
 #include "Settings.h"
 #include "SettingsUI.h"
 #include "extension/Widgets.h"
+#include "extension/ImGui_Math.h"
 
 AppChartsContainer charts;
 
@@ -392,8 +394,11 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 			} else {
 				percentage = current_boon_uptime;
 			}
-			// ImVec4 color((1 - percentage) * 255, 125/*percentage * 255*/, 0, 1);
-			ImVec4 color(1 - percentage, percentage, 0, 110.f / 255.f);
+			ImVec4 _0Color = settings.get0Color();
+			ImVec4 _100Color = settings.get100Color();
+			_0Color = _0Color * (1 - percentage);
+			_100Color = _100Color * percentage;
+			ImVec4 color = _100Color + _0Color;
 			buffProgressBar(current_buff, current_boon_uptime, width, color);
 			break;
 		}
@@ -414,7 +419,11 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 			} else {
 				percentage = current_boon_uptime;
 			}
-			ImVec4 color(1 - percentage, percentage, 0, (float)125 / 255);
+			ImVec4 _0Color = settings.get0Color();
+			ImVec4 _100Color = settings.get100Color();
+			_0Color = _0Color * (1 - percentage);
+			_100Color = _100Color * percentage;
+			ImVec4 color = _100Color + _0Color;
 			buffProgressBar(current_buff, current_boon_uptime, width, color);
 			break;
 		}

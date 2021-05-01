@@ -42,6 +42,8 @@ public:
 
 	[[nodiscard]] WPARAM getTableKey() const;
 	[[nodiscard]] const ImVec4& getSelfColor() const;
+	[[nodiscard]] const ImVec4& get100Color() const;
+	[[nodiscard]] const ImVec4& get0Color() const;
 
 	void setShowChart(int tableIndex, bool status);
 
@@ -74,6 +76,8 @@ private:
 
 	WPARAM table_key;
 	std::optional<ImVec4> self_color;
+	std::optional<ImVec4> _100color;
+	std::optional<ImVec4> _0color;
 	Table tables[MaxTableWindowAmount]{};
 
 	void readTable(int tableIndex);

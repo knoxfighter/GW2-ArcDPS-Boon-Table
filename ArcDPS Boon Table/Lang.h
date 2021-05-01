@@ -59,6 +59,8 @@ BUILD_ENUM_INI_NAMES(
 	SettingsWidthSlideTooltip, "Press CTRL+Leftclick to manually input the number.",
 	SettingsColumnSetup, "Column Setup",
 	SettingsStyle, "Style",
+	Settings100Color, "100% color",
+	Settings0Color, "0% color",
 
 	SizingPolicySizeToContent, "Autoresize window to content",
 	SizingPolicySizeContentToWindow, "Size content to window",

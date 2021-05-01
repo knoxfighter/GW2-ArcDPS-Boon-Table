@@ -103,6 +103,23 @@ const ImVec4& Settings::getSelfColor() const {
 	}
 }
 
+const ImVec4& Settings::get100Color() const {
+	if (_100color) {
+		return _100color.value();
+	}
+	else {
+		return ImVec4(0, 1, 0, (float)125 / 255);
+	}
+}
+const ImVec4& Settings::get0Color() const {
+	if (_0color) {
+		return _0color.value();
+	}
+	else {
+		return ImVec4(1,0,0, (float)125 / 255);
+	}
+}
+
 void Settings::setShowChart(int tableIndex, bool status) {
 	tables[tableIndex].show_chart = status;
 }
@@ -115,6 +132,12 @@ void Settings::readFromFile() {
 
 	const char* value = table_ini.GetValue("colors", "self_color", "");
 	self_color = ImVec4_color_from_string(value);
+	
+	const char* _100Col = table_ini.GetValue("colors", "100%color", "");
+	_100color = ImVec4_color_from_string(_100Col);
+
+	const char* _0Col = table_ini.GetValue("colors", "0%color", "");
+	_0color = ImVec4_color_from_string(_0Col);
 
 	for (int i = 0; i < MaxTableWindowAmount; ++i) {
 		readTable(i);
@@ -154,6 +177,14 @@ void Settings::saveToFile() {
 
 	if (self_color) {
 		table_ini.SetValue("colors", "self_color", to_string(self_color.value()).c_str());
+	}
+
+	if (_100color) {
+		table_ini.SetValue("colors", "100%color", to_string(_100color.value()).c_str());
+	}
+
+	if (_0color) {
+		table_ini.SetValue("colors", "0%color", to_string(_0color.value()).c_str());
 	}
 
 	for (int i = 0; i < MaxTableWindowAmount; ++i) {

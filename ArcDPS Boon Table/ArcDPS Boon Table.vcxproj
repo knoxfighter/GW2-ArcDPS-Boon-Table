@@ -243,6 +243,7 @@
     <ClInclude Include="extension\arcdps_structs.h" />
     <ClInclude Include="extension\BigTable.h" />
     <ClInclude Include="extension\Icon.h" />
+    <ClInclude Include="extension\ImGui_Math.h" />
     <ClInclude Include="extension\json.hpp" />
     <ClInclude Include="extension\map.h" />
     <ClInclude Include="extension\UpdateCheckerBase.h" />

@@ -77,6 +77,35 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex) {
 		ImGuiEx::EnumCombo(showColoredText.c_str(), show_colored, ProgressBarColoringMode::LAST_ENTRY);
 		ImGui::PopItemWidth();
 
+		if (show_colored == ProgressBarColoringMode::ByPercentage) {
+			ImGui::Indent(20.f);
+			if (ImGui::ColorEdit4(lang.translate(LangKey::Settings100Color).c_str(), _100color)) {
+				// i think the color changed
+				if (settings._100color) {
+					settings._100color->x = _100color[0];
+					settings._100color->y = _100color[1];
+					settings._100color->z = _100color[2];
+					settings._100color->w = _100color[3];
+				}
+				else {
+					settings._100color = ImVec4(_100color[0], _100color[1], _100color[2], _100color[3]);
+				}
+			}
+			if (ImGui::ColorEdit4(lang.translate(LangKey::Settings0Color).c_str(), _0color)) {
+				// i think the color changed
+				if (settings._0color) {
+					settings._0color->x = _0color[0];
+					settings._0color->y = _0color[1];
+					settings._0color->z = _0color[2];
+					settings._0color->w = _0color[3];
+				}
+				else {
+					settings._0color = ImVec4(_0color[0], _0color[1], _0color[2], _0color[3]);
+				}
+			}
+			ImGui::Unindent(20.f);
+		}
+
 		Alignment& alignment = settings.tables[tableIndex].alignment;
 		std::string alignmentText = lang.translate(LangKey::SettingsAlignment);
 		alignmentText.append("###Alignment");
@@ -134,6 +163,18 @@ void SettingsUI::initialize() {
 	self_color[1] = imVec4.y;
 	self_color[2] = imVec4.z;
 	self_color[3] = imVec4.w;
+
+	const ImVec4& imVec4_2 = settings.get100Color();
+	_100color[0] = imVec4_2.x;
+	_100color[1] = imVec4_2.y;
+	_100color[2] = imVec4_2.z;
+	_100color[3] = imVec4_2.w;
+
+	const ImVec4& imVec4_3 = settings.get0Color();
+	_0color[0] = imVec4_3.x;
+	_0color[1] = imVec4_3.y;
+	_0color[2] = imVec4_3.z;
+	_0color[3] = imVec4_3.w;
 }
 
 bool SettingsUI::tableColumnSubMenu(Table::ImGuiTable* table, const char* label, BoonType type, int beginId) const {
