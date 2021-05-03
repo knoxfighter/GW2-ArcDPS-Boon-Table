@@ -206,7 +206,8 @@
       <AdditionalDependencies>version.lib;crypt32.lib;Ws2_32.lib;Wldap32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>powershell -noprofile -command  "(Get-FileHash '$(OutDirFullPath)$(TargetFileName)').Hash  &gt; '$(OutDirFullPath)$(TargetName).sha'"</Command>
+      <Command>powershell -noprofile -command  "(Get-FileHash '$(OutDirFullPath)$(TargetFileName)').Hash  &gt; '$(OutDirFullPath)$(TargetName).sha'"
+powershell.exe -noprofile -executionpolicy bypass "&amp; '.\extension\updateVersion.ps1' '.\ArcDPS Boon Table.rc'"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
