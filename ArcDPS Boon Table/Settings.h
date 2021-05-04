@@ -27,6 +27,7 @@ public:
 	bool& isShowChart(int tableIndex);
 	[[nodiscard]] Alignment getAlignment(int tableIndex) const;
 	[[nodiscard]] bool isShowSubgroups(const Tracker& tracker, int tableIndex) const;
+	[[nodiscard]] bool isShowSelfOnTop(int tableIndex) const;
 	[[nodiscard]] bool isShowPlayers(int tableIndex) const;
 	[[nodiscard]] bool isShowNpcs(int tableIndex) const;
 	[[nodiscard]] bool isShowTotal(int tableIndex) const;
@@ -38,7 +39,6 @@ public:
 	[[nodiscard]] SizingPolicy getSizingPolicy(int tableIndex) const;
 	[[nodiscard]] float getBoonColumnWidth(int tableIndex) const;
 	[[nodiscard]] bool isShowOnlySubgroup(int tableIndex) const;
-	[[nodiscard]] bool isShowOnlySelf(int tableIndex) const;
 	[[nodiscard]] bool isShowBackground(int tableIndex) const;
 
 	[[nodiscard]] WPARAM getTableKey() const;
@@ -57,6 +57,7 @@ public:
 private:
 	struct Table {
 		bool show_chart = false;
+		bool show_self_on_top = false;
 		bool show_players = true;
 		bool show_npcs = true;
 		bool show_subgroups = true;
@@ -70,7 +71,6 @@ private:
 		SizingPolicy sizingPolicy = SizingPolicy::SizeToContent;
 		float boon_column_width = 80.f;
 		bool show_only_subgroup = false;
-		bool show_only_self = false;
 		bool show_background = true;
 	};
 	

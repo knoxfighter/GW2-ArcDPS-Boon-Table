@@ -41,6 +41,10 @@ bool Settings::isShowSubgroups(const Tracker& tracker, int tableIndex) const {
 		&& tracker.subgroups.size() > 1;
 }
 
+bool Settings::isShowSelfOnTop(int tableIndex) const {
+	return tables[tableIndex].show_self_on_top;
+}
+
 WPARAM Settings::getTableKey() const {
 	return table_key;
 }
@@ -87,10 +91,6 @@ float Settings::getBoonColumnWidth(int tableIndex) const {
 
 bool Settings::isShowOnlySubgroup(int tableIndex) const {
 	return tables[tableIndex].show_only_subgroup;
-}
-
-bool Settings::isShowOnlySelf(int tableIndex) const {
-	return tables[tableIndex].show_only_self;
 }
 
 bool Settings::isShowBackground(int tableIndex) const {
@@ -157,6 +157,7 @@ void Settings::readTable(int tableIndex) {
 	}
 
 	table.show_chart = table_ini.GetBoolValue(sectionName.c_str(), "show");
+	table.show_self_on_top = table_ini.GetBoolValue(sectionName.c_str(), "show_self_on_top", false);
 	table.show_players = table_ini.GetBoolValue(sectionName.c_str(), "show_players", true);
 	table.show_subgroups = table_ini.GetBoolValue(sectionName.c_str(), "show_subgroups", true);
 	table.show_total = table_ini.GetBoolValue(sectionName.c_str(), "show_total", true);
@@ -173,7 +174,6 @@ void Settings::readTable(int tableIndex) {
 	table.sizingPolicy = static_cast<SizingPolicy>(pszValueLong);
 	table.boon_column_width = table_ini.GetDoubleValue(sectionName.c_str(), "boon_column_width", 80);
 	table.show_only_subgroup = table_ini.GetBoolValue(sectionName.c_str(), "show_only_subgroup", false);
-	table.show_only_self = table_ini.GetBoolValue(sectionName.c_str(), "show_only_self", false);
 	table.show_background = table_ini.GetBoolValue(sectionName.c_str(), "show_background", true);
 }
 
@@ -208,6 +208,7 @@ void Settings::saveTable(int tableIndex) {
 	}
 
 	table_ini.SetBoolValue(sectionName.c_str(), "show", table.show_chart);
+	table_ini.SetBoolValue(sectionName.c_str(), "show_self_on_top", table.show_self_on_top);
 	table_ini.SetBoolValue(sectionName.c_str(), "show_players", table.show_players);
 	table_ini.SetBoolValue(sectionName.c_str(), "show_subgroups", table.show_subgroups);
 	table_ini.SetBoolValue(sectionName.c_str(), "show_total", table.show_total);
@@ -221,7 +222,6 @@ void Settings::saveTable(int tableIndex) {
 	table_ini.SetLongValue(sectionName.c_str(), "sizing_policy", static_cast<long>(table.sizingPolicy));
 	table_ini.SetDoubleValue(sectionName.c_str(), "boon_column_width", table.boon_column_width);
 	table_ini.SetBoolValue(sectionName.c_str(), "show_only_subgroup", table.show_only_subgroup);
-	table_ini.SetBoolValue(sectionName.c_str(), "show_only_self", table.show_only_self);
 	table_ini.SetBoolValue(sectionName.c_str(), "show_background", table.show_background);
 }
 

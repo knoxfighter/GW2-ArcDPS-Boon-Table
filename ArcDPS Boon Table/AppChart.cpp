@@ -207,38 +207,44 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 			}
 		}
 
+		/**
+		 * SELF
+		 */
+		if (settings.isShowSelfOnTop(index)) {
+			if (self_player) {
+				DrawRow(alignment, self_player->name.c_str(), std::to_string(self_player->subgroup).c_str(), [&](const BoonDef& boonDef) {
+					return getEntityDisplayValue(tracker, *self_player, boonDef);
+				}, [&self_player]() {
+					return self_player->getOver90();
+				}, true, *self_player, true, settings.getSelfColor());
+			}
+
+			Table::TableNextRow();
+			Table::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
+		}
+
 		/*
 		 * PLAYERS
 		 */
 		if (settings.isShowPlayers(index)) {
-			if (settings.isShowOnlySelf(index)) {
-				if (self_player) {
-					DrawRow(alignment, self_player->name.c_str(), std::to_string(self_player->subgroup).c_str(), [&](const BoonDef& boonDef) {
-						return getEntityDisplayValue(tracker, *self_player, boonDef);
-					}, [&self_player]() {
-						return self_player->getOver90();
-					}, true, * self_player, true, settings.getSelfColor());
-				}
-			} else {
-				bool onlySubgroup = settings.isShowOnlySubgroup(index);
-				auto group_filter = [&self_player, onlySubgroup, &tracker](const size_t& playerIdx) {
-					if (self_player && onlySubgroup) {
-						uint8_t subgroup = self_player->subgroup;
-						const Player& player = tracker.players.at(playerIdx);
-						return player.subgroup == subgroup;
-					}
-					return true;
-				};
-				for (const size_t& playerIdx : playerOrder | std::views::filter(group_filter)) {
-					// for (const Player& player : tracker.players | std::views::filter(group_filter)) {
+			bool onlySubgroup = settings.isShowOnlySubgroup(index);
+			auto group_filter = [&self_player, onlySubgroup, &tracker](const size_t& playerIdx) {
+				if (self_player && onlySubgroup) {
+					uint8_t subgroup = self_player->subgroup;
 					const Player& player = tracker.players.at(playerIdx);
-
-					DrawRow(alignment, player.name.c_str(), std::to_string(player.subgroup).c_str(), [&](const BoonDef& boonDef) {
-						return getEntityDisplayValue(tracker, player, boonDef);
-					}, [&player]() {
-						return player.getOver90();
-					}, true, player, player.self, settings.getSelfColor());
+					return player.subgroup == subgroup;
 				}
+				return true;
+			};
+			for (const size_t& playerIdx : playerOrder | std::views::filter(group_filter)) {
+				// for (const Player& player : tracker.players | std::views::filter(group_filter)) {
+				const Player& player = tracker.players.at(playerIdx);
+
+				DrawRow(alignment, player.name.c_str(), std::to_string(player.subgroup).c_str(), [&](const BoonDef& boonDef) {
+					return getEntityDisplayValue(tracker, player, boonDef);
+				}, [&player]() {
+					return player.getOver90();
+				}, true, player, player.self, settings.getSelfColor());
 			}
 		}
 

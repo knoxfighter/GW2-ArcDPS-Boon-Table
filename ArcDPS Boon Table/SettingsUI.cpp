@@ -17,6 +17,7 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex) {
 
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.f, 0.f));
 
+	ImGui::Checkbox(lang.translate(LangKey::SettingsSelfOnTop).c_str(), &settings.tables[tableIndex].show_self_on_top);
 	ImGui::Checkbox(lang.translate(LangKey::SettingsPlayers).c_str(), &settings.tables[tableIndex].show_players);
 	ImGui::Checkbox(lang.translate(LangKey::SettingsSubgroups).c_str(), &settings.tables[tableIndex].show_subgroups);
 	ImGui::Checkbox(lang.translate(LangKey::SettingsTotal).c_str(), &settings.tables[tableIndex].show_total);
@@ -68,7 +69,6 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex) {
 		ImGui::Checkbox(lang.translate(LangKey::SettingsShowLabel).c_str(), &settings.tables[tableIndex].show_label);
 		ImGui::Checkbox(lang.translate(LangKey::SettingsHideHeader).c_str(), &settings.tables[tableIndex].hide_header);
 		ImGui::Checkbox(lang.translate(LangKey::SettingsShowOnlySubgroup).c_str(), &settings.tables[tableIndex].show_only_subgroup);
-		ImGui::Checkbox(lang.translate(LangKey::SettingsShowOnlySelf).c_str(), &settings.tables[tableIndex].show_only_self);
 		ImGui::Checkbox(lang.translate(LangKey::SettingsShowBackground).c_str(), &settings.tables[tableIndex].show_background);
 
 		ProgressBarColoringMode& show_colored = settings.tables[tableIndex].show_colored;
