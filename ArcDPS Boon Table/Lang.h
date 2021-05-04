@@ -62,6 +62,7 @@ BUILD_ENUM_INI_NAMES(
 	Settings100Color, "100% color",
 	Settings0Color, "0% color",
 	SettingsShowBackground, "Background",
+	SettingsResetTableColumns, "Reset table columns",
 
 	SizingPolicySizeToContent, "Autoresize window to content",
 	SizingPolicySizeContentToWindow, "Size content to window",

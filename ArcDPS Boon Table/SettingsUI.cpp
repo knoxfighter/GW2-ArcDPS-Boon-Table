@@ -58,6 +58,10 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex) {
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::Button(lang.translate(LangKey::SettingsResetTableColumns).c_str())) {
+			Table::TableResetSettings(table);
+		}
+
 		ImGui::PopItemFlag();
 
 		ImGui::EndMenu();
@@ -153,7 +157,6 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex) {
 
 		ImGui::EndMenu();
 	}
-	
 
 	ImGui::PopStyleVar();
 }
