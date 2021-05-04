@@ -61,6 +61,7 @@ BUILD_ENUM_INI_NAMES(
 	SettingsStyle, "Style",
 	Settings100Color, "100% color",
 	Settings0Color, "0% color",
+	SettingsShowBackground, "Background",
 
 	SizingPolicySizeToContent, "Autoresize window to content",
 	SizingPolicySizeContentToWindow, "Size content to window",
