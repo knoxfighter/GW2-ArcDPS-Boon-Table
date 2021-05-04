@@ -79,7 +79,7 @@ void init_tracked_buffs(IDirect3DDevice9* d3d9device) {
 	tracked_buffs.emplace_back(std::vector<uint32_t>{31229, 46910}, lang.translate(LangKey::BuffBulwarkGyro), StackingType_single, false, BoonType_Engineer, new Icon(ID_Bulwark_Gyro, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{56890}, lang.translate(LangKey::BuffSymbolicAvenger), StackingType_single, false, BoonType_Guardian, new Icon(ID_Symbolic_Avenger, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{30207}, lang.translate(LangKey::BuffInvigoratedBulwark), StackingType_single, false, BoonType_Guardian, new Icon(ID_Invigorated_Bulwark, self_dll, d3d9device));
-	tracked_buffs.emplace_back(std::vector<uint32_t>{53932}, lang.translate(LangKey::BuffStickingTogether), StackingType_single, false, BoonType_other, new Icon(ID_Sticking_Together, self_dll, d3d9device));
+	// tracked_buffs.emplace_back(std::vector<uint32_t>{53932}, lang.translate(LangKey::BuffStickingTogether), StackingType_single, false, BoonType_other, new Icon(ID_Sticking_Together, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{33652}, lang.translate(LangKey::BuffRigorousCertainty), StackingType_single, false, BoonType_other, new Icon(ID_Rigorous_Certainty, self_dll, d3d9device));
 	
 	// above 90
