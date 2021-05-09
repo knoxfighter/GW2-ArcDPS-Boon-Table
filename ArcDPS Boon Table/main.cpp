@@ -114,7 +114,7 @@ arcdps_exports* mod_init()
 		init_tracked_buffs(id3dd9);
 
 		// check for new version on github
-		updateChecker.checkForUpdate(self_dll);
+		updateChecker.checkForUpdate(self_dll, "knoxfighter/GW2-ArcDPS-Boon-Table");
 
 		// load my table loader into imgui
 		ImGuiEx::BigTable::RegisterSettingsHandler("BigTable-BoonTable");
