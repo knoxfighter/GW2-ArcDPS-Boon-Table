@@ -268,7 +268,6 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 	/* combat event. skillname may be null. non-null skillname will remain static until module is unloaded. refer to evtc notes for complete detail */
 	else {
 		/* common */
-
 		
 		for (int i = 0; i < num_of_npcs; i++) {
 			//Player

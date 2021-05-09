@@ -157,6 +157,7 @@ BUILD_ENUM_INI_NAMES(
 	UpdateDesc, "A new update for the Boon Table plugin is available.",
 	UpdateCurrentVersion, "Current version",
 	UpdateNewVersion, "New version",
+	UpdateOpenPage, "Open download page",
 
 	// always last element
 	// ALWAYS UPDATE AFTER CHANGING THE ENUM
