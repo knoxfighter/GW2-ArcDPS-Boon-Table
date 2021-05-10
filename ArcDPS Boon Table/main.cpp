@@ -127,18 +127,7 @@ arcdps_exports* mod_init()
 	/* for arcdps */
 	arc_exports.imguivers = IMGUI_VERSION_NUM;
 	arc_exports.out_name = "Boon Table";
-	std::optional<ImVec4> currentVersion = UpdateCheckerBase::GetCurrentVersion(self_dll);
-	std::stringstream version;
-	if (currentVersion) {
-		version << currentVersion->x << "." << currentVersion->y << "." << currentVersion->z << "." << currentVersion->w;
-	}
-	else {
-		version << __VERSION__;
-	}
-	std::string temp = version.str();
-	char* version_c_str = new char[temp.length() + 1];
-	strcpy(version_c_str, temp.c_str());
-	arc_exports.out_build = version_c_str;
+	arc_exports.out_build = UpdateCheckerBase::GetVersionAsString(self_dll);
 
 	if (loading_successful) {
 		arc_exports.size = sizeof(arcdps_exports);
