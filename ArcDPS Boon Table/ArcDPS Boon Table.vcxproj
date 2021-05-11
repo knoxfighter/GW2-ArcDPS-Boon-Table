@@ -305,7 +305,7 @@ powershell.exe -noprofile -executionpolicy bypass "&amp; '.\extension\updateVers
     <Image Include="icons\Razorclaws_Rage.png" />
     <Image Include="icons\Regeneration.png" />
     <Image Include="icons\Resistance.png" />
-    <Image Include="icons\Retaliation.png" />
+    <Image Include="icons\Resolution.png" />
     <Image Include="icons\Rigorous_Certainty.png" />
     <Image Include="icons\Rite_of_the_Great_Dwarf.png" />
     <Image Include="icons\Rune_of_the_Scholar.png" />

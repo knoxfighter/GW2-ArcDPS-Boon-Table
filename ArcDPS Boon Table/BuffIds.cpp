@@ -15,7 +15,7 @@ void init_tracked_buffs(IDirect3DDevice9* d3d9device) {
 	tracked_buffs.emplace_back(std::vector<uint32_t>{717}, lang.translate(LangKey::BuffProtection), StackingType_duration, true, BoonType_boon, new Icon(ID_Protection, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{1187}, lang.translate(LangKey::BuffQuickness), StackingType_duration, true, BoonType_boon, new Icon(ID_Quickness, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{30328}, lang.translate(LangKey::BuffAlacrity), StackingType_duration, true, BoonType_boon, new Icon(ID_Alacrity, self_dll, d3d9device));
-	tracked_buffs.emplace_back(std::vector<uint32_t>{873}, lang.translate(LangKey::BuffRetaliation), StackingType_duration, false, BoonType_boon, new Icon(ID_Retaliation, self_dll, d3d9device));
+	tracked_buffs.emplace_back(std::vector<uint32_t>{873}, lang.translate(LangKey::BuffResolution), StackingType_duration, false, BoonType_boon, new Icon(ID_Resolution, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{726}, lang.translate(LangKey::BuffVigor), StackingType_duration, false, BoonType_boon, new Icon(ID_Vigor, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{1122}, lang.translate(LangKey::BuffStability), StackingType_intensity, false, BoonType_boon, new Icon(ID_Stability, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{743}, lang.translate(LangKey::BuffAegis), StackingType_duration, false, BoonType_boon, new Icon(ID_Aegis, self_dll, d3d9device));

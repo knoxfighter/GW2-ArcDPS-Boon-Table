@@ -93,7 +93,7 @@ BUILD_ENUM_INI_NAMES(
 	BuffProtection, "Protection",
 	BuffQuickness, "Quickness",
 	BuffAlacrity, "Alacrity",
-	BuffRetaliation, "Retaliation",
+	BuffResolution, "Resolution",
 	BuffVigor, "Vigor",
 	BuffStability, "Stability",
 	BuffAegis, "Aegis",

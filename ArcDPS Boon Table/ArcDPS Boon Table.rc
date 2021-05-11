@@ -62,8 +62,6 @@ ID_Quickness            PNG                     "icons\\Quickness.png"
 
 ID_Alacrity             PNG                     "icons\\Alacrity.png"
 
-ID_Retaliation          PNG                     "icons\\Retaliation.png"
-
 ID_Vigor                PNG                     "icons\\Vigor.png"
 
 ID_Stability            PNG                     "icons\\Stability.png"
@@ -179,6 +177,8 @@ ID_Invigorated_Bulwark  PNG                     "icons\\Invigorated_Bulwark.png"
 ID_Sticking_Together    PNG                     "icons\\Sticking_Together.png"
 
 ID_Rigorous_Certainty   PNG                     "icons\\Rigorous_Certainty.png"
+
+ID_Resolution           PNG                     "icons\\Resolution.png"
 
 
 /////////////////////////////////////////////////////////////////////////////
