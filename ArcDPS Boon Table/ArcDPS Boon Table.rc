@@ -187,8 +187,8 @@ ID_Resolution           PNG                     "icons\\Resolution.png"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,1,0,12
- PRODUCTVERSION 2,1,0,12
+ FILEVERSION 2,2,0,3
+ PRODUCTVERSION 2,2,0,3
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -203,12 +203,12 @@ BEGIN
     BEGIN
         BLOCK "000004b0"
         BEGIN
-            VALUE "FileVersion", "2.1.0.12"
+            VALUE "FileVersion", "2.2.0.3"
             VALUE "InternalName", "d3d9_arcdps_table.dll"
             VALUE "LegalCopyright", "Copyright (C) 2021"
             VALUE "OriginalFilename", "d3d9_arcdps_table.dll"
             VALUE "ProductName", "Arcdps Boon table plugin"
-            VALUE "ProductVersion", "2.1.0.12"
+            VALUE "ProductVersion", "2.2.0.3"
         END
     END
     BLOCK "VarFileInfo"
