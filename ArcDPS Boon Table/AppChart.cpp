@@ -10,6 +10,7 @@
 #include "SettingsUI.h"
 #include "extension/Widgets.h"
 #include "extension/ImGui_Math.h"
+#include "extension/Icon.h"
 
 AppChartsContainer charts;
 
@@ -131,13 +132,13 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		// buff headers
 		for (const BoonDef& trackedBuff : tracked_buffs) {
 			if (Table::TableNextColumn()) {
-				Table::TableHeader(trackedBuff.name.c_str(), showLabel, trackedBuff.icon->texture, alignment);
+				Table::TableHeader(trackedBuff.name.c_str(), showLabel, iconLoader.getTexture(trackedBuff.icon), alignment);
 			}
 		}
 
 		// above90 header
 		if (Table::TableNextColumn()) {
-			Table::TableHeader(above90BoonDef->name.c_str(), showLabel, above90BoonDef->icon->texture, alignment);
+			Table::TableHeader(above90BoonDef->name.c_str(), showLabel, iconLoader.getTexture(above90BoonDef->icon), alignment);
 		}
 
 		/*

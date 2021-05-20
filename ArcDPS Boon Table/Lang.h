@@ -153,11 +153,24 @@ BUILD_ENUM_INI_NAMES(
 	BuffStickingTogether, "Sticking Together",
 	BuffRigorousCertainty, "Rigorous Certainty",
 
+	PositionManual, "manual",
+	PositionScreenRelative, "screen relative position",
+	PositionWindowRelative, "window relative position",
+
+	CornerPositionTopLeft, "top-left",
+	CornerPositionTopRight, "top-right",
+	CornerPositionBottomLeft, "bottom-left",
+	CornerPositionBottomRight, "bottom-right",
+
 	UpdateWindowHeader, "Arcdps Boon Table Plugin Update",
 	UpdateDesc, "A new update for the Boon Table plugin is available.",
 	UpdateCurrentVersion, "Current version",
 	UpdateNewVersion, "New version",
 	UpdateOpenPage, "Open download page",
+	UpdateAutoButton, "Update autmatically",
+	UpdateInProgress, "Autoupdate in progress",
+	UpdateRestartPending, "Autoupdate finished, restart your game to activate it.",
+	UpdateError, "Autoupdate error, please update manually.",
 
 	// always last element
 	// ALWAYS UPDATE AFTER CHANGING THE ENUM

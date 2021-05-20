@@ -114,10 +114,13 @@ arcdps_exports* mod_init()
 		init_tracked_buffs(id3dd9);
 
 		// check for new version on github
-		updateChecker.checkForUpdate(self_dll, "knoxfighter/GW2-ArcDPS-Boon-Table");
+		updateChecker.CheckForUpdate(self_dll, "knoxfighter/GW2-ArcDPS-Boon-Table");
 
 		// load my table loader into imgui
 		ImGuiEx::BigTable::RegisterSettingsHandler("BigTable-BoonTable");
+
+		// setup icon loader
+		iconLoader.Setup(self_dll, id3dd9);
 	} catch (std::exception& e) {
 		loading_successful = false;
 		error_message = "Error starting up: ";

@@ -36,9 +36,9 @@ struct BoonDef
 	StackingType stacking_type = StackingType_duration;
 	bool is_relevant = false;
 	BoonType category = BoonType_other;
-	Icon* icon;
+	UINT icon;
 
-	BoonDef(std::vector<uint32_t> new_ids, std::string new_name, StackingType new_stacking_type, bool new_is_relevant, BoonType new_category, Icon* new_icon);
+	BoonDef(std::vector<uint32_t> new_ids, std::string new_name, StackingType new_stacking_type, bool new_is_relevant, BoonType new_category, UINT new_icon);
 };
 
 BoonDef* getTrackedBoon(uint32_t new_id);
