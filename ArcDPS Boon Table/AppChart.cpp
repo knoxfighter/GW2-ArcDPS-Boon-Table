@@ -305,6 +305,8 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		Table::EndTable();
 	}
 
+	ImGuiEx::WindowReposition();
+
 	ImGui::End();
 
 	ImGui::PopFont();

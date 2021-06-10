@@ -40,6 +40,12 @@ public:
 	[[nodiscard]] float getBoonColumnWidth(int tableIndex) const;
 	[[nodiscard]] bool isShowOnlySubgroup(int tableIndex) const;
 	[[nodiscard]] bool isShowBackground(int tableIndex) const;
+	[[nodiscard]] Position getPosition(int tableIndex) const;
+	[[nodiscard]] CornerPosition getCornerPosition(int tableIndex) const;
+	[[nodiscard]] const ImVec2& getCornerVector(int tableIndex) const;
+	[[nodiscard]] CornerPosition getAnchorPanelCornerPosition(int tableIndex) const;
+	[[nodiscard]] CornerPosition getSelfPanelCornerPosition(int tableIndex) const;
+	[[nodiscard]] ImGuiID getFromWindowID(int tableIndex) const;
 
 	[[nodiscard]] WPARAM getTableKey() const;
 	[[nodiscard]] const ImVec4& getSelfColor() const;
@@ -72,6 +78,12 @@ private:
 		float boon_column_width = 80.f;
 		bool show_only_subgroup = false;
 		bool show_background = true;
+		Position position = Position::Manual;
+		CornerPosition cornerPosition = CornerPosition::TopLeft;
+		ImVec2 cornerVector;
+		CornerPosition anchorPanelCornerPosition = CornerPosition::TopLeft;
+		CornerPosition selfPanelCornerPosition = CornerPosition::TopLeft;
+		ImGuiID fromWindowID;
 	};
 	
 	CSimpleIniA table_ini;

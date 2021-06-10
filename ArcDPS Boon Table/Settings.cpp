@@ -97,6 +97,30 @@ bool Settings::isShowBackground(int tableIndex) const {
 	return tables[tableIndex].show_background;
 }
 
+Position Settings::getPosition(int tableIndex) const {
+	return tables[tableIndex].position;
+}
+
+CornerPosition Settings::getCornerPosition(int tableIndex) const {
+	return tables[tableIndex].cornerPosition;
+}
+
+const ImVec2& Settings::getCornerVector(int tableIndex) const {
+	return tables[tableIndex].cornerVector;
+}
+
+CornerPosition Settings::getAnchorPanelCornerPosition(int tableIndex) const {
+	return tables[tableIndex].anchorPanelCornerPosition;
+}
+
+CornerPosition Settings::getSelfPanelCornerPosition(int tableIndex) const {
+	return tables[tableIndex].selfPanelCornerPosition;
+}
+
+ImGuiID Settings::getFromWindowID(int tableIndex) const {
+	return tables[tableIndex].fromWindowID;
+}
+
 const ImVec4& Settings::getSelfColor() const {
 	if (self_color) {
 		return self_color.value();
@@ -175,6 +199,16 @@ void Settings::readTable(int tableIndex) {
 	table.boon_column_width = table_ini.GetDoubleValue(sectionName.c_str(), "boon_column_width", 80);
 	table.show_only_subgroup = table_ini.GetBoolValue(sectionName.c_str(), "show_only_subgroup", false);
 	table.show_background = table_ini.GetBoolValue(sectionName.c_str(), "show_background", true);
+	long positionInt = table_ini.GetLongValue(sectionName.c_str(), "position", static_cast<long>(Position::Manual));
+	table.position = static_cast<Position>(positionInt);
+	long cornerPositionInt = table_ini.GetLongValue(sectionName.c_str(), "corner_position", static_cast<long>(CornerPosition::TopLeft));
+	table.cornerPosition = static_cast<CornerPosition>(cornerPositionInt);
+	
+	
+	ImVec2 cornerVector;
+	CornerPosition anchorPanelCornerPosition = CornerPosition::TopLeft;
+	CornerPosition selfPanelCornerPosition = CornerPosition::TopLeft;
+	ImGuiID fromWindowID;
 }
 
 void Settings::saveToFile() {
