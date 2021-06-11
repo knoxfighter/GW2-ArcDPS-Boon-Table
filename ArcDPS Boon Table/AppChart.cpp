@@ -23,9 +23,9 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 
 	SizingPolicy sizingPolicy = settings.getSizingPolicy(index);
 	switch (sizingPolicy) {
-	case SizingPolicy::SizeToContent:
-		flags |= ImGuiWindowFlags_AlwaysAutoResize;
-		break;
+		case SizingPolicy::SizeToContent:
+			flags |= ImGuiWindowFlags_AlwaysAutoResize;
+			break;
 	}
 	if (settings.isHideHeader(index)) {
 		flags |= ImGuiWindowFlags_NoTitleBar;
@@ -66,13 +66,13 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_NoBordersInBody;
 
 	switch (sizingPolicy) {
-	case SizingPolicy::ManualWindowSize:
-	case SizingPolicy::SizeToContent:
-		tableFlags |= ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX | ImGuiTableFlags_ScrollY;
-		break;
-	case SizingPolicy::SizeContentToWindow:
-		tableFlags |= ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_ScrollY;
-		break;
+		case SizingPolicy::ManualWindowSize:
+		case SizingPolicy::SizeToContent:
+			tableFlags |= ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX | ImGuiTableFlags_ScrollY;
+			break;
+		case SizingPolicy::SizeContentToWindow:
+			tableFlags |= ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_ScrollY;
+			break;
 	}
 
 	if (settings.isAlternatingRowBg(index)) {
@@ -83,7 +83,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 	tableId.append(std::to_string(index));
 	if (Table::BeginTable(tableId.c_str(), columnCount, tableFlags)) {
 		imGuiTable = Table::CurrentTable;
-		
+
 		Alignment alignment = settings.getAlignment(index);
 		bool showLabel = settings.isShowLabel(index);
 
@@ -214,10 +214,10 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		if (settings.isShowSelfOnTop(index)) {
 			if (self_player) {
 				DrawRow(alignment, self_player->name.c_str(), std::to_string(self_player->subgroup).c_str(), [&](const BoonDef& boonDef) {
-					return getEntityDisplayValue(tracker, *self_player, boonDef);
-				}, [&self_player]() {
-					return self_player->getOver90();
-				}, true, *self_player, true, settings.getSelfColor());
+					        return getEntityDisplayValue(tracker, *self_player, boonDef);
+				        }, [&self_player]() {
+					        return self_player->getOver90();
+				        }, true, *self_player, true, settings.getSelfColor());
 			}
 
 			Table::TableNextRow();
@@ -242,10 +242,10 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 				const Player& player = tracker.players.at(playerIdx);
 
 				DrawRow(alignment, player.name.c_str(), std::to_string(player.subgroup).c_str(), [&](const BoonDef& boonDef) {
-					return getEntityDisplayValue(tracker, player, boonDef);
-				}, [&player]() {
-					return player.getOver90();
-				}, true, player, player.self, settings.getSelfColor());
+					        return getEntityDisplayValue(tracker, player, boonDef);
+				        }, [&player]() {
+					        return player.getOver90();
+				        }, true, player, player.self, settings.getSelfColor());
 			}
 		}
 
@@ -279,11 +279,11 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		 */
 		if (settings.isShowTotal(index)) {
 			DrawRow(alignment, lang.translate(LangKey::TotalNameColumnValue).c_str(), lang.translate(LangKey::TotalSubgroupColumnValue).c_str(),
-				[&](const BoonDef& boonDef) {
-				return tracker.getAverageBoonUptime(boonDef);
-			}, [&tracker]() {
-				return tracker.getAverageOver90();
-			});
+			        [&](const BoonDef& boonDef) {
+				        return tracker.getAverageBoonUptime(boonDef);
+			        }, [&tracker]() {
+				        return tracker.getAverageOver90();
+			        });
 		}
 
 		/*
@@ -294,18 +294,20 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 			Table::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
 			for (const NPC& npc : tracker.npcs) {
 				DrawRow(alignment, npc.name.c_str(), lang.translate(LangKey::NPCSubgroupColumnValue).c_str(),
-					[&](const BoonDef& boonDef) {
-					return getEntityDisplayValue(tracker, npc, boonDef);
-				}, [&npc]() {
-					return npc.getOver90();
-				}, true, npc);
+				        [&](const BoonDef& boonDef) {
+					        return getEntityDisplayValue(tracker, npc, boonDef);
+				        }, [&npc]() {
+					        return npc.getOver90();
+				        }, true, npc);
 			}
 		}
 
 		Table::EndTable();
 	}
 
-	ImGuiEx::WindowReposition();
+	ImGuiEx::WindowReposition(settings.getPosition(index), settings.getCornerVector(index), 
+							  settings.getCornerPosition(index), settings.getFromWindowID(index),
+	                          settings.getAnchorPanelCornerPosition(index), settings.getSelfPanelCornerPosition(index));
 
 	ImGui::End();
 
@@ -399,8 +401,7 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 
 void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width) {
 	switch (settings.getShowColored(index)) {
-	case ProgressBarColoringMode::ByPercentage:
-		{
+		case ProgressBarColoringMode::ByPercentage: {
 			float percentage = 0;
 			if (current_buff.stacking_type == StackingType_intensity) {
 				percentage = current_boon_uptime / 25;
@@ -415,17 +416,16 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 			buffProgressBar(current_buff, current_boon_uptime, width, color);
 			break;
 		}
-	default: buffProgressBar(current_buff, current_boon_uptime, width, ImVec4(0, 0, 0, 0));
+		default: buffProgressBar(current_buff, current_boon_uptime, width, ImVec4(0, 0, 0, 0));
 	}
 }
 
 void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, const Entity& entity) const {
 	switch (settings.getShowColored(index)) {
-	case ProgressBarColoringMode::ByProfession:
-		buffProgressBar(current_buff, current_boon_uptime, width, entity.getColor());
-		break;
-	case ProgressBarColoringMode::ByPercentage:
-		{
+		case ProgressBarColoringMode::ByProfession:
+			buffProgressBar(current_buff, current_boon_uptime, width, entity.getColor());
+			break;
+		case ProgressBarColoringMode::ByPercentage: {
 			float percentage = 0;
 			if (current_buff.stacking_type == StackingType_intensity) {
 				percentage = current_boon_uptime / 25;
@@ -440,8 +440,8 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 			buffProgressBar(current_buff, current_boon_uptime, width, color);
 			break;
 		}
-	default:
-		buffProgressBar(current_buff, current_boon_uptime, width, ImVec4(0, 0, 0, 0));
+		default:
+			buffProgressBar(current_buff, current_boon_uptime, width, ImVec4(0, 0, 0, 0));
 	}
 }
 

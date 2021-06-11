@@ -68,7 +68,7 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex) {
 	}
 
 	if (ImGui::BeginMenu(lang.translate(LangKey::SettingsStyle).c_str())) {
-		ImGui::Checkbox(lang.translate(LangKey::SettingsShowProgressBar).c_str(), &settings.tables[tableIndex].show_boon_as_progress_bar);
+		ImGui::Checkbox(lang.translate(LangKey::SettingsShowProgressBar).c_str(), &settings.tables[tableIndex].show_uptime_as_progress_bar);
 		ImGui::Checkbox(lang.translate(LangKey::SettingsAlternatingRow).c_str(), &settings.tables[tableIndex].alternating_row_bg);
 		ImGui::Checkbox(lang.translate(LangKey::SettingsShowLabel).c_str(), &settings.tables[tableIndex].show_label);
 		ImGui::Checkbox(lang.translate(LangKey::SettingsHideHeader).c_str(), &settings.tables[tableIndex].hide_header);
@@ -86,26 +86,26 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex) {
 			ImGui::Indent(20.f);
 			if (ImGui::ColorEdit4(lang.translate(LangKey::Settings100Color).c_str(), _100color)) {
 				// i think the color changed
-				if (settings._100color) {
-					settings._100color->x = _100color[0];
-					settings._100color->y = _100color[1];
-					settings._100color->z = _100color[2];
-					settings._100color->w = _100color[3];
+				if (settings._100_color) {
+					settings._100_color->x = _100color[0];
+					settings._100_color->y = _100color[1];
+					settings._100_color->z = _100color[2];
+					settings._100_color->w = _100color[3];
 				}
 				else {
-					settings._100color = ImVec4(_100color[0], _100color[1], _100color[2], _100color[3]);
+					settings._100_color = ImVec4(_100color[0], _100color[1], _100color[2], _100color[3]);
 				}
 			}
 			if (ImGui::ColorEdit4(lang.translate(LangKey::Settings0Color).c_str(), _0color)) {
 				// i think the color changed
-				if (settings._0color) {
-					settings._0color->x = _0color[0];
-					settings._0color->y = _0color[1];
-					settings._0color->z = _0color[2];
-					settings._0color->w = _0color[3];
+				if (settings._0_color) {
+					settings._0_color->x = _0color[0];
+					settings._0_color->y = _0color[1];
+					settings._0_color->z = _0color[2];
+					settings._0_color->w = _0color[3];
 				}
 				else {
-					settings._0color = ImVec4(_0color[0], _0color[1], _0color[2], _0color[3]);
+					settings._0_color = ImVec4(_0color[0], _0color[1], _0color[2], _0color[3]);
 				}
 			}
 			ImGui::Unindent(20.f);
@@ -118,7 +118,7 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex) {
 		ImGuiEx::EnumCombo(alignmentText.c_str(), alignment, Alignment::FINAL_ENTRY);
 		ImGui::PopItemWidth();
 
-		SizingPolicy& sizingPolicy = settings.tables[tableIndex].sizingPolicy;
+		SizingPolicy& sizingPolicy = settings.tables[tableIndex].sizing_policy;
 		std::string sizingPolicyText = lang.translate(LangKey::SettingsSizingPolicy);
 		sizingPolicyText.append("###SizingPolicy");
 		ImGuiEx::EnumCombo(sizingPolicyText.c_str(), sizingPolicy, SizingPolicy::FINAL_ENTRY);

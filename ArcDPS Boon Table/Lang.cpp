@@ -1,42 +1,51 @@
 #include "Lang.h"
 
-#include "simpleini/SimpleIni.h"
+#include <fstream>
+
+import modernIni;
 
 Lang lang;
 
 std::string Lang::translate(LangKey key) {
-	return translations.at(key);
+	return langMap.at(key);
 }
 
-Lang::Lang() : lang_ini(true) {
+Lang::Lang() {
 	readFromFile();
 }
 
 Lang::~Lang() {
-#ifdef _DEBUG
 	saveToFile();
-#endif
 }
 
 void Lang::readFromFile() {
-	SI_Error rc = lang_ini.LoadFile("addons\\arcdps\\arcdps_table_lang.ini");
-	// copy defaults if file does not exist or is unreadable
-	if (rc < 0) {
-		translations = langDefaults;
+	std::ifstream stream("addons\\arcdps\\arcdps_table_lang.ini");
+
+	if (!stream.is_open()) {
+		// file not opened/exists
 		return;
 	}
 
-	for (uint32_t i = 0; i < static_cast<uint32_t>(LangKey::FINAL_ENTRY); ++i) {
-		LangKey key = static_cast<LangKey>(i);
-		std::string trans = lang_ini.GetValue("translation", langIniNames.at(key).c_str(), langDefaults.at(key).c_str());
-		translations.try_emplace(key, trans);
+	modernIni::Ini ini;
+
+	stream >> ini;
+
+	if (ini.has("translation")) {
+		ini.at("translation").get_to(langMap);
 	}
 }
 
 void Lang::saveToFile() {
-	for (const auto& translation : translations) {
-		lang_ini.SetValue("translation", langIniNames.at(translation.first).c_str(), translation.second.c_str());
-	}
+#ifdef _DEBUG
+	std::ofstream stream("addons\\arcdps\\arcdps_table_lang.ini");
 
-	lang_ini.SaveFile("addons\\arcdps\\arcdps_table_lang.ini");
+	modernIni::Ini ini;
+
+	ini["translation"] = langMap;
+
+	stream << ini;
+	
+	stream.flush();
+	stream.close();
+#endif
 }

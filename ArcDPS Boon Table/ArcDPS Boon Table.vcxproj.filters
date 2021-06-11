@@ -19,17 +19,17 @@
     <Filter Include="Header Files\imgui">
       <UniqueIdentifier>{6efe4edd-3146-48b9-adb8-f4574313337f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\simpleini">
-      <UniqueIdentifier>{7ca9d431-2cf2-4bd5-acaa-59ef521d5b0d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\simpleini">
-      <UniqueIdentifier>{64104c97-0448-43a5-b9ca-3872e9266c87}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\extension">
       <UniqueIdentifier>{7e3c8b45-262a-4d67-a61a-03ff680c9916}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\extension">
       <UniqueIdentifier>{6320364a-059b-4af3-94a0-83ce70b2f352}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\modernIni">
+      <UniqueIdentifier>{918ddf9b-285b-4ae5-bbc4-e3e720687e98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\modernIni">
+      <UniqueIdentifier>{6c5c4668-fbb5-4888-83d1-e38176a44867}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -62,9 +62,6 @@
     </ClCompile>
     <ClCompile Include="Helpers.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="simpleini\ConvertUTF.c">
-      <Filter>Source Files\simpleini</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_tables.cpp">
       <Filter>Source Files\imgui</Filter>
@@ -105,6 +102,9 @@
     <ClCompile Include="extension\BigTable.cpp">
       <Filter>Source Files\extension</Filter>
     </ClCompile>
+    <ClCompile Include="modernIni\modernIni\modernIni.ixx">
+      <Filter>Source Files\modernIni</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -142,12 +142,6 @@
     </ClInclude>
     <ClInclude Include="Helpers.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="simpleini\SimpleIni.h">
-      <Filter>Header Files\simpleini</Filter>
-    </ClInclude>
-    <ClInclude Include="simpleini\ConvertUTF.h">
-      <Filter>Header Files\simpleini</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Header Files</Filter>
@@ -192,6 +186,15 @@
       <Filter>Header Files\extension</Filter>
     </ClInclude>
     <ClInclude Include="extension\ImGui_Math.h">
+      <Filter>Header Files\extension</Filter>
+    </ClInclude>
+    <ClInclude Include="modernIni\modernIni\map.h">
+      <Filter>Header Files\modernIni</Filter>
+    </ClInclude>
+    <ClInclude Include="modernIni\modernIni\modernIniMacros.h">
+      <Filter>Header Files\modernIni</Filter>
+    </ClInclude>
+    <ClInclude Include="extension\arcdps_structs_slim.h">
       <Filter>Header Files\extension</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,6 +5,7 @@
 
 #include "extension/arcdps_structs.h"
 #include "imgui/imgui.h"
+#include "modernIni/modernIni/modernIniMacros.h"
 
 extern uint64_t current_time;
 
@@ -25,10 +26,10 @@ inline float discretize(float a);
 
 bool floatCmp(float a, float b);
 
-typedef void(*arc_color_func)(ImVec4**);
+typedef void (*arc_color_func)(ImVec4**);
 extern arc_color_func arc_export_e5;
 
-typedef void(*arc_log_func_ptr)(const char* str);
+typedef void (*arc_log_func_ptr)(const char* str);
 extern arc_log_func_ptr arc_log_file;
 extern arc_log_func_ptr arc_log;
 

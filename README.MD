@@ -41,6 +41,21 @@ To create your own translation you can take the example file in [localization](/
 
 - [Chinese Translation by Snowy](https://github.com/Snowy1794/Arcdps-boon-table-translation-Chinese-simplified)
 
+## LICENSE
+This project is Licensed with the MIT License.
+
+### Dear ImGui
+[Dear ImGui](https://github.com/ocornut/imgui) is licensed with the MIT License and included as git submodule to this project.
+
+### arcdps-extension
+[arcdps-extension](https://github.com/knoxfighter/arcdps-extension) is licensed with the MIT License and included as git submodule to this project.
+
+### modernIni
+[modernIni](https://github.com/knoxfighter/modernIni) is licensed with the MIT License and included as git submodule to this project.
+
+### Game Graphics
+© 2021 NCSOFT Corporation. All rights reserved. NCSOFT, ArenaNet, the interlocking NC logo, Aion, Lineage II, Guild Wars, Guild Wars 2: Heart of Thorns, Guild Wars 2: Path of Fire, Blade & Soul, and all associated logos, designs, and composite marks are trademarks or registered trademarks of NCSOFT Corporation. All other trademarks are the property of their respective owners. 
+
 ## Changelog
     
     April 12 2021

@@ -1,8 +1,16 @@
 #pragma once
 
+#include <optional>
+#include <array>
+
 #include "Helpers.h"
 #include "Tracker.h"
-#include "simpleini/SimpleIni.h"
+#include "modernIni/modernIni/modernIniMacros.h"
+
+import modernIni;
+
+MODERN_INI_DEFINE_TYPE_NON_INTRUSIVE_NO_EXCEPT(ImVec2, x, y)
+MODERN_INI_DEFINE_TYPE_NON_INTRUSIVE_NO_EXCEPT(ImVec4, x, y, z, w)
 
 class SettingsUI;
 
@@ -62,41 +70,47 @@ public:
 
 private:
 	struct Table {
-		bool show_chart = false;
+		bool show = false;
 		bool show_self_on_top = false;
 		bool show_players = true;
 		bool show_npcs = true;
 		bool show_subgroups = true;
 		bool show_total = true;
-		bool show_boon_as_progress_bar = true;
+		bool show_uptime_as_progress_bar = true;
 		ProgressBarColoringMode show_colored = ProgressBarColoringMode::Uncolored;
 		bool alternating_row_bg = true;
 		bool show_label = false;
 		Alignment alignment = Alignment::Right;
 		bool hide_header = false;
-		SizingPolicy sizingPolicy = SizingPolicy::SizeToContent;
+		SizingPolicy sizing_policy = SizingPolicy::SizeToContent;
 		float boon_column_width = 80.f;
 		bool show_only_subgroup = false;
 		bool show_background = true;
 		Position position = Position::Manual;
-		CornerPosition cornerPosition = CornerPosition::TopLeft;
-		ImVec2 cornerVector;
-		CornerPosition anchorPanelCornerPosition = CornerPosition::TopLeft;
-		CornerPosition selfPanelCornerPosition = CornerPosition::TopLeft;
-		ImGuiID fromWindowID;
+		CornerPosition corner_position = CornerPosition::TopLeft;
+		ImVec2 corner_vector;
+		CornerPosition anchor_panel_corner_position = CornerPosition::TopLeft;
+		CornerPosition self_panel_corner_position = CornerPosition::TopLeft;
+		ImGuiID from_window_id;
+
+		MODERN_INI_DEFINE_TYPE_INTRUSIVE_NO_EXCEPT(Table, show, show_self_on_top, show_players, show_npcs, show_subgroups, show_total, 
+			show_uptime_as_progress_bar, show_colored, alternating_row_bg, show_label, alignment, hide_header, sizing_policy, boon_column_width,
+			show_only_subgroup, show_background, position, corner_position, corner_vector, anchor_panel_corner_position, self_panel_corner_position,
+			from_window_id)
 	};
 	
-	CSimpleIniA table_ini;
-
-	WPARAM table_key;
+	WPARAM table_key = 66;
 	std::optional<ImVec4> self_color;
-	std::optional<ImVec4> _100color;
-	std::optional<ImVec4> _0color;
-	Table tables[MaxTableWindowAmount]{};
+	std::optional<ImVec4> _100_color;
+	std::optional<ImVec4> _0_color;
+	
+	// Table tables[MaxTableWindowAmount]{};
+	std::array<Table, MaxTableWindowAmount> tables;
 
-	void readTable(int tableIndex);
 	void saveToFile();
-	void saveTable(int tableIndex);
+	void convertFromSimpleIni(modernIni::Ini& ini);
+
+	MODERN_INI_DEFINE_TYPE_INTRUSIVE_NO_EXCEPT(Settings, table_key, self_color, _100_color, _0_color, tables)
 };
 
 extern Settings settings;

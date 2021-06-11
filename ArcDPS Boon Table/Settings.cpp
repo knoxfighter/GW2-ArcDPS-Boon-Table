@@ -1,5 +1,7 @@
 #include "Settings.h"
 
+#include <fstream>
+
 #include "Lang.h"
 #include "Helpers.h"
 
@@ -14,7 +16,7 @@ std::string to_string(SizingPolicy sizingPolicy) {
 	}
 }
 
-Settings::Settings() : table_ini(true) {
+Settings::Settings() {
 }
 
 Settings::~Settings() {
@@ -28,7 +30,7 @@ Settings::~Settings() {
 }
 
 bool& Settings::isShowChart(int tableIndex) {
-	return tables[tableIndex].show_chart;
+	return tables[tableIndex].show;
 }
 
 Alignment Settings::getAlignment(int tableIndex) const {
@@ -62,7 +64,7 @@ bool Settings::isShowTotal(int tableIndex) const {
 }
 
 bool Settings::isShowBoonAsProgressBar(int tableIndex) const {
-	return tables[tableIndex].show_boon_as_progress_bar;
+	return tables[tableIndex].show_uptime_as_progress_bar;
 }
 
 ProgressBarColoringMode Settings::getShowColored(int tableIndex) const {
@@ -82,7 +84,7 @@ bool Settings::isHideHeader(int tableIndex) const {
 }
 
 SizingPolicy Settings::getSizingPolicy(int tableIndex) const {
-	return tables[tableIndex].sizingPolicy;
+	return tables[tableIndex].sizing_policy;
 }
 
 float Settings::getBoonColumnWidth(int tableIndex) const {
@@ -102,23 +104,23 @@ Position Settings::getPosition(int tableIndex) const {
 }
 
 CornerPosition Settings::getCornerPosition(int tableIndex) const {
-	return tables[tableIndex].cornerPosition;
+	return tables[tableIndex].corner_position;
 }
 
 const ImVec2& Settings::getCornerVector(int tableIndex) const {
-	return tables[tableIndex].cornerVector;
+	return tables[tableIndex].corner_vector;
 }
 
 CornerPosition Settings::getAnchorPanelCornerPosition(int tableIndex) const {
-	return tables[tableIndex].anchorPanelCornerPosition;
+	return tables[tableIndex].anchor_panel_corner_position;
 }
 
 CornerPosition Settings::getSelfPanelCornerPosition(int tableIndex) const {
-	return tables[tableIndex].selfPanelCornerPosition;
+	return tables[tableIndex].self_panel_corner_position;
 }
 
 ImGuiID Settings::getFromWindowID(int tableIndex) const {
-	return tables[tableIndex].fromWindowID;
+	return tables[tableIndex].from_window_id;
 }
 
 const ImVec4& Settings::getSelfColor() const {
@@ -132,16 +134,16 @@ const ImVec4& Settings::getSelfColor() const {
 }
 
 const ImVec4& Settings::get100Color() const {
-	if (_100color) {
-		return _100color.value();
+	if (_100_color) {
+		return _100_color.value();
 	}
 	else {
 		return ImVec4(0, 1, 0, (float)125 / 255);
 	}
 }
 const ImVec4& Settings::get0Color() const {
-	if (_0color) {
-		return _0color.value();
+	if (_0_color) {
+		return _0_color.value();
 	}
 	else {
 		return ImVec4(1,0,0, (float)125 / 255);
@@ -149,113 +151,90 @@ const ImVec4& Settings::get0Color() const {
 }
 
 void Settings::setShowChart(int tableIndex, bool status) {
-	tables[tableIndex].show_chart = status;
+	tables[tableIndex].show = status;
 }
 
 void Settings::readFromFile() {
-	table_ini.LoadFile("addons\\arcdps\\arcdps_table.ini");
+	std::ifstream stream("addons\\arcdps\\arcdps_table.ini");
 
-	std::string pszValueString = table_ini.GetValue("general", "key", "66");
-	table_key = std::stoi(pszValueString);
-
-	const char* value = table_ini.GetValue("colors", "self_color", "");
-	self_color = ImVec4_color_from_string(value);
-	
-	const char* _100Col = table_ini.GetValue("colors", "100%color", "");
-	_100color = ImVec4_color_from_string(_100Col);
-
-	const char* _0Col = table_ini.GetValue("colors", "0%color", "");
-	_0color = ImVec4_color_from_string(_0Col);
-
-	for (int i = 0; i < MaxTableWindowAmount; ++i) {
-		readTable(i);
+	if (!stream.is_open()) {
+		// Do not load if file was not opened/found
+		return;
 	}
+	
+	modernIni::Ini ini;
+
+	stream >> ini;
+
+	ini.get_to(*this);
+
+	convertFromSimpleIni(ini);
 }
 
-void Settings::readTable(int tableIndex) {
-	Table& table = tables[tableIndex];
-	std::string sectionName = "table";
-
-	if (tableIndex > 0) {
-		sectionName.append(std::to_string(tableIndex));
+void Settings::convertFromSimpleIni(modernIni::Ini& ini) {
+	if (ini.has("general")) {
+		auto& general = ini.at("general");
+		if (general.has("key")) {
+			general.at("key").get_to(table_key);
+		}
 	}
 
-	table.show_chart = table_ini.GetBoolValue(sectionName.c_str(), "show");
-	table.show_self_on_top = table_ini.GetBoolValue(sectionName.c_str(), "show_self_on_top", false);
-	table.show_players = table_ini.GetBoolValue(sectionName.c_str(), "show_players", true);
-	table.show_subgroups = table_ini.GetBoolValue(sectionName.c_str(), "show_subgroups", true);
-	table.show_total = table_ini.GetBoolValue(sectionName.c_str(), "show_total", true);
-	table.show_npcs = table_ini.GetBoolValue(sectionName.c_str(), "show_npcs", true);
-	table.show_boon_as_progress_bar = table_ini.GetBoolValue(sectionName.c_str(), "show_uptime_as_progress_bar", true);
-	long show_colored_num = table_ini.GetLongValue(sectionName.c_str(), "show_colored", static_cast<long>(ProgressBarColoringMode::Uncolored));
-	table.show_colored = static_cast<ProgressBarColoringMode>(show_colored_num);
-	table.alternating_row_bg = table_ini.GetBoolValue(sectionName.c_str(), "alternating_row_bg", true);
-	table.show_label = table_ini.GetBoolValue(sectionName.c_str(), "show_label");
-	long pszValueLong = table_ini.GetLongValue(sectionName.c_str(), "alignment", static_cast<long>(Alignment::Right));
-	table.alignment = static_cast<Alignment>(pszValueLong);
-	table.hide_header = table_ini.GetBoolValue(sectionName.c_str(), "hide_header", false);
-	pszValueLong = table_ini.GetLongValue(sectionName.c_str(), "sizing_policy", static_cast<long>(SizingPolicy::SizeToContent));
-	table.sizingPolicy = static_cast<SizingPolicy>(pszValueLong);
-	table.boon_column_width = table_ini.GetDoubleValue(sectionName.c_str(), "boon_column_width", 80);
-	table.show_only_subgroup = table_ini.GetBoolValue(sectionName.c_str(), "show_only_subgroup", false);
-	table.show_background = table_ini.GetBoolValue(sectionName.c_str(), "show_background", true);
-	long positionInt = table_ini.GetLongValue(sectionName.c_str(), "position", static_cast<long>(Position::Manual));
-	table.position = static_cast<Position>(positionInt);
-	long cornerPositionInt = table_ini.GetLongValue(sectionName.c_str(), "corner_position", static_cast<long>(CornerPosition::TopLeft));
-	table.cornerPosition = static_cast<CornerPosition>(cornerPositionInt);
-	
-	
-	ImVec2 cornerVector;
-	CornerPosition anchorPanelCornerPosition = CornerPosition::TopLeft;
-	CornerPosition selfPanelCornerPosition = CornerPosition::TopLeft;
-	ImGuiID fromWindowID;
+	if (ini.has("colors")) {
+		auto& colors = ini.at("colors");
+		if (colors.has("self_color")) {
+			colors.at("self_color").get_to(self_color);
+		}
+		if (colors.has("100%color")) {
+			colors.at("100%color").get_to(_100_color);
+		}
+		if (colors.has("0%color")) {
+			colors.at("0%color").get_to(_0_color);
+		}
+	}
+
+	if (ini.has("table")) {
+		auto& table = ini.at("table");
+		Table& t = tables[0];
+		table.get_to(t);
+	}
+
+	if (ini.has("table1")) {
+		auto& table = ini.at("table1");
+		Table& t = tables[1];
+		table.get_to(t);
+	}
+
+	if (ini.has("table2")) {
+		auto& table = ini.at("table2");
+		Table& t = tables[2];
+		table.get_to(t);
+	}
+
+	if (ini.has("table3")) {
+		auto& table = ini.at("table3");
+		Table& t = tables[3];
+		table.get_to(t);
+	}
+
+	if (ini.has("table4")) {
+		auto& table = ini.at("table4");
+		Table& t = tables[4];
+		table.get_to(t);
+	}
 }
 
 void Settings::saveToFile() {
-	table_ini.SetValue("general", "key", std::to_string(table_key).c_str());
+	std::ofstream stream("addons\\arcdps\\arcdps_table.ini");
 
-	if (self_color) {
-		table_ini.SetValue("colors", "self_color", to_string(self_color.value()).c_str());
+	if (!stream.is_open()) {
+		// Do not load if file was not opened/found
+		return;
 	}
 
-	if (_100color) {
-		table_ini.SetValue("colors", "100%color", to_string(_100color.value()).c_str());
-	}
+	modernIni::Ini ini(*this);
 
-	if (_0color) {
-		table_ini.SetValue("colors", "0%color", to_string(_0color.value()).c_str());
-	}
+	stream << ini;
 
-	for (int i = 0; i < MaxTableWindowAmount; ++i) {
-		saveTable(i);
-	}
-
-	table_ini.SaveFile("addons\\arcdps\\arcdps_table.ini");
+	stream.flush();
+	stream.close();
 }
-
-void Settings::saveTable(int tableIndex) {
-	const Table& table = tables[tableIndex];
-	std::string sectionName = "table";
-
-	if (tableIndex > 0) {
-		sectionName.append(std::to_string(tableIndex));
-	}
-
-	table_ini.SetBoolValue(sectionName.c_str(), "show", table.show_chart);
-	table_ini.SetBoolValue(sectionName.c_str(), "show_self_on_top", table.show_self_on_top);
-	table_ini.SetBoolValue(sectionName.c_str(), "show_players", table.show_players);
-	table_ini.SetBoolValue(sectionName.c_str(), "show_subgroups", table.show_subgroups);
-	table_ini.SetBoolValue(sectionName.c_str(), "show_total", table.show_total);
-	table_ini.SetBoolValue(sectionName.c_str(), "show_npcs", table.show_npcs);
-	table_ini.SetBoolValue(sectionName.c_str(), "show_uptime_as_progress_bar", table.show_boon_as_progress_bar);
-	table_ini.SetLongValue(sectionName.c_str(), "show_colored", static_cast<long>(table.show_colored));
-	table_ini.SetBoolValue(sectionName.c_str(), "show_label", table.show_label);
-	table_ini.SetBoolValue(sectionName.c_str(), "alternating_row_bg", table.alternating_row_bg);
-	table_ini.SetLongValue(sectionName.c_str(), "alignment", static_cast<long>(table.alignment));
-	table_ini.SetBoolValue(sectionName.c_str(), "hide_header", table.hide_header);
-	table_ini.SetLongValue(sectionName.c_str(), "sizing_policy", static_cast<long>(table.sizingPolicy));
-	table_ini.SetDoubleValue(sectionName.c_str(), "boon_column_width", table.boon_column_width);
-	table_ini.SetBoolValue(sectionName.c_str(), "show_only_subgroup", table.show_only_subgroup);
-	table_ini.SetBoolValue(sectionName.c_str(), "show_background", table.show_background);
-}
-

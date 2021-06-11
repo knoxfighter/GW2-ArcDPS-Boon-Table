@@ -139,6 +139,8 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <EnableModules>true</EnableModules>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Mock|Win32'">
@@ -147,6 +149,8 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <EnableModules>true</EnableModules>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -155,6 +159,7 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions);IMGUI_DEFINE_MATH_OPERATORS</PreprocessorDefinitions>
+      <EnableModules>true</EnableModules>
     </ClCompile>
     <PostBuildEvent>
       <Command>powershell -noprofile -command  "(Get-FileHash '$(OutDirFullPath)$(TargetFileName)').Hash  &gt; '$(OutDirFullPath)$(TargetName).sha'"</Command>
@@ -169,6 +174,7 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions);IMGUI_DEFINE_MATH_OPERATORS</PreprocessorDefinitions>
+      <EnableModules>true</EnableModules>
     </ClCompile>
     <PostBuildEvent>
       <Command>powershell -noprofile -command  "(Get-FileHash '$(OutDirFullPath)$(TargetFileName)').Hash  &gt; '$(OutDirFullPath)$(TargetName).sha'"</Command>
@@ -185,6 +191,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <EnableModules>true</EnableModules>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -199,6 +207,7 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions);IMGUI_DEFINE_MATH_OPERATORS</PreprocessorDefinitions>
+      <EnableModules>true</EnableModules>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -228,11 +237,11 @@ powershell.exe -noprofile -executionpolicy bypass "&amp; '.\extension\updateVers
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Lang.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="modernIni\modernIni\modernIni.ixx" />
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="SettingsUI.cpp" />
-    <ClCompile Include="simpleini\ConvertUTF.c" />
     <ClCompile Include="Tracker.cpp" />
     <ClCompile Include="UpdateChecker.cpp" />
   </ItemGroup>
@@ -242,6 +251,7 @@ powershell.exe -noprofile -executionpolicy bypass "&amp; '.\extension\updateVers
     <ClInclude Include="BuffIds.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="extension\arcdps_structs.h" />
+    <ClInclude Include="extension\arcdps_structs_slim.h" />
     <ClInclude Include="extension\BigTable.h" />
     <ClInclude Include="extension\Icon.h" />
     <ClInclude Include="extension\ImGui_Math.h" />
@@ -257,13 +267,13 @@ powershell.exe -noprofile -executionpolicy bypass "&amp; '.\extension\updateVers
     <ClInclude Include="imgui\stb_textedit.h" />
     <ClInclude Include="imgui\stb_truetype.h" />
     <ClInclude Include="Lang.h" />
+    <ClInclude Include="modernIni\modernIni\map.h" />
+    <ClInclude Include="modernIni\modernIni\modernIniMacros.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="SettingsUI.h" />
-    <ClInclude Include="simpleini\ConvertUTF.h" />
-    <ClInclude Include="simpleini\SimpleIni.h" />
     <ClInclude Include="Tracker.h" />
     <ClInclude Include="UpdateChecker.h" />
   </ItemGroup>
