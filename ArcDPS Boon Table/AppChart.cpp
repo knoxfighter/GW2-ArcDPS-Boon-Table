@@ -35,6 +35,10 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		flags |= ImGuiWindowFlags_NoBackground;
 	}
 
+	if (settings.getPosition(index) != Position::Manual) {
+		flags |= ImGuiWindowFlags_NoMove;
+	}
+
 	std::string windowName = lang.translate(LangKey::WindowHeader);
 	windowName.append("##Boon Table");
 	if (index > 0)

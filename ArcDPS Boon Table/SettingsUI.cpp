@@ -220,7 +220,7 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 					if (!window->Hidden) {
 						std::string windowName = window->Name;
 						if (window->ParentWindow || window->ID == currentRootWindow->ID || windowName.find("Tooltip_") != std::string::npos
-							|| windowName.find("Default") != std::string::npos || windowName.find('/') != std::string::npos) {
+							|| windowName.find("Default") != std::string::npos) {
 							continue;
 						}
 
