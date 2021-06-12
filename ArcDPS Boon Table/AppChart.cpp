@@ -44,8 +44,9 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 	/**
 	 * Settings UI
 	 */
+	ImGuiWindow* currentWindow = ImGui::GetCurrentWindow();
 	if (ImGuiEx::BeginPopupContextWindow(nullptr, 1, ImGuiHoveredFlags_ChildWindows)) {
-		settingsUi.Draw(imGuiTable, index);
+		settingsUi.Draw(imGuiTable, index, currentWindow);
 
 		ImGui::EndPopup();
 	}

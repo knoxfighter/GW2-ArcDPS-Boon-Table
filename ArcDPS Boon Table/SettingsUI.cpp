@@ -9,10 +9,9 @@ SettingsUI settingsUi;
 
 namespace Table = ImGuiEx::BigTable;
 
-void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex) {
-	if (!init) {
-		init = true;
-		initialize();
+void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* currentRootWindow) {
+	if (ImGui::IsWindowAppearing()) {
+		initialize(tableIndex);
 	}
 
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.f, 0.f));
@@ -158,10 +157,96 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex) {
 		ImGui::EndMenu();
 	}
 
+	if (ImGui::BeginMenu(lang.translate(LangKey::SettingsPosition).c_str())) {
+		ImGuiEx::EnumRadioButton(position, Position::Manual, settings.tables[tableIndex].position);
+
+		ImGuiEx::EnumRadioButton(position, Position::ScreenRelative, settings.tables[tableIndex].position);
+		if (position == static_cast<int>(Position::ScreenRelative)) {
+			ImGui::Indent(15.f);
+
+			ImGui::PushID("cornerPositionRadioButton");
+			ImGuiEx::EnumRadioButton(cornerPosition, CornerPosition::TopLeft, settings.tables[tableIndex].corner_position);
+			ImGuiEx::EnumRadioButton(cornerPosition, CornerPosition::TopRight, settings.tables[tableIndex].corner_position);
+			ImGuiEx::EnumRadioButton(cornerPosition, CornerPosition::BottomLeft, settings.tables[tableIndex].corner_position);
+			ImGuiEx::EnumRadioButton(cornerPosition, CornerPosition::BottomRight, settings.tables[tableIndex].corner_position);
+			ImGui::PopID();
+
+			ImGui::PushItemWidth(80.f);
+			ImGui::DragFloat("x", &settings.tables[tableIndex].corner_vector.x);
+			ImGui::DragFloat("y", &settings.tables[tableIndex].corner_vector.y);
+			ImGui::PopItemWidth();
+
+			ImGui::Unindent(15.f);
+		}
+
+		ImGuiEx::EnumRadioButton(position, Position::WindowRelative, settings.tables[tableIndex].position);
+		if (position == static_cast<int>(Position::WindowRelative)) {
+			ImGui::Indent(15.f);
+
+			ImGui::TextUnformatted(lang.translate(LangKey::SettingsFromAnchorPanelCorner).c_str());
+			ImGui::PushID("anchorPanelCornerPositionRadioButton");
+			ImGuiEx::EnumRadioButton(anchorPanelCornerPosition, CornerPosition::TopLeft, settings.tables[tableIndex].anchor_panel_corner_position);
+			ImGuiEx::EnumRadioButton(anchorPanelCornerPosition, CornerPosition::TopRight, settings.tables[tableIndex].anchor_panel_corner_position);
+			ImGuiEx::EnumRadioButton(anchorPanelCornerPosition, CornerPosition::BottomLeft, settings.tables[tableIndex].anchor_panel_corner_position);
+			ImGuiEx::EnumRadioButton(anchorPanelCornerPosition, CornerPosition::BottomRight, settings.tables[tableIndex].anchor_panel_corner_position);
+			ImGui::PopID();
+
+			ImGui::TextUnformatted(lang.translate(LangKey::SettingsToThisPanelCorner).c_str());
+			ImGui::PushID("selfPanelCornerPositionRadioButton");
+			ImGuiEx::EnumRadioButton(selfPanelCornerPosition, CornerPosition::TopLeft, settings.tables[tableIndex].self_panel_corner_position);
+			ImGuiEx::EnumRadioButton(selfPanelCornerPosition, CornerPosition::TopRight, settings.tables[tableIndex].self_panel_corner_position);
+			ImGuiEx::EnumRadioButton(selfPanelCornerPosition, CornerPosition::BottomLeft, settings.tables[tableIndex].self_panel_corner_position);
+			ImGuiEx::EnumRadioButton(selfPanelCornerPosition, CornerPosition::BottomRight, settings.tables[tableIndex].self_panel_corner_position);
+			ImGui::PopID();
+
+			ImGui::PushItemWidth(80.f);
+			ImGui::DragFloat("x", &settings.tables[tableIndex].corner_vector.x);
+			ImGui::DragFloat("y", &settings.tables[tableIndex].corner_vector.y);
+			ImGui::PopItemWidth();
+
+			ImGuiID shownWindowName = settings.tables[tableIndex].from_window_id;
+			ImGuiWindow* selectedWindow = ImGui::FindWindowByID(shownWindowName);
+			std::string selectedWindowName;
+			if (selectedWindow) {
+				selectedWindowName = selectedWindow->Name;
+				const auto findRes = selectedWindowName.find('#');
+				if (findRes != std::string::npos) {
+					selectedWindowName = selectedWindowName.substr(0, findRes);
+				}
+			}
+
+			if (ImGui::BeginCombo(lang.translate(LangKey::SettingsFromWindowName).c_str(), selectedWindowName.c_str())) {
+				for (ImGuiWindow* window : GImGui->Windows) {
+					if (!window->Hidden) {
+						std::string windowName = window->Name;
+						if (window->ParentWindow || window->ID == currentRootWindow->ID || windowName.find("Tooltip_") != std::string::npos
+							|| windowName.find("Default") != std::string::npos || windowName.find('/') != std::string::npos) {
+							continue;
+						}
+
+						const auto findRes = windowName.find('#');
+						if (findRes != std::string::npos) {
+							windowName = windowName.substr(0, findRes);
+						}
+
+						if (ImGui::Selectable(windowName.c_str())) {
+							settings.tables[tableIndex].from_window_id = window->ID;
+						}
+					}
+				}
+				ImGui::EndCombo();
+			}
+
+			ImGui::Unindent();
+		}
+
+		ImGui::EndMenu();
+	}
+
 	ImGui::PopStyleVar();
 }
 
-void SettingsUI::initialize() {
+void SettingsUI::initialize(int tableIndex) {
 	const ImVec4& imVec4 = settings.getSelfColor();
 	self_color[0] = imVec4.x;
 	self_color[1] = imVec4.y;
@@ -179,6 +264,11 @@ void SettingsUI::initialize() {
 	_0color[1] = imVec4_3.y;
 	_0color[2] = imVec4_3.z;
 	_0color[3] = imVec4_3.w;
+
+	position = static_cast<int>(settings.tables[tableIndex].position);
+	cornerPosition = static_cast<int>(settings.tables[tableIndex].corner_position);
+	selfPanelCornerPosition = static_cast<int>(settings.tables[tableIndex].self_panel_corner_position);
+	anchorPanelCornerPosition = static_cast<int>(settings.tables[tableIndex].anchor_panel_corner_position);
 }
 
 bool SettingsUI::tableColumnSubMenu(Table::ImGuiTable* table, const char* label, BoonType type, int beginId) const {

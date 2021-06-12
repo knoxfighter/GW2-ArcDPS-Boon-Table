@@ -21,6 +21,7 @@ LANG_KEY_ENUM(
 	Center,
 	Unaligned,
 	ShowChart,
+
 	SettingsSelfOnTop,
 	SettingsPlayers,
 	SettingsSubgroups,
@@ -30,9 +31,11 @@ LANG_KEY_ENUM(
 	SettingsAlwaysResize,
 	SettingsAlternatingRow,
 	SettingsColoringMode,
+
 	ColoringModeDefault,
 	ColoringModeByProfession,
 	ColoringModeByPercentage,
+
 	SettingsAlignment,
 	SettingsShowLabel,
 	SettingsHideHeader,
@@ -50,12 +53,19 @@ LANG_KEY_ENUM(
 	SizingPolicySizeToContent,
 	SizingPolicySizeContentToWindow,
 	SizingPolicyManualWindowSize,
+
+	SettingsPosition,
+	SettingsFromAnchorPanelCorner,
+	SettingsToThisPanelCorner,
+	SettingsFromWindowName,
+
 	NameColumnHeader,
 	SubgroupColumnHeader,
 	SubgroupNameColumnValue,
 	TotalNameColumnValue,
 	TotalSubgroupColumnValue,
 	NPCSubgroupColumnValue,
+
 	BoonTypeBoon,
 	BoonTypeWarrior,
 	BoonTypeRevenant,
@@ -67,6 +77,7 @@ LANG_KEY_ENUM(
 	BoonTypeNecromancer,
 	BoonTypeAura,
 	BoonTypeOther,
+
 	BuffMight,
 	BuffFury,
 	BuffRegeneration,
@@ -132,13 +143,16 @@ LANG_KEY_ENUM(
 	BuffInvigoratedBulwark,
 	BuffStickingTogether,
 	BuffRigorousCertainty,
+
 	PositionManual,
 	PositionScreenRelative,
 	PositionWindowRelative,
+
 	CornerPositionTopLeft,
 	CornerPositionTopRight,
 	CornerPositionBottomLeft,
 	CornerPositionBottomRight,
+
 	UpdateWindowHeader,
 	UpdateDesc,
 	UpdateCurrentVersion,
@@ -304,6 +318,10 @@ private:
 		{LangKey::UpdateInProgress, "Autoupdate in progress"},
 		{LangKey::UpdateRestartPending, "Autoupdate finished, restart your game to activate it."},
 		{LangKey::UpdateError, "Autoupdate error, please update manually."},
+		{LangKey::SettingsPosition, "Position"},
+		{LangKey::SettingsFromAnchorPanelCorner, "from anchor panel corner"},
+		{LangKey::SettingsToThisPanelCorner, "to this panel corner"},
+		{LangKey::SettingsFromWindowName, "from window"},
 	};
 };
 
