@@ -257,7 +257,11 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 	/* combat event. skillname may be null. non-null skillname will remain static until module is unloaded. refer to evtc notes for complete detail */
 	else {
 		/* common */
-		
+
+		/*
+		This code crashes, cause dst->name is not checked.
+		Also the npc tracking is completely broken and needs deeper fixing and investigation!
+
 		for (int i = 0; i < num_of_npcs; i++) {
 			//Player
 			// Self: 200
@@ -276,6 +280,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 				tracker.addNPC(dst->id, dst->name, ev);
 			}
 		}
+		*/
 
 		if(ev->time > 0) current_time = ev->time;
 
