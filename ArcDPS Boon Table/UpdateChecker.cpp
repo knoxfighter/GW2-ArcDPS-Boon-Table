@@ -12,7 +12,7 @@ void UpdateChecker::Draw() {
 	if (update_status != Status::Unknown && shown) {
 		std::string headerName = lang.translate(LangKey::UpdateWindowHeader);
 		headerName.append("##BoonTableUpdate");
-		ImGui::Begin(headerName.c_str(), &shown);
+		ImGui::Begin(headerName.c_str(), &shown, ImGuiWindowFlags_AlwaysAutoResize);
 		ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), lang.translate(LangKey::UpdateDesc).c_str());
 		ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "%s: %.0f.%.0f.%.0f", lang.translate(LangKey::UpdateCurrentVersion).c_str(), version.x, version.y,
 		                   version.z);
