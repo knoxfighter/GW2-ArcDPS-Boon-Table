@@ -17,6 +17,11 @@ AppChartsContainer charts;
 namespace Table = ImGuiEx::BigTable;
 
 void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) {
+	// set max window height, reset height counting
+	ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 0), ImVec2(-1, maxHeight));
+	rowCount = 0;
+	maxHeight = 0;
+	
 	ImGui::PushFont(ImGui::GetIO().Fonts->Fonts.back());
 
 	flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
@@ -38,6 +43,8 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 	if (settings.getPosition(index) != Position::Manual) {
 		flags |= ImGuiWindowFlags_NoMove;
 	}
+
+	ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 0), ImVec2(-1, 150));
 
 	std::string windowName = lang.translate(LangKey::WindowHeader);
 	windowName.append("##Boon Table");
@@ -251,6 +258,8 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 				        }, [&player]() {
 					        return player.getOver90();
 				        }, true, player, player.self, settings.getSelfColor());
+
+				
 			}
 		}
 
@@ -362,6 +371,8 @@ void AppChart::DrawRow(Alignment alignment, const char* charnameText, const char
 			buffProgressBar(*above90BoonDef, above90, ImGui::GetColumnWidth());
 		}
 	}
+
+	addToMaxHeight();
 }
 
 void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, ImVec4 color) const {
@@ -463,6 +474,15 @@ void AppChart::removePlayer(size_t playerId) {
 
 void AppChart::addPlayer(size_t playerId) {
 	playerOrder.emplace_back(playerId);
+}
+
+void AppChart::addToMaxHeight() {
+	if (rowCount < 1) {
+		const ImRect rowRect = Table::TableGetCellBgRect(imGuiTable, Table::TableGetColumnIndex());
+		const float height = rowRect.GetHeight();
+		maxHeight += height;
+		++rowCount;
+	}
 }
 
 void AppChartsContainer::removePlayer(uintptr_t playerId) {

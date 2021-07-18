@@ -34,6 +34,11 @@ private:
 	ImGuiEx::BigTable::ImGuiTable* imGuiTable = nullptr;
 	int index = 0;
 	std::vector<size_t> playerOrder;
+
+	uint8_t rowCount;
+	float maxHeight;
+
+	void addToMaxHeight();
 };
 
 class AppChartsContainer {
