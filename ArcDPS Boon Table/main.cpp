@@ -365,7 +365,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 
 uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 {
-	ImGui::ShowDemoWindow();
+	// ImGui::ShowDemoWindow();
 	
 	readArcExports();
 
