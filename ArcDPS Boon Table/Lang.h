@@ -58,6 +58,9 @@ LANG_KEY_ENUM(
 	SettingsFromAnchorPanelCorner,
 	SettingsToThisPanelCorner,
 	SettingsFromWindowName,
+	SettingsDisplay,
+	SettingsMaxDisplayed,
+	SettingsMaxDisplayedPopup,
 
 	NameColumnHeader,
 	SubgroupColumnHeader,
@@ -322,6 +325,9 @@ private:
 		{LangKey::SettingsFromAnchorPanelCorner, "from anchor panel corner"},
 		{LangKey::SettingsToThisPanelCorner, "to this panel corner"},
 		{LangKey::SettingsFromWindowName, "from window"},
+		{LangKey::SettingsDisplay, "Display"},
+		{LangKey::SettingsMaxDisplayed, "max displayed"},
+		{LangKey::SettingsMaxDisplayedPopup, "The amount of rows, that are displayed.\nTotals and Subgroups also count as row.\nIf you want a squad plus totals, you have to set this to '11'"},
 	};
 };
 

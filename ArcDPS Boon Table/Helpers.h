@@ -48,3 +48,19 @@ std::string to_string(const ImVec4& vec4);
 std::optional<ImVec4> ImVec4_color_from_string(const std::string& vec4str);
 
 extern HMODULE self_dll;
+
+// ImGui function to display question marks with tooltips
+static void HelpMarker(const char* desc)
+{
+	ImGui::PushStyleColor(ImGuiCol_Text, {1.f, 1.f, 1.f, .5f});
+    ImGui::TextUnformatted("(?)");
+	ImGui::PopStyleColor();
+    if (ImGui::IsItemHovered())
+    {
+        ImGui::BeginTooltip();
+        ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+        ImGui::TextUnformatted(desc);
+        ImGui::PopTextWrapPos();
+        ImGui::EndTooltip();
+    }
+}

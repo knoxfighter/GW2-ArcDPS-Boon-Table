@@ -17,11 +17,22 @@ AppChartsContainer charts;
 namespace Table = ImGuiEx::BigTable;
 
 void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) {
-	// set max window height, reset height counting
-	ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 0), ImVec2(-1, maxHeight));
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {0.f, 0.f});
+
+	bool maxDisplayedEnabled = false;
+	if (settings.getMaxDisplayed(index) > 0) {
+		maxDisplayedEnabled = true;
+	}
+	if (maxDisplayedEnabled) {
+		if (minHeight < 30.f) minHeight = 30.f;
+		if (maxHeight < 30.f) maxHeight = 30.f;
+		ImGui::SetNextWindowSizeConstraints(ImVec2(0, minHeight), ImVec2(FLT_MAX, maxHeight));
+	}
+
 	rowCount = 0;
 	maxHeight = 0;
-	
+	minHeight = 0;
+
 	ImGui::PushFont(ImGui::GetIO().Fonts->Fonts.back());
 
 	flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
@@ -44,23 +55,38 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		flags |= ImGuiWindowFlags_NoMove;
 	}
 
-	ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 0), ImVec2(-1, 150));
-
 	std::string windowName = lang.translate(LangKey::WindowHeader);
 	windowName.append("##Boon Table");
 	if (index > 0)
 		windowName.append(std::to_string(index));
 	ImGui::Begin(windowName.c_str(), p_open, flags);
 
+	ImGuiWindow* currentWindow = ImGui::GetCurrentWindow();
+	ImVec2 size = ImGui::GetWindowSize();
+
+	if (maxDisplayedEnabled) {
+		float titleBarHeight = currentWindow->TitleBarHeight();
+		minHeight += titleBarHeight;
+		maxHeight += titleBarHeight;
+
+		if (imGuiTable && imGuiTable->InnerWindow->ScrollbarX) {
+			const ImRect scrollbarRect = ImGui::GetWindowScrollbarRect(imGuiTable->InnerWindow, ImGuiAxis_X);
+			float height = scrollbarRect.GetHeight();
+			minHeight += height;
+			maxHeight += height;
+		}
+	}
+
 	/**
 	 * Settings UI
 	 */
-	ImGuiWindow* currentWindow = ImGui::GetCurrentWindow();
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {4.f, 4.f});
 	if (ImGuiEx::BeginPopupContextWindow(nullptr, 1, ImGuiHoveredFlags_ChildWindows)) {
 		settingsUi.Draw(imGuiTable, index, currentWindow);
 
 		ImGui::EndPopup();
 	}
+	ImGui::PopStyleVar();
 
 	// columns: charname | subgroup | tracked_buffs
 	const int columnCount = tracked_buffs.size() + 3;
@@ -95,6 +121,9 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 	tableId.append(std::to_string(index));
 	if (Table::BeginTable(tableId.c_str(), columnCount, tableFlags)) {
 		imGuiTable = Table::CurrentTable;
+
+		// lock header so it is not scrolled out of vision
+		Table::TableSetupScrollFreeze(0, 1);
 
 		Alignment alignment = settings.getAlignment(index);
 		bool showLabel = settings.isShowLabel(index);
@@ -151,6 +180,13 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		// above90 header
 		if (Table::TableNextColumn()) {
 			Table::TableHeader(above90BoonDef->name.c_str(), showLabel, iconLoader.getTexture(above90BoonDef->icon), alignment);
+		}
+
+		// height of table header
+		if (maxDisplayedEnabled) {
+			float headerRowHeight = ImGui::GetStyle().CellPadding.y * 2.0f + 17.f;
+			maxHeight += headerRowHeight;
+			minHeight += headerRowHeight;
 		}
 
 		/*
@@ -234,6 +270,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 
 			Table::TableNextRow();
 			Table::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
+			addToMaxHeight(false);
 		}
 
 		/*
@@ -258,8 +295,6 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 				        }, [&player]() {
 					        return player.getOver90();
 				        }, true, player, player.self, settings.getSelfColor());
-
-				
 			}
 		}
 
@@ -269,6 +304,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		if (settings.isShowSubgroups(tracker, index)) {
 			Table::TableNextRow();
 			Table::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
+			addToMaxHeight(false);
 
 			bool onlySubgroup = settings.isShowOnlySubgroup(index);
 			auto group_filter = [&self_player, onlySubgroup](const uint8_t& subgroup) {
@@ -306,6 +342,8 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		if (settings.isShowNpcs(index) && !tracker.npcs.empty()) {
 			Table::TableNextRow();
 			Table::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
+			addToMaxHeight(false);
+
 			for (const NPC& npc : tracker.npcs) {
 				DrawRow(alignment, npc.name.c_str(), lang.translate(LangKey::NPCSubgroupColumnValue).c_str(),
 				        [&](const BoonDef& boonDef) {
@@ -319,13 +357,14 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		Table::EndTable();
 	}
 
-	ImGuiEx::WindowReposition(settings.getPosition(index), settings.getCornerVector(index), 
-							  settings.getCornerPosition(index), settings.getFromWindowID(index),
+	ImGuiEx::WindowReposition(settings.getPosition(index), settings.getCornerVector(index),
+	                          settings.getCornerPosition(index), settings.getFromWindowID(index),
 	                          settings.getAnchorPanelCornerPosition(index), settings.getSelfPanelCornerPosition(index));
 
 	ImGui::End();
 
 	ImGui::PopFont();
+	ImGui::PopStyleVar();
 }
 
 
@@ -476,12 +515,14 @@ void AppChart::addPlayer(size_t playerId) {
 	playerOrder.emplace_back(playerId);
 }
 
-void AppChart::addToMaxHeight() {
-	if (rowCount < 1) {
-		const ImRect rowRect = Table::TableGetCellBgRect(imGuiTable, Table::TableGetColumnIndex());
+void AppChart::addToMaxHeight(bool count) {
+	if (rowCount < settings.getMaxDisplayed(index)) {
+		// TODO make actual value in settings
+		const ImRect rowRect = Table::TableGetCellBgRect(imGuiTable, 1);
 		const float height = rowRect.GetHeight();
 		maxHeight += height;
-		++rowCount;
+		if (count)
+			++rowCount;
 	}
 }
 

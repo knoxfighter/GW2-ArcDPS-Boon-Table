@@ -123,6 +123,10 @@ ImGuiID Settings::getFromWindowID(int tableIndex) const {
 	return tables[tableIndex].from_window_id;
 }
 
+int Settings::getMaxDisplayed(int tableIndex) const {
+	return tables[tableIndex].max_displayed;
+}
+
 const ImVec4& Settings::getSelfColor() const {
 	if (self_color) {
 		return self_color.value();

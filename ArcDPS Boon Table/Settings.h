@@ -54,6 +54,7 @@ public:
 	[[nodiscard]] CornerPosition getAnchorPanelCornerPosition(int tableIndex) const;
 	[[nodiscard]] CornerPosition getSelfPanelCornerPosition(int tableIndex) const;
 	[[nodiscard]] ImGuiID getFromWindowID(int tableIndex) const;
+	[[nodiscard]] int getMaxDisplayed(int tableIndex) const;
 
 	[[nodiscard]] WPARAM getTableKey() const;
 	[[nodiscard]] const ImVec4& getSelfColor() const;
@@ -92,11 +93,12 @@ private:
 		CornerPosition anchor_panel_corner_position = CornerPosition::TopLeft;
 		CornerPosition self_panel_corner_position = CornerPosition::TopLeft;
 		ImGuiID from_window_id;
+		int max_displayed = 0;
 
 		MODERN_INI_DEFINE_TYPE_INTRUSIVE_NO_EXCEPT(Table, show, show_self_on_top, show_players, show_npcs, show_subgroups, show_total, 
 			show_uptime_as_progress_bar, show_colored, alternating_row_bg, show_label, alignment, hide_header, sizing_policy, boon_column_width,
 			show_only_subgroup, show_background, position, corner_position, corner_vector, anchor_panel_corner_position, self_panel_corner_position,
-			from_window_id)
+			from_window_id, max_displayed)
 	};
 	
 	WPARAM table_key = 66;

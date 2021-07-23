@@ -35,10 +35,11 @@ private:
 	int index = 0;
 	std::vector<size_t> playerOrder;
 
-	uint8_t rowCount;
-	float maxHeight;
+	uint8_t rowCount = 0;
+	float maxHeight = 0;
+	float minHeight = 0;
 
-	void addToMaxHeight();
+	void addToMaxHeight(bool count = true);
 };
 
 class AppChartsContainer {

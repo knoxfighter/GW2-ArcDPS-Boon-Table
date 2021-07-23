@@ -66,14 +66,13 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		ImGui::EndMenu();
 	}
 
-	if (ImGui::BeginMenu(lang.translate(LangKey::SettingsStyle).c_str())) {
-		ImGui::Checkbox(lang.translate(LangKey::SettingsShowProgressBar).c_str(), &settings.tables[tableIndex].show_uptime_as_progress_bar);
-		ImGui::Checkbox(lang.translate(LangKey::SettingsAlternatingRow).c_str(), &settings.tables[tableIndex].alternating_row_bg);
+	if (ImGui::BeginMenu(lang.translate(LangKey::SettingsDisplay).c_str())) {
 		ImGui::Checkbox(lang.translate(LangKey::SettingsShowLabel).c_str(), &settings.tables[tableIndex].show_label);
-		ImGui::Checkbox(lang.translate(LangKey::SettingsHideHeader).c_str(), &settings.tables[tableIndex].hide_header);
-		ImGui::Checkbox(lang.translate(LangKey::SettingsShowOnlySubgroup).c_str(), &settings.tables[tableIndex].show_only_subgroup);
-		ImGui::Checkbox(lang.translate(LangKey::SettingsShowBackground).c_str(), &settings.tables[tableIndex].show_background);
-
+		std::string maxDisplayedInputLabel = std::format("{}##maxDisplayedInput", lang.translate(LangKey::SettingsMaxDisplayed));
+		ImGui::InputInt(maxDisplayedInputLabel.c_str(), &settings.tables[tableIndex].max_displayed);
+		ImGui::SameLine();
+		HelpMarker(lang.translate(LangKey::SettingsMaxDisplayedPopup).c_str());
+		
 		ProgressBarColoringMode& show_colored = settings.tables[tableIndex].show_colored;
 		std::string showColoredText = lang.translate(LangKey::SettingsColoringMode);
 		showColoredText.append("###ShowColored");
@@ -109,6 +108,18 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 			}
 			ImGui::Unindent(20.f);
 		}
+
+		ImGui::EndMenu();
+	}
+
+	if (ImGui::BeginMenu(lang.translate(LangKey::SettingsStyle).c_str())) {
+		ImGui::Checkbox(lang.translate(LangKey::SettingsShowProgressBar).c_str(), &settings.tables[tableIndex].show_uptime_as_progress_bar);
+		ImGui::Checkbox(lang.translate(LangKey::SettingsAlternatingRow).c_str(), &settings.tables[tableIndex].alternating_row_bg);
+		ImGui::Checkbox(lang.translate(LangKey::SettingsHideHeader).c_str(), &settings.tables[tableIndex].hide_header);
+		ImGui::Checkbox(lang.translate(LangKey::SettingsShowOnlySubgroup).c_str(), &settings.tables[tableIndex].show_only_subgroup);
+		ImGui::Checkbox(lang.translate(LangKey::SettingsShowBackground).c_str(), &settings.tables[tableIndex].show_background);
+
+		ImGui::Separator();
 
 		Alignment& alignment = settings.tables[tableIndex].alignment;
 		std::string alignmentText = lang.translate(LangKey::SettingsAlignment);
