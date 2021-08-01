@@ -38,8 +38,10 @@ private:
 	uint8_t rowCount = 0;
 	float maxHeight = 0;
 	float minHeight = 0;
+	float titleBarHeight = 0;
+	float innerTableCursorPos = 0;
 
-	void addToMaxHeight(bool count = true);
+	void endOfRow();
 };
 
 class AppChartsContainer {
