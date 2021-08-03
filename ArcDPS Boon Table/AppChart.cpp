@@ -30,7 +30,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		float overriddenHeight = titleBarHeight + 5.f;
 		if (minHeight < overriddenHeight) minHeight = overriddenHeight;
 		if (maxHeight < overriddenHeight) maxHeight = overriddenHeight;
-		ImGui::SetNextWindowSizeConstraints(ImVec2(0, minHeight), ImVec2(FLT_MAX, maxHeight));
+		ImGui::SetNextWindowSizeConstraints(ImVec2(20.f, minHeight), ImVec2(FLT_MAX, maxHeight));
 	}
 
 	rowCount = 0;
