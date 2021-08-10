@@ -30,8 +30,12 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		float overriddenHeight = titleBarHeight + 5.f;
 		if (minHeight < overriddenHeight) minHeight = overriddenHeight;
 		if (maxHeight < overriddenHeight) maxHeight = overriddenHeight;
-		ImGui::SetNextWindowSizeConstraints(ImVec2(20.f, minHeight), ImVec2(FLT_MAX, maxHeight));
+	} else {
+		minHeight = titleBarHeight + 5.f;
+		maxHeight = FLT_MAX;
 	}
+
+	ImGui::SetNextWindowSizeConstraints(ImVec2(50.f, minHeight), ImVec2(FLT_MAX, maxHeight));
 
 	rowCount = 0;
 	maxHeight = 0;
@@ -68,17 +72,15 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 
 	ImGuiWindow* currentWindow = ImGui::GetCurrentWindow();
 
-	if (maxDisplayedEnabled) {
-		titleBarHeight = currentWindow->TitleBarHeight();
-		minHeight += titleBarHeight;
-		maxHeight += titleBarHeight;
+	titleBarHeight = currentWindow->TitleBarHeight();
+	minHeight += titleBarHeight;
+	maxHeight += titleBarHeight;
 
-		if (imGuiTable && imGuiTable->InnerWindow->ScrollbarX) {
-			const ImRect scrollbarRect = ImGui::GetWindowScrollbarRect(imGuiTable->InnerWindow, ImGuiAxis_X);
-			float height = scrollbarRect.GetHeight();
-			minHeight += height;
-			maxHeight += height;
-		}
+	if (imGuiTable && imGuiTable->InnerWindow->ScrollbarX) {
+		const ImRect scrollbarRect = ImGui::GetWindowScrollbarRect(imGuiTable->InnerWindow, ImGuiAxis_X);
+		float height = scrollbarRect.GetHeight();
+		minHeight += height;
+		maxHeight += height;
 	}
 
 	/**
