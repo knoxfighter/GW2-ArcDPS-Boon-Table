@@ -37,10 +37,10 @@ Alignment Settings::getAlignment(int tableIndex) const {
 	return tables[tableIndex].alignment;
 }
 
-bool Settings::isShowSubgroups(const Tracker& tracker, int tableIndex) const {
+bool Settings::isShowSubgroups(const ITracker& tracker, int tableIndex) const {
 	return tables[tableIndex].show_subgroups
-		&& tracker.is_squad
-		&& tracker.subgroups.size() > 1;
+		&& tracker.isSquad()
+		&& tracker.getSubgroups().size() > 1;
 }
 
 bool Settings::isShowSelfOnTop(int tableIndex) const {
@@ -125,6 +125,10 @@ ImGuiID Settings::getFromWindowID(int tableIndex) const {
 
 int Settings::getMaxDisplayed(int tableIndex) const {
 	return tables[tableIndex].max_displayed;
+}
+
+uint8_t Settings::getCurrentHistory(int tableIndex) const {
+	return tables[tableIndex].current_history;
 }
 
 const ImVec4& Settings::getSelfColor() const {

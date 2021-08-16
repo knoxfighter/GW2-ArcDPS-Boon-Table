@@ -4,7 +4,7 @@
 #include <array>
 
 #include "Helpers.h"
-#include "Tracker.h"
+#include "ITracker.h"
 #include "modernIni/modernIni/modernIniMacros.h"
 
 import modernIni;
@@ -34,7 +34,7 @@ public:
 
 	bool& isShowChart(int tableIndex);
 	[[nodiscard]] Alignment getAlignment(int tableIndex) const;
-	[[nodiscard]] bool isShowSubgroups(const Tracker& tracker, int tableIndex) const;
+	[[nodiscard]] bool isShowSubgroups(const ITracker& tracker, int tableIndex) const;
 	[[nodiscard]] bool isShowSelfOnTop(int tableIndex) const;
 	[[nodiscard]] bool isShowPlayers(int tableIndex) const;
 	[[nodiscard]] bool isShowNpcs(int tableIndex) const;
@@ -55,6 +55,7 @@ public:
 	[[nodiscard]] CornerPosition getSelfPanelCornerPosition(int tableIndex) const;
 	[[nodiscard]] ImGuiID getFromWindowID(int tableIndex) const;
 	[[nodiscard]] int getMaxDisplayed(int tableIndex) const;
+	[[nodiscard]] uint8_t getCurrentHistory(int tableIndex) const;
 
 	[[nodiscard]] WPARAM getTableKey() const;
 	[[nodiscard]] const ImVec4& getSelfColor() const;
@@ -94,6 +95,8 @@ private:
 		CornerPosition self_panel_corner_position = CornerPosition::TopLeft;
 		ImGuiID from_window_id;
 		int max_displayed = 0;
+		// history value 1-based (0 = current)
+		uint8_t current_history = 0;
 
 		MODERN_INI_DEFINE_TYPE_INTRUSIVE_NO_EXCEPT(Table, show, show_self_on_top, show_players, show_npcs, show_subgroups, show_total, 
 			show_uptime_as_progress_bar, show_colored, alternating_row_bg, show_label, alignment, hide_header, sizing_policy, boon_column_width,

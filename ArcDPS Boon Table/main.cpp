@@ -14,6 +14,7 @@
 #include "Tracker.h"
 #include "AppChart.h"
 #include "Helpers.h"
+#include "History.h"
 #include "Lang.h"
 #include "Settings.h"
 #include "UpdateChecker.h"
@@ -35,8 +36,6 @@ uintptr_t mod_options_windows(const char* windowname); // fn(char* windowname)
 void readArcExports();
 bool modsPressed();
 bool canMoveWindows();
-
-Tracker tracker;
 
 typedef uint64_t(*arc_export_func_u64)();
 
@@ -234,6 +233,8 @@ uintptr_t npc_ids[num_of_npcs];
 /* one participant will be party/squad, or minion of. no spawn statechange events. despawn statechange only on marked boss npcs */
 uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision) {
 	/* ev is null. dst will only be valid on tracking add. skillname will also be null */
+	history.Event(dst);
+	
 	if (!ev) {
 		if (src) {
 			/* notify tracking change */
@@ -241,13 +242,13 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 				/* add */
 				if (src->prof) {
 					if (dst && dst->name) {
-						tracker.addPlayer(src,dst);
+						liveTracker.addPlayer(src,dst);
 						charts.sortNeeded();
 					}
 				}
 				/* remove */
 				else {
-					tracker.removePlayer(src);
+					liveTracker.removePlayer(src);
 					charts.sortNeeded();
 				}
 			}
@@ -290,40 +291,48 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 		/* statechange */
 		if (ev->is_statechange) {
 			if (ev->is_statechange == CBTS_ENTERCOMBAT) {
-				Player* player = tracker.getPlayer(src->id);
+				Player* player = liveTracker.getPlayer(src->id);
 				if (player) {
 					player->combatEnter(ev);
 
-					if(src->self) {
-						for (NPC& npc : tracker.npcs) {
-							npc.combatEnter(ev);
-						}
-					}
-					tracker.bakeCombatData();
+					// FIXME: NPC stuff
+					// if(src->self) {
+					// 	for (NPC& npc : tracker.npcs) {
+					// 		npc.combatEnter(ev);
+					// 	}
+					// }
 					charts.sortNeeded();
 				}
 			}
 			else if (ev->is_statechange == CBTS_EXITCOMBAT) {
-				Player* player = tracker.getPlayer(src->id);
+				Player* player = liveTracker.getPlayer(src->id);
 				if (player)
 				{
 					player->combatExit(ev);
 
-					if (src->self)
-					{
-						for (NPC& npc : tracker.npcs) {
-							npc.combatExit(ev);
-						}
-					}
+					// FIXME: NPC stuff
+					// if (src->self)
+					// {
+					// 	for (NPC& npc : tracker.npcs) {
+					// 		npc.combatExit(ev);
+					// 	}
+					// }
 				}
 			}
 			else if (ev->is_statechange == CBTS_STATRESET) {
-				for (auto& pair :tracker.players) {
+				history.Reset(ev);
+				
+				std::lock_guard<std::mutex> guard(liveTracker.players_mtx);
+				for (auto& pair : liveTracker.getPlayers()) {
 					Player& player = pair.second;
 					player.combatExit(ev);
 					// do not call combatEnter on Player, cause ev->dst_agent (subgroup) is not set
 					player.Entity::combatEnter(ev);
 				}
+			} else if (ev->is_statechange == CBTS_LOGSTART) {
+				history.LogStart(ev);
+			} else if (ev->is_statechange == CBTS_LOGEND) {
+				history.LogEnd(ev);
 			}
 		}
 		/* activation */
@@ -333,7 +342,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 		/* buff remove */
 		else if (ev->is_buffremove) {
 			if (ev->is_buffremove == CBTB_MANUAL) { //TODO: move to tracker
-				Entity* entity = tracker.getEntity(src->id);
+				Entity* entity = liveTracker.getEntity(src->id);
 				if (entity) {
 					entity->removeBoon(ev);
 					charts.sortNeeded();
@@ -348,14 +357,14 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 			}
 			/* application */
 			else {
-				tracker.applyBoon(src, dst, ev);
+				liveTracker.applyBoon(src, dst, ev);
 				charts.sortNeeded();
 			}
 		}
 		/* physical */
 		else {
 			// read out if players are above 90% health
-			tracker.dealtDamage(src, ev);
+			liveTracker.dealtDamage(src, ev);
 		}
 
 		/* common */
@@ -381,7 +390,7 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 		}
 	}
 
-	charts.drawAll(tracker, !canMoveWindows() ? ImGuiWindowFlags_NoMove : 0);
+	charts.drawAll(!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0);
 
 	updateChecker.Draw();
 	return 0;

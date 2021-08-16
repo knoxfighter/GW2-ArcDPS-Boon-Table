@@ -1,7 +1,6 @@
 #pragma once
 
 #include "BuffIds.h"
-#include "Settings.h"
 #include "extension/BigTable.h"
 
 class SettingsUI {

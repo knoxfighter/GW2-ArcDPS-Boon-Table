@@ -5,9 +5,12 @@
 #include <mutex>
 #include <ranges>
 
+#include "Entity.h"
+#include "History.h"
 #include "Lang.h"
 #include "Settings.h"
 #include "SettingsUI.h"
+#include "Tracker.h"
 #include "extension/Widgets.h"
 #include "extension/ImGui_Math.h"
 #include "extension/Icon.h"
@@ -16,8 +19,27 @@ AppChartsContainer charts;
 
 namespace Table = ImGuiEx::BigTable;
 
-void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) {
+void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {0.f, 0.f});
+
+	ITracker* trackerPtr;
+	auto currentHistory = settings.getCurrentHistory(index);
+	if (currentHistory == 0) {
+		trackerPtr = &liveTracker;
+	} else {
+		trackerPtr = &history[currentHistory - 1];
+	}
+	ITracker& tracker = *trackerPtr;
+
+	if (lastCalculatedHistory != currentHistory) {
+		playerOrder.clear();
+		for (const auto& id : tracker.getAllPlayerIds()) {
+			playerOrder.emplace_back(id);
+		}
+		needSort = true;
+
+		lastCalculatedHistory = currentHistory;
+	}
 
 	bool maxDisplayedEnabled = false;
 	if (settings.getMaxDisplayed(index) > 0) {
@@ -102,9 +124,9 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 	const unsigned int above90ColumnId = 128 - 3;
 
 	// we have to get it here, cause it will lock tracker.players_mtx itself (which causes a crash, when it is already locked)
-	Player* self_player = tracker.getPlayer(2000);
+	IPlayer* self_player = tracker.getIPlayer(2000);
 
-	std::scoped_lock<std::mutex, std::mutex, std::mutex> lock(tracker.players_mtx, tracker.npcs_mtx, boons_mtx);
+	std::scoped_lock<std::mutex, std::mutex> lock(tracker.players_mtx, tracker.npcs_mtx);
 
 	int tableFlags = ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_Sortable | ImGuiTableFlags_Resizable |
 		ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_NoBordersInBody;
@@ -203,8 +225,8 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 				if (sorts_specs->Specs->ColumnUserID == nameColumnId) {
 					// sort by account name.
 					std::sort(playerOrder.begin(), playerOrder.end(), [descend, &tracker](const size_t& playerIdx1, const size_t& playerIdx2) {
-						std::string charName1 = tracker.players.at(playerIdx1).name;
-						std::string charName2 = tracker.players.at(playerIdx2).name;
+						std::string charName1 = tracker.getIEntity(playerIdx1)->getName();
+						std::string charName2 = tracker.getIEntity(playerIdx2)->getName();
 						std::transform(charName1.begin(), charName1.end(), charName1.begin(), [](unsigned char c) { return std::tolower(c); });
 						std::transform(charName2.begin(), charName2.end(), charName2.begin(), [](unsigned char c) { return std::tolower(c); });
 
@@ -218,23 +240,23 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 				} else if (sorts_specs->Specs->ColumnUserID == subgroupColumnId) {
 					// sort by subgroup
 					std::sort(playerOrder.begin(), playerOrder.end(), [descend, &tracker](const size_t& playerIdx1, const size_t& playerIdx2) {
-						const Player& player1 = tracker.players.at(playerIdx1);
-						const Player& player2 = tracker.players.at(playerIdx2);
+						uint8_t player1Subgroup = tracker.getIPlayer(playerIdx1)->getSubgroup();
+						uint8_t player2Subgroup = tracker.getIPlayer(playerIdx2)->getSubgroup();
 						if (descend) {
-							return player1.subgroup < player2.subgroup;
+							return player1Subgroup < player2Subgroup;
 						} else {
-							return player1.subgroup > player2.subgroup;
+							return player1Subgroup > player2Subgroup;
 						}
 					});
 				} else if (sorts_specs->Specs->ColumnUserID == above90ColumnId) {
 					// sort by above 90% hp
 					std::sort(playerOrder.begin(), playerOrder.end(), [descend, &tracker](const size_t& playerIdx1, const size_t& playerIdx2) {
-						const Player& player1 = tracker.players.at(playerIdx1);
-						const Player& player2 = tracker.players.at(playerIdx2);
+						float player1Over90 = tracker.getIEntity(playerIdx1)->getOver90();
+						float player2Over90 = tracker.getIEntity(playerIdx2)->getOver90();
 						if (descend) {
-							return player1.getOver90() < player2.getOver90();
+							return player1Over90 < player2Over90;
 						} else {
-							return player1.getOver90() > player2.getOver90();
+							return player1Over90 > player2Over90;
 						}
 					});
 				} else {
@@ -242,12 +264,12 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 					const ImGuiID buffId = sorts_specs->Specs->ColumnUserID;
 					const BoonDef& buff = tracked_buffs[buffId];
 					std::sort(playerOrder.begin(), playerOrder.end(), [descend, &tracker, &buff, this](const size_t& playerIdx1, const size_t& playerIdx2) {
-						const Player& player1 = tracker.players.at(playerIdx1);
-						const Player& player2 = tracker.players.at(playerIdx2);
+						float player1Uptime = tracker.getIEntity(playerIdx1)->getBoonUptime(buff);
+						float player2Uptime = tracker.getIEntity(playerIdx2)->getBoonUptime(buff);
 						if (descend) {
-							return player1.getBoonUptime(buff) < player2.getBoonUptime(buff);
+							return player1Uptime < player2Uptime;
 						} else {
-							return player1.getBoonUptime(buff) > player2.getBoonUptime(buff);
+							return player1Uptime > player2Uptime;
 						}
 					});
 				}
@@ -260,11 +282,11 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		 */
 		if (settings.isShowSelfOnTop(index)) {
 			if (self_player) {
-				DrawRow(alignment, self_player->name.c_str(), std::to_string(self_player->subgroup).c_str(), [&](const BoonDef& boonDef) {
+				DrawRow(alignment, self_player->getName().c_str(), std::to_string(self_player->getSubgroup()).c_str(), [&](const BoonDef& boonDef) {
 					        return getEntityDisplayValue(tracker, *self_player, boonDef);
 				        }, [&self_player]() {
 					        return self_player->getOver90();
-				        }, true, *self_player, true, settings.getSelfColor());
+				        }, true, self_player, true, settings.getSelfColor());
 			}
 
 			Table::TableNextRow();
@@ -278,21 +300,21 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 			bool onlySubgroup = settings.isShowOnlySubgroup(index);
 			auto group_filter = [&self_player, onlySubgroup, &tracker](const size_t& playerIdx) {
 				if (self_player && onlySubgroup) {
-					uint8_t subgroup = self_player->subgroup;
-					const Player& player = tracker.players.at(playerIdx);
-					return player.subgroup == subgroup;
+					uint8_t subgroup = self_player->getSubgroup();
+					const IPlayer* const player = tracker.getIPlayer(playerIdx);
+					return player->getSubgroup() == subgroup;
 				}
 				return true;
 			};
 			for (const size_t& playerIdx : playerOrder | std::views::filter(group_filter)) {
 				// for (const Player& player : tracker.players | std::views::filter(group_filter)) {
-				const Player& player = tracker.players.at(playerIdx);
+				const IPlayer* const player = tracker.getIPlayer(playerIdx);
 
-				DrawRow(alignment, player.name.c_str(), std::to_string(player.subgroup).c_str(), [&](const BoonDef& boonDef) {
-					        return getEntityDisplayValue(tracker, player, boonDef);
+				DrawRow(alignment, player->getName().c_str(), std::to_string(player->getSubgroup()).c_str(), [&](const BoonDef& boonDef) {
+					        return getEntityDisplayValue(tracker, *player, boonDef);
 				        }, [&player]() {
-					        return player.getOver90();
-				        }, true, player, player.self, settings.getSelfColor());
+					        return player->getOver90();
+				        }, true, player, player->isSelf(), settings.getSelfColor());
 			}
 		}
 
@@ -306,12 +328,12 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 			bool onlySubgroup = settings.isShowOnlySubgroup(index);
 			auto group_filter = [&self_player, onlySubgroup](const uint8_t& subgroup) {
 				if (self_player && onlySubgroup) {
-					return subgroup == self_player->subgroup;
+					return subgroup == self_player->getSubgroup();
 				}
 				return true;
 			};
 
-			for (uint8_t subgroup : tracker.subgroups | std::views::filter(group_filter)) {
+			for (std::set<uint8_t> subgroups = tracker.getSubgroups(); uint8_t subgroup : subgroups | std::views::filter(group_filter)) {
 				DrawRow(alignment, lang.translate(LangKey::SubgroupNameColumnValue).c_str(), std::to_string(subgroup).c_str(),
 				        [&](const BoonDef& boonDef) {
 					        return tracker.getSubgroupBoonUptime(boonDef, subgroup);
@@ -336,19 +358,20 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 		/*
 		 * NPCs
 		 */
-		if (settings.isShowNpcs(index) && !tracker.npcs.empty()) {
-			Table::TableNextRow();
-			Table::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
-
-			for (const NPC& npc : tracker.npcs) {
-				DrawRow(alignment, npc.name.c_str(), lang.translate(LangKey::NPCSubgroupColumnValue).c_str(),
-				        [&](const BoonDef& boonDef) {
-					        return getEntityDisplayValue(tracker, npc, boonDef);
-				        }, [&npc]() {
-					        return npc.getOver90();
-				        }, true, npc);
-			}
-		}
+		// FIXME: Enable if player tracking works again
+		// if (settings.isShowNpcs(index) && !tracker.npcs.empty()) {
+		// 	Table::TableNextRow();
+		// 	Table::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
+		//
+		// 	for (const NPC& npc : tracker.npcs) {
+		// 		DrawRow(alignment, npc.name.c_str(), lang.translate(LangKey::NPCSubgroupColumnValue).c_str(),
+		// 		        [&](const BoonDef& boonDef) {
+		// 			        return getEntityDisplayValue(tracker, npc, boonDef);
+		// 		        }, [&npc]() {
+		// 			        return npc.getOver90();
+		// 		        }, true, npc);
+		// 	}
+		// }
 
 		Table::EndTable();
 	}
@@ -365,7 +388,7 @@ void AppChart::Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags = 0) 
 
 
 void AppChart::DrawRow(Alignment alignment, const char* charnameText, const char* subgroupText, std::function<float(const BoonDef&)> uptimeFunc,
-                       std::function<float()> above90Func, bool hasEntity, const Entity& entity, bool hasColor, const ImVec4& color) {
+                       std::function<float()> above90Func, bool hasEntity, const IEntity* const entity, bool hasColor, const ImVec4& color) {
 	Table::TableNextRow();
 
 	if (hasColor) {
@@ -390,7 +413,7 @@ void AppChart::DrawRow(Alignment alignment, const char* charnameText, const char
 		if (Table::TableNextColumn()) {
 			float averageBoonUptime = uptimeFunc(trackedBuff);
 			if (hasEntity) {
-				buffProgressBar(trackedBuff, averageBoonUptime, Table::GetColumnWidth(), entity);
+				buffProgressBar(trackedBuff, averageBoonUptime, Table::GetColumnWidth(), *entity);
 			} else {
 				buffProgressBar(trackedBuff, averageBoonUptime, Table::GetColumnWidth());
 			}
@@ -401,7 +424,7 @@ void AppChart::DrawRow(Alignment alignment, const char* charnameText, const char
 	if (Table::TableNextColumn()) {
 		const float above90 = above90Func();
 		if (hasEntity) {
-			buffProgressBar(*above90BoonDef, above90, ImGui::GetColumnWidth(), entity);
+			buffProgressBar(*above90BoonDef, above90, ImGui::GetColumnWidth(), *entity);
 		} else {
 			buffProgressBar(*above90BoonDef, above90, ImGui::GetColumnWidth());
 		}
@@ -471,7 +494,7 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 	}
 }
 
-void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, const Entity& entity) const {
+void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, const IEntity& entity) const {
 	switch (settings.getShowColored(index)) {
 		case ProgressBarColoringMode::ByProfession:
 			buffProgressBar(current_buff, current_boon_uptime, width, entity.getColor());
@@ -496,7 +519,7 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 	}
 }
 
-float AppChart::getEntityDisplayValue(const Tracker& tracker, const Entity& entity, const BoonDef& boon) {
+float AppChart::getEntityDisplayValue(const ITracker& tracker, const IEntity& entity, const BoonDef& boon) {
 	return entity.getBoonUptime(boon);
 }
 
@@ -543,11 +566,11 @@ void AppChartsContainer::sortNeeded() {
 	}
 }
 
-void AppChartsContainer::drawAll(Tracker& tracker, ImGuiWindowFlags flags) {
+void AppChartsContainer::drawAll(ImGuiWindowFlags flags) {
 	for (AppChart& chart : charts) {
 		bool& showChart = settings.isShowChart(chart.index);
 		if (showChart) {
-			chart.Draw(&showChart, tracker, flags);
+			chart.Draw(&showChart, flags);
 		}
 	}
 }

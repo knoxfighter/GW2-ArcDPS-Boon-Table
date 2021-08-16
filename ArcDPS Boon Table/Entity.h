@@ -8,18 +8,21 @@
 #include "Helpers.h"
 #include "Boon.h"
 #include "BuffIds.h"
+#include "IEntity.h"
 
-class Entity
-{
-public:
+class Entity : public virtual IEntity {
+protected:
 	uintptr_t id;
 	std::string name;
+
+	mutable std::mutex boons_mtx;
 
 	std::map<uint32_t, Boon> boons_uptime;
 	std::map<uint32_t, Boon> boons_uptime_initial;
 	std::map<uint32_t, Boon> boons_generation;
 	std::map<uint32_t, Boon> boons_generation_initial;
 
+public:
 	virtual bool operator==(uintptr_t other_id) const;
 	virtual bool operator==(std::string other_name) const;
 
@@ -53,27 +56,28 @@ public:
 
 	virtual bool operator==(const Entity& other) const;
 
+	uintptr_t getId() const override;
+	const std::string& getName() const override;
+	
 	void applyBoon(cbtevent* ev);
 	void removeBoon(cbtevent* ev);
 	void gaveBoon(cbtevent* ev);
 	void flushAllBoons();
 	void dealtDamage(cbtevent* ev);
 
-	float getBoonUptime(const BoonDef& boon) const;
+	float getBoonUptime(const BoonDef& boon) const override;
 	float getBoonGeneration(const BoonDef& new_boon) const;
 
 	virtual void combatEnter(cbtevent* ev);
 	void combatExit(cbtevent* ev);
-	uint64_t getCombatDuration() const;
+	uint64_t getCombatDuration() const override;
 	uint64_t enter_combat_time = getCurrentTime();
 	uint64_t exit_combat_time = getCurrentTime();
 	bool in_combat = false;
 
 	std::atomic_uint32_t damageEvents = 0;
 	std::atomic_uint32_t damageEventsOver90 = 0;
-	float getOver90() const;
+	float getOver90() const override;
 
-	virtual ImVec4 getColor() const;
+	ImVec4 getColor() const override;
 };
-
-extern std::mutex boons_mtx;

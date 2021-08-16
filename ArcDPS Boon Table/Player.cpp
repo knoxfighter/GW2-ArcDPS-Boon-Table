@@ -19,6 +19,18 @@ Player::Player(uintptr_t new_id = 0,
 	}
 }
 
+uint8_t Player::getSubgroup() const {
+	return subgroup;
+}
+
+bool Player::isSelf() const {
+	return self;
+}
+
+Prof Player::getProfession() const {
+	return profession;
+}
+
 bool Player::operator==(uintptr_t other_id) const {
     return Entity::operator==(other_id);
 }
@@ -29,7 +41,7 @@ bool Player::operator==(std::string other_name) const {
 }
 
 bool Player::operator==(const Entity& other) const {
-    return id == other.id && this->operator==(other.name);
+	return Entity::operator==(other);
 }
 
 void Player::combatEnter(cbtevent* ev) {

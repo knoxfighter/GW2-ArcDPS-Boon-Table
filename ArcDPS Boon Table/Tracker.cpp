@@ -2,6 +2,12 @@
 
 #include "AppChart.h"
 
+Tracker liveTracker;
+
+bool Tracker::isSquad() const {
+	return players.size() > 5;
+}
+
 void Tracker::addPlayer(ag* src, ag* dst) {
 	if (!is_player(src)) return;
 
@@ -50,8 +56,6 @@ void Tracker::addNewPlayer(uintptr_t id,
 	// give charts index to newly player
 	charts.addPlayer(id);
 	lock.unlock();
-
-	bakeCombatData();
 }
 
 void Tracker::addNPC(uintptr_t id, std::string name, cbtevent* ev) {
@@ -100,8 +104,6 @@ void Tracker::removePlayer(ag* src) {
 	// remove player from tracked list at all
 	players.erase(id);
 	lock.unlock();
-
-	bakeCombatData();
 }
 
 void Tracker::clearPlayers() {
@@ -110,28 +112,16 @@ void Tracker::clearPlayers() {
 
 	charts.clearPlayers();
 	lock.unlock();
-
-	bakeCombatData();
 }
 
 void Tracker::clearNPCs() {
 	std::unique_lock<std::mutex> lock(npcs_mtx);
 	npcs.clear();
 	lock.unlock();
-
-	bakeCombatData();
-}
-
-void Tracker::bakeCombatData() {
-	std::lock_guard<std::mutex> lock(subgroups_mtx);
-	subgroups = getSubgroups();
-
-	is_squad = players.size() > 5;
 }
 
 Player* Tracker::getPlayer(uintptr_t new_player) {
 	if (!new_player) return nullptr;
-	std::lock_guard<std::mutex> lock(players_mtx);
 	const auto& it = players.find(new_player);
 
 	//player not tracked yet
@@ -147,7 +137,10 @@ Entity* Tracker::getEntity(uintptr_t new_entity) {
 	Entity* entity = getPlayer(new_entity);
 	if (entity != nullptr) return entity;
 	return getNPC(new_entity);
+}
 
+IEntity* Tracker::getIEntity(uintptr_t new_entity) {
+	return getEntity(new_entity);
 }
 
 NPC* Tracker::getNPC(uintptr_t new_npc) {
@@ -194,6 +187,26 @@ Player* Tracker::getPlayer(std::string new_player) {
 	}
 }
 
+IPlayer* Tracker::getIPlayer(uintptr_t new_player) {
+	return getPlayer(new_player);
+}
+
+IPlayer* Tracker::getIPlayer(std::string new_player) {
+	return getPlayer(new_player);
+}
+
+std::unordered_map<uintptr_t, Player>& Tracker::getPlayers() {
+	return players;
+}
+
+std::set<uintptr_t> Tracker::getAllPlayerIds() {
+	std::set<uintptr_t> ret;
+	for (const auto& player : players) {
+		ret.emplace(player.first);
+	}
+	return ret;
+}
+
 void Tracker::applyBoon(ag* src, ag* dst, cbtevent* ev) {
 	Entity* current_player = getEntity(src->id);
 
@@ -217,8 +230,7 @@ void Tracker::dealtDamage(ag* src, cbtevent* ev) {
 	}
 }
 
-std::set<uint8_t> Tracker::getSubgroups() {
-	std::lock_guard<std::mutex> lock(players_mtx);
+std::set<uint8_t> Tracker::getSubgroups() const {
 	std::set<uint8_t> out;
 
 	for (auto& player : players) {

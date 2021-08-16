@@ -4,7 +4,7 @@
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
-#include "Tracker.h"
+#include "ITracker.h"
 #include "BuffIds.h"
 #include "Settings.h"
 #include "extension/BigTable.h"
@@ -17,15 +17,15 @@ public:
 	
 	AppChart(int new_index) : index(new_index) {};
 
-	void Draw(bool* p_open, Tracker& tracker, ImGuiWindowFlags flags);
+	void Draw(bool* p_open, ImGuiWindowFlags flags);
 	void DrawRow(Alignment alignment, const char* charnameText, const char* subgroupText, std::function<float(const BoonDef&)> uptimeFunc, std::function<float()>
-	             above90Func, bool hasEntity = false, const Entity& entity = Entity(), bool hasColor = false, const ImVec4& color = ImVec4(0, 0, 0, 0));
+	             above90Func, bool hasEntity = false, const IEntity* const entity = nullptr, bool hasColor = false, const ImVec4& color = ImVec4(0, 0, 0, 0));
 
 	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, ImVec4 color) const;
 	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width);
-	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, const Entity& entity) const;
+	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, const IEntity& entity) const;
 
-	float getEntityDisplayValue(const Tracker& tracker, const Entity& entity, const BoonDef& boon);
+	float getEntityDisplayValue(const ITracker& tracker, const IEntity& entity, const BoonDef& boon);
 
 	void removePlayer(size_t playerId);
 	void addPlayer(size_t playerId);
@@ -34,6 +34,7 @@ private:
 	ImGuiEx::BigTable::ImGuiTable* imGuiTable = nullptr;
 	int index = 0;
 	std::vector<size_t> playerOrder;
+	uint8_t lastCalculatedHistory = 0;
 
 	uint8_t rowCount = 0;
 	float maxHeight = 0;
@@ -50,7 +51,7 @@ public:
 	void addPlayer(uintptr_t playerId);
 	void clearPlayers();
 	void sortNeeded();
-	void drawAll(Tracker& tracker, ImGuiWindowFlags flags);
+	void drawAll(ImGuiWindowFlags flags);
 	
 private:
 	AppChart charts[MaxTableWindowAmount] {

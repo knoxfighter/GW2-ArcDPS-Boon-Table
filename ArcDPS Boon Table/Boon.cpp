@@ -1,5 +1,7 @@
 #include "Boon.h"
 
+#include "Helpers.h"
+
 bool Boon::operator==(uint32_t other_id) const {
 	if (!def) return false;
 

@@ -1,7 +1,6 @@
 #pragma once
+
 #include <inttypes.h>
-#include <mutex>
-#include "Helpers.h"
 #include "BuffIds.h"
 
 class Boon

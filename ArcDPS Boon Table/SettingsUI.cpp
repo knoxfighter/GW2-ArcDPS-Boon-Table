@@ -1,6 +1,8 @@
 #include "SettingsUI.h"
 
+#include "AppChart.h"
 #include "Helpers.h"
+#include "History.h"
 #include "Lang.h"
 #include "Settings.h"
 #include "extension/Widgets.h"
@@ -15,6 +17,56 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 	}
 
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.f, 0.f));
+
+	if (ImGui::BeginMenu(lang.translate(LangKey::SettingsHistory).c_str())) {
+		ImVec4* arc_colors[5];
+		arc_export_e5(arc_colors);
+		
+		if (settings.tables[tableIndex].current_history != 0) {
+			ImGui::PushStyleColor(ImGuiCol_Text, arc_colors[0][CCOL_LGREY]);
+		}
+		ImGui::TextUnformatted(lang.translate(LangKey::SettingsHistoryCurrent).c_str());
+		if (settings.tables[tableIndex].current_history != 0) {
+			ImGui::PopStyleColor();
+		}
+		if (ImGui::IsItemClicked()) {
+			settings.tables[tableIndex].current_history = 0;
+		}
+
+		// 1-based, 0 = current
+		int historyIndex = 1;
+		for (const TrackerHistory& trackerHistory : history) {
+			auto duration = trackerHistory.getDuration();
+
+			// "<starttime>, <mm>m<ss.uu>s (<name>)"
+			// starttime: <hh>:<mm>:<ss>
+			std::stringstream ss;
+			auto starttime = trackerHistory.getStarttime();
+			ss << (starttime.hours() % 24).count() << ":";
+			ss << starttime.minutes().count() << ":";
+			ss << starttime.seconds().count() << ",";
+			if (duration>= 60) {
+				ss << " " << duration/60 << "m";
+			}
+			ss << " " << duration%60 << "s";
+			ss << " (" << trackerHistory.getLogName() << ")";
+
+			if (settings.tables[tableIndex].current_history != historyIndex) {
+				ImGui::PushStyleColor(ImGuiCol_Text, arc_colors[0][CCOL_LGREY]);
+			}
+			ImGui::TextUnformatted(ss.str().c_str());
+			if (settings.tables[tableIndex].current_history != historyIndex) {
+				ImGui::PopStyleColor();
+			}
+			if (ImGui::IsItemClicked()) {
+				settings.tables[tableIndex].current_history = historyIndex;
+			}
+
+			++historyIndex;
+		}
+		
+		ImGui::EndMenu();
+	}
 
 	ImGui::Checkbox(lang.translate(LangKey::SettingsSelfOnTop).c_str(), &settings.tables[tableIndex].show_self_on_top);
 	ImGui::Checkbox(lang.translate(LangKey::SettingsPlayers).c_str(), &settings.tables[tableIndex].show_players);

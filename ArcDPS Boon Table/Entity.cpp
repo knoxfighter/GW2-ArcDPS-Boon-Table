@@ -14,6 +14,14 @@ bool Entity::operator==(const Entity& other) const {
 	return id == other.id && name == other.name;
 }
 
+uintptr_t Entity::getId() const {
+	return id;
+}
+
+const std::string& Entity::getName() const {
+	return name;
+}
+
 void Entity::applyBoon(cbtevent* ev)
 {
 	if (!ev) return;
@@ -105,6 +113,8 @@ void Entity::dealtDamage(cbtevent* ev) {
 float Entity::getBoonUptime(const BoonDef& boon) const {
 	if (getCombatDuration() == 0) return 0.0f;
 
+	std::lock_guard<std::mutex> lock(boons_mtx);
+
 	auto it = boons_uptime.find(boon.ids[0]);
 
 	if (it != boons_uptime.end())
@@ -136,6 +146,8 @@ float Entity::getBoonUptime(const BoonDef& boon) const {
 float Entity::getBoonGeneration(const BoonDef& new_boon) const {
 	if (getCombatDuration() == 0) return 0.0f;
 
+	std::lock_guard<std::mutex> lock(boons_mtx);
+	
 	auto it = boons_generation.find(new_boon.ids[0]);
 
 	if (it != boons_generation.end())

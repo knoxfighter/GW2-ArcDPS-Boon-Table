@@ -62,6 +62,9 @@ LANG_KEY_ENUM(
 	SettingsMaxDisplayed,
 	SettingsMaxDisplayedPopup,
 
+	SettingsHistory,
+	SettingsHistoryCurrent,
+
 	NameColumnHeader,
 	SubgroupColumnHeader,
 	SubgroupNameColumnValue,
@@ -166,6 +169,8 @@ LANG_KEY_ENUM(
 	UpdateRestartPending,
 	UpdateError,
 
+	Unknown,
+
 	// always last element
 	FINAL_ENTRY
 )
@@ -220,6 +225,8 @@ private:
 		{LangKey::Settings0Color, "0% color"},
 		{LangKey::SettingsShowBackground, "Background"},
 		{LangKey::SettingsResetTableColumns, "Reset table columns"},
+		{LangKey::SettingsHistoryCurrent, "current"},
+		{LangKey::SettingsHistory, "history"},
 		{LangKey::SizingPolicySizeToContent, "Autoresize window to content"},
 		{LangKey::SizingPolicySizeContentToWindow, "Size content to window"},
 		{LangKey::SizingPolicyManualWindowSize, "Manual window sizing"},
@@ -328,6 +335,7 @@ private:
 		{LangKey::SettingsDisplay, "Display"},
 		{LangKey::SettingsMaxDisplayed, "max displayed"},
 		{LangKey::SettingsMaxDisplayedPopup, "The amount of rows, that are displayed.\nTotals and Subgroups also count as row.\nIf you want a squad plus totals, you have to set this to '11'"},
+		{LangKey::Unknown, "Unknown"},
 	};
 };
 
