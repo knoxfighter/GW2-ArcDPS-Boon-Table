@@ -20,7 +20,7 @@ AppChartsContainer charts;
 namespace Table = ImGuiEx::BigTable;
 
 void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {0.f, 0.f});
+	// ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {0.f, 0.f});
 
 	ITracker* trackerPtr;
 	auto currentHistory = settings.getCurrentHistory(index);
@@ -94,16 +94,23 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 
 	ImGuiWindow* currentWindow = ImGui::GetCurrentWindow();
 
-	titleBarHeight = currentWindow->TitleBarHeight();
+	// add window titleBar to defined height
+	titleBarHeight = currentWindow->TitleBarHeight() * 2;
 	minHeight += titleBarHeight;
 	maxHeight += titleBarHeight;
 
+	// add scrollbar to defined height
 	if (imGuiTable && imGuiTable->InnerWindow->ScrollbarX) {
 		const ImRect scrollbarRect = ImGui::GetWindowScrollbarRect(imGuiTable->InnerWindow, ImGuiAxis_X);
 		float height = scrollbarRect.GetHeight();
 		minHeight += height;
 		maxHeight += height;
 	}
+
+	// add window paddings to defined height
+	float paddingHeight = ImGui::GetStyle().WindowPadding.y;
+	minHeight += paddingHeight;
+	maxHeight += paddingHeight;
 
 	/**
 	 * Settings UI
@@ -383,7 +390,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 	ImGui::End();
 
 	ImGui::PopFont();
-	ImGui::PopStyleVar();
+	// ImGui::PopStyleVar();
 }
 
 
