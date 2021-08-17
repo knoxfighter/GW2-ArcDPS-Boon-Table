@@ -11,6 +11,7 @@ private:
 	float self_color[4]{};
 	float _100color[4]{};
 	float _0color[4]{};
+	float windowPadding[2]{};
 	bool init = false;
 	
 	void initialize(int tableIndex);

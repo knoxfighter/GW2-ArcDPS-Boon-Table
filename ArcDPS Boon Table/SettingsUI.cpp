@@ -180,6 +180,25 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		ImGuiEx::EnumCombo(alignmentText.c_str(), alignment, Alignment::FINAL_ENTRY);
 		ImGui::PopItemWidth();
 
+		// window padding
+		std::string windowPaddingText = lang.translate(LangKey::SettingsWindowPadding);
+		windowPaddingText.append("##WindowPadding");
+		if (ImGui::InputFloat2(windowPaddingText.c_str(), windowPadding)) {
+			std::optional<ImVec2>& settingsWindowPadding = settings.tables[tableIndex].window_padding;
+			if (settingsWindowPadding) {
+				settingsWindowPadding->x = windowPadding[0];
+				settingsWindowPadding->y = windowPadding[1];
+			} else {
+				settingsWindowPadding.emplace(windowPadding[0], windowPadding[1]);
+			}
+		}
+		// always update to current windowPadding, when windowPadding is controlled by arcdps/ImGui
+		if (!settings.tables[tableIndex].window_padding) {
+			const auto& padding = ImGui::GetStyle().WindowPadding;
+			windowPadding[0] = padding.x;
+			windowPadding[1] = padding.y;
+		}
+
 		SizingPolicy& sizingPolicy = settings.tables[tableIndex].sizing_policy;
 		std::string sizingPolicyText = lang.translate(LangKey::SettingsSizingPolicy);
 		sizingPolicyText.append("###SizingPolicy");
@@ -197,7 +216,7 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		}
 
 		if (ImGui::ColorEdit4(lang.translate(LangKey::SettingsSelfColor).c_str(), self_color)) {
-			// i think the color changed
+			// color changed
 			if (settings.self_color) {
 				settings.self_color->x = self_color[0];
 				settings.self_color->y = self_color[1];
@@ -332,6 +351,18 @@ void SettingsUI::initialize(int tableIndex) {
 	cornerPosition = static_cast<int>(settings.tables[tableIndex].corner_position);
 	selfPanelCornerPosition = static_cast<int>(settings.tables[tableIndex].self_panel_corner_position);
 	anchorPanelCornerPosition = static_cast<int>(settings.tables[tableIndex].anchor_panel_corner_position);
+
+	const std::optional<ImVec2>& paddingOptional = settings.getWindowPadding(tableIndex);
+	if (paddingOptional) {
+		const ImVec2& value = paddingOptional.value();
+		windowPadding[0] = value.x;
+		windowPadding[1] = value.y;
+	} else {
+		ImGuiStyle& style = ImGui::GetStyle();
+		const auto& padding = style.WindowPadding;
+		windowPadding[0] = padding.x;
+		windowPadding[1] = padding.y;
+	}
 }
 
 bool SettingsUI::tableColumnSubMenu(Table::ImGuiTable* table, const char* label, BoonType type, int beginId) const {

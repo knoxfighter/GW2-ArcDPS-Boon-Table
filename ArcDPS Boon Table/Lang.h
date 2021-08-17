@@ -53,6 +53,7 @@ LANG_KEY_ENUM(
 	SizingPolicySizeToContent,
 	SizingPolicySizeContentToWindow,
 	SizingPolicyManualWindowSize,
+	SettingsWindowPadding,
 
 	SettingsPosition,
 	SettingsFromAnchorPanelCorner,
@@ -227,6 +228,7 @@ private:
 		{LangKey::SettingsResetTableColumns, "Reset table columns"},
 		{LangKey::SettingsHistoryCurrent, "current"},
 		{LangKey::SettingsHistory, "history"},
+		{LangKey::SettingsWindowPadding, "padding"},
 		{LangKey::SizingPolicySizeToContent, "Autoresize window to content"},
 		{LangKey::SizingPolicySizeContentToWindow, "Size content to window"},
 		{LangKey::SizingPolicyManualWindowSize, "Manual window sizing"},

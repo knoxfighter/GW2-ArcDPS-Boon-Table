@@ -127,6 +127,10 @@ int Settings::getMaxDisplayed(int tableIndex) const {
 	return tables[tableIndex].max_displayed;
 }
 
+const std::optional<ImVec2>& Settings::getWindowPadding(int tableIndex) const {
+	return tables[tableIndex].window_padding;
+}
+
 uint8_t Settings::getCurrentHistory(int tableIndex) const {
 	return tables[tableIndex].current_history;
 }

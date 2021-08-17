@@ -20,8 +20,12 @@ AppChartsContainer charts;
 namespace Table = ImGuiEx::BigTable;
 
 void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
-	// ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {0.f, 0.f});
+	const std::optional<ImVec2>& windowPadding = settings.getWindowPadding(index);
+	if (windowPadding) {
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, windowPadding.value());
+	}
 
+	// get current tracker
 	ITracker* trackerPtr;
 	auto currentHistory = settings.getCurrentHistory(index);
 	if (currentHistory == 0) {
@@ -31,6 +35,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 	}
 	ITracker& tracker = *trackerPtr;
 
+	// if tracker changed, update the playerOrder (new IDs)
 	if (lastCalculatedHistory != currentHistory) {
 		playerOrder.clear();
 		for (const auto& id : tracker.getAllPlayerIds()) {
@@ -390,7 +395,9 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 	ImGui::End();
 
 	ImGui::PopFont();
-	// ImGui::PopStyleVar();
+	if (windowPadding) {
+		ImGui::PopStyleVar();
+	}
 }
 
 
