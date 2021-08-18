@@ -120,10 +120,15 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 
 	if (ImGui::BeginMenu(lang.translate(LangKey::SettingsDisplay).c_str())) {
 		ImGui::Checkbox(lang.translate(LangKey::SettingsShowLabel).c_str(), &settings.tables[tableIndex].show_label);
+		
 		std::string maxDisplayedInputLabel = std::format("{}##maxDisplayedInput", lang.translate(LangKey::SettingsMaxDisplayed));
 		ImGui::InputInt(maxDisplayedInputLabel.c_str(), &settings.tables[tableIndex].max_displayed);
 		ImGui::SameLine();
 		HelpMarker(lang.translate(LangKey::SettingsMaxDisplayedPopup).c_str());
+
+		std::string maxPlayerLengthStr = lang.translate(LangKey::SettingsMaxPlayerLength);
+		maxPlayerLengthStr.append("##MaxPlayerLength");
+		ImGui::InputInt(maxPlayerLengthStr.c_str(), &settings.tables[tableIndex].max_player_length);
 		
 		ProgressBarColoringMode& show_colored = settings.tables[tableIndex].show_colored;
 		std::string showColoredText = lang.translate(LangKey::SettingsColoringMode);

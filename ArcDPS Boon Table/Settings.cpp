@@ -135,6 +135,10 @@ uint8_t Settings::getCurrentHistory(int tableIndex) const {
 	return tables[tableIndex].current_history;
 }
 
+int Settings::getMaxPlayerLength(int tableIndex) const {
+	return tables[tableIndex].max_player_length;
+}
+
 const ImVec4& Settings::getSelfColor() const {
 	if (self_color) {
 		return self_color.value();

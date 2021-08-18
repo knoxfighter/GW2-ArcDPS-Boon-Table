@@ -62,6 +62,7 @@ LANG_KEY_ENUM(
 	SettingsDisplay,
 	SettingsMaxDisplayed,
 	SettingsMaxDisplayedPopup,
+	SettingsMaxPlayerLength,
 
 	SettingsHistory,
 	SettingsHistoryCurrent,
@@ -232,6 +233,7 @@ private:
 		{LangKey::SizingPolicySizeToContent, "Autoresize window to content"},
 		{LangKey::SizingPolicySizeContentToWindow, "Size content to window"},
 		{LangKey::SizingPolicyManualWindowSize, "Manual window sizing"},
+		{LangKey::SettingsMaxPlayerLength, "Max player length"},
 		{LangKey::NameColumnHeader, "Name"},
 		{LangKey::SubgroupColumnHeader, "Sub"},
 		{LangKey::SubgroupNameColumnValue, "Subgroup"},

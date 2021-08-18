@@ -401,7 +401,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 }
 
 
-void AppChart::DrawRow(Alignment alignment, const char* charnameText, const char* subgroupText, std::function<float(const BoonDef&)> uptimeFunc,
+void AppChart::DrawRow(Alignment alignment, const std::string& charnameText, const char* subgroupText, std::function<float(const BoonDef&)> uptimeFunc,
                        std::function<float()> above90Func, bool hasEntity, const IEntity* const entity, bool hasColor, const ImVec4& color) {
 	Table::TableNextRow();
 
@@ -411,7 +411,14 @@ void AppChart::DrawRow(Alignment alignment, const char* charnameText, const char
 
 	// charname
 	Table::TableNextColumn();
-	ImGui::TextUnformatted(charnameText);
+	int maxPlayerLength = settings.getMaxPlayerLength(index);
+	std::string shortenedCharname;
+	if (maxPlayerLength == 0 || charnameText.length() <= maxPlayerLength) {
+		shortenedCharname = charnameText;
+	} else {
+		shortenedCharname = charnameText.substr(0, maxPlayerLength);
+	}
+	ImGui::TextUnformatted(shortenedCharname.c_str());
 
 	// subgroup
 	if (Table::TableNextColumn()) {
