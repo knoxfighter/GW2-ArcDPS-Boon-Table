@@ -20,7 +20,7 @@ protected:
 	bool self = false;
 
 public:
-	Player(uintptr_t new_id, const std::string& new_name, const std::string& new_account_name, uint8_t new_subgroup, Prof new_profession);
+	Player(uintptr_t new_id, const std::string& new_name, const std::string& new_account_name, uint8_t new_subgroup, Prof new_profession, bool new_self);
 
 	[[nodiscard]] uint8_t getSubgroup() const override;
 	[[nodiscard]] bool isSelf() const override;

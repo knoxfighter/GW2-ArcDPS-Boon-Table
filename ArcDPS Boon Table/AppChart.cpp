@@ -136,7 +136,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 	const unsigned int above90ColumnId = 128 - 3;
 
 	// we have to get it here, cause it will lock tracker.players_mtx itself (which causes a crash, when it is already locked)
-	IPlayer* self_player = tracker.getIPlayer(2000);
+	IPlayer* self_player = tracker.getSelfIPlayer();
 
 	std::scoped_lock<std::mutex, std::mutex> lock(tracker.players_mtx, tracker.npcs_mtx);
 

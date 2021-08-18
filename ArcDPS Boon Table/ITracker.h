@@ -19,6 +19,7 @@ public:
 
 	virtual IPlayer* getIPlayer(uintptr_t new_player) = 0;
 	virtual IPlayer* getIPlayer(std::string new_player) = 0;
+	virtual IPlayer* getSelfIPlayer() = 0;
 	virtual std::set<uintptr_t> getAllPlayerIds() = 0;
 
 	virtual IEntity* getIEntity(uintptr_t new_entity) = 0;

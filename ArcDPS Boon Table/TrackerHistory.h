@@ -64,6 +64,7 @@ public:
 	float getAverageOver90() const override;
 	IPlayer* getIPlayer(uintptr_t new_player) override;
 	IPlayer* getIPlayer(std::string new_player) override;
+	IPlayer* getSelfIPlayer() override;
 	std::set<uintptr_t> getAllPlayerIds() override;
 	IEntity* getIEntity(uintptr_t new_entity) override;
 	bool isSquad() const override;

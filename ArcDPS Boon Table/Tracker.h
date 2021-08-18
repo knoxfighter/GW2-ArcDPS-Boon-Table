@@ -22,8 +22,8 @@ public:
 	bool isSquad() const override;
 	
 	void addPlayer(ag* src, ag* dst);
-	void addPlayer(uintptr_t id, uint8_t subgroup, Prof profession, std::string characterName, std::string accountName);
-	void addNewPlayer(uintptr_t id, uint8_t subgroup, Prof profession, std::string characterName, std::string accountName);
+	void addPlayer(uintptr_t id, uint8_t subgroup, Prof profession, std::string characterName, std::string accountName, bool self);
+	void addNewPlayer(uintptr_t id, uint8_t subgroup, Prof profession, std::string characterName, std::string accountName, bool self);
 	void addNPC(uintptr_t id, std::string name, cbtevent* ev);
 	void removePlayer(ag* src);
 	void clearPlayers();//marks all players as not in squad
@@ -33,6 +33,7 @@ public:
 	Player* getPlayer(std::string new_player);
 	IPlayer* getIPlayer(uintptr_t new_player) override;
 	IPlayer* getIPlayer(std::string new_player) override;
+	IPlayer* getSelfIPlayer() override;
 	std::unordered_map<uintptr_t, Player>& getPlayers();
 	std::set<uintptr_t> getAllPlayerIds() override;
 

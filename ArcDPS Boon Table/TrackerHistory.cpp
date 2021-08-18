@@ -53,6 +53,14 @@ IPlayer* TrackerHistory::getIPlayer(std::string new_player) {
 	}
 }
 
+IPlayer* TrackerHistory::getSelfIPlayer() {
+	for (auto& player : players) {
+		if (player.second.isSelf()) {
+			return &player.second;
+		}
+	}
+}
+
 std::set<uintptr_t> TrackerHistory::getAllPlayerIds() {
 	std::set<uintptr_t> ret;
 	for (const auto& player : players) {

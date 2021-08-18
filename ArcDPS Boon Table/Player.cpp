@@ -4,7 +4,8 @@ Player::Player(uintptr_t new_id = 0,
 	const std::string& new_name = "",
 	const std::string& new_account_name = "",
 	uint8_t new_subgroup = 1,
-	Prof new_profession = PROF_UNKNOWN)
+	Prof new_profession = PROF_UNKNOWN,
+    bool new_self = false)
 {
 	id = new_id;
 	name = new_name;
@@ -13,10 +14,7 @@ Player::Player(uintptr_t new_id = 0,
 	in_combat = false;
 	subgroup = new_subgroup;
 	profession = new_profession;
-
-	if (id == 2000) {
-        self = true;
-	}
+	self = new_self;
 }
 
 uint8_t Player::getSubgroup() const {

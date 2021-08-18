@@ -17,14 +17,15 @@ void Tracker::addPlayer(ag* src, ag* dst) {
 	std::string characterName = std::string(src->name);
 	std::string accountName = std::string(dst->name);
 
-	addPlayer(id, subgroup, profession, characterName, accountName);
+	addPlayer(id, subgroup, profession, characterName, accountName, dst->self);
 }
 
 void Tracker::addPlayer(uintptr_t id,
                         uint8_t subgroup,
                         Prof profession,
                         std::string characterName,
-                        std::string accountName) {
+                        std::string accountName,
+						bool self = false) {
 	// remove ':' from accountName if it is there
 	if (accountName.at(0) == ':') {
 		accountName.erase(0, 1);
@@ -41,8 +42,9 @@ void Tracker::addPlayer(uintptr_t id,
 		current_player->name = characterName;
 		current_player->subgroup = subgroup;
 		current_player->profession = profession;
+		current_player->self = self;
 	} else {
-		addNewPlayer(id, subgroup, profession, characterName, accountName);
+		addNewPlayer(id, subgroup, profession, characterName, accountName, self);
 	}
 }
 
@@ -50,47 +52,46 @@ void Tracker::addNewPlayer(uintptr_t id,
                            uint8_t subgroup,
                            Prof profession,
                            std::string characterName,
-                           std::string accountName) {
+                           std::string accountName,
+						   bool self = false) {
 	std::unique_lock<std::mutex> lock(players_mtx);
-	players.try_emplace(id, id, characterName, accountName, subgroup, profession);
+	players.try_emplace(id, id, characterName, accountName, subgroup, profession, self);
 	// give charts index to newly player
 	charts.addPlayer(id);
 	lock.unlock();
 }
 
 void Tracker::addNPC(uintptr_t id, std::string name, cbtevent* ev) {
-	NPC* npc = getNPC(name);
-	if (npc) {
-		if (npc && npc->id != id && npc->in_combat) {
-			//If there is a new npc id it means that a new instance was spawned, and the combat timer ran for the old instance without it beeing spawned
-			// this removes the npc from combat, if its actually in combat it will be set later in this function
-			// worst set the combat start to a later point, when the npc got its first buff, which might be later during the fight than you actually could buff it
-			npc->combatExit(ev);
-		}
-
-		// if npc already tracked, just update it
-		// npcs get tracked by their name, not their id (respawned npcs get new ids)
-		npc->id = id;
-		//current_npc->name = name;
-	} else {
-		// add new npc
-		std::unique_lock<std::mutex> lock(npcs_mtx);
-		npcs.emplace_back(id, name);
-		lock.unlock();
-
-		// we don't need this here.
-		// bakeCombatData();
-	}
-	
-	if (ev) {
-		Player* self_player = getPlayer(2000);
-		if (self_player && self_player->in_combat && getNPC(id)) {
-			NPC* npc = getNPC(id);
-			if (npc && !npc->in_combat) {
-				npc->combatEnter(ev);
-			}
-		}
-	}
+	// FIXME: NPC stuff
+	// NPC* npc = getNPC(name);
+	// if (npc) {
+	// 	if (npc && npc->id != id && npc->in_combat) {
+	// 		//If there is a new npc id it means that a new instance was spawned, and the combat timer ran for the old instance without it beeing spawned
+	// 		// this removes the npc from combat, if its actually in combat it will be set later in this function
+	// 		// worst set the combat start to a later point, when the npc got its first buff, which might be later during the fight than you actually could buff it
+	// 		npc->combatExit(ev);
+	// 	}
+	//
+	// 	// if npc already tracked, just update it
+	// 	// npcs get tracked by their name, not their id (respawned npcs get new ids)
+	// 	npc->id = id;
+	// 	//current_npc->name = name;
+	// } else {
+	// 	// add new npc
+	// 	std::unique_lock<std::mutex> lock(npcs_mtx);
+	// 	npcs.emplace_back(id, name);
+	// 	lock.unlock();
+	// }
+	//
+	// if (ev) {
+	// 	Player* self_player = getPlayer(2000);
+	// 	if (self_player && self_player->in_combat && getNPC(id)) {
+	// 		NPC* npc = getNPC(id);
+	// 		if (npc && !npc->in_combat) {
+	// 			npc->combatEnter(ev);
+	// 		}
+	// 	}
+	// }
 }
 
 void Tracker::removePlayer(ag* src) {
@@ -193,6 +194,14 @@ IPlayer* Tracker::getIPlayer(uintptr_t new_player) {
 
 IPlayer* Tracker::getIPlayer(std::string new_player) {
 	return getPlayer(new_player);
+}
+
+IPlayer* Tracker::getSelfIPlayer() {
+	for (auto& player : players) {
+		if (player.second.self == true) {
+			return &player.second;
+		}
+	}
 }
 
 std::unordered_map<uintptr_t, Player>& Tracker::getPlayers() {
