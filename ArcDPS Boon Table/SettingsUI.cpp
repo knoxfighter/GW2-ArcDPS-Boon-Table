@@ -120,8 +120,9 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 
 	if (ImGui::BeginMenu(lang.translate(LangKey::SettingsDisplay).c_str())) {
 		ImGui::Checkbox(lang.translate(LangKey::SettingsShowLabel).c_str(), &settings.tables[tableIndex].show_label);
-		
-		std::string maxDisplayedInputLabel = std::format("{}##maxDisplayedInput", lang.translate(LangKey::SettingsMaxDisplayed));
+
+		std::string maxDisplayedInputLabel = lang.translate(LangKey::SettingsMaxDisplayed);
+		maxDisplayedInputLabel.append("##maxDisplayedInput");
 		ImGui::InputInt(maxDisplayedInputLabel.c_str(), &settings.tables[tableIndex].max_displayed);
 		ImGui::SameLine();
 		HelpMarker(lang.translate(LangKey::SettingsMaxDisplayedPopup).c_str());

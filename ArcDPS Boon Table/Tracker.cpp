@@ -202,6 +202,8 @@ IPlayer* Tracker::getSelfIPlayer() {
 			return &player.second;
 		}
 	}
+
+	return nullptr;
 }
 
 std::unordered_map<uintptr_t, Player>& Tracker::getPlayers() {

@@ -59,6 +59,7 @@ IPlayer* TrackerHistory::getSelfIPlayer() {
 			return &player.second;
 		}
 	}
+	return nullptr;
 }
 
 std::set<uintptr_t> TrackerHistory::getAllPlayerIds() {
