@@ -255,6 +255,7 @@
     <ClCompile Include="PlayerHistory.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="SettingsUI.cpp" />
+    <ClCompile Include="SettingsUIGlobal.cpp" />
     <ClCompile Include="Tracker.cpp" />
     <ClCompile Include="TrackerHistory.cpp" />
     <ClCompile Include="UpdateChecker.cpp" />
@@ -294,6 +295,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="SettingsUI.h" />
+    <ClInclude Include="SettingsUIGlobal.h" />
     <ClInclude Include="Tracker.h" />
     <ClInclude Include="TrackerHistory.h" />
     <ClInclude Include="UpdateChecker.h" />

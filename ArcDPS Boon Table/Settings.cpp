@@ -47,8 +47,12 @@ bool Settings::isShowSelfOnTop(int tableIndex) const {
 	return tables[tableIndex].show_self_on_top;
 }
 
-WPARAM Settings::getTableKey() const {
-	return table_key;
+std::array<WPARAM, MaxTableWindowAmount> Settings::getShortcuts() const {
+	std::array<WPARAM, MaxTableWindowAmount> ret;
+	for (size_t i = 0; i < MaxTableWindowAmount; ++i) {
+		ret[i] = tables[i].shortcut;
+	}
+	return ret;
 }
 
 bool Settings::isShowPlayers(int tableIndex) const {
@@ -185,13 +189,32 @@ void Settings::readFromFile() {
 	ini.get_to(*this);
 
 	convertFromSimpleIni(ini);
+
+	// convertion/defaults for shortcuts
+	if (ini.has("table_key")) {
+		ini.at("table_key").get_to(tables[0].shortcut);
+	} else {
+		if (!ini.has("tables")) {
+			tables[0].shortcut = 66;
+		} else {
+			auto& iniTables = ini.at("tables");
+			if (!iniTables.has("0")) {
+				tables[0].shortcut = 66;
+			} else {
+				auto& zero = iniTables.at("0");
+				if (!zero.has("shortcut")) {
+					tables[0].shortcut = 66;
+				}
+			}
+		}
+	}
 }
 
 void Settings::convertFromSimpleIni(modernIni::Ini& ini) {
 	if (ini.has("general")) {
 		auto& general = ini.at("general");
 		if (general.has("key")) {
-			general.at("key").get_to(table_key);
+			general.at("key").get_to(tables[0].shortcut);
 		}
 	}
 

@@ -22,6 +22,7 @@ LANG_KEY_ENUM(
 	Unaligned,
 	ShowChart,
 
+	SettingsWindowName,
 	SettingsSelfOnTop,
 	SettingsPlayers,
 	SettingsSubgroups,
@@ -66,6 +67,13 @@ LANG_KEY_ENUM(
 
 	SettingsHistory,
 	SettingsHistoryCurrent,
+
+	// Make sure, this stay in order!
+	SettingsShortcut,
+	SettingsShortcut1,
+	SettingsShortcut2,
+	SettingsShortcut3,
+	SettingsShortcut4,
 
 	NameColumnHeader,
 	SubgroupColumnHeader,
@@ -201,6 +209,7 @@ private:
 		{LangKey::Center, "Center"},
 		{LangKey::Unaligned, "Unaligned"},
 		{LangKey::ShowChart, "Boon Table"},
+		{LangKey::SettingsWindowName, "Boon Table Settings"},
 		{LangKey::SettingsSelfOnTop, "Show self on top"},
 		{LangKey::SettingsPlayers, "Players"},
 		{LangKey::SettingsSubgroups, "Subgroups"},
@@ -234,6 +243,11 @@ private:
 		{LangKey::SizingPolicySizeContentToWindow, "Size content to window"},
 		{LangKey::SizingPolicyManualWindowSize, "Manual window sizing"},
 		{LangKey::SettingsMaxPlayerLength, "Max player length"},
+		{LangKey::SettingsShortcut, "Shortcut #0"},
+		{LangKey::SettingsShortcut1, "Shortcut #1"},
+		{LangKey::SettingsShortcut2, "Shortcut #2"},
+		{LangKey::SettingsShortcut3, "Shortcut #3"},
+		{LangKey::SettingsShortcut4, "Shortcut #4"},
 		{LangKey::NameColumnHeader, "Name"},
 		{LangKey::SubgroupColumnHeader, "Sub"},
 		{LangKey::SubgroupNameColumnValue, "Subgroup"},

@@ -2,6 +2,8 @@
 
 #include <optional>
 #include <array>
+#include <string>
+#include <cstdint>
 
 #include "Helpers.h"
 #include "ITracker.h"
@@ -13,6 +15,7 @@ MODERN_INI_DEFINE_TYPE_NON_INTRUSIVE_NO_EXCEPT(ImVec2, x, y)
 MODERN_INI_DEFINE_TYPE_NON_INTRUSIVE_NO_EXCEPT(ImVec4, x, y, z, w)
 
 class SettingsUI;
+class SettingsUIGlobal;
 
 enum class SizingPolicy {
 	SizeToContent,
@@ -26,6 +29,7 @@ std::string to_string(SizingPolicy sizingPolicy);
 
 class Settings {
 	friend SettingsUI;
+	friend SettingsUIGlobal;
 	
 public:
 	Settings();
@@ -59,7 +63,7 @@ public:
 	[[nodiscard]] uint8_t getCurrentHistory(int tableIndex) const;
 	[[nodiscard]] int getMaxPlayerLength(int tableIndex) const;
 
-	[[nodiscard]] WPARAM getTableKey() const;
+	[[nodiscard]] std::array<WPARAM, MaxTableWindowAmount> getShortcuts() const;
 	[[nodiscard]] const ImVec4& getSelfColor() const;
 	[[nodiscard]] const ImVec4& get100Color() const;
 	[[nodiscard]] const ImVec4& get0Color() const;
@@ -99,16 +103,16 @@ private:
 		int max_displayed = 0;
 		std::optional<ImVec2> window_padding;
 		int max_player_length = 0;
+		WPARAM shortcut = 0;
 		// history value 1-based (0 = current)
 		uint8_t current_history = 0;
 
 		MODERN_INI_DEFINE_TYPE_INTRUSIVE_NO_EXCEPT(Table, show, show_self_on_top, show_players, show_npcs, show_subgroups, show_total, 
 			show_uptime_as_progress_bar, show_colored, alternating_row_bg, show_label, alignment, hide_header, sizing_policy, boon_column_width,
 			show_only_subgroup, show_background, position, corner_position, corner_vector, anchor_panel_corner_position, self_panel_corner_position,
-			from_window_id, max_displayed, window_padding, max_player_length)
+			from_window_id, max_displayed, window_padding, max_player_length, shortcut)
 	};
 	
-	WPARAM table_key = 66;
 	std::optional<ImVec4> self_color;
 	std::optional<ImVec4> _100_color;
 	std::optional<ImVec4> _0_color;
@@ -119,7 +123,7 @@ private:
 	void saveToFile();
 	void convertFromSimpleIni(modernIni::Ini& ini);
 
-	MODERN_INI_DEFINE_TYPE_INTRUSIVE_NO_EXCEPT(Settings, table_key, self_color, _100_color, _0_color, tables)
+	MODERN_INI_DEFINE_TYPE_INTRUSIVE_NO_EXCEPT(Settings, self_color, _100_color, _0_color, tables)
 };
 
 extern Settings settings;

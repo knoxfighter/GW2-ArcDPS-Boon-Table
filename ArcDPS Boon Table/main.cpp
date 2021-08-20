@@ -17,6 +17,7 @@
 #include "History.h"
 #include "Lang.h"
 #include "Settings.h"
+#include "SettingsUIGlobal.h"
 #include "UpdateChecker.h"
 #include "extension/Widgets.h"
 #include "imgui/imgui_internal.h"
@@ -137,7 +138,7 @@ arcdps_exports* mod_init()
 		arc_exports.wnd_nofilter = mod_wnd;
 		arc_exports.combat = mod_combat;
 		arc_exports.imgui = mod_imgui;
-		// arc_exports.options_end = mod_options;
+		arc_exports.options_end = mod_options;
 		arc_exports.options_windows = mod_options_windows;
 	} else {
 		arc_exports.sig = 0;
@@ -213,7 +214,9 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	if (io->KeysDown[arc_global_mod1] && io->KeysDown[arc_global_mod2])
 	{
-		if (io->KeysDown[settings.getTableKey()]) return 0;
+		for (const auto& shortcut : settings.getShortcuts()) {
+			if (io->KeysDown[shortcut]) return 0;
+		}
 	}
 	return uMsg;
 }
@@ -382,11 +385,12 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 
 	auto io = &ImGui::GetIO();
 
-	if (io->KeysDown[arc_global_mod1] && io->KeysDown[arc_global_mod2])
-	{
-		if (ImGui::IsKeyPressed(settings.getTableKey()))
-		{
-			settings.setShowChart(0, !settings.isShowChart(0));
+	if (io->KeysDown[arc_global_mod1] && io->KeysDown[arc_global_mod2]) {
+		const auto& shortcuts = settings.getShortcuts();
+		for (size_t i = 0; i < MaxTableWindowAmount; ++i) {
+			if (ImGui::IsKeyPressed(shortcuts[i])) {
+				settings.setShowChart(i, !settings.isShowChart(i));
+			}
 		}
 	}
 
@@ -397,12 +401,8 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 }
 uintptr_t mod_options()
 {
-	ImGui::Checkbox(lang.translate(LangKey::ShowChart).c_str(), &settings.isShowChart(0));
-	ImGui::SameLine();
-	ImGuiEx::BeginMenuChild("optionsBoonSubmenu", "", []() {
-		for (int i = 1; i < MaxTableWindowAmount; ++i) {
-			ImGui::Checkbox(std::to_string(i).c_str(), &settings.isShowChart(i));
-		}
+	ImGuiEx::BeginMenu(lang.translate(LangKey::SettingsWindowName).c_str(), []() {
+		settingsUiGlobal.Draw();
 	});
 
 	return 0;
@@ -413,7 +413,13 @@ uintptr_t mod_options()
  */
 uintptr_t mod_options_windows(const char* windowname) {
 	if (!windowname) {
-		mod_options();
+		ImGui::Checkbox(lang.translate(LangKey::ShowChart).c_str(), &settings.isShowChart(0));
+		ImGui::SameLine();
+		ImGuiEx::BeginMenuChild("optionsBoonSubmenu", "", []() {
+			for (int i = 1; i < MaxTableWindowAmount; ++i) {
+				ImGui::Checkbox(std::to_string(i).c_str(), &settings.isShowChart(i));
+			}
+		});
 	}
 	return 0;
 }
