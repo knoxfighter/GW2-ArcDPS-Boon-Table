@@ -73,7 +73,7 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 	ImGui::Checkbox(lang.translate(LangKey::SettingsPlayers).c_str(), &settings.tables[tableIndex].show_players);
 	ImGui::Checkbox(lang.translate(LangKey::SettingsSubgroups).c_str(), &settings.tables[tableIndex].show_subgroups);
 	ImGui::Checkbox(lang.translate(LangKey::SettingsTotal).c_str(), &settings.tables[tableIndex].show_total);
-	ImGui::Checkbox(lang.translate(LangKey::SettingsNPC).c_str(), &settings.tables[tableIndex].show_npcs);
+	// ImGui::Checkbox(lang.translate(LangKey::SettingsNPC).c_str(), &settings.tables[tableIndex].show_npcs);
 
 	ImGui::Separator();
 	if (ImGui::BeginMenu(lang.translate(LangKey::SettingsColumnSetup).c_str(), table != nullptr)) {
