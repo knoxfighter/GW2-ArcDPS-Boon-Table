@@ -143,6 +143,10 @@ int Settings::getMaxPlayerLength(int tableIndex) const {
 	return tables[tableIndex].max_player_length;
 }
 
+const std::string& Settings::getAppearAsInOption(int tableIndex) const {
+	return tables[tableIndex].appear_as_in_option;
+}
+
 const ImVec4& Settings::getSelfColor() const {
 	if (self_color) {
 		return self_color.value();

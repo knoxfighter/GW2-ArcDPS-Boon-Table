@@ -198,6 +198,10 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		// use the buffer in `SettingsUIGlobal`
 		ImGuiEx::KeyInput(lang.translate(static_cast<LangKey>(static_cast<size_t>(LangKey::SettingsShortcut) + tableIndex)).c_str(), id.c_str(), settingsUiGlobal.shortcut[tableIndex], 4, settings.tables[tableIndex].shortcut);
 
+		if (ImGui::InputText("appear as in option##appearAsInOption", appearAsInOption, 128)) {
+			settings.tables[tableIndex].appear_as_in_option = appearAsInOption;
+		}
+		
 		ImGui::EndMenu();
 	}
 
@@ -295,6 +299,7 @@ void SettingsUI::initialize(int tableIndex) {
 	cornerPosition = static_cast<int>(settings.tables[tableIndex].corner_position);
 	selfPanelCornerPosition = static_cast<int>(settings.tables[tableIndex].self_panel_corner_position);
 	anchorPanelCornerPosition = static_cast<int>(settings.tables[tableIndex].anchor_panel_corner_position);
+	settings.tables[tableIndex].appear_as_in_option.copy(appearAsInOption, 128);
 
 	const std::optional<ImVec2>& paddingOptional = settings.getWindowPadding(tableIndex);
 	if (paddingOptional) {

@@ -417,7 +417,11 @@ uintptr_t mod_options_windows(const char* windowname) {
 		ImGui::SameLine();
 		ImGuiEx::BeginMenuChild("optionsBoonSubmenu", "", []() {
 			for (int i = 1; i < MaxTableWindowAmount; ++i) {
-				ImGui::Checkbox(std::to_string(i).c_str(), &settings.isShowChart(i));
+				std::string str = settings.getAppearAsInOption(i);
+				if (str.empty()) {
+					str = std::to_string(i);
+				}
+				ImGui::Checkbox(str.c_str(), &settings.isShowChart(i));
 			}
 		});
 	}

@@ -9,6 +9,7 @@ public:
 
 private:
 	float windowPadding[2]{};
+	char appearAsInOption[128]{};
 	
 	void initialize(int tableIndex);
 	bool tableColumnSubMenu(ImGuiEx::BigTable::ImGuiTable* table, const char* label, BoonType type, int beginId) const;
