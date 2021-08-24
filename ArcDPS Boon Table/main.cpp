@@ -159,64 +159,70 @@ uintptr_t mod_release()
 /* window callback -- return is assigned to umsg (return zero to not be processed by arcdps or game) */
 uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	auto const io = &ImGui::GetIO();
+	try {
+		auto const io = &ImGui::GetIO();
 
-	switch (uMsg)
-	{
-	case WM_KEYUP:
-	case WM_SYSKEYUP:
-	{
-		const int vkey = (int)wParam;
-		io->KeysDown[vkey] = 0;
-		if (vkey == VK_CONTROL)
+		switch (uMsg)
 		{
-			io->KeyCtrl = false;
-		}
-		else if (vkey == VK_MENU)
+		case WM_KEYUP:
+		case WM_SYSKEYUP:
 		{
-			io->KeyAlt = false;
+			const int vkey = (int)wParam;
+			io->KeysDown[vkey] = 0;
+			if (vkey == VK_CONTROL)
+			{
+				io->KeyCtrl = false;
+			}
+			else if (vkey == VK_MENU)
+			{
+				io->KeyAlt = false;
+			}
+			else if (vkey == VK_SHIFT)
+			{
+				io->KeyShift = false;
+			}
+			break;
 		}
-		else if (vkey == VK_SHIFT)
+		case WM_KEYDOWN:
+		case WM_SYSKEYDOWN:
 		{
-			io->KeyShift = false;
+			const int vkey = (int)wParam;
+			io->KeysDown[vkey] = 1;
+			if (vkey == VK_CONTROL)
+			{
+				io->KeyCtrl = true;
+			}
+			else if (vkey == VK_MENU)
+			{
+				io->KeyAlt = true;
+			}
+			else if (vkey == VK_SHIFT)
+			{
+				io->KeyShift = true;
+			}
+			break;
 		}
-		break;
-	}
-	case WM_KEYDOWN:
-	case WM_SYSKEYDOWN:
-	{
-		const int vkey = (int)wParam;
-		io->KeysDown[vkey] = 1;
-		if (vkey == VK_CONTROL)
+		case WM_ACTIVATEAPP:
 		{
-			io->KeyCtrl = true;
+			if (!wParam)
+			{
+				io->KeysDown[arc_global_mod1] = false;
+				io->KeysDown[arc_global_mod2] = false;
+			}
+			break;
 		}
-		else if (vkey == VK_MENU)
-		{
-			io->KeyAlt = true;
 		}
-		else if (vkey == VK_SHIFT)
-		{
-			io->KeyShift = true;
-		}
-		break;
-	}
-	case WM_ACTIVATEAPP:
-	{
-		if (!wParam)
-		{
-			io->KeysDown[arc_global_mod1] = false;
-			io->KeysDown[arc_global_mod2] = false;
-		}
-		break;
-	}
-	}
 
-	if (io->KeysDown[arc_global_mod1] && io->KeysDown[arc_global_mod2])
-	{
-		for (const auto& shortcut : settings.getShortcuts()) {
-			if (io->KeysDown[shortcut]) return 0;
+		if (io->KeysDown[arc_global_mod1] && io->KeysDown[arc_global_mod2])
+		{
+			for (const auto& shortcut : settings.getShortcuts()) {
+				if (io->KeysDown[shortcut]) return 0;
+			}
 		}
+	} catch (const std::exception& e) {
+		arc_log_file("Boon Table: exception in mod_wnd");
+		arc_log_file(e.what());
+		throw e;
 	}
 	return uMsg;
 }
@@ -235,176 +241,193 @@ uintptr_t npc_ids[num_of_npcs];
 /* combat callback -- may be called asynchronously. return ignored */
 /* one participant will be party/squad, or minion of. no spawn statechange events. despawn statechange only on marked boss npcs */
 uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision) {
-	/* ev is null. dst will only be valid on tracking add. skillname will also be null */
-	history.Event(dst);
-	
-	if (!ev) {
-		if (src) {
-			/* notify tracking change */
-			if (!src->elite) {
-				/* add */
-				if (src->prof) {
-					if (dst && dst->name) {
-						liveTracker.addPlayer(src,dst);
+	try {
+		/* ev is null. dst will only be valid on tracking add. skillname will also be null */
+		history.Event(dst);
+		
+		if (!ev) {
+			if (src) {
+				/* notify tracking change */
+				if (!src->elite) {
+					/* add */
+					if (src->prof) {
+						if (dst && dst->name) {
+							liveTracker.addPlayer(src,dst);
+							charts.sortNeeded();
+						}
+					}
+					/* remove */
+					else {
+						liveTracker.removePlayer(src);
 						charts.sortNeeded();
 					}
 				}
-				/* remove */
-				else {
-					liveTracker.removePlayer(src);
-					charts.sortNeeded();
-				}
-			}
-			/* notify target change */
-			else if (src->elite == 1) {
+				/* notify target change */
+				else if (src->elite == 1) {
 
-			}
-		}
-	}
-	/* combat event. skillname may be null. non-null skillname will remain static until module is unloaded. refer to evtc notes for complete detail */
-	else {
-		/* common */
-
-		/*
-		This code crashes, cause dst->name is not checked.
-		Also the npc tracking is completely broken and needs deeper fixing and investigation!
-
-		for (int i = 0; i < num_of_npcs; i++) {
-			//Player
-			// Self: 200
-			// Own Illusion: 200
-			// Other players: 200
-			//Friendly
-			// Glenna: 194
-			// w7 Djins: 194
-			// Priory Arcanist: 194
-			// Saul: 194
-			//Enemy:
-			// w7 trash: 199
-			// undead eagle in orr: 263
-			if (dst->team == 194 && std::regex_match(dst->name, npc_names[i])) {
-				npc_ids[i] = dst->id;
-				tracker.addNPC(dst->id, dst->name, ev);
-			}
-		}
-		*/
-
-		if(ev->time > 0) current_time = ev->time;
-
-		/* statechange */
-		if (ev->is_statechange) {
-			if (ev->is_statechange == CBTS_ENTERCOMBAT) {
-				Player* player = liveTracker.getPlayer(src->id);
-				if (player) {
-					player->combatEnter(ev);
-
-					// FIXME: NPC stuff
-					// if(src->self) {
-					// 	for (NPC& npc : tracker.npcs) {
-					// 		npc.combatEnter(ev);
-					// 	}
-					// }
-					charts.sortNeeded();
-				}
-			}
-			else if (ev->is_statechange == CBTS_EXITCOMBAT) {
-				Player* player = liveTracker.getPlayer(src->id);
-				if (player)
-				{
-					player->combatExit(ev);
-
-					// FIXME: NPC stuff
-					// if (src->self)
-					// {
-					// 	for (NPC& npc : tracker.npcs) {
-					// 		npc.combatExit(ev);
-					// 	}
-					// }
-				}
-			}
-			else if (ev->is_statechange == CBTS_STATRESET) {
-				history.Reset(ev);
-				
-				std::lock_guard<std::mutex> guard(liveTracker.players_mtx);
-				for (auto& pair : liveTracker.getPlayers()) {
-					Player& player = pair.second;
-					player.combatExit(ev);
-					// do not call combatEnter on Player, cause ev->dst_agent (subgroup) is not set
-					player.Entity::combatEnter(ev);
-				}
-			} else if (ev->is_statechange == CBTS_LOGSTART) {
-				history.LogStart(ev);
-			} else if (ev->is_statechange == CBTS_LOGEND) {
-				history.LogEnd(ev);
-			}
-		}
-		/* activation */
-		else if (ev->is_activation) {
-		}
-
-		/* buff remove */
-		else if (ev->is_buffremove) {
-			if (ev->is_buffremove == CBTB_MANUAL) { //TODO: move to tracker
-				Entity* entity = liveTracker.getEntity(src->id);
-				if (entity) {
-					entity->removeBoon(ev);
-					charts.sortNeeded();
 				}
 			}
 		}
-		/* buff */
-		else if (ev->buff) {
-			/* damage */
-			if (ev->buff_dmg) {
-
-			}
-			/* application */
-			else {
-				liveTracker.applyBoon(src, dst, ev);
-				charts.sortNeeded();
-			}
-		}
-		/* physical */
+		/* combat event. skillname may be null. non-null skillname will remain static until module is unloaded. refer to evtc notes for complete detail */
 		else {
-			// read out if players are above 90% health
-			liveTracker.dealtDamage(src, ev);
-		}
+			/* common */
 
-		/* common */
+			/*
+			This code crashes, cause dst->name is not checked.
+			Also the npc tracking is completely broken and needs deeper fixing and investigation!
+
+			for (int i = 0; i < num_of_npcs; i++) {
+				//Player
+				// Self: 200
+				// Own Illusion: 200
+				// Other players: 200
+				//Friendly
+				// Glenna: 194
+				// w7 Djins: 194
+				// Priory Arcanist: 194
+				// Saul: 194
+				//Enemy:
+				// w7 trash: 199
+				// undead eagle in orr: 263
+				if (dst->team == 194 && std::regex_match(dst->name, npc_names[i])) {
+					npc_ids[i] = dst->id;
+					tracker.addNPC(dst->id, dst->name, ev);
+				}
+			}
+			*/
+
+			if(ev->time > 0) current_time = ev->time;
+
+			/* statechange */
+			if (ev->is_statechange) {
+				if (ev->is_statechange == CBTS_ENTERCOMBAT) {
+					Player* player = liveTracker.getPlayer(src->id);
+					if (player) {
+						player->combatEnter(ev);
+
+						// FIXME: NPC stuff
+						// if(src->self) {
+						// 	for (NPC& npc : tracker.npcs) {
+						// 		npc.combatEnter(ev);
+						// 	}
+						// }
+						charts.sortNeeded();
+					}
+				}
+				else if (ev->is_statechange == CBTS_EXITCOMBAT) {
+					Player* player = liveTracker.getPlayer(src->id);
+					if (player)
+					{
+						player->combatExit(ev);
+
+						// FIXME: NPC stuff
+						// if (src->self)
+						// {
+						// 	for (NPC& npc : tracker.npcs) {
+						// 		npc.combatExit(ev);
+						// 	}
+						// }
+					}
+				}
+				else if (ev->is_statechange == CBTS_STATRESET) {
+					history.Reset(ev);
+					
+					std::lock_guard<std::mutex> guard(liveTracker.players_mtx);
+					for (auto& pair : liveTracker.getPlayers()) {
+						Player& player = pair.second;
+						player.combatExit(ev);
+						// do not call combatEnter on Player, cause ev->dst_agent (subgroup) is not set
+						player.Entity::combatEnter(ev);
+					}
+				} else if (ev->is_statechange == CBTS_LOGSTART) {
+					history.LogStart(ev);
+				} else if (ev->is_statechange == CBTS_LOGEND) {
+					history.LogEnd(ev);
+				}
+			}
+			/* activation */
+			else if (ev->is_activation) {
+			}
+
+			/* buff remove */
+			else if (ev->is_buffremove) {
+				if (ev->is_buffremove == CBTB_MANUAL) { //TODO: move to tracker
+					Entity* entity = liveTracker.getEntity(src->id);
+					if (entity) {
+						entity->removeBoon(ev);
+						charts.sortNeeded();
+					}
+				}
+			}
+			/* buff */
+			else if (ev->buff) {
+				/* damage */
+				if (ev->buff_dmg) {
+
+				}
+				/* application */
+				else {
+					liveTracker.applyBoon(src, dst, ev);
+					charts.sortNeeded();
+				}
+			}
+			/* physical */
+			else {
+				// read out if players are above 90% health
+				liveTracker.dealtDamage(src, ev);
+			}
+
+			/* common */
+		}
+	} catch(const std::exception& e) {
+		arc_log_file("Boon Table: exception in mod_combat");
+		arc_log_file(e.what());
+		throw e;
 	}
 	return 0;
 }
 
 uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 {
-	// ImGui::ShowDemoWindow();
-	
-	readArcExports();
+	try {
+		// ImGui::ShowDemoWindow();
+		
+		readArcExports();
 
-	if (!not_charsel_or_loading) return 0;
+		if (!not_charsel_or_loading) return 0;
 
-	auto io = &ImGui::GetIO();
+		auto io = &ImGui::GetIO();
 
-	if (io->KeysDown[arc_global_mod1] && io->KeysDown[arc_global_mod2]) {
-		const auto& shortcuts = settings.getShortcuts();
-		for (size_t i = 0; i < MaxTableWindowAmount; ++i) {
-			if (ImGui::IsKeyPressed(shortcuts[i])) {
-				settings.setShowChart(i, !settings.isShowChart(i));
+		if (io->KeysDown[arc_global_mod1] && io->KeysDown[arc_global_mod2]) {
+			const auto& shortcuts = settings.getShortcuts();
+			for (size_t i = 0; i < MaxTableWindowAmount; ++i) {
+				if (ImGui::IsKeyPressed(shortcuts[i])) {
+					settings.setShowChart(i, !settings.isShowChart(i));
+				}
 			}
 		}
+
+		charts.drawAll(!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0);
+
+		updateChecker.Draw();
+	} catch(const std::exception& e) {
+		arc_log_file("Boon Table: exception in mod_imgui");
+		arc_log_file(e.what());
+		throw e;
 	}
-
-	charts.drawAll(!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0);
-
-	updateChecker.Draw();
 	return 0;
 }
 uintptr_t mod_options()
 {
-	ImGuiEx::BeginMenu(lang.translate(LangKey::SettingsWindowName).c_str(), []() {
-		settingsUiGlobal.Draw();
-	});
-
+	try {
+		ImGuiEx::BeginMenu(lang.translate(LangKey::SettingsWindowName).c_str(), []() {
+			settingsUiGlobal.Draw();
+		});
+	} catch(const std::exception& e) {
+		arc_log_file("Boon Table: exception in mod_options");
+		arc_log_file(e.what());
+		throw e;
+	}
 	return 0;
 }
 
@@ -412,18 +435,24 @@ uintptr_t mod_options()
  * @return true to disable this option
  */
 uintptr_t mod_options_windows(const char* windowname) {
-	if (!windowname) {
-		ImGui::Checkbox(lang.translate(LangKey::ShowChart).c_str(), &settings.isShowChart(0));
-		ImGui::SameLine();
-		ImGuiEx::BeginMenuChild("optionsBoonSubmenu", "", []() {
-			for (int i = 1; i < MaxTableWindowAmount; ++i) {
-				std::string str = settings.getAppearAsInOption(i);
-				if (str.empty()) {
-					str = std::to_string(i);
+	try {
+		if (!windowname) {
+			ImGui::Checkbox(lang.translate(LangKey::ShowChart).c_str(), &settings.isShowChart(0));
+			ImGui::SameLine();
+			ImGuiEx::BeginMenuChild("optionsBoonSubmenu", "", []() {
+				for (int i = 1; i < MaxTableWindowAmount; ++i) {
+					std::string str = settings.getAppearAsInOption(i);
+					if (str.empty()) {
+						str = std::to_string(i);
+					}
+					ImGui::Checkbox(str.c_str(), &settings.isShowChart(i));
 				}
-				ImGui::Checkbox(str.c_str(), &settings.isShowChart(i));
-			}
-		});
+			});
+		}
+	} catch(const std::exception& e) {
+		arc_log_file("Boon Table: exception in mod_options_windows");
+		arc_log_file(e.what());
+		throw e;
 	}
 	return 0;
 }
