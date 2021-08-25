@@ -19,7 +19,20 @@ AppChartsContainer charts;
 
 namespace Table = ImGuiEx::BigTable;
 
+bool first = true;
+
 void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
+	if (first) {
+		first = false;
+		ImGuiID id = ImHashStr("Boon Table##Boon Table");
+		ImGuiWindowSettings* windowSettings = ImGui::FindWindowSettings(id);
+		ImGuiWindowSettings* newWindowSettings = ImGui::FindOrCreateWindowSettings("###Boon Table");
+		// ImGuiWindowSettings* newWindowSettings = ImGui::CreateNewWindowSettings("###Boon Table");
+		newWindowSettings->Size = windowSettings->Size;
+		newWindowSettings->Collapsed = windowSettings->Collapsed;
+		newWindowSettings->Pos = windowSettings->Pos;
+	}
+	
 	const std::optional<ImVec2>& windowPadding = settings.getWindowPadding(index);
 	if (windowPadding) {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, windowPadding.value());
@@ -91,11 +104,21 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		flags |= ImGuiWindowFlags_NoMove;
 	}
 
-	std::string windowName = lang.translate(LangKey::WindowHeader);
-	windowName.append("##Boon Table");
+	std::string titleBarStr;
+	const auto& titleBarSet = settings.getTitleBar(index);
+	if (titleBarSet) {
+		titleBarStr = titleBarSet.value();
+	} else {
+		titleBarStr = lang.translate(LangKey::WindowHeader);
+	}
+	titleBarStr.append("###Boon Table");
 	if (index > 0)
-		windowName.append(std::to_string(index));
-	ImGui::Begin(windowName.c_str(), p_open, flags);
+		titleBarStr.append(std::to_string(index));
+	
+	std::string windowId = "##Boon Table";
+	if (index > 0)
+		windowId.append(std::to_string(index));
+	ImGui::Begin(titleBarStr.c_str(), p_open, flags);
 
 	ImGuiWindow* currentWindow = ImGui::GetCurrentWindow();
 
