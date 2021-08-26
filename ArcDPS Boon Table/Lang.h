@@ -180,6 +180,7 @@ LANG_KEY_ENUM(
 	UpdateError,
 
 	Unknown,
+	WvW,
 
 	// always last element
 	FINAL_ENTRY
@@ -354,6 +355,7 @@ private:
 		{LangKey::SettingsMaxDisplayed, "max displayed"},
 		{LangKey::SettingsMaxDisplayedPopup, "The amount of rows, that are displayed.\nTotals and Subgroups also count as row.\nIf you want a squad plus totals, you have to set this to '11'"},
 		{LangKey::Unknown, "Unknown"},
+		{LangKey::WvW, "WvW"},
 	};
 };
 

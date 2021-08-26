@@ -9,7 +9,10 @@ void History::LogStart(cbtevent* event) {
 		return;
 	}
 
-	if (event->src_agent == 1) {
+	if (isWvW && event->src_agent == 1) {
+		status = Status::NameAcquired;
+		currentName = lang.translate(LangKey::WvW);
+	} else if (event->src_agent == 1) {
 		// id for pre-events (e.g. Deimos)
 		status = Status::WaitingForReset;
 	} else {
@@ -17,8 +20,6 @@ void History::LogStart(cbtevent* event) {
 		currentID = event->src_agent;
 	}
 
-	currentName = lang.translate(LangKey::Unknown);
-	
 	currentBeginTimestamp = event->buff_dmg;
 
 	auto milliseconds = std::chrono::milliseconds(currentBeginTimestamp);

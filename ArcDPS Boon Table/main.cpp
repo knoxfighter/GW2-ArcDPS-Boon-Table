@@ -19,6 +19,7 @@
 #include "Settings.h"
 #include "SettingsUIGlobal.h"
 #include "UpdateChecker.h"
+#include "extension/MumbleLink.h"
 #include "extension/Widgets.h"
 #include "imgui/imgui_internal.h"
 
@@ -43,6 +44,7 @@ typedef uint64_t(*arc_export_func_u64)();
 HMODULE arc_dll;
 HMODULE self_dll;
 IDirect3DDevice9* id3dd9;
+LPVOID mapViewOfMumbleFile = nullptr;
 
 // get exports
 arc_color_func arc_export_e5;
@@ -66,6 +68,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 	switch (ulReasonForCall) {
 	case DLL_PROCESS_ATTACH:
 		self_dll = hModule;
+		if (HANDLE mumbleFileHandle = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(LinkedMem), L"MumbleLink"); mumbleFileHandle) {
+			mapViewOfMumbleFile = MapViewOfFile(mumbleFileHandle, FILE_MAP_READ, 0, 0, 0);
+		}
+		break;
 	case DLL_PROCESS_DETACH:
 	case DLL_THREAD_ATTACH:
 	case DLL_THREAD_DETACH:
@@ -254,6 +260,17 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 						if (dst && dst->name) {
 							liveTracker.addPlayer(src,dst);
 							charts.sortNeeded();
+
+							if (dst->self) {
+								// this is yourself, check your map and see active "one-logging" if it is WvW
+								if (mapViewOfMumbleFile) {
+									LinkedMem* linkedMem = static_cast<LinkedMem*>(mapViewOfMumbleFile);
+									constexpr std::array<uint32_t, 4> mapIDs {38, 95, 96, 1099};
+									uint32_t mapId = linkedMem->getMumbleContext()->mapId;
+									const auto& mapIdIt = std::find(mapIDs.begin(), mapIDs.end(), mapId);
+									isWvW = mapIdIt != mapIDs.end();
+								}
+							}
 						}
 					}
 					/* remove */

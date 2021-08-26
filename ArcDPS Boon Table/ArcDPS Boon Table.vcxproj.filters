@@ -236,6 +236,9 @@
     <ClInclude Include="SettingsUIGlobal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="extension\MumbleLink.h">
+      <Filter>Header Files\extension</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ArcDPS Boon Table.rc">

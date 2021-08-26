@@ -79,3 +79,5 @@ std::optional<ImVec4> ImVec4_color_from_string(const std::string& vec4str) {
 	}
 	return ImVec4(val[0], val[1], val[2], val[3]);
 }
+
+bool isWvW = false;
