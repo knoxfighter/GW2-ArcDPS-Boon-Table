@@ -32,6 +32,7 @@ LANG_KEY_ENUM(
 	SettingsAlwaysResize,
 	SettingsAlternatingRow,
 	SettingsColoringMode,
+	SettingsFightsToKeep,
 
 	ColoringModeDefault,
 	ColoringModeByProfession,
@@ -230,6 +231,7 @@ private:
 		{LangKey::SettingsBoonColumnWidth, "Boon column width"},
 		{LangKey::SettingsShowOnlySubgroup, "Show only your Subgroup"},
 		{LangKey::SettingsSelfColor, "Self Color"},
+		{LangKey::SettingsFightsToKeep, "fights to keep"},
 		{LangKey::SettingsWidthSlideTooltip, "Press CTRL+Leftclick to manually input the number."},
 		{LangKey::SettingsColumnSetup, "Column Setup"},
 		{LangKey::SettingsStyle, "Style"},

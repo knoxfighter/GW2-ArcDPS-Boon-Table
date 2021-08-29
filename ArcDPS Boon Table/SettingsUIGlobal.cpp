@@ -18,6 +18,9 @@ void SettingsUIGlobal::Draw() {
 		initialize();
 	}
 
+	// fights to keep
+	ImGui::InputInt(lang.translate(LangKey::SettingsFightsToKeep).c_str(), &settings.fights_to_keep);
+
 	if (ImGui::ColorEdit4(lang.translate(LangKey::Settings100Color).c_str(), _100color)) {
 		// i think the color changed
 		if (settings._100_color) {

@@ -1,5 +1,6 @@
 #include "History.h"
 
+#include "Settings.h"
 #include "Tracker.h"
 
 History history;
@@ -35,7 +36,7 @@ void History::LogEnd(cbtevent* event) {
 		// save stuff to historylist
 		entries.emplace_front(liveTracker, duration, beginTimestamp, currentName);
 
-		if (entries.size() > 10) { // TODO: change to settings value
+		if (entries.size() > settings.getFightsToKeep()) {
 			entries.pop_back();
 		}
 	}
