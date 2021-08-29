@@ -174,6 +174,10 @@ const ImVec4& Settings::get0Color() const {
 	}
 }
 
+int Settings::getFightsToKeep() const {
+	return fights_to_keep;
+}
+
 void Settings::setShowChart(int tableIndex, bool status) {
 	tables[tableIndex].show = status;
 }

@@ -68,6 +68,7 @@ public:
 	[[nodiscard]] const ImVec4& getSelfColor() const;
 	[[nodiscard]] const ImVec4& get100Color() const;
 	[[nodiscard]] const ImVec4& get0Color() const;
+	[[nodiscard]] int getFightsToKeep() const;
 
 	void setShowChart(int tableIndex, bool status);
 
@@ -118,6 +119,7 @@ private:
 	std::optional<ImVec4> self_color;
 	std::optional<ImVec4> _100_color;
 	std::optional<ImVec4> _0_color;
+	int fights_to_keep = 10;
 	
 	// Table tables[MaxTableWindowAmount]{};
 	std::array<Table, MaxTableWindowAmount> tables;
@@ -125,7 +127,7 @@ private:
 	void saveToFile();
 	void convertFromSimpleIni(modernIni::Ini& ini);
 
-	MODERN_INI_DEFINE_TYPE_INTRUSIVE_NO_EXCEPT(Settings, self_color, _100_color, _0_color, tables)
+	MODERN_INI_DEFINE_TYPE_INTRUSIVE_NO_EXCEPT(Settings, self_color, _100_color, _0_color, fights_to_keep, tables)
 };
 
 extern Settings settings;

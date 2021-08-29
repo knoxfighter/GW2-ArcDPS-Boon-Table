@@ -88,4 +88,8 @@ void SettingsUIGlobal::initialize() {
 	_0color[1] = imVec4_3.y;
 	_0color[2] = imVec4_3.z;
 	_0color[3] = imVec4_3.w;
+
+	for (size_t i = 0; i < MaxTableWindowAmount; ++i) {
+		std::to_string(settings.tables[i].shortcut).copy(shortcut[i], 4);
+	}
 }
