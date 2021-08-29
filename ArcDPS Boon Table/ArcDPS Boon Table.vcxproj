@@ -219,6 +219,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions);IMGUI_DEFINE_MATH_OPERATORS</PreprocessorDefinitions>
       <EnableModules>true</EnableModules>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

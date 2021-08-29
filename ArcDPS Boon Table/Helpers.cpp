@@ -47,6 +47,7 @@ std::string to_string(ProgressBarColoringMode coloringMode) {
 		return lang.translate(LangKey::ColoringModeByProfession);
 	case ProgressBarColoringMode::ByPercentage:
 		return lang.translate(LangKey::ColoringModeByPercentage);
+	default: lang.translate(LangKey::Unknown);
 	}
 }
 
