@@ -6,7 +6,6 @@
 #include <unordered_map>
 #include <chrono>
 
-#include "Lang.h"
 #include "TrackerHistory.h"
 #include "extension/arcdps_structs_slim.h"
 
@@ -15,6 +14,7 @@ private:
 	using EntryType = std::deque<TrackerHistory>;
 	// this holds the last X of fights as history
 	EntryType entries;
+	std::mutex historyMutex;
 
 public:
 	void LogStart(cbtevent* event);

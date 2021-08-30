@@ -434,6 +434,7 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 	}
 	return 0;
 }
+
 uintptr_t mod_options()
 {
 	try {

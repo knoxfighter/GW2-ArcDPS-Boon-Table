@@ -1,5 +1,6 @@
 #include "History.h"
 
+#include "Lang.h"
 #include "Settings.h"
 #include "Tracker.h"
 
@@ -48,6 +49,8 @@ void History::LogEnd(cbtevent* event) {
 }
 
 void History::Event(ag* dst) {
+	std::lock_guard<std::mutex> guard(historyMutex);
+	
 	if (status != Status::WaitingForName) {
 		return;
 	}
