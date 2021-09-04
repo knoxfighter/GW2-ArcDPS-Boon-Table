@@ -188,9 +188,6 @@
     <ClInclude Include="SettingsUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UpdateChecker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="extension\UpdateCheckerBase.h">
       <Filter>Header Files\extension</Filter>
     </ClInclude>
@@ -238,6 +235,9 @@
     </ClInclude>
     <ClInclude Include="extension\MumbleLink.h">
       <Filter>Header Files\extension</Filter>
+    </ClInclude>
+    <ClInclude Include="UpdateChecker.h">
+      <Filter>Resource Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
