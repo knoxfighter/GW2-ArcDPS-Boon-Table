@@ -216,6 +216,13 @@ void Settings::readFromFile() {
 			}
 		}
 	}
+
+	// fix for 0-value
+	if (self_color) {
+		if (self_color->x == 0 && self_color->y == 0 && self_color->z == 0 && self_color->w == 0) {
+			self_color.reset();
+		}
+	}
 }
 
 void Settings::convertFromSimpleIni(modernIni::Ini& ini) {
@@ -229,13 +236,16 @@ void Settings::convertFromSimpleIni(modernIni::Ini& ini) {
 	if (ini.has("colors")) {
 		auto& colors = ini.at("colors");
 		if (colors.has("self_color")) {
-			colors.at("self_color").get_to(self_color);
+			const std::string self_color_str = colors.at("self_color").get<std::string>();
+			self_color = ImVec4_color_from_string(self_color_str);
 		}
 		if (colors.has("100%color")) {
-			colors.at("100%color").get_to(_100_color);
+			const std::string _100_color_str = colors.at("100%color").get<std::string>();
+			_100_color = ImVec4_color_from_string(_100_color_str);
 		}
 		if (colors.has("0%color")) {
-			colors.at("0%color").get_to(_0_color);
+			const std::string _0_color_str = colors.at("0%color").get<std::string>();
+			_0_color = ImVec4_color_from_string(_0_color_str);
 		}
 	}
 
