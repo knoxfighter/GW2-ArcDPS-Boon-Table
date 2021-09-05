@@ -47,14 +47,18 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 	}
 
 	bool maxDisplayedEnabled = false;
-	if (settings.getMaxDisplayed(index) > 0) {
+	if (settings.getMaxDisplayed(index) > 0 && rowCount >= settings.getMaxDisplayed(index)) {
 		maxDisplayedEnabled = true;
 	}
 	if (maxDisplayedEnabled) {
 		// add the innertable position to the maxHeight
 		maxHeight += innerTableCursorPos;
+#if _DEBUG
+		arc_log(std::format("innerTableCursorPos: {}", innerTableCursorPos).c_str());
+#endif
 		
 		float overriddenHeight = titleBarHeight + 5.f;
+		if (overriddenHeight < 50.f) overriddenHeight = 50.f;
 		if (minHeight < overriddenHeight) minHeight = overriddenHeight;
 		if (maxHeight < overriddenHeight) maxHeight = overriddenHeight;
 	} else {
@@ -62,6 +66,11 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		maxHeight = FLT_MAX;
 	}
 
+#if _DEBUG
+	arc_log("--------------------");
+	arc_log(std::format("maxHeight: {}", maxHeight).c_str());
+#endif
+	
 	ImGui::SetNextWindowSizeConstraints(ImVec2(50.f, minHeight), ImVec2(FLT_MAX, maxHeight));
 
 	rowCount = 0;
@@ -99,10 +108,17 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 
 	ImGuiWindow* currentWindow = ImGui::GetCurrentWindow();
 
+#if _DEBUG
+	arc_log(std::format("actualHeight: {}", ImGui::GetWindowHeight()).c_str());
+#endif
+
 	// add window titleBar to defined height
-	titleBarHeight = currentWindow->TitleBarHeight() * 2;
+	titleBarHeight = currentWindow->TitleBarHeight();
 	minHeight += titleBarHeight;
 	maxHeight += titleBarHeight;
+#if _DEBUG
+	arc_log(std::format("titleBarHeight: {}", titleBarHeight).c_str());
+#endif
 
 	// add scrollbar to defined height
 	if (imGuiTable && imGuiTable->InnerWindow->ScrollbarX) {
@@ -110,12 +126,20 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		float height = scrollbarRect.GetHeight();
 		minHeight += height;
 		maxHeight += height;
+
+#if _DEBUG
+		arc_log(std::format("scrollbarHeight: {}", height).c_str());
+#endif
 	}
 
 	// add window paddings to defined height
 	float paddingHeight = ImGui::GetStyle().WindowPadding.y;
 	minHeight += paddingHeight;
 	maxHeight += paddingHeight;
+
+#if _DEBUG
+	arc_log(std::format("paddingHeight: {}", paddingHeight).c_str());
+#endif
 
 	/**
 	 * Settings UI
@@ -388,6 +412,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		Table::EndTable();
 	}
 
+
 	ImGuiEx::WindowReposition(settings.getPosition(index), settings.getCornerVector(index),
 	                          settings.getCornerPosition(index), settings.getFromWindowID(index),
 	                          settings.getAnchorPanelCornerPosition(index), settings.getSelfPanelCornerPosition(index));
@@ -558,6 +583,7 @@ void AppChart::addPlayer(size_t playerId) {
 void AppChart::endOfRow() {
 	if (rowCount < settings.getMaxDisplayed(index)) {
 		innerTableCursorPos = ImGui::GetCursorPosY();
+		// innerTableCursorPos = ImGui::GetCurrentWindow()->DC.CursorPosPrevLine.y;
 	}
 
 	++rowCount;
