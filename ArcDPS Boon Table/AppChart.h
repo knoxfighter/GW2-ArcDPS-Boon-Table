@@ -41,6 +41,7 @@ private:
 	float minHeight = 0;
 	float titleBarHeight = 0;
 	float innerTableCursorPos = 0;
+	uint8_t nthTick = 0;
 
 	void endOfRow();
 };

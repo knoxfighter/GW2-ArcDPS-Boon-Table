@@ -412,10 +412,14 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		Table::EndTable();
 	}
 
-
-	ImGuiEx::WindowReposition(settings.getPosition(index), settings.getCornerVector(index),
-	                          settings.getCornerPosition(index), settings.getFromWindowID(index),
-	                          settings.getAnchorPanelCornerPosition(index), settings.getSelfPanelCornerPosition(index));
+	if (nthTick >= 10) {
+		nthTick = 0;
+		ImGuiEx::WindowReposition(settings.getPosition(index), settings.getCornerVector(index),
+		                          settings.getCornerPosition(index), settings.getFromWindowID(index),
+		                          settings.getAnchorPanelCornerPosition(index), settings.getSelfPanelCornerPosition(index));
+	} else {
+		++nthTick;
+	}
 
 	ImGui::End();
 
