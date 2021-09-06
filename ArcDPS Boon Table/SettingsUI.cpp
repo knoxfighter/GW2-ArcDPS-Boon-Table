@@ -299,8 +299,11 @@ void SettingsUI::initialize(int tableIndex) {
 	cornerPosition = static_cast<int>(settings.tables[tableIndex].corner_position);
 	selfPanelCornerPosition = static_cast<int>(settings.tables[tableIndex].self_panel_corner_position);
 	anchorPanelCornerPosition = static_cast<int>(settings.tables[tableIndex].anchor_panel_corner_position);
-	settings.tables[tableIndex].appear_as_in_option.copy(appearAsInOption, 128);
 	std::to_string(settings.tables[tableIndex].shortcut).copy(settingsUiGlobal.shortcut[tableIndex], 4);
+	
+	char *end = appearAsInOption + sizeof(appearAsInOption);
+	std::fill(appearAsInOption, end, 0);
+	settings.tables[tableIndex].appear_as_in_option.copy(appearAsInOption, 128);
 
 	const std::optional<ImVec2>& paddingOptional = settings.getWindowPadding(tableIndex);
 	if (paddingOptional) {
