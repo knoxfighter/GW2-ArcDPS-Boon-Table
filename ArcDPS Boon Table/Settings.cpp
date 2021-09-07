@@ -187,6 +187,10 @@ void Settings::readFromFile() {
 
 	if (!stream.is_open()) {
 		// Do not load if file was not opened/found
+
+		// load defaults
+		tables[0].shortcut = 66;
+		
 		return;
 	}
 	
