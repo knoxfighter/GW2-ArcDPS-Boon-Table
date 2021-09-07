@@ -69,7 +69,10 @@ LANG_KEY_ENUM(
 	SettingsHistory,
 	SettingsHistoryCurrent,
 
-	// Make sure, this stay in order!
+	SettingsAppearAsInOption,
+	SettingsTitleBar,
+
+	// Make sure, this stays in order!
 	SettingsShortcut,
 	SettingsShortcut1,
 	SettingsShortcut2,
@@ -246,6 +249,8 @@ private:
 		{LangKey::SizingPolicySizeContentToWindow, "Size content to window"},
 		{LangKey::SizingPolicyManualWindowSize, "Manual window sizing"},
 		{LangKey::SettingsMaxPlayerLength, "Max player length"},
+		{LangKey::SettingsAppearAsInOption, "appear as in option"},
+		{LangKey::SettingsTitleBar, "title bar"},
 		{LangKey::SettingsShortcut, "Shortcut #0"},
 		{LangKey::SettingsShortcut1, "Shortcut #1"},
 		{LangKey::SettingsShortcut2, "Shortcut #2"},

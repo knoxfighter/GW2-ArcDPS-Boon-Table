@@ -198,8 +198,21 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		// use the buffer in `SettingsUIGlobal`
 		ImGuiEx::KeyInput(lang.translate(static_cast<LangKey>(static_cast<size_t>(LangKey::SettingsShortcut) + tableIndex)).c_str(), id.c_str(), settingsUiGlobal.shortcut[tableIndex], 4, settings.tables[tableIndex].shortcut);
 
-		if (ImGui::InputText("appear as in option##appearAsInOption", appearAsInOption, 128)) {
+		std::string appearAsInOptionStr = lang.translate(LangKey::SettingsAppearAsInOption);
+		appearAsInOptionStr.append("##appearAsInOption");
+		if (ImGui::InputText(appearAsInOptionStr.c_str(), appearAsInOption, 128)) {
 			settings.tables[tableIndex].appear_as_in_option = appearAsInOption;
+		}
+
+		std::string titleBarStr = lang.translate(LangKey::SettingsTitleBar);
+		titleBarStr.append("##titleBar");
+		if (ImGui::InputText(titleBarStr.c_str(), titleBar, 128)) {
+			std::optional<std::string>& optTitleBar = settings.tables[tableIndex].title_bar;
+			if (optTitleBar) {
+				optTitleBar = titleBar;
+			} else {
+				optTitleBar.emplace(titleBar);
+			}
 		}
 		
 		ImGui::EndMenu();
@@ -304,6 +317,9 @@ void SettingsUI::initialize(int tableIndex) {
 	char *end = appearAsInOption + sizeof(appearAsInOption);
 	std::fill(appearAsInOption, end, 0);
 	settings.tables[tableIndex].appear_as_in_option.copy(appearAsInOption, 128);
+	if (settings.tables[tableIndex].title_bar) {
+		settings.tables[tableIndex].title_bar.value().copy(titleBar, 128);
+	}
 
 	const std::optional<ImVec2>& paddingOptional = settings.getWindowPadding(tableIndex);
 	if (paddingOptional) {

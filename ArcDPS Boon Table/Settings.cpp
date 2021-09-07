@@ -147,6 +147,10 @@ const std::string& Settings::getAppearAsInOption(int tableIndex) const {
 	return tables[tableIndex].appear_as_in_option;
 }
 
+const std::optional<std::string>& Settings::getTitleBar(int tableIndex) const {
+	return tables[tableIndex].title_bar;
+}
+
 const ImVec4& Settings::getSelfColor() const {
 	if (self_color) {
 		return self_color.value();
