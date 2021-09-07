@@ -14,9 +14,9 @@ void UpdateChecker::Draw() {
 		headerName.append("##BoonTableUpdate");
 		ImGui::Begin(headerName.c_str(), &shown, ImGuiWindowFlags_AlwaysAutoResize);
 		ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), lang.translate(LangKey::UpdateDesc).c_str());
-		ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "%s: %.0f.%.0f.%.0f", lang.translate(LangKey::UpdateCurrentVersion).c_str(), version[0], version[1],
+		ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "%s: %i.%i.%i", lang.translate(LangKey::UpdateCurrentVersion).c_str(), version[0], version[1],
 		                   version[2]);
-		ImGui::TextColored(ImVec4(0.f, 1.f, 0.f, 1.f), "%s: %.0f.%.0f.%.0f", lang.translate(LangKey::UpdateNewVersion).c_str(), newVersion[0], newVersion[1],
+		ImGui::TextColored(ImVec4(0.f, 1.f, 0.f, 1.f), "%s: %i.%i.%i", lang.translate(LangKey::UpdateNewVersion).c_str(), newVersion[0], newVersion[1],
 		                   newVersion[2]);
 		if (ImGui::Button(lang.translate(LangKey::UpdateOpenPage).c_str())) {
 			std::thread([](){
