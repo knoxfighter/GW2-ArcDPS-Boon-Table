@@ -2,7 +2,6 @@
 
 #include <string>
 #include <vector>
-#include <d3d9.h>
 #include <memory>
 
 #include "extension/Icon.h"
@@ -32,7 +31,7 @@ enum StackingType
 struct BoonDef
 {
 	std::vector<uint32_t> ids = {};
-	std::string name = "";
+	std::string name;
 	StackingType stacking_type = StackingType_duration;
 	bool is_relevant = false;
 	BoonType category = BoonType_other;
@@ -46,4 +45,4 @@ BoonDef* getTrackedBoon(uint32_t new_id);
 extern std::vector<BoonDef> tracked_buffs;
 extern std::shared_ptr<BoonDef> above90BoonDef;
 
-void init_tracked_buffs(IDirect3DDevice9* d3d9device);
+void init_tracked_buffs();

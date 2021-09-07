@@ -6,7 +6,7 @@
 #include <Windows.h>
 #include <string>
 #include <regex>
-#include <d3d9.h>
+#include <d3d11.h>
 
 #include "imgui/imgui.h"
 #include "extension/arcdps_structs.h"
@@ -26,7 +26,7 @@
 /* proto/globals */
 arcdps_exports arc_exports{};
 char* arcvers;
-extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, IDirect3DDevice9* id3dd9, HMODULE arcdll, void* mallocfn, void* freefn);
+extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, ID3D11Device* id3d11d, HMODULE arcdll, void* mallocfn, void* freefn);
 extern "C" __declspec(dllexport) void* get_release_addr();
 arcdps_exports* mod_init();
 uintptr_t mod_release();
@@ -43,7 +43,7 @@ typedef uint64_t(*arc_export_func_u64)();
 
 HMODULE arc_dll;
 HMODULE self_dll;
-IDirect3DDevice9* id3dd9;
+ID3D11Device* id3d11d;
 LPVOID mapViewOfMumbleFile = nullptr;
 
 // get exports
@@ -81,7 +81,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 }
 
 /* export -- arcdps looks for this exported function and calls the address it returns */
-extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, IDirect3DDevice9* new_id3dd9, HMODULE new_arcdll, void* mallocfn, void* freefn) {
+extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, ID3D11Device* new_id3d11d, HMODULE new_arcdll, void* mallocfn, void* freefn) {
 	// set all arcdps stuff
 	arcvers = arcversionstr;
 	arc_dll = new_arcdll;
@@ -95,7 +95,7 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 	ImGui::SetCurrentContext(static_cast<ImGuiContext*>(imguicontext));
 	ImGui::SetAllocatorFunctions((void* (*)(size_t, void*))mallocfn, (void (*)(void*, void*))freefn);
 
-	id3dd9 = new_id3dd9;
+	id3d11d = new_id3d11d;
 
 	return mod_init;
 }
@@ -117,7 +117,7 @@ arcdps_exports* mod_init()
 		settings.readFromFile();
 
 		// init buffs, this will load the icons into RAM
-		init_tracked_buffs(id3dd9);
+		init_tracked_buffs();
 
 		// check for new version on github
 		updateChecker.CheckForUpdate(self_dll, "knoxfighter/GW2-ArcDPS-Boon-Table");
@@ -126,7 +126,7 @@ arcdps_exports* mod_init()
 		ImGuiEx::BigTable::RegisterSettingsHandler("BigTable-BoonTable");
 
 		// setup icon loader
-		iconLoader.Setup(self_dll, id3dd9);
+		iconLoader.Setup(self_dll, id3d11d);
 	} catch (std::exception& e) {
 		loading_successful = false;
 		error_message = "Error starting up: ";
