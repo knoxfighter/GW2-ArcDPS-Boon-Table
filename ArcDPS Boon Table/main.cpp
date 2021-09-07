@@ -26,7 +26,6 @@
 
 /* proto/globals */
 arcdps_exports arc_exports{};
-char* arcvers;
 extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, void* dxptr, HMODULE arcdll, void* mallocfn, void* freefn, UINT dxVer);
 extern "C" __declspec(dllexport) void* get_release_addr();
 arcdps_exports* mod_init();
@@ -87,7 +86,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 /* export -- arcdps looks for this exported function and calls the address it returns */
 extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, void* dxptr, HMODULE new_arcdll, void* mallocfn, void* freefn, UINT dxver) {
 	// set all arcdps stuff
-	arcvers = arcversionstr;
 	arc_dll = new_arcdll;
 	arc_export_e5 = (arc_color_func)GetProcAddress(arc_dll, "e5");
 	arc_export_e6 = (arc_export_func_u64)GetProcAddress(arc_dll, "e6");
@@ -99,8 +97,12 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 	ImGui::SetCurrentContext(static_cast<ImGuiContext*>(imguicontext));
 	ImGui::SetAllocatorFunctions((void* (*)(size_t, void*))mallocfn, (void (*)(void*, void*))freefn);
 
-	// dxver is unitialized memory in old arcdps versions
-	if (dxver == 11) {
+	// dx11 not available in older arcdps versions
+	std::string arcVersion = arcversionstr;
+	auto firstDot = arcVersion.find_first_of(".");
+	arcVersion = arcVersion.substr(0, firstDot);
+	int arcVersionNum = std::stoi(arcVersion);
+	if (arcVersionNum > 20210828 && dxver == 11) {
 		auto swapChain = static_cast<IDXGISwapChain*>(dxptr);
 		swapChain->GetDevice(__uuidof(id3d11d), reinterpret_cast<void**>(&id3d11d));
 		directxVersion = 11;
@@ -114,7 +116,6 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 
 /* export -- arcdps looks for this exported function and calls the address it returns */
 extern "C" __declspec(dllexport) void* get_release_addr() {
-	arcvers = 0;
 	return mod_release;
 }
 
