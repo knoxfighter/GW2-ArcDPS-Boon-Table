@@ -7,6 +7,7 @@
 #include <string>
 #include <regex>
 #include <d3d11.h>
+#include <d3d9.h>
 
 #include "imgui/imgui.h"
 #include "extension/arcdps_structs.h"
@@ -26,7 +27,7 @@
 /* proto/globals */
 arcdps_exports arc_exports{};
 char* arcvers;
-extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, ID3D11Device* id3d11d, HMODULE arcdll, void* mallocfn, void* freefn);
+extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, void* dxptr, HMODULE arcdll, void* mallocfn, void* freefn, UINT dxVer);
 extern "C" __declspec(dllexport) void* get_release_addr();
 arcdps_exports* mod_init();
 uintptr_t mod_release();
@@ -43,8 +44,10 @@ typedef uint64_t(*arc_export_func_u64)();
 
 HMODULE arc_dll;
 HMODULE self_dll;
-ID3D11Device* id3d11d;
 LPVOID mapViewOfMumbleFile = nullptr;
+UINT directxVersion;
+IDirect3DDevice9* id3dd9 = nullptr;
+ID3D11Device* id3d11d = nullptr;
 
 // get exports
 arc_color_func arc_export_e5;
@@ -80,8 +83,9 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 	return 1;
 }
 
+// (*fg)(m_version, ImGui::GetCurrentContext(), g_directx == 9 ? (void*)m_gl_pmyIDirect3DDevice9 : m_gl_d3d11swapchain, g_hthisinstance, malloc, free, g_directx);
 /* export -- arcdps looks for this exported function and calls the address it returns */
-extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, ID3D11Device* new_id3d11d, HMODULE new_arcdll, void* mallocfn, void* freefn) {
+extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, void* dxptr, HMODULE new_arcdll, void* mallocfn, void* freefn, UINT dxver) {
 	// set all arcdps stuff
 	arcvers = arcversionstr;
 	arc_dll = new_arcdll;
@@ -95,7 +99,15 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 	ImGui::SetCurrentContext(static_cast<ImGuiContext*>(imguicontext));
 	ImGui::SetAllocatorFunctions((void* (*)(size_t, void*))mallocfn, (void (*)(void*, void*))freefn);
 
-	id3d11d = new_id3d11d;
+	// dxver is unitialized memory in old arcdps versions
+	if (dxver == 11) {
+		auto swapChain = static_cast<IDXGISwapChain*>(dxptr);
+		swapChain->GetDevice(__uuidof(id3d11d), reinterpret_cast<void**>(&id3d11d));
+		directxVersion = 11;
+	} else {
+		id3dd9 = static_cast<IDirect3DDevice9*>(dxptr);
+		directxVersion = 9;
+	} 
 
 	return mod_init;
 }
@@ -126,7 +138,7 @@ arcdps_exports* mod_init()
 		ImGuiEx::BigTable::RegisterSettingsHandler("BigTable-BoonTable");
 
 		// setup icon loader
-		iconLoader.Setup(self_dll, id3d11d);
+		iconLoader.Setup(self_dll, id3dd9, id3d11d);
 	} catch (std::exception& e) {
 		loading_successful = false;
 		error_message = "Error starting up: ";
