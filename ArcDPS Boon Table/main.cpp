@@ -132,8 +132,13 @@ arcdps_exports* mod_init()
 		// init buffs, this will load the icons into RAM
 		init_tracked_buffs();
 
+		UpdateCheckerBase::ClearFiles(self_dll);
+
 		// check for new version on github
-		updateChecker.CheckForUpdate(self_dll, "knoxfighter/GW2-ArcDPS-Boon-Table");
+		const auto& version = UpdateCheckerBase::GetCurrentVersion(self_dll);
+		if (version) {
+			updateChecker.CheckForUpdate(version.value(), "knoxfighter/GW2-ArcDPS-Boon-Table", false);
+		}
 
 		// load my table loader into imgui
 		ImGuiEx::BigTable::RegisterSettingsHandler("BigTable-BoonTable");
