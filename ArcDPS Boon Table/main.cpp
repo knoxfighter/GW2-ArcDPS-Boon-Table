@@ -102,6 +102,7 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 	auto firstDot = arcVersion.find_first_of(".");
 	arcVersion = arcVersion.substr(0, firstDot);
 	int arcVersionNum = std::stoi(arcVersion);
+
 	if (arcVersionNum > 20210828 && dxver == 11) {
 		auto swapChain = static_cast<IDXGISwapChain*>(dxptr);
 		swapChain->GetDevice(__uuidof(id3d11d), reinterpret_cast<void**>(&id3d11d));
@@ -476,7 +477,7 @@ uintptr_t mod_options()
  */
 uintptr_t mod_options_windows(const char* windowname) {
 	try {
-		if (!windowname) {
+		if (windowname && !std::strcmp(windowname, "bufftable")) {
 			ImGui::Checkbox(lang.translate(LangKey::ShowChart).c_str(), &settings.isShowChart(0));
 			ImGui::SameLine();
 			ImGuiEx::BeginMenuChild("optionsBoonSubmenu", "", []() {
