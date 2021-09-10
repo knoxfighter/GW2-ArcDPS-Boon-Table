@@ -56,6 +56,7 @@ LANG_KEY_ENUM(
 	SizingPolicySizeContentToWindow,
 	SizingPolicyManualWindowSize,
 	SettingsWindowPadding,
+	SettingsScrollbar,
 
 	SettingsPosition,
 	SettingsFromAnchorPanelCorner,
@@ -245,6 +246,7 @@ private:
 		{LangKey::SettingsHistoryCurrent, "current"},
 		{LangKey::SettingsHistory, "history"},
 		{LangKey::SettingsWindowPadding, "padding"},
+		{LangKey::SettingsScrollbar, "Scroll bar"},
 		{LangKey::SizingPolicySizeToContent, "Autoresize window to content"},
 		{LangKey::SizingPolicySizeContentToWindow, "Size content to window"},
 		{LangKey::SizingPolicyManualWindowSize, "Manual window sizing"},

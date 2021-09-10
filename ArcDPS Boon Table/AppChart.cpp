@@ -201,9 +201,14 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		tableFlags |= ImGuiTableFlags_RowBg;
 	}
 
+	ImGuiWindowFlags subWindowFlags = 0;
+	if (!settings.isScrollbar(index)) {
+		subWindowFlags |= ImGuiWindowFlags_NoScrollbar;
+	}
+
 	std::string tableId = "BoonTable";
 	tableId.append(std::to_string(index));
-	if (Table::BeginTable(tableId.c_str(), columnCount, tableFlags)) {
+	if (Table::BeginTable(tableId.c_str(), columnCount, tableFlags, subWindowFlags)) {
 		imGuiTable = Table::CurrentTable;
 
 		// lock header so it is not scrolled out of vision

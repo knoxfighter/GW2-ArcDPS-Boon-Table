@@ -151,6 +151,10 @@ const std::optional<std::string>& Settings::getTitleBar(int tableIndex) const {
 	return tables[tableIndex].title_bar;
 }
 
+bool Settings::isScrollbar(int tableIndex) const {
+	return tables[tableIndex].scrollbar;
+}
+
 const ImVec4& Settings::getSelfColor() const {
 	if (self_color) {
 		return self_color.value();
