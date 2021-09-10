@@ -65,6 +65,7 @@ public:
 	[[nodiscard]] const std::string& getAppearAsInOption(int tableIndex) const;
 	[[nodiscard]] const std::optional<std::string>& getTitleBar(int tableIndex) const;
 	[[nodiscard]] bool isScrollbar(int tableIndex) const;
+	[[nodiscard]] bool isTablePaddingX(int tableIndex) const;
 
 	[[nodiscard]] std::array<WPARAM, MaxTableWindowAmount> getShortcuts() const;
 	[[nodiscard]] const ImVec4& getSelfColor() const;
@@ -113,11 +114,12 @@ private:
 		// history value 1-based (0 = current)
 		uint8_t current_history = 0;
 		bool scrollbar = true;
+		bool table_padding_x = false;
 
 		MODERN_INI_DEFINE_TYPE_INTRUSIVE_NO_EXCEPT(Table, show, show_self_on_top, show_players, show_npcs, show_subgroups, show_total, 
 			show_uptime_as_progress_bar, show_colored, alternating_row_bg, show_label, alignment, hide_header, sizing_policy, boon_column_width,
 			show_only_subgroup, show_background, position, corner_position, corner_vector, anchor_panel_corner_position, self_panel_corner_position,
-			from_window_id, max_displayed, window_padding, max_player_length, shortcut, appear_as_in_option, title_bar, scrollbar)
+			from_window_id, max_displayed, window_padding, max_player_length, shortcut, appear_as_in_option, title_bar, scrollbar, table_padding_x)
 	};
 	
 	std::optional<ImVec4> self_color;

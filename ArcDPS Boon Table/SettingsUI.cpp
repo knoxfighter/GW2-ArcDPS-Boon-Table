@@ -149,6 +149,7 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		ImGui::Checkbox(lang.translate(LangKey::SettingsShowOnlySubgroup).c_str(), &settings.tables[tableIndex].show_only_subgroup);
 		ImGui::Checkbox(lang.translate(LangKey::SettingsShowBackground).c_str(), &settings.tables[tableIndex].show_background);
 		ImGui::Checkbox(lang.translate(LangKey::SettingsScrollbar).c_str(), &settings.tables[tableIndex].scrollbar);
+		ImGui::Checkbox(lang.translate(LangKey::SettingsTablePaddingX).c_str(), &settings.tables[tableIndex].table_padding_x);
 
 		ImGui::Separator();
 

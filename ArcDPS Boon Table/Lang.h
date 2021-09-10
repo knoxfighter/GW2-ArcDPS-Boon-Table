@@ -57,6 +57,7 @@ LANG_KEY_ENUM(
 	SizingPolicyManualWindowSize,
 	SettingsWindowPadding,
 	SettingsScrollbar,
+	SettingsTablePaddingX,
 
 	SettingsPosition,
 	SettingsFromAnchorPanelCorner,
@@ -247,6 +248,7 @@ private:
 		{LangKey::SettingsHistory, "history"},
 		{LangKey::SettingsWindowPadding, "padding"},
 		{LangKey::SettingsScrollbar, "Scroll bar"},
+		{LangKey::SettingsTablePaddingX, "Add outer padding to table (x-axis)"},
 		{LangKey::SizingPolicySizeToContent, "Autoresize window to content"},
 		{LangKey::SizingPolicySizeContentToWindow, "Size content to window"},
 		{LangKey::SizingPolicyManualWindowSize, "Manual window sizing"},

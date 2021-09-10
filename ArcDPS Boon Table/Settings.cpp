@@ -155,6 +155,10 @@ bool Settings::isScrollbar(int tableIndex) const {
 	return tables[tableIndex].scrollbar;
 }
 
+bool Settings::isTablePaddingX(int tableIndex) const {
+	return tables[tableIndex].table_padding_x;
+}
+
 const ImVec4& Settings::getSelfColor() const {
 	if (self_color) {
 		return self_color.value();

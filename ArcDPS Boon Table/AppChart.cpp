@@ -201,6 +201,10 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		tableFlags |= ImGuiTableFlags_RowBg;
 	}
 
+	if (settings.isTablePaddingX(index)) {
+		tableFlags |= ImGuiTableFlags_PadOuterX;
+	}
+
 	ImGuiWindowFlags subWindowFlags = 0;
 	if (!settings.isScrollbar(index)) {
 		subWindowFlags |= ImGuiWindowFlags_NoScrollbar;
