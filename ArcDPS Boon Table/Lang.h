@@ -354,7 +354,7 @@ private:
 		{LangKey::UpdateCurrentVersion, "Current version"},
 		{LangKey::UpdateNewVersion, "New version"},
 		{LangKey::UpdateOpenPage, "Open download page"},
-		{LangKey::UpdateAutoButton, "Update autmatically"},
+		{LangKey::UpdateAutoButton, "Update automatically"},
 		{LangKey::UpdateInProgress, "Autoupdate in progress"},
 		{LangKey::UpdateRestartPending, "Autoupdate finished, restart your game to activate it."},
 		{LangKey::UpdateError, "Autoupdate error, please update manually."},
