@@ -19,20 +19,7 @@ AppChartsContainer charts;
 
 namespace Table = ImGuiEx::BigTable;
 
-bool first = true;
-
 void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
-	if (first) {
-		first = false;
-		ImGuiID id = ImHashStr("Boon Table##Boon Table");
-		ImGuiWindowSettings* windowSettings = ImGui::FindWindowSettings(id);
-		ImGuiWindowSettings* newWindowSettings = ImGui::FindOrCreateWindowSettings("###Boon Table");
-		// ImGuiWindowSettings* newWindowSettings = ImGui::CreateNewWindowSettings("###Boon Table");
-		newWindowSettings->Size = windowSettings->Size;
-		newWindowSettings->Collapsed = windowSettings->Collapsed;
-		newWindowSettings->Pos = windowSettings->Pos;
-	}
-	
 	const std::optional<ImVec2>& windowPadding = settings.getWindowPadding(index);
 	if (windowPadding) {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, windowPadding.value());
