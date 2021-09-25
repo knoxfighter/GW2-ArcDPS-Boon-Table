@@ -198,7 +198,7 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		std::string id("##singleShortcut");
 		id.append(std::to_string(tableIndex));
 		// use the buffer in `SettingsUIGlobal`
-		ImGuiEx::KeyInput(lang.translate(static_cast<LangKey>(static_cast<size_t>(LangKey::SettingsShortcut) + tableIndex)).c_str(), id.c_str(), settingsUiGlobal.shortcut[tableIndex], 4, settings.tables[tableIndex].shortcut);
+		ImGuiEx::KeyInput(lang.translate(static_cast<LangKey>(static_cast<size_t>(LangKey::SettingsShortcut) + tableIndex)).c_str(), id.c_str(), settingsUiGlobal.shortcut[tableIndex], 4, settings.tables[tableIndex].shortcut, lang.translate(LangKey::SettingsKeyNotSetText).c_str());
 
 		std::string appearAsInOptionStr = lang.translate(LangKey::SettingsAppearAsInOption);
 		appearAsInOptionStr.append("##appearAsInOption");

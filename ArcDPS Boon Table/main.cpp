@@ -473,9 +473,7 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 uintptr_t mod_options()
 {
 	try {
-		ImGuiEx::BeginMenu(lang.translate(LangKey::SettingsWindowName).c_str(), []() {
-			settingsUiGlobal.Draw();
-		});
+		settingsUiGlobal.Draw();
 	} catch(const std::exception& e) {
 		arc_log_file("Boon Table: exception in mod_options");
 		arc_log_file(e.what());

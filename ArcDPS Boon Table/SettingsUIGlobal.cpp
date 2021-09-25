@@ -14,9 +14,21 @@
 SettingsUIGlobal settingsUiGlobal;
 
 void SettingsUIGlobal::Draw() {
-	if (ImGui::IsWindowAppearing()) {
+	if (!initialized) {
 		initialize();
 	}
+
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {0.f, 0.f});
+
+	ImGui::BeginTable("###SettingsGeneralTable", 2, ImGuiTableFlags_NoSavedSettings | ImGuiTableFlags_SizingFixedFit);
+
+	ImGui::TableSetupColumn("0");
+	ImGui::TableSetupColumn("1");
+
+	ImGui::TableNextRow();
+	ImGui::TableNextColumn();
+
+	ImGui::TextDisabled("General");
 
 	// fights to keep
 	ImGui::InputInt(lang.translate(LangKey::SettingsFightsToKeep).c_str(), &settings.fights_to_keep);
@@ -64,13 +76,19 @@ void SettingsUIGlobal::Draw() {
 		self_color[3] = imVec4.w;
 	}
 
-	ImGui::Separator();
+	ImGui::TableNextColumn();
+
+	ImGui::TextDisabled("Shortcuts");
 
 	for (size_t i = 0; i < MaxTableWindowAmount; ++i) {
 		std::string id("##shortcut");
 		id.append(std::to_string(i));
-		ImGuiEx::KeyInput(lang.translate(static_cast<LangKey>(static_cast<size_t>(LangKey::SettingsShortcut) + i)).c_str(), id.c_str(), shortcut[i], 4, settings.tables[i].shortcut);
+		ImGuiEx::KeyInput(lang.translate(static_cast<LangKey>(static_cast<size_t>(LangKey::SettingsShortcut) + i)).c_str(), id.c_str(), shortcut[i], 4, settings.tables[i].shortcut, lang.translate(LangKey::SettingsKeyNotSetText).c_str());
 	}
+
+	ImGui::EndTable();
+
+	ImGui::PopStyleVar();
 }
 
 void SettingsUIGlobal::initialize() {
@@ -93,6 +111,10 @@ void SettingsUIGlobal::initialize() {
 	_0color[3] = imVec4_3.w;
 
 	for (size_t i = 0; i < MaxTableWindowAmount; ++i) {
-		std::to_string(settings.tables[i].shortcut).copy(shortcut[i], 4);
+		if (settings.tables[i].shortcut != 0) {
+			std::to_string(settings.tables[i].shortcut).copy(shortcut[i], 4);
+		}
 	}
+
+	initialized = true;
 }

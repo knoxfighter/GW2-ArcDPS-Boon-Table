@@ -22,7 +22,6 @@ LANG_KEY_ENUM(
 	Unaligned,
 	ShowChart,
 
-	SettingsWindowName,
 	SettingsSelfOnTop,
 	SettingsPlayers,
 	SettingsSubgroups,
@@ -73,6 +72,7 @@ LANG_KEY_ENUM(
 
 	SettingsAppearAsInOption,
 	SettingsTitleBar,
+	SettingsKeyNotSetText,
 
 	// Make sure, this stays in order!
 	SettingsShortcut,
@@ -216,7 +216,6 @@ private:
 		{LangKey::Center, "Center"},
 		{LangKey::Unaligned, "Unaligned"},
 		{LangKey::ShowChart, "Boon Table"},
-		{LangKey::SettingsWindowName, "Boon Table Settings"},
 		{LangKey::SettingsSelfOnTop, "Show self on top"},
 		{LangKey::SettingsPlayers, "Players"},
 		{LangKey::SettingsSubgroups, "Subgroups"},
@@ -255,6 +254,7 @@ private:
 		{LangKey::SettingsMaxPlayerLength, "Max player length"},
 		{LangKey::SettingsAppearAsInOption, "appear as in option"},
 		{LangKey::SettingsTitleBar, "title bar"},
+		{LangKey::SettingsKeyNotSetText, "(not set)"},
 		{LangKey::SettingsShortcut, "Shortcut #0"},
 		{LangKey::SettingsShortcut1, "Shortcut #1"},
 		{LangKey::SettingsShortcut2, "Shortcut #2"},
