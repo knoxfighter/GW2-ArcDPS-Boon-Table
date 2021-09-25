@@ -477,18 +477,18 @@ uintptr_t mod_options()
  */
 uintptr_t mod_options_windows(const char* windowname) {
 	try {
-		if (windowname && !std::strcmp(windowname, "bufftable")) {
+		if (!windowname) {
 			ImGui::Checkbox(lang.translate(LangKey::ShowChart).c_str(), &settings.isShowChart(0));
-			ImGui::SameLine();
-			ImGuiEx::BeginMenuChild("optionsBoonSubmenu", "", []() {
-				for (int i = 1; i < MaxTableWindowAmount; ++i) {
-					std::string str = settings.getAppearAsInOption(i);
-					if (str.empty()) {
-						str = std::to_string(i);
-					}
-					ImGui::Checkbox(str.c_str(), &settings.isShowChart(i));
+
+			for (int i = 1; i < MaxTableWindowAmount; ++i) {
+				std::string str = settings.getAppearAsInOption(i);
+				if (str.empty()) {
+					str = lang.translate(LangKey::ShowChart);
+					str.append(" ");
+					str.append(std::to_string(i));
 				}
-			});
+				ImGui::Checkbox(str.c_str(), &settings.isShowChart(i));
+			}
 		}
 	} catch(const std::exception& e) {
 		arc_log_file("Boon Table: exception in mod_options_windows");

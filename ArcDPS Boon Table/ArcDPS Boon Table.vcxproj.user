@@ -9,7 +9,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Mock|x64'">
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerAttach>false</LocalDebuggerAttach>
-    <LocalDebuggerCommand>C:\Users\User\Desktop\Programme\arcdps_mock\x64\Debug\arcdps_mock.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommand>C:\Users\knox\Desktop\Programme\arcdps_mock\x64\Debug\arcdps_mock.exe</LocalDebuggerCommand>
     <LocalDebuggerCommandArguments>"$(OutDirFullPath)$(TargetFileName)"</LocalDebuggerCommandArguments>
     <LocalDebuggerWorkingDirectory>$(OutDirFullPath)</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
