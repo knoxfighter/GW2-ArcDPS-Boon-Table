@@ -130,6 +130,9 @@ arcdps_exports* mod_init()
 		// load settings
 		settings.readFromFile();
 
+		// load translation
+		lang.readFromFile();
+
 		// init buffs, this will load the icons into RAM
 		init_tracked_buffs();
 
@@ -182,6 +185,15 @@ arcdps_exports* mod_init()
 /* release mod -- return ignored */
 uintptr_t mod_release()
 {
+	try {
+		settings.saveToFile();
+
+		lang.saveToFile();
+	} catch(const std::exception& e) {
+		arc_log_file("error in mod_release!");
+		arc_log_file(e.what());
+	}
+
 	return 0;
 }
 

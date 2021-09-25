@@ -196,8 +196,11 @@ class Lang {
 public:
 	std::string translate(LangKey key);
 
-	Lang();
-	~Lang();
+	Lang() = default;
+	~Lang() = default;
+
+	void readFromFile();
+	void saveToFile();
 
 	// copy/move delete
 	Lang(const Lang& other) = delete;
@@ -206,9 +209,6 @@ public:
 	Lang& operator=(Lang&& other) noexcept = delete;
 
 private:
-	void readFromFile();
-	void saveToFile();
-
 	std::map<LangKey, std::string> langMap{
 		{LangKey::WindowHeader, "Boon Table"},
 		{LangKey::Left, "Left"},

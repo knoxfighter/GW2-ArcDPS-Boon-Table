@@ -10,14 +10,6 @@ std::string Lang::translate(LangKey key) {
 	return langMap.at(key);
 }
 
-Lang::Lang() {
-	readFromFile();
-}
-
-Lang::~Lang() {
-	saveToFile();
-}
-
 void Lang::readFromFile() {
 	std::ifstream stream("addons\\arcdps\\arcdps_table_lang.ini");
 

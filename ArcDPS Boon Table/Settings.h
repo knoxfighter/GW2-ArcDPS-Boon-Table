@@ -32,9 +32,11 @@ class Settings {
 	friend SettingsUIGlobal;
 	
 public:
-	Settings();
-	~Settings();
+	Settings() = default;
+	~Settings() = default;
+
 	void readFromFile();
+	void saveToFile();
 
 	bool& isShowChart(int tableIndex);
 	[[nodiscard]] Alignment getAlignment(int tableIndex) const;
@@ -130,7 +132,6 @@ private:
 	// Table tables[MaxTableWindowAmount]{};
 	std::array<Table, MaxTableWindowAmount> tables;
 
-	void saveToFile();
 	void convertFromSimpleIni(modernIni::Ini& ini);
 
 	MODERN_INI_DEFINE_TYPE_INTRUSIVE_NO_EXCEPT(Settings, self_color, _100_color, _0_color, fights_to_keep, tables)

@@ -16,19 +16,6 @@ std::string to_string(SizingPolicy sizingPolicy) {
 	}
 }
 
-Settings::Settings() {
-}
-
-Settings::~Settings() {
-	try {
-		saveToFile();
-	} catch(const std::exception& e) {
-		std::string err = "BoonTable: Error saving settings to file";
-		err.append(e.what());
-		arc_log_file(err.c_str());
-	}
-}
-
 bool& Settings::isShowChart(int tableIndex) {
 	return tables[tableIndex].show;
 }
