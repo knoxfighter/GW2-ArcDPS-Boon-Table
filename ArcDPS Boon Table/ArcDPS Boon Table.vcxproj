@@ -100,7 +100,7 @@
       </Command>
     </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>version.lib;crypt32.lib;Ws2_32.lib;Wldap32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>version.lib;crypt32.lib;Ws2_32.lib;Wldap32.lib;d3d9.lib;d3d11.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Mock|x64'">
@@ -116,7 +116,7 @@
       </Command>
     </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>version.lib;crypt32.lib;Ws2_32.lib;Wldap32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>version.lib;crypt32.lib;Ws2_32.lib;Wldap32.lib;d3d9.lib;d3d11.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -133,7 +133,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>version.lib;crypt32.lib;Ws2_32.lib;Wldap32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>version.lib;crypt32.lib;Ws2_32.lib;Wldap32.lib;d3d9.lib;d3d11.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>powershell.exe -noprofile -executionpolicy bypass "&amp; '.\extension\updateVersion.ps1' '.\ArcDPS Boon Table.rc'"</Command>

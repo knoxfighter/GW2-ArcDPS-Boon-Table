@@ -5,7 +5,9 @@
 
 #include "extension/arcdps_structs.h"
 #include "imgui/imgui.h"
-#include "modernIni/modernIni/modernIniMacros.h"
+
+// #define PRINT_LINE() arc_log_file(std::format("{}:{}#{}", __FILE__, __FUNCTION__, __LINE__).c_str());
+#define PRINT_LINE();
 
 extern uint64_t current_time;
 
@@ -15,8 +17,6 @@ extern uint64_t current_time;
 		if (per>99) ImGui::SameLine(3);					\
 		ImGui::Text("%u%%", per);						\
 		}
-
-#define __VERSION__ (__DATE__)
 
 uint64_t getCurrentTime();
 

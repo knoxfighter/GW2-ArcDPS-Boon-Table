@@ -93,6 +93,8 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 	arc_log_file = (arc_log_func_ptr)GetProcAddress(arc_dll, "e3");
 	arc_log = (arc_log_func_ptr)GetProcAddress(arc_dll, "e8");
 
+	PRINT_LINE()
+
 	// set imgui context && allocation for arcdps dll space
 	ImGui::SetCurrentContext(static_cast<ImGuiContext*>(imguicontext));
 	ImGui::SetAllocatorFunctions((void* (*)(size_t, void*))mallocfn, (void (*)(void*, void*))freefn);
@@ -123,6 +125,7 @@ extern "C" __declspec(dllexport) void* get_release_addr() {
 /* initialize mod -- return table that arcdps will use for callbacks */
 arcdps_exports* mod_init()
 {
+	PRINT_LINE()
 	bool loading_successful = true;
 	std::string error_message = "Unknown error";
 	
@@ -282,6 +285,7 @@ uintptr_t npc_ids[num_of_npcs];
 /* combat callback -- may be called asynchronously. return ignored */
 /* one participant will be party/squad, or minion of. no spawn statechange events. despawn statechange only on marked boss npcs */
 uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision) {
+	PRINT_LINE()
 	try {
 		/* ev is null. dst will only be valid on tracking add. skillname will also be null */
 		history.Event(dst);
@@ -441,12 +445,15 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 
 uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 {
+	PRINT_LINE()
 	try {
 		// ImGui::ShowDemoWindow();
 		
 		readArcExports();
 
 		if (!not_charsel_or_loading) return 0;
+
+		PRINT_LINE()
 
 		auto io = &ImGui::GetIO();
 

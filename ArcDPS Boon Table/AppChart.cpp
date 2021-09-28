@@ -20,6 +20,8 @@ AppChartsContainer charts;
 namespace Table = ImGuiEx::BigTable;
 
 void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
+	PRINT_LINE()
+
 	const std::optional<ImVec2>& windowPadding = settings.getWindowPadding(index);
 	if (windowPadding) {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, windowPadding.value());
@@ -634,6 +636,11 @@ void AppChartsContainer::sortNeeded() {
 }
 
 void AppChartsContainer::drawAll(ImGuiWindowFlags flags) {
+	if (frameCount < 10) {
+		return;
+	}
+	++frameCount;
+	PRINT_LINE()
 	for (AppChart& chart : charts) {
 		bool& showChart = settings.isShowChart(chart.index);
 		if (showChart) {
