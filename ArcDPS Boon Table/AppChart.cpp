@@ -636,10 +636,10 @@ void AppChartsContainer::sortNeeded() {
 }
 
 void AppChartsContainer::drawAll(ImGuiWindowFlags flags) {
+	++frameCount;
 	if (frameCount < 10) {
 		return;
 	}
-	++frameCount;
 	PRINT_LINE()
 	for (AppChart& chart : charts) {
 		bool& showChart = settings.isShowChart(chart.index);
