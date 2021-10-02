@@ -4,8 +4,7 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerAttach>false</LocalDebuggerAttach>
     <LocalDebuggerCommand>D:\Guild Wars 2\Gw2-64.exe</LocalDebuggerCommand>
-    <LocalDebuggerCommandArguments>
-    </LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-autologin</LocalDebuggerCommandArguments>
     <LocalDebuggerEnvironment>APPDATA="D:\Guild Wars 2\debug_data\appdata"
 TMP="D:\Guild Wars 2\debug_data\tmp"
 USERPROFILE="D:\Guild Wars 2"</LocalDebuggerEnvironment>
@@ -23,6 +22,9 @@ USERPROFILE="D:\Guild Wars 2"</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerCommand>D:\Guild Wars 2\Gw2-64.exe</LocalDebuggerCommand>
     <LocalDebuggerCommandArguments>-autologin</LocalDebuggerCommandArguments>
+    <LocalDebuggerEnvironment>APPDATA="D:\Guild Wars 2\debug_data\appdata"
+TMP="D:\Guild Wars 2\debug_data\tmp"
+USERPROFILE="D:\Guild Wars 2"</LocalDebuggerEnvironment>
   </PropertyGroup>
   <PropertyGroup>
     <ShowAllFiles>false</ShowAllFiles>

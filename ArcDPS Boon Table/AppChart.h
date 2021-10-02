@@ -58,7 +58,6 @@ private:
 	AppChart charts[MaxTableWindowAmount] {
 		0,1,2,3,4
 	};
-	uint64_t frameCount = 0;
 };
 
 extern AppChartsContainer charts;
