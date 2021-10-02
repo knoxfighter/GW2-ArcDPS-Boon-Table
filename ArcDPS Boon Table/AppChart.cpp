@@ -337,10 +337,10 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		if (settings.isShowSelfOnTop(index)) {
 			if (self_player) {
 				DrawRow(alignment, self_player->getName().c_str(), std::to_string(self_player->getSubgroup()).c_str(), [&](const BoonDef& boonDef) {
-					        return getEntityDisplayValue(tracker, *self_player, boonDef);
-				        }, [&self_player]() {
-					        return self_player->getOver90();
-				        }, true, self_player, true, settings.getSelfColor());
+							return getEntityDisplayValue(tracker, *self_player, boonDef);
+						}, [&self_player]() {
+							return self_player->getOver90();
+						}, true, self_player, true, settings.getSelfColor());
 			}
 
 			Table::TableNextRow();
@@ -365,10 +365,10 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 				const IPlayer* const player = tracker.getIPlayer(playerIdx);
 
 				DrawRow(alignment, player->getName().c_str(), std::to_string(player->getSubgroup()).c_str(), [&](const BoonDef& boonDef) {
-					        return getEntityDisplayValue(tracker, *player, boonDef);
-				        }, [&player]() {
-					        return player->getOver90();
-				        }, true, player, player->isSelf(), settings.getSelfColor());
+							return getEntityDisplayValue(tracker, *player, boonDef);
+						}, [&player]() {
+							return player->getOver90();
+						}, true, player, player->isSelf(), settings.getSelfColor());
 			}
 		}
 
@@ -389,11 +389,11 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 
 			for (std::set<uint8_t> subgroups = tracker.getSubgroups(); uint8_t subgroup : subgroups | std::views::filter(group_filter)) {
 				DrawRow(alignment, lang.translate(LangKey::SubgroupNameColumnValue).c_str(), std::to_string(subgroup).c_str(),
-				        [&](const BoonDef& boonDef) {
-					        return tracker.getSubgroupBoonUptime(boonDef, subgroup);
-				        }, [&tracker, &subgroup]() {
-					        return tracker.getSubgroupOver90(subgroup);
-				        });
+						[&](const BoonDef& boonDef) {
+							return tracker.getSubgroupBoonUptime(boonDef, subgroup);
+						}, [&tracker, &subgroup]() {
+							return tracker.getSubgroupOver90(subgroup);
+						});
 			}
 		}
 
@@ -402,11 +402,11 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		 */
 		if (settings.isShowTotal(index)) {
 			DrawRow(alignment, lang.translate(LangKey::TotalNameColumnValue).c_str(), lang.translate(LangKey::TotalSubgroupColumnValue).c_str(),
-			        [&](const BoonDef& boonDef) {
-				        return tracker.getAverageBoonUptime(boonDef);
-			        }, [&tracker]() {
-				        return tracker.getAverageOver90();
-			        });
+					[&](const BoonDef& boonDef) {
+						return tracker.getAverageBoonUptime(boonDef);
+					}, [&tracker]() {
+						return tracker.getAverageOver90();
+					});
 		}
 
 		/*
@@ -433,8 +433,8 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 	if (nthTick >= 10) {
 		nthTick = 0;
 		ImGuiEx::WindowReposition(settings.getPosition(index), settings.getCornerVector(index),
-		                          settings.getCornerPosition(index), settings.getFromWindowID(index),
-		                          settings.getAnchorPanelCornerPosition(index), settings.getSelfPanelCornerPosition(index));
+								  settings.getCornerPosition(index), settings.getFromWindowID(index),
+								  settings.getAnchorPanelCornerPosition(index), settings.getSelfPanelCornerPosition(index));
 	} else {
 		++nthTick;
 	}
@@ -449,7 +449,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 
 
 void AppChart::DrawRow(Alignment alignment, const std::string& charnameText, const char* subgroupText, std::function<float(const BoonDef&)> uptimeFunc,
-                       std::function<float()> above90Func, bool hasEntity, const IEntity* const entity, bool hasColor, const ImVec4& color) {
+					   std::function<float()> above90Func, bool hasEntity, const IEntity* const entity, bool hasColor, const ImVec4& color) {
 	Table::TableNextRow();
 
 	if (hasColor) {

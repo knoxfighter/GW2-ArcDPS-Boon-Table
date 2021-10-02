@@ -3,20 +3,25 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerAttach>false</LocalDebuggerAttach>
-    <LocalDebuggerCommand>C:\Program Files\Guild Wars 2\Gw2-64.exe</LocalDebuggerCommand>
-    <LocalDebuggerCommandArguments>-autologin</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommand>D:\Guild Wars 2\Gw2-64.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommandArguments>
+    </LocalDebuggerCommandArguments>
+    <LocalDebuggerEnvironment>APPDATA="D:\Guild Wars 2\debug_data\appdata"
+TMP="D:\Guild Wars 2\debug_data\tmp"
+USERPROFILE="D:\Guild Wars 2"</LocalDebuggerEnvironment>
+    <LocalDebuggerMergeEnvironment>true</LocalDebuggerMergeEnvironment>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Mock|x64'">
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerAttach>false</LocalDebuggerAttach>
-    <LocalDebuggerCommand>C:\Users\knox\Desktop\Programme\arcdps_mock\x64\Debug\arcdps_mock.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommand>D:\ProgrammeSelbst\C++\arcdps_mock\x64\Debug\arcdps_mock.exe</LocalDebuggerCommand>
     <LocalDebuggerCommandArguments>"$(OutDirFullPath)$(TargetFileName)"</LocalDebuggerCommandArguments>
     <LocalDebuggerWorkingDirectory>$(OutDirFullPath)</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LocalDebuggerAttach>false</LocalDebuggerAttach>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommand>C:\Program Files\Guild Wars 2\Gw2-64.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommand>D:\Guild Wars 2\Gw2-64.exe</LocalDebuggerCommand>
     <LocalDebuggerCommandArguments>-autologin</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup>
