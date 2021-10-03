@@ -59,12 +59,12 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		arc_log(std::format("innerTableCursorPos: {}", innerTableCursorPos).c_str());
 #endif
 		
-		float overriddenHeight = titleBarHeight + 5.f;
+		float overriddenHeight = titleBarHeight + ImGui::GetStyle().WindowPadding.y + 5.f;
 		if (overriddenHeight < 50.f) overriddenHeight = 50.f;
 		if (minHeight < overriddenHeight) minHeight = overriddenHeight;
 		if (maxHeight < overriddenHeight) maxHeight = overriddenHeight;
 	} else {
-		minHeight = titleBarHeight + 5.f;
+		minHeight = titleBarHeight + ImGui::GetStyle().WindowPadding.y + 5.f;
 		maxHeight = FLT_MAX;
 	}
 
