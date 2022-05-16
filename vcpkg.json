@@ -1,0 +1,9 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
+  "name": "arcdps-demo-project",
+  "version-string": "0.1.0",
+  "dependencies": [
+    "magic-enum",
+	"nlohmann-json"
+  ]
+}
