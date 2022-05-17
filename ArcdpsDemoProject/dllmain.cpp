@@ -1,3 +1,4 @@
+#include "EventWindow.h"
 #include "global.h"
 
 #include "extension/arcdps_structs.h"
@@ -13,6 +14,7 @@
 #include <d3d9.h>
 #include <string>
 #include <Windows.h>
+#include <format>
 
 namespace {
 	HMODULE SELF_DLL;
@@ -40,6 +42,7 @@ BOOL APIENTRY DllMain(HMODULE pModule,
 
 uintptr_t mod_windows(const char* windowname) {
 	if (!windowname) {
+		EventWindow::instance().DrawOptionCheckbox();
 #if _DEBUG
 		DemoWindow::instance().DrawOptionCheckbox();
 		DemoTableWindow::instance().DrawOptionCheckbox();
@@ -53,6 +56,7 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading) {
 	const auto& beforePoint = std::chrono::high_resolution_clock::now();
 #endif
 
+	EventWindow::instance().Draw();
 #if _DEBUG
 	DemoWindow::instance().Draw();
 	DemoTableWindow::instance().Draw();
@@ -146,9 +150,153 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	return uMsg;
 }
 
+namespace {
+	uint64_t cbtcount = 0;
+}
+/* combat callback -- may be called asynchronously, use id param to keep track of order, first event id will be 2. return ignored */
+/* at least one participant will be party/squad or minion of, or a buff applied by squad in the case of buff remove. not all statechanges present, see evtc statechange enum */
+uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision) {
+	auto& eventWindow = EventWindow::instance();
+
+	/* ev is null. dst will only be valid on tracking add. skillname will also be null */
+	if (!ev) {
+
+		/* notify tracking change */
+		if (!src->elite) {
+
+			/* add */
+			if (src->prof) {
+				eventWindow.AddData(std::format("==== cbtnotify ==== -> agent added: {}:{} ({}), instid: {}, prof: {}, elite: {}, self: {}, team: {}, subgroup: {}", src->name, dst->name, src->id, dst->id, static_cast<std::underlying_type_t<Prof>>(dst->prof), dst->elite, dst->self, src->team, dst->team));
+				// p += _snprintf_s(p, 400, _TRUNCATE, "==== cbtnotify ====\n");
+				// p += _snprintf_s(p, 400, _TRUNCATE, "agent added: %s:%s (%0llx), instid: %u, prof: %u, elite: %u, self: %u, team: %u, subgroup: %u\n", src->name, dst->name, src->id, dst->id, dst->prof, dst->elite, dst->self, src->team, dst->team);
+			}
+
+			/* remove */
+			else {
+				eventWindow.AddData(std::format("==== cbtnotify ==== -> agent removed: {} ({})", src->name, src->id));
+				// p += _snprintf_s(p, 400, _TRUNCATE, "==== cbtnotify ====\n");
+				// p += _snprintf_s(p, 400, _TRUNCATE, "agent removed: %s (%0llx)\n", src->name, src->id);
+			}
+		}
+
+		/* target change */
+		else if (src->elite == 1) {
+			eventWindow.AddData(std::format("==== cbtnotify ==== -> new target: {}", src->id));
+			// p += _snprintf_s(p, 400, _TRUNCATE, "==== cbtnotify ====\n");
+			// p += _snprintf_s(p, 400, _TRUNCATE, "new target: %0llx\n", src->id);
+		}
+	}
+
+	/* combat event. skillname may be null. non-null skillname will remain static until client exit. refer to evtc notes for complete detail */
+	else {
+
+		/* default names */
+		if (!src->name || !strlen(src->name)) src->name = (char*)"(area)";
+		if (!dst->name || !strlen(dst->name)) dst->name = (char*)"(area)";
+
+		/* common */
+		eventWindow.AddData(std::format("combatdemo: ==== cbtevent {} at {} ====", cbtcount, ev->time));
+		// p += _snprintf_s(p, 400, _TRUNCATE, "combatdemo: ==== cbtevent %u at %llu ====\n", cbtcount, ev->time);
+		eventWindow.AddData(std::format("source agent: {} ({}:{}, {}:{}), master: {}", src->name, ev->src_agent, ev->src_instid, static_cast<std::underlying_type_t<Prof>>(src->prof), src->elite, ev->src_master_instid));
+		// p += _snprintf_s(p, 400, _TRUNCATE, "source agent: %s (%0llx:%u, %lx:%lx), master: %u\n", src->name, ev->src_agent, ev->src_instid, src->prof, src->elite, ev->src_master_instid);
+
+		if (ev->dst_agent) {
+			eventWindow.AddData(std::format("target agent: {} ({}:{}, {}:{})", dst->name, ev->dst_agent, ev->dst_instid, static_cast<std::underlying_type_t<Prof>>(dst->prof), dst->elite));
+			// p += _snprintf_s(p, 400, _TRUNCATE, "target agent: %s (%0llx:%u, %lx:%lx)\n", dst->name, ev->dst_agent, ev->dst_instid, dst->prof, dst->elite);
+		} else {
+			eventWindow.AddData("target agent: n/a");
+			// p += _snprintf_s(p, 400, _TRUNCATE, "target agent: n/a\n");
+		}
+
+		/* statechange */
+		if (ev->is_statechange) {
+			eventWindow.AddData(std::format("is_statechange: {}", static_cast<std::underlying_type_t<cbtstatechange>>(ev->is_statechange)));
+			// p += _snprintf_s(p, 400, _TRUNCATE, "is_statechange: %u\n", ev->is_statechange);
+		}
+
+		/* activation */
+		else if (ev->is_activation) {
+			eventWindow.AddData(std::format("is_activation: {}", ev->is_activation));
+			eventWindow.AddData(std::format("skill: {}:{}", skillname, ev->skillid));
+			eventWindow.AddData(std::format("ms_expected: {}", ev->value));
+			// p += _snprintf_s(p, 400, _TRUNCATE, "is_activation: %u\n", ev->is_activation);
+			// p += _snprintf_s(p, 400, _TRUNCATE, "skill: %s:%u\n", skillname, ev->skillid);
+			// p += _snprintf_s(p, 400, _TRUNCATE, "ms_expected: %d\n", ev->value);
+		}
+
+		/* buff remove */
+		else if (ev->is_buffremove) {
+			eventWindow.AddData(std::format("is_buffremove: {}", ev->is_buffremove));
+			eventWindow.AddData(std::format("skill: {}:{}", skillname, ev->skillid));
+			eventWindow.AddData(std::format("ms_expected: {}", ev->value));
+			eventWindow.AddData(std::format("ms_intensity: {}", ev->buff_dmg));
+			// p += _snprintf_s(p, 400, _TRUNCATE, "is_buffremove: %u\n", ev->is_buffremove);
+			// p += _snprintf_s(p, 400, _TRUNCATE, "skill: %s:%u\n", skillname, ev->skillid);
+			// p += _snprintf_s(p, 400, _TRUNCATE, "ms_duration: %d\n", ev->value);
+			// p += _snprintf_s(p, 400, _TRUNCATE, "ms_intensity: %d\n", ev->buff_dmg);
+		}
+
+		/* buff */
+		else if (ev->buff) {
+
+			/* damage */
+			if (ev->buff_dmg) {
+				eventWindow.AddData(std::format("is_buff: {}", ev->buff));
+				eventWindow.AddData(std::format("skill: {}:{}", skillname, ev->skillid));
+				eventWindow.AddData(std::format("dmg: {}", ev->buff_dmg));
+				eventWindow.AddData(std::format("is_shields: {}", ev->is_shields));
+				// p += _snprintf_s(p, 400, _TRUNCATE, "is_buff: %u\n", ev->buff);
+				// p += _snprintf_s(p, 400, _TRUNCATE, "skill: %s:%u\n", skillname, ev->skillid);
+				// p += _snprintf_s(p, 400, _TRUNCATE, "dmg: %d\n", ev->buff_dmg);
+				// p += _snprintf_s(p, 400, _TRUNCATE, "is_shields: %u\n", ev->is_shields);
+			}
+
+			/* application */
+			else {
+				eventWindow.AddData(std::format("is_buff: {}", ev->buff));
+				eventWindow.AddData(std::format("skill: {}:{}", skillname, ev->skillid));
+				eventWindow.AddData(std::format("raw ms: {}", ev->value));
+				eventWindow.AddData(std::format("overstack ms: {}", ev->overstack_value));
+				// p += _snprintf_s(p, 400, _TRUNCATE, "is_buff: %u\n", ev->buff);
+				// p += _snprintf_s(p, 400, _TRUNCATE, "skill: %s:%u\n", skillname, ev->skillid);
+				// p += _snprintf_s(p, 400, _TRUNCATE, "raw ms: %d\n", ev->value);
+				// p += _snprintf_s(p, 400, _TRUNCATE, "overstack ms: %u\n", ev->overstack_value);
+			}
+		}
+
+		/* strike */
+		else {
+			eventWindow.AddData(std::format("is_buff: {}", ev->buff));
+			eventWindow.AddData(std::format("skill: {}:{}", skillname, ev->skillid));
+			eventWindow.AddData(std::format("dmg: {}", ev->value));
+			eventWindow.AddData(std::format("is_moving: {}", ev->is_moving));
+			eventWindow.AddData(std::format("is_ninety: {}", ev->is_ninety));
+			eventWindow.AddData(std::format("is_flanking: {}", ev->is_flanking));
+			eventWindow.AddData(std::format("is_shields: {}", ev->is_shields));
+			// p += _snprintf_s(p, 400, _TRUNCATE, "is_buff: %u\n", ev->buff);
+			// p += _snprintf_s(p, 400, _TRUNCATE, "skill: %s:%u\n", skillname, ev->skillid);
+			// p += _snprintf_s(p, 400, _TRUNCATE, "dmg: %d\n", ev->value);
+			// p += _snprintf_s(p, 400, _TRUNCATE, "is_moving: %u\n", ev->is_moving);
+			// p += _snprintf_s(p, 400, _TRUNCATE, "is_ninety: %u\n", ev->is_ninety);
+			// p += _snprintf_s(p, 400, _TRUNCATE, "is_flanking: %u\n", ev->is_flanking);
+			// p += _snprintf_s(p, 400, _TRUNCATE, "is_shields: %u\n", ev->is_shields);
+		}
+
+		/* common */
+		eventWindow.AddData(std::format("iff: {}", ev->iff));
+		eventWindow.AddData(std::format("result: {}", ev->result));
+		// p += _snprintf_s(p, 400, _TRUNCATE, "iff: %u\n", ev->iff);
+		// p += _snprintf_s(p, 400, _TRUNCATE, "result: %u\n", ev->result);
+		cbtcount += 1;
+	}
+
+	return 0;
+}
+
 /* initialize mod -- return table that arcdps will use for callbacks */
 arcdps_exports* mod_init() {
 	// windows init
+	EventWindow::instance().Init();
 #if _DEBUG
 	DemoWindow::instance().Init();
 	DemoTableWindow::instance().Init();
@@ -162,10 +310,10 @@ arcdps_exports* mod_init() {
 	arc_exports.sig = 0x00000011; // generate random number!
 	arc_exports.size = sizeof(arcdps_exports);
 	arc_exports.wnd_nofilter = mod_wnd;
-	// arc_exports.combat = mod_combat;
+	arc_exports.combat = mod_combat;
 	arc_exports.imgui = mod_imgui;
-	// arc_exports.options_end = mod_options;
 	arc_exports.options_windows = mod_windows;
+	// arc_exports.options_end = mod_options;
 	// arc_exports.combat_local = mod_combat_local;
 
 	return &arc_exports;
