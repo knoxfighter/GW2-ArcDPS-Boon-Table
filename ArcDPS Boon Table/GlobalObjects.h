@@ -1,12 +1,17 @@
 #pragma once
 
+#include "extension/MumbleLink.h"
+#include "extension/UpdateCheckerBase.h"
+
 #include "unofficial_extras/Definitions.h"
 
-#include <memory>
 #include <Windows.h>
 
 class GlobalObjects {
 public:
+	// Updating myself stuff
+	static inline std::unique_ptr<UpdateCheckerBase::UpdateState> UPDATE_STATE = nullptr;
+
 	// arc keyboard modifier
 	static inline DWORD ARC_GLOBAL_MOD1 = 0;
 	static inline DWORD ARC_GLOBAL_MOD2 = 0;
@@ -24,8 +29,8 @@ public:
 	static bool ModsPressed();
 	static bool CanMoveWindows();
 
-	// other
-	// TODO: fill with actual values and keep them up to date
+	static inline LinkedMem* MUMBLE_MEM = nullptr;
 	static inline Language CURRENT_LANGUAGE = Language::English;
 	static inline HKL CURRENT_HKL;
 };
+

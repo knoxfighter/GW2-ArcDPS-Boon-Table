@@ -1,0 +1,234 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// German (Germany) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
+LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
+#pragma code_page(1252)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+
+ID_Might                PNG                     "icons\\Might.png"
+
+ID_Fury                 PNG                     "icons\\Fury.png"
+
+ID_Regeneration         PNG                     "icons\\Regeneration.png"
+
+ID_Protection           PNG                     "icons\\Protection.png"
+
+ID_Quickness            PNG                     "icons\\Quickness.png"
+
+ID_Alacrity             PNG                     "icons\\Alacrity.png"
+
+ID_Vigor                PNG                     "icons\\Vigor.png"
+
+ID_Stability            PNG                     "icons\\Stability.png"
+
+ID_Aegis                PNG                     "icons\\Aegis.png"
+
+ID_Swiftness            PNG                     "icons\\Swiftness.png"
+
+ID_Resistance           PNG                     "icons\\Resistance.png"
+
+ID_Empower_Allies       PNG                     "icons\\Empower_Allies.png"
+
+ID_Pinpoint_Distribution PNG                     "icons\\Pinpoint_Distribution.png"
+
+ID_Spotter              PNG                     "icons\\Spotter.png"
+
+ID_Soothing_Mist        PNG                     "icons\\Soothing_Mist.png"
+
+ID_Vampiric_Presence    PNG                     "icons\\Vampiric_Presence.png"
+
+ID_Strength_in_Numbers  PNG                     "icons\\Strength_in_Numbers.png"
+
+ID_Water_Spirit         PNG                     "icons\\Water_Spirit.png"
+
+ID_Banner_of_Strength2  PNG                     "icons\\bannerStrength.png"
+
+ID_Banner_of_Discipline2 PNG                     "icons\\Banner_of_Discipline2.png"
+
+ID_Banner_of_Tactics2   PNG                     "icons\\Banner_of_Tactics2.png"
+
+ID_Banner_of_Defense2   PNG                     "icons\\Banner_of_Defense2.png"
+
+ID_Frost_Spirit2        PNG                     "icons\\Frost_Spirit2.png"
+
+ID_Sun_Spirit2          PNG                     "icons\\Sun_Spirit2.png"
+
+ID_Stone_Spirit2        PNG                     "icons\\Stone_Spirit2.png"
+
+ID_Storm_Spirit2        PNG                     "icons\\Storm_Spirit2.png"
+
+ID_Signet_of_Inspiration2 PNG                     "icons\\Signet_of_Inspiration2.png"
+
+ID_Stealth2             PNG                     "icons\\Stealth2.png"
+
+ID_Super_Speed2         PNG                     "icons\\Super_Speed2.png"
+
+ID_Rune_Scholar         PNG                     "icons\\Rune_of_the_Scholar.png"
+
+ID_Signet_Resolve       PNG                     "icons\\Signet_of_Resolve.png"
+
+ID_Signet_Bane          PNG                     "icons\\Bane_Signet.png"
+
+ID_Signet_Judgment      PNG                     "icons\\Signet_Judgment.png"
+
+ID_Signet_Mercy         PNG                     "icons\\Signet_Mercy.png"
+
+ID_Signet_Wrath         PNG                     "icons\\Signet_Wrath.png"
+
+ID_Signet_Courage       PNG                     "icons\\Signet_of_Courage.png"
+
+ID_Unbroken_Lines       PNG                     "icons\\Unbroken_Lines.png"
+
+ID_Dolyak_Stance        PNG                     "icons\\Dolyak_Stance.png"
+
+ID_Griffon_Stance       PNG                     "icons\\Griffon_Stance.png"
+
+ID_Moa_Stance           PNG                     "icons\\Moa_Stance.png"
+
+ID_Vulture_Stance       PNG                     "icons\\Vulture_Stance.png"
+
+ID_Bear_Stance          PNG                     "icons\\Bear_Stance.png"
+
+ID_One_Wolf_Pack        PNG                     "icons\\One_Wolf_Pack.png"
+
+ID_Soulcleaves_Summit   PNG                     "icons\\Soulcleaves_Summit.png"
+
+ID_Razorclaws_Rage      PNG                     "icons\\Razorclaws_Rage.png"
+
+ID_Breakrazors_Bastion  PNG                     "icons\\Breakrazors_Bastion.png"
+
+ID_Assassins_Presence2  PNG                     "icons\\Assassin's_Presence2.png"
+
+ID_Chaos_Aura           PNG                     "icons\\Chaos_Aura.png"
+
+ID_Dark_Aura            PNG                     "icons\\Dark_Aura.png"
+
+ID_Fire_Aura            PNG                     "icons\\Fire_Aura.png"
+
+ID_Frost_Aura           PNG                     "icons\\Frost_Aura.png"
+
+ID_Light_Aura           PNG                     "icons\\Light_Aura.png"
+
+ID_Magnetic_Aura        PNG                     "icons\\Magnetic_Aura.png"
+
+ID_Shocking_Aura        PNG                     "icons\\Shocking_Aura.png"
+
+ID_Soul_Barbs           PNG                     "icons\\Soul_Barbs.png"
+
+ID_Spectral_Armor       PNG                     "icons\\Spectral_Armor.png"
+
+ID_Inspiring_Virtue     PNG                     "icons\\Inspiring_Virtue.png"
+
+ID_Eternal_Oasis        PNG                     "icons\\Eternal_Oasis.png"
+
+ID_Rite_of_the_Great_Dwarf PNG                     "icons\\Rite_of_the_Great_Dwarf.png"
+
+ID_Bulwark_Gyro         PNG                     "icons\\Bulwark_Gyro.png"
+
+ID_Symbolic_Avenger     PNG                     "icons\\Symbolic_Avenger.png"
+
+ID_Invigorated_Bulwark  PNG                     "icons\\Invigorated_Bulwark.png"
+
+ID_Sticking_Together    PNG                     "icons\\Sticking_Together.png"
+
+ID_Rigorous_Certainty   PNG                     "icons\\Rigorous_Certainty.png"
+
+ID_Resolution           PNG                     "icons\\Resolution.png"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 2,4,3,2
+ PRODUCTVERSION 2,4,3,2
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000004b0"
+        BEGIN
+            VALUE "FileVersion", "2.4.3.2"
+            VALUE "InternalName", "d3d9_arcdps_table.dll"
+            VALUE "LegalCopyright", "Copyright (C) 2021"
+            VALUE "OriginalFilename", "d3d9_arcdps_table.dll"
+            VALUE "ProductName", "Arcdps Boon table plugin"
+            VALUE "ProductVersion", "2.4.3.2"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0, 1200
+    END
+END
+
+#endif    // German (Germany) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

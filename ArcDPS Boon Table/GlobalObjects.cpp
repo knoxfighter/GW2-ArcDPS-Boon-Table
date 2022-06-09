@@ -1,4 +1,4 @@
-#include "global.h"
+#include "GlobalObjects.h"
 
 #include "extension/arcdps_structs.h"
 
