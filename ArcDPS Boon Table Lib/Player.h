@@ -104,11 +104,12 @@ public:
 	bool operator==(const std::string& pOther) const { return mAccountName == pOther; }
 	bool operator==(const uintptr_t pOther) const { return mId == pOther; }
 
-	void GotBoon(Boons pBoon, uint64_t pTime, int32_t pDuration);
-	void RemoveBoon(Boons pBoons, uint64_t pTime, int32_t pDuration, uint8_t pStacksRemoved, cbtbuffremove pRemoveType);
+	void GotBoon(Boons pBoon, double pTime, int32_t pDuration);
+	void RemoveBoon(Boons pBoons, double pTime, int32_t pDuration, uint8_t pStacksRemoved, cbtbuffremove pRemoveType);
 	void AppliedBoon(Boons pBoon);
 	void EnterCombat(cbtevent* pEvent);
 	void ExitCombat(cbtevent* pEvent);
+	double GetIntensity(Boons pBoons) const;
 
 private:
 	// bool mCommander = false;

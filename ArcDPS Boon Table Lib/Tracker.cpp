@@ -6,7 +6,8 @@
 
 void Tracker::Event(cbtevent* pEvent, ag* pSrc, ag* pDst, const char* pSkillname, uint64_t pId) {
 	if (pEvent) {
-		mCurrentTime = pEvent->time;
+		// times are saved as double in seconds
+		mCurrentTime = static_cast<double>(pEvent->time) / 1000;
 
 		// buff applied event
 		if (pEvent->buff && pEvent->buff_dmg == 0 && pEvent->is_buffremove == 0) {
@@ -18,7 +19,7 @@ void Tracker::Event(cbtevent* pEvent, ag* pSrc, ag* pDst, const char* pSkillname
 		}
 		// state change event
 		else if (cbtstatechange statechange = pEvent->is_statechange) {
-			PlayerReadLock guard(mPlayersMutex);
+			PlayerReadLock guard(PlayersMutex);
 
 			if (statechange == CBTS_ENTERCOMBAT) {
 				const auto& player = std::ranges::find_if(mPlayers, [pSrc](const auto& pPlayer) {
@@ -67,12 +68,16 @@ void Tracker::Event(cbtevent* pEvent, ag* pSrc, ag* pDst, const char* pSkillname
 	}
 }
 
-uint64_t Tracker::GetTime() const {
+double Tracker::GetTime() const {
 	return mCurrentTime;
 }
 
+const std::vector<Player>& Tracker::GetAllPlayer() {
+	return mPlayers;
+}
+
 void Tracker::AddPlayer(ag* pSrc, ag* pDst) {
-	PlayerWriteLock guard(mPlayersMutex);
+	PlayerWriteLock guard(PlayersMutex);
 
 	std::string accountName = pDst->name;
 
@@ -84,13 +89,13 @@ void Tracker::AddPlayer(ag* pSrc, ag* pDst) {
 }
 
 void Tracker::RemovePlayer(ag* pDst) {
-	PlayerWriteLock guard(mPlayersMutex);
+	PlayerWriteLock guard(PlayersMutex);
 
 	std::erase(mPlayers, pDst->name);
 }
 
 void Tracker::BuffAppliedEvent(cbtevent* pEvent, ag* pSrc, ag* pDst) {
-	PlayerReadLock guard(mPlayersMutex);
+	PlayerReadLock guard(PlayersMutex);
 
 	const auto& player = std::ranges::find_if(mPlayers, [pDst](const auto& pPlayer) {
 		return pPlayer == pDst->id;
@@ -112,12 +117,12 @@ void Tracker::BuffAppliedEvent(cbtevent* pEvent, ag* pSrc, ag* pDst) {
 			pDuration = pEvent->value;
 		}
 
-		player->GotBoon(boons.value(), pEvent->time, pDuration);
+		player->GotBoon(boons.value(), static_cast<double>(pEvent->time) / 1000, pDuration);
 	}
 }
 
 void Tracker::BuffRemoveEvent(cbtevent* pEvent, ag* pSrc) {
-	PlayerReadLock guard(mPlayersMutex);
+	PlayerReadLock guard(PlayersMutex);
 
 	const auto& player = std::ranges::find_if(mPlayers, [pSrc](const auto& pPlayer) {
 		return pPlayer == pSrc->id;
@@ -139,6 +144,6 @@ void Tracker::BuffRemoveEvent(cbtevent* pEvent, ag* pSrc) {
 			pDuration = pEvent->value;
 		}
 
-		player->RemoveBoon(boons.value(), pEvent->time, pDuration, pEvent->result, pEvent->is_buffremove);
+		player->RemoveBoon(boons.value(), static_cast<double>(pEvent->time) / 1000, pDuration, pEvent->result, pEvent->is_buffremove);
 	}
 }

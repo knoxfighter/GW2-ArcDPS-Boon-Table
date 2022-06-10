@@ -1,0 +1,9 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
+  "name": "arcdps-boon-table-plugin-lib",
+  "version-string": "2.4.3",
+  "dependencies": [
+    "cpr",
+	"magic-enum"
+  ]
+}

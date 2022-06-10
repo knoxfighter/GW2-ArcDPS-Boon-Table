@@ -4,11 +4,16 @@
 
 void Boon::GotBoon(uint64_t pTime, int32_t pDuration) {
 	if (StackType == StackType::Multi) {
+		if (mBeginTime && !mEndTime) {
+			mLastCalculationUptime = CalcUptime(pTime);
+			mLastCalculationTime = pTime;
+		}
+
 		mCurrentStacks += 1;
 	}
 }
 
-void Boon::RemoveBoon(uint64_t pTime, int32_t pDuration, uint8_t pStacksRemoved, cbtbuffremove pRemoveType) {
+void Boon::RemoveBoon(double pTime, int32_t pDuration, uint8_t pStacksRemoved, cbtbuffremove pRemoveType) {
 	// ignore CBTB_ALL for now, every last stack removed gets a MANUAL call as well.
 	if (StackType == StackType::Multi) {
 		// calculate new current value
@@ -26,7 +31,7 @@ void Boon::RemoveBoon(uint64_t pTime, int32_t pDuration, uint8_t pStacksRemoved,
 	}
 }
 
-void Boon::BeginCount(uint64_t pTime) {
+void Boon::BeginCount(double pTime) {
 	mBeginTime = pTime;
 	mLastCalculationTime = pTime;
 	mLastCalculationUptime = mCurrentStacks;
@@ -34,11 +39,11 @@ void Boon::BeginCount(uint64_t pTime) {
 	mEndTime = 0;
 }
 
-void Boon::EndCount(uint64_t pTime) {
+void Boon::EndCount(double pTime) {
 	mEndTime = pTime;
 }
 
-double Boon::GetIntensity() {
+double Boon::GetIntensity() const {
 	if (mEndTime) {
 		return mLastCalculationUptime;
 	}
@@ -47,9 +52,9 @@ double Boon::GetIntensity() {
 		return 0;
 	}
 
-	return CalcUptime(std::forward<uint64_t>(Tracker::instance().GetTime()));
+	return CalcUptime(std::forward<double>(Tracker::instance().GetTime()));
 }
 
-double Boon::CalcUptime(uint64_t pTime) {
-	return static_cast<double>(mLastCalculationTime - mBeginTime) * mLastCalculationUptime + static_cast<double>(pTime - mLastCalculationTime) * mCurrentStacks;
+double Boon::CalcUptime(double pTime) const {
+	return ((mLastCalculationTime - mBeginTime) * mLastCalculationUptime + (pTime - mLastCalculationTime) * mCurrentStacks) / (pTime - mBeginTime);
 }

@@ -1,0 +1,10 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
+  "name": "arcdps-boon-table-plugin-tests",
+  "version-string": "0.0.1",
+  "dependencies": [
+    "gtest",
+	"magic-enum",
+	"cpr"
+  ]
+}

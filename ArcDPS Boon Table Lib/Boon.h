@@ -11,20 +11,20 @@ public:
 	Boon(BoonDef pBoonDef) : BoonDef(pBoonDef) {}
 
 	void GotBoon(uint64_t pTime, int32_t pDuration);
-	void RemoveBoon(uint64_t pTime, int32_t pDuration, uint8_t pStacksRemoved, cbtbuffremove pRemoveType);
-	void BeginCount(uint64_t pTime);
-	void EndCount(uint64_t pTime);
-	double GetIntensity();
+	void RemoveBoon(double pTime, int32_t pDuration, uint8_t pStacksRemoved, cbtbuffremove pRemoveType);
+	void BeginCount(double pTime);
+	void EndCount(double pTime);
+	double GetIntensity() const;
 
 	// TODO remove
 	friend class BoonWindowHandler;
 
 private:
-	uint64_t mBeginTime = 0;
-	uint64_t mLastCalculationTime = 0;
+	double mBeginTime = 0;
+	double mLastCalculationTime = 0;
 	double mLastCalculationUptime = 0;
-	uint64_t mEndTime = 0;
+	double mEndTime = 0;
 	uint8_t mCurrentStacks = 0;
 
-	double CalcUptime(uint64_t pTime);
+	double CalcUptime(double pTime) const;
 };

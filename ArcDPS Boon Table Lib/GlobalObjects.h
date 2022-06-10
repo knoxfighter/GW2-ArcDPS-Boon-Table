@@ -1,5 +1,6 @@
 #pragma once
 
+#include "extension/arcdps_structs.h"
 #include "extension/MumbleLink.h"
 #include "extension/UpdateCheckerBase.h"
 
@@ -32,5 +33,9 @@ public:
 	static inline LinkedMem* MUMBLE_MEM = nullptr;
 	static inline Language CURRENT_LANGUAGE = Language::English;
 	static inline HKL CURRENT_HKL;
+	static inline HMODULE SELF_DLL;
 };
 
+// Exports
+extern "C" __declspec(dllexport) ModInitSignature get_init_addr(const char* arcversion, ImGuiContext* imguictx, void* dxptr, HMODULE arcdll, MallocSignature mallocfn, FreeSignature freefn, UINT dxver);
+extern "C" __declspec(dllexport) ModReleaseSignature get_release_addr();
