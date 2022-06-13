@@ -4,6 +4,7 @@
   "version-string": "2.4.3",
   "dependencies": [
     "cpr",
-	"magic-enum"
+	"magic-enum",
+	"imgui"
   ]
 }

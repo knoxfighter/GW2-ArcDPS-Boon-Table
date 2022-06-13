@@ -67,5 +67,5 @@ GTEST_TEST(BoonTests, MightIntensity2s2s) {
 	double intensity = players[0].GetIntensity(Boons::Might);
 
 	// result should be 2.5
-	EXPECT_EQ(intensity, 2.5);
+	EXPECT_DOUBLE_EQ(intensity, 2.5);
 }

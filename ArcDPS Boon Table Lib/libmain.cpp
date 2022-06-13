@@ -6,21 +6,22 @@
 #include "extension/arcdps_structs.h"
 #include "extension/IconLoader.h"
 #include "extension/KeyBindHandler.h"
-#include "extension/Windows/Demo/DemoTableWindow.h"
-#include "extension/Windows/Demo/DemoWindow.h"
 #include "extension/KeyInput.h"
 #include "extension/MumbleLink.h"
 #include "extension/UpdateChecker.h"
-#include "extension/windows/PositioningComponent.h"
-
-#include "imgui/imgui.h"
+#include "extension/Windows/PositioningComponent.h"
+#include "extension/Windows/Demo/DemoTableWindow.h"
+#include "extension/Windows/Demo/DemoWindow.h"
 
 #include "unofficial_extras/Definitions.h"
 
+#include <imgui/imgui.h>
+
 #include <d3d11.h>
 #include <d3d9.h>
-#include <Windows.h>
 #include <format>
+#include <Windows.h>
+
 
 namespace {
 	HMODULE ARC_DLL;

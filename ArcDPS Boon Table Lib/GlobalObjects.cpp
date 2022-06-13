@@ -2,7 +2,7 @@
 
 #include "extension/arcdps_structs.h"
 
-#include "imgui/imgui.h"
+#include <imgui/imgui.h>
 
 void GlobalObjects::UpdateArcExports() {
 	uint64_t e6_result = ARC_EXPORT_E6();

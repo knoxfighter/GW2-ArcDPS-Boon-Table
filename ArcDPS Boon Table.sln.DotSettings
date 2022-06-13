@@ -6,8 +6,10 @@
 	<s:String x:Key="/Default/CodeEditing/Intellisense/CodeCompletion/AutopopupEnabled/CppAutopopupEnabled/OnIdent/@EntryValue">HardAutopopup</s:String>
 	<s:String x:Key="/Default/CodeStyle/CppSortIncludes/IncludeSortCategories/@EntryValue">&lt;CppIncludeCategories&gt;&#xD;
   &lt;CppIncludeCategorySetting Pattern="^&amp;quot;.*" Description="#include &amp;quot;header&amp;quot;" Group="2" Order="2" /&gt;&#xD;
-  &lt;CppIncludeCategorySetting Pattern="^&amp;lt;.*" Description="#include &amp;lt;header&amp;gt;" Group="3" Order="3" /&gt;&#xD;
+  &lt;CppIncludeCategorySetting Pattern="^&amp;lt;.*/.*" Description="#include &amp;lt;folder/header&amp;gt;" Group="3" Order="3" /&gt;&#xD;
+  &lt;CppIncludeCategorySetting Pattern="^&amp;lt;.*" Description="#include &amp;lt;header&amp;gt;" Group="4" Order="4" /&gt;&#xD;
 &lt;/CppIncludeCategories&gt;</s:String>
+	<s:Int64 x:Key="/Default/CodeStyle/CppSortIncludes/UnmatchedHeaderGroup/@EntryValue">5</s:Int64>
 	<s:String x:Key="/Default/CodeStyle/Naming/CppNaming/Rules/=Class_0020and_0020struct_0020fields/@EntryIndexedValue">&lt;NamingElement Priority="11"&gt;&lt;Descriptor Static="Indeterminate" Constexpr="Indeterminate" Const="Indeterminate" Volatile="Indeterminate" Accessibility="NOT_APPLICABLE"&gt;&lt;type Name="class field" /&gt;&lt;type Name="struct field" /&gt;&lt;/Descriptor&gt;&lt;Policy Inspect="True" Prefix="m" Suffix="" Style="AaBb" /&gt;&lt;/NamingElement&gt;</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CppNaming/Rules/=Class_0020and_0020struct_0020methods/@EntryIndexedValue">&lt;NamingElement Priority="10"&gt;&lt;Descriptor Static="Indeterminate" Constexpr="Indeterminate" Const="Indeterminate" Volatile="Indeterminate" Accessibility="NOT_APPLICABLE"&gt;&lt;type Name="member function" /&gt;&lt;/Descriptor&gt;&lt;Policy Inspect="True" Prefix="" Suffix="" Style="AaBb" /&gt;&lt;/NamingElement&gt;</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CppNaming/Rules/=Class_0020and_0020struct_0020private_0020fields/@EntryIndexedValue">&lt;NamingElement Priority="13"&gt;&lt;Descriptor Static="Indeterminate" Constexpr="Indeterminate" Const="Indeterminate" Volatile="Indeterminate" Accessibility="PRIVATE"&gt;&lt;type Name="class field" /&gt;&lt;type Name="struct field" /&gt;&lt;/Descriptor&gt;&lt;Policy Inspect="True" Prefix="m" Suffix="" Style="AaBb" /&gt;&lt;/NamingElement&gt;</s:String>

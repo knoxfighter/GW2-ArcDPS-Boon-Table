@@ -1,6 +1,3 @@
-[submodule "modules/imgui"]
-	path = modules/imgui
-	url = https://github.com/knoxfighter/imgui.git
 [submodule "modules/extension"]
 	path = modules/extension
 	url = https://github.com/knoxfighter/arcdps-extension.git

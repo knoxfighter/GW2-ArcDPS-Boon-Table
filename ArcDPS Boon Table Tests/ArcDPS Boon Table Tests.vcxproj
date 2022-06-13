@@ -51,9 +51,11 @@
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <VcpkgUseStatic>true</VcpkgUseStatic>
+    <VcpkgAdditionalInstallOptions>--overlay-ports=$(SolutionDir)modules\extension\vcpkg-overlay-ports</VcpkgAdditionalInstallOptions>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <VcpkgUseStatic>true</VcpkgUseStatic>
+    <VcpkgAdditionalInstallOptions>--overlay-ports=$(SolutionDir)modules\extension\vcpkg-overlay-ports</VcpkgAdditionalInstallOptions>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -104,9 +106,6 @@
     </ProjectReference>
     <ProjectReference Include="..\modules\extension\arcdps_extension.vcxproj">
       <Project>{5aff3fc8-8e6f-4fda-9867-93bb861ab635}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\modules\imgui\imgui.vcxproj">
-      <Project>{34ec5a9c-750c-4e6e-bc1a-3090ad360b7e}</Project>
     </ProjectReference>
     <ProjectReference Include="..\modules\unofficial_extras\unofficial_extras.vcxproj">
       <Project>{dab9bae4-7c01-4d28-90fe-b49387e9fb24}</Project>
