@@ -22,12 +22,11 @@
 #include <format>
 #include <Windows.h>
 
-
+arcdps_exports arc_exports = {};
 namespace {
 	HMODULE ARC_DLL;
 	IDirect3DDevice9* d3d9Device = nullptr;
 	ID3D11Device* d3d11Device = nullptr;
-	arcdps_exports arc_exports = {};
 
 	bool initFailed = false;
 }

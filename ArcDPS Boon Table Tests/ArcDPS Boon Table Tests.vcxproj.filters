@@ -3,5 +3,6 @@
   <ItemGroup>
     <ClCompile Include="TestMain.cpp" />
     <ClCompile Include="BoonTests.cpp" />
+    <ClCompile Include="EntireTests.cpp" />
   </ItemGroup>
 </Project>

@@ -39,3 +39,5 @@ public:
 // Exports
 extern "C" __declspec(dllexport) ModInitSignature get_init_addr(const char* arcversion, ImGuiContext* imguictx, void* dxptr, HMODULE arcdll, MallocSignature mallocfn, FreeSignature freefn, UINT dxver);
 extern "C" __declspec(dllexport) ModReleaseSignature get_release_addr();
+
+extern arcdps_exports arc_exports;

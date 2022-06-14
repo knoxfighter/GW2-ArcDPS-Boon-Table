@@ -61,10 +61,10 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>X64;TEST;_DEBUG;_CONSOLE;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>X64;TEST;IMGUI_DEFINE_MATH_OPERATORS;_DEBUG;_CONSOLE;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)modules;$(SolutionDir)$(SolutionName) Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)modules\arcdps_mock\arcdps-extension;$(SolutionDir)modules\arcdps_mock\arcdps_mock;$(SolutionDir)modules\arcdps_mock\xevtc;$(SolutionDir)modules\arcdps_mock\log;$(SolutionDir)modules\arcdps_mock\json;$(SolutionDir)modules\arcdps_mock\imgui;$(SolutionDir)modules;$(SolutionDir)$(SolutionName) Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -81,10 +81,10 @@
       </FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>X64;TEST;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>X64;TEST;IMGUI_DEFINE_MATH_OPERATORS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)modules;$(SolutionDir)$(SolutionName) Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)modules\arcdps_mock\arcdps-extension;$(SolutionDir)modules\arcdps_mock\arcdps_mock;$(SolutionDir)modules\arcdps_mock\xevtc;$(SolutionDir)modules\arcdps_mock\log;$(SolutionDir)modules\arcdps_mock\json;$(SolutionDir)modules\arcdps_mock\imgui;$(SolutionDir)modules;$(SolutionDir)$(SolutionName) Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -98,6 +98,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BoonTests.cpp" />
+    <ClCompile Include="EntireTests.cpp" />
     <ClCompile Include="TestMain.cpp" />
   </ItemGroup>
   <ItemGroup>
