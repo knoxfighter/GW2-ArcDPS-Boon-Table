@@ -99,6 +99,10 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 	ImGui::SetCurrentContext(static_cast<ImGuiContext*>(imguicontext));
 	ImGui::SetAllocatorFunctions((void* (*)(size_t, void*))mallocfn, (void (*)(void*, void*))freefn);
 
+	// load my table loader into imgui
+	ImGuiEx::BigTable::RegisterSettingsHandler("BigTable-BoonTable");
+	static_cast<ImGuiContext*>(imguicontext)->SettingsLoaded = false;
+
 	// dx11 not available in older arcdps versions
 	std::string arcVersion = arcversionstr;
 	auto firstDot = arcVersion.find_first_of(".");
@@ -147,9 +151,6 @@ arcdps_exports* mod_init()
 			updateChecker.CheckForUpdate(version.value(), "knoxfighter/GW2-ArcDPS-Boon-Table", false);
 		}
 
-		// load my table loader into imgui
-		ImGuiEx::BigTable::RegisterSettingsHandler("BigTable-BoonTable");
-
 		// setup icon loader
 		iconLoader.Setup(self_dll, id3dd9, id3d11d);
 	} catch (std::exception& e) {
@@ -157,7 +158,7 @@ arcdps_exports* mod_init()
 		error_message = "Error starting up: ";
 		error_message.append(e.what());
 	}
-	
+
 	/* for arcdps */
 	arc_exports.imguivers = IMGUI_VERSION_NUM;
 	arc_exports.out_name = "Boon Table";
