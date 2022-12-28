@@ -50,6 +50,7 @@ std::optional<ImVec4> ImVec4_color_from_string(const std::string& vec4str);
 extern HMODULE self_dll;
 extern LPVOID mapViewOfMumbleFile;
 extern bool isWvW;
+extern UINT directxVersion;
 
 // ImGui function to display question marks with tooltips
 static void HelpMarker(const char* desc)

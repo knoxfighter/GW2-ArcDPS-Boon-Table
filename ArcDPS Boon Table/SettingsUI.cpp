@@ -120,7 +120,16 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 	}
 
 	if (ImGui::BeginMenu(lang.translate(LangKey::SettingsDisplay).c_str())) {
-		ImGui::Checkbox(lang.translate(LangKey::SettingsShowLabel).c_str(), &settings.tables[tableIndex].show_label);
+		if (directxVersion == 9) {
+			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+			ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled));
+			bool tmp = true;
+			ImGui::Checkbox(lang.translate(LangKey::SettingsShowLabel).c_str(), &tmp);
+			ImGui::PopStyleColor();
+			ImGui::PopItemFlag();
+		} else {
+			ImGui::Checkbox(lang.translate(LangKey::SettingsShowLabel).c_str(), &settings.tables[tableIndex].show_label);
+		}
 
 		std::string maxDisplayedInputLabel = lang.translate(LangKey::SettingsMaxDisplayed);
 		maxDisplayedInputLabel.append("##maxDisplayedInput");

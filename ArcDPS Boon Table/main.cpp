@@ -103,18 +103,12 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 	ImGuiEx::BigTable::RegisterSettingsHandler("BigTable-BoonTable");
 	static_cast<ImGuiContext*>(imguicontext)->SettingsLoaded = false;
 
-	// dx11 not available in older arcdps versions
-	std::string arcVersion = arcversionstr;
-	auto firstDot = arcVersion.find_first_of(".");
-	arcVersion = arcVersion.substr(0, firstDot);
-	int arcVersionNum = std::stoi(arcVersion);
-
-	if (arcVersionNum > 20210828 && dxver == 11) {
+	if (dxver == 11) {
 		auto swapChain = static_cast<IDXGISwapChain*>(dxptr);
 		swapChain->GetDevice(__uuidof(id3d11d), reinterpret_cast<void**>(&id3d11d));
 		directxVersion = 11;
 	} else {
-		id3dd9 = static_cast<IDirect3DDevice9*>(dxptr);
+		// id3dd9 = static_cast<IDirect3DDevice9*>(dxptr);
 		directxVersion = 9;
 	} 
 
