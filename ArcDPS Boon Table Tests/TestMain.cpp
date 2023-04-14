@@ -1,3 +1,7 @@
+#include "GlobalObjects.h"
+#include "HistoryTests.h"
+#include "Logger.h"
+
 #include "extension/arcdps_structs_slim.h"
 
 #include <gtest/gtest.h>
@@ -38,11 +42,43 @@ void e9(cbtevent*, uint32_t)
 	return; // Ignore, can be overridden by specific test if need be
 }
 
+class TestLogFlusher : public testing::EmptyTestEventListener
+{
+	void OnTestStart(const ::testing::TestInfo& pTestInfo) override
+	{
+		LOG_I("Starting test {}.{}.{}", pTestInfo.test_suite_name(), pTestInfo.test_case_name(), pTestInfo.name());
+	}
+
+	// Called after a failed assertion or a SUCCESS().
+	void OnTestPartResult(const testing::TestPartResult& /*pTestInfo*/) override
+	{
+		Log_::FlushLogFile();
+	}
+
+	// Called after a test ends.
+	void OnTestEnd(const testing::TestInfo& /*pTestInfo*/) override
+	{
+		Log_::FlushLogFile();
+	}
+};
+
 int main(int pArgumentCount, char** pArgumentVector)
 {
-	::testing::InitGoogleTest(&pArgumentCount, pArgumentVector); 
+	GlobalObjects::IS_UNIT_TEST = true;
+
+	Log_::Init(true, "logs/unit_tests.txt");
+	// Log_::SetLevel(spdlog::level::debug);
+	Log_::SetLevel(spdlog::level::trace);
+	Log_::LockLogger();
+
+	testing::InitGoogleTest(&pArgumentCount, pArgumentVector);
+	testing::UnitTest::GetInstance()->listeners().Append(new TestLogFlusher);
+
+	RegisterHistoryTests();
 
 	int result = RUN_ALL_TESTS();
+
+	Log_::Shutdown();
 
 	return result;
 }

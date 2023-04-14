@@ -5,6 +5,13 @@
   "dependencies": [
     "cpr",
 	"magic-enum",
-	"imgui"
+	"imgui",
+	{
+      "name": "spdlog",
+      "default-features": false,
+      "features": [
+        "stdformat"
+      ]
+    }
   ]
 }

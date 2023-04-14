@@ -61,17 +61,19 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>X64;TEST;IMGUI_DEFINE_MATH_OPERATORS;_DEBUG;_CONSOLE;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MAGIC_ENUM_RANGE_MAX=256;NOMINMAX;IMGUI_DEFINE_MATH_OPERATORS;X64;TEST;_DEBUG;_CONSOLE;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)modules\arcdps_mock\arcdps-extension;$(SolutionDir)modules\arcdps_mock\arcdps_mock;$(SolutionDir)modules\arcdps_mock\xevtc;$(SolutionDir)modules\arcdps_mock\log;$(SolutionDir)modules\arcdps_mock\json;$(SolutionDir)modules\arcdps_mock\imgui;$(SolutionDir)modules;$(SolutionDir)$(SolutionName) Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)modules;$(SolutionDir)$(SolutionName) Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>atls.lib;crypt32.lib;Ws2_32.lib;Wldap32.lib;Version.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>atls.lib;crypt32.lib;Ws2_32.lib;Wldap32.lib;Version.lib;Winmm.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -81,11 +83,13 @@
       </FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>X64;TEST;IMGUI_DEFINE_MATH_OPERATORS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MAGIC_ENUM_RANGE_MAX=256;NOMINMAX;IMGUI_DEFINE_MATH_OPERATORS;X64;TEST;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)modules\arcdps_mock\arcdps-extension;$(SolutionDir)modules\arcdps_mock\arcdps_mock;$(SolutionDir)modules\arcdps_mock\xevtc;$(SolutionDir)modules\arcdps_mock\log;$(SolutionDir)modules\arcdps_mock\json;$(SolutionDir)modules\arcdps_mock\imgui;$(SolutionDir)modules;$(SolutionDir)$(SolutionName) Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)modules;$(SolutionDir)$(SolutionName) Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PreprocessToFile>false</PreprocessToFile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -93,12 +97,12 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>atls.lib;crypt32.lib;Ws2_32.lib;Wldap32.lib;Version.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>atls.lib;crypt32.lib;Ws2_32.lib;Wldap32.lib;Version.lib;Winmm.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BoonTests.cpp" />
-    <ClCompile Include="EntireTests.cpp" />
+    <ClCompile Include="arcdps_mock\CombatMock.cpp" />
+    <ClCompile Include="HistoryTests.cpp" />
     <ClCompile Include="TestMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +115,12 @@
     <ProjectReference Include="..\modules\unofficial_extras\unofficial_extras.vcxproj">
       <Project>{dab9bae4-7c01-4d28-90fe-b49387e9fb24}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="arcdps_mock\CombatMock.h" />
+    <ClInclude Include="arcdps_mock\Xevtc.h" />
+    <ClInclude Include="Helper.h" />
+    <ClInclude Include="HistoryTests.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

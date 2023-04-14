@@ -1,5 +1,6 @@
 #include "BoonWindowHandler.h"
 #include "GlobalObjects.h"
+#include "Logger.h"
 #include "Settings.h"
 #include "Tracker.h"
 
@@ -22,11 +23,11 @@
 #include <format>
 #include <Windows.h>
 
-arcdps_exports arc_exports = {};
 namespace {
 	HMODULE ARC_DLL;
 	IDirect3DDevice9* d3d9Device = nullptr;
 	ID3D11Device* d3d11Device = nullptr;
+	arcdps_exports arc_exports = {};
 
 	bool initFailed = false;
 }
@@ -142,13 +143,11 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	return uMsg;
 }
 
-namespace {
-	uint64_t cbtcount = 0;
-}
 /* combat callback -- may be called asynchronously, use id param to keep track of order, first event id will be 2. return ignored */
 /* at least one participant will be party/squad or minion of, or a buff applied by squad in the case of buff remove. not all statechanges present, see evtc statechange enum */
 uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision) {
-	Tracker::instance().Event(ev, src, dst, skillname, id);
+	// LOG_T("EventId: {}", id);
+	Tracker::instance().Event(ev, src, dst, skillname, id, revision);
 
 	return 0;
 }
@@ -169,6 +168,13 @@ arcdps_exports* mod_init() {
 	const auto& currentVersion = updateChecker.GetCurrentVersion(GlobalObjects::SELF_DLL);
 
 	try {
+		// init logger
+		if (!GlobalObjects::IS_UNIT_TEST) {
+			Log_::Init(false, "addons/logs/GW2-ArcDPS-Boon-Table/GW2-ArcDPS-Boon-Table.txt");
+
+			Log_::SetLevel(spdlog::level::info);
+		}
+
 		// Setup iconLoader
 		IconLoader::instance().Setup(GlobalObjects::SELF_DLL, d3d9Device, d3d11Device);
 
@@ -181,6 +187,9 @@ arcdps_exports* mod_init() {
 				updateChecker.CheckForUpdate(GlobalObjects::SELF_DLL, currentVersion.value(),
 				                             "knoxfighter/GW2-ArcDPS-Boon-Table", false));
 		}
+
+		// generate tracker instance
+		Tracker::instance();
 
 		// TODO
 		// Settings::instance().load();
@@ -271,6 +280,13 @@ uintptr_t mod_release() {
 	// Settings::instance().unload();
 
 	g_singletonManagerInstance.Shutdown();
+
+	Log_::FlushLogFile();
+
+	if (!GlobalObjects::IS_UNIT_TEST)
+	{
+		Log_::Shutdown();
+	}
 
 	return 0;
 }

@@ -2,7 +2,13 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="TestMain.cpp" />
-    <ClCompile Include="BoonTests.cpp" />
-    <ClCompile Include="EntireTests.cpp" />
+    <ClCompile Include="arcdps_mock\CombatMock.cpp" />
+    <ClCompile Include="HistoryTests.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="arcdps_mock\CombatMock.h" />
+    <ClInclude Include="arcdps_mock\Xevtc.h" />
+    <ClInclude Include="Helper.h" />
+    <ClInclude Include="HistoryTests.h" />
   </ItemGroup>
 </Project>

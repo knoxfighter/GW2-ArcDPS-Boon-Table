@@ -16,22 +16,8 @@ enum class Boons {
 	Aegis,
 	Swiftness,
 	Resistance,
-	EmpowerAllies,
-	PinPointDistribution,
-	AssassinsPresence,
-	Spotter,
 	SoothingMist,
 	VampiricAura,
-	StrengthInNumbers,
-	BannerOfStrength,
-	BannerOfDiscipline,
-	BannerOfTactics,
-	BannerOfDefense,
-	SpiritFrost,
-	SpiritSun,
-	SpiritStone,
-	SpiritStorm,
-	SpiritWater,
 	SignetOfInspiration,
 	Stealth,
 	Superspeed,
@@ -54,7 +40,7 @@ enum class Boons {
 	AuraDark,
 	AuraFire,
 	AuraFrost,
-	AuraLigth,
+	AuraLight,
 	AuraMagnetic,
 	AuraShocking,
 	SoulBarbs,
@@ -106,22 +92,8 @@ static inline constexpr std::array<BoonDef, magic_enum::enum_count<Boons>()> BOO
 	{ Boons::Aegis, StackType::Single, },
 	{ Boons::Swiftness, StackType::Single, },
 	{ Boons::Resistance, StackType::Single, },
-	{ Boons::EmpowerAllies, StackType::Single, },
-	{ Boons::PinPointDistribution, StackType::Single, },
-	{ Boons::AssassinsPresence, StackType::Single, },
-	{ Boons::Spotter, StackType::Single, },
 	{ Boons::SoothingMist, StackType::Single, },
 	{ Boons::VampiricAura, StackType::Single, },
-	{ Boons::StrengthInNumbers, StackType::Single, },
-	{ Boons::BannerOfStrength, StackType::Single, },
-	{ Boons::BannerOfDiscipline, StackType::Single, },
-	{ Boons::BannerOfTactics, StackType::Single, },
-	{ Boons::BannerOfDefense, StackType::Single, },
-	{ Boons::SpiritFrost, StackType::Single, },
-	{ Boons::SpiritSun, StackType::Single, },
-	{ Boons::SpiritStone, StackType::Single, },
-	{ Boons::SpiritStorm, StackType::Single, },
-	{ Boons::SpiritWater, StackType::Single, },
 	{ Boons::SignetOfInspiration, StackType::Single, },
 	{ Boons::Stealth, StackType::Single, },
 	{ Boons::Superspeed, StackType::Single, },
@@ -144,7 +116,7 @@ static inline constexpr std::array<BoonDef, magic_enum::enum_count<Boons>()> BOO
 	{ Boons::AuraDark, StackType::Single, },
 	{ Boons::AuraFire, StackType::Single, },
 	{ Boons::AuraFrost, StackType::Single, },
-	{ Boons::AuraLigth, StackType::Single, },
+	{ Boons::AuraLight, StackType::Single, },
 	{ Boons::AuraMagnetic, StackType::Single, },
 	{ Boons::AuraShocking, StackType::Single, },
 	{ Boons::SoulBarbs, StackType::Single, },
@@ -154,7 +126,7 @@ static inline constexpr std::array<BoonDef, magic_enum::enum_count<Boons>()> BOO
 	{ Boons::UnbrokenLines, StackType::Single, },
 	{ Boons::RiteOfTheGreatDwarf, StackType::Single, },
 	{ Boons::BulwarkGyro, StackType::Single, },
-	{ Boons::SymbolicAvenger, StackType::Single, },
+	{ Boons::SymbolicAvenger, StackType::Multi, },
 	{ Boons::InvigoratedBulwark, StackType::Single, },
 	{ Boons::RigorousCertainty, StackType::Single, },
 });
@@ -173,22 +145,8 @@ constexpr std::optional<Boons> GetBoonsFromId(uint32_t pId) {
 	case 743: return Boons::Aegis;
 	case 719: return Boons::Swiftness;
 	case 26980: return Boons::Resistance;
-	case 14222: return Boons::EmpowerAllies;
-	case 38333: return Boons::PinPointDistribution;
-	case 26854: return Boons::AssassinsPresence;
-	case 14055: return Boons::Spotter;
 	case 5587: return Boons::SoothingMist;
 	case 30285: return Boons::VampiricAura;
-	case 13796: return Boons::StrengthInNumbers;
-	case 14417: return Boons::BannerOfStrength;
-	case 14449: return Boons::BannerOfDiscipline;
-	case 14450: return Boons::BannerOfTactics;
-	case 14543: return Boons::BannerOfDefense;
-	case 50421: return Boons::SpiritFrost;
-	case 50413: return Boons::SpiritSun;
-	case 50415: return Boons::SpiritStone;
-	case 50381: return Boons::SpiritStorm;
-	case 50386: return Boons::SpiritWater;
 	case 10235: return Boons::SignetOfInspiration;
 	case 13017: [[fallthrough]];
 	case 26142: [[fallthrough]];
@@ -219,7 +177,7 @@ constexpr std::optional<Boons> GetBoonsFromId(uint32_t pId) {
 	case 39978: return Boons::AuraDark;
 	case 5677: return Boons::AuraFire;
 	case 5579: return Boons::AuraFrost;
-	case 25518: return Boons::AuraLigth;
+	case 25518: return Boons::AuraLight;
 	case 5684: return Boons::AuraMagnetic;
 	case 5577: return Boons::AuraShocking;
 	case 53489: return Boons::SoulBarbs;

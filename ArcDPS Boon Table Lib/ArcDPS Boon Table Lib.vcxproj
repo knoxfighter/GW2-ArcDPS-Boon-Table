@@ -66,6 +66,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)modules\;</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -87,6 +88,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)modules\;</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -100,14 +102,19 @@
     <ProjectReference Include="..\modules\extension\arcdps_extension.vcxproj">
       <Project>{5aff3fc8-8e6f-4fda-9867-93bb861ab635}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\modules\imgui\imgui.vcxproj">
-      <Project>{34ec5a9c-750c-4e6e-bc1a-3090ad360b7e}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\modules\unofficial_extras\unofficial_extras.vcxproj">
       <Project>{dab9bae4-7c01-4d28-90fe-b49387e9fb24}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Activity\Activities.h" />
+    <ClInclude Include="Activity\IffNpcTracker.h" />
+    <ClInclude Include="Activity\NpcUpdateTracker.h" />
+    <ClInclude Include="Activity\IActivityTracker.h" />
+    <ClInclude Include="Activity\IffActivity.h" />
+    <ClInclude Include="Activity\RaidActivity.h" />
+    <ClInclude Include="Activity\RaidNpcTracker.h" />
+    <ClInclude Include="Activity\TestActivity.h" />
     <ClInclude Include="Boon.h" />
     <ClInclude Include="BoonDef.h" />
     <ClInclude Include="BoonWindow.h" />
@@ -115,19 +122,32 @@
     <ClInclude Include="BoonWindowTable.h" />
     <ClInclude Include="GlobalObjects.h" />
     <ClInclude Include="History.h" />
+    <ClInclude Include="HistoryPlayer.h" />
+    <ClInclude Include="HistoryTracker.h" />
+    <ClInclude Include="IPlayer.h" />
+    <ClInclude Include="ITracker.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Tracker.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Activity\IActivityTracker.cpp" />
+    <ClCompile Include="Activity\IffActivity.cpp" />
+    <ClCompile Include="Activity\NpcUpdateTracker.cpp" />
+    <ClCompile Include="Activity\RaidActivity.cpp" />
+    <ClCompile Include="Activity\RaidNpcTracker.cpp" />
     <ClCompile Include="Boon.cpp" />
     <ClCompile Include="BoonDef.cpp" />
     <ClCompile Include="BoonWindow.cpp" />
     <ClCompile Include="BoonWindowHandler.cpp" />
     <ClCompile Include="BoonWindowTable.cpp" />
+    <ClCompile Include="HistoryPlayer.cpp" />
+    <ClCompile Include="HistoryTracker.cpp" />
     <ClCompile Include="libmain.cpp" />
     <ClCompile Include="GlobalObjects.cpp" />
     <ClCompile Include="History.cpp" />
+    <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="Tracker.cpp" />

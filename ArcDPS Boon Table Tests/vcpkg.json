@@ -5,6 +5,15 @@
   "dependencies": [
     "gtest",
 	"magic-enum",
-	"cpr"
+	"cpr",
+	"imgui",
+	"nlohmann-json",
+	{
+      "name": "spdlog",
+      "default-features": false,
+      "features": [
+        "stdformat"
+      ]
+    }
   ]
 }
