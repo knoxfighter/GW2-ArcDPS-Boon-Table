@@ -3,9 +3,10 @@
   "name": "arcdps-boon-table-plugin-lib",
   "version-string": "2.4.3",
   "dependencies": [
+	"beicode",
+	"imgui",
     "cpr",
 	"magic-enum",
-	"imgui",
 	{
       "name": "spdlog",
       "default-features": false,
