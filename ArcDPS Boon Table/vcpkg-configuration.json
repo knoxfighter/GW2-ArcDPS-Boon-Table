@@ -2,10 +2,10 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg-configuration.schema.json",
   "registries": [
     {
-      "kind": "git",
-      "repository": "https://github.com/Zinn-o-Matics/vcpkg-registry",
-      "baseline": "410894d799ebe386f0891d032ffdceb1ddd93ab8",
-      "packages": [ "imgui" ]
-    }
+	  "kind": "git",
+	  "repository": "https://github.com/Zinn-o-Matics/vcpkg-registry",
+	  "baseline": "0648a5a52dce656385b0480b73f12dbeb35ffaeb",
+	  "packages": [ "imgui", "spdlog" ]
+	}
   ]
 }

@@ -1,24 +1,11 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg-configuration.schema.json",
-  "default-registry": null,
   "registries": [
     {
 	  "kind": "git",
 	  "repository": "https://github.com/Zinn-o-Matics/vcpkg-registry",
-	  "baseline": "410894d799ebe386f0891d032ffdceb1ddd93ab8",
-	  "packages": [ "imgui" ]
-	},
-	{
-      "kind": "git",
-      "repository": "https://github.com/northwindtraders/vcpkg-registry",
-      "baseline": "dacf4de488094a384ca2c202b923ccc097956e0c",
-      "packages": [ "beicode", "beison" ]
-    },
-	{
-      "kind": "git",
-      "repository": "https://github.com/Microsoft/vcpkg",
-      "baseline": "501db0f17ef6df184fcdbfbe0f87cde2313b6ab1",
-      "packages": [ "a*" ]
-    }
+	  "baseline": "0648a5a52dce656385b0480b73f12dbeb35ffaeb",
+	  "packages": [ "imgui", "spdlog" ]
+	}
   ]
 }
