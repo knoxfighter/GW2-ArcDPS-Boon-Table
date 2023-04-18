@@ -1,5 +1,10 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg-configuration.schema.json",
+  "default-registry": {
+    "kind": "git",
+    "repository": "https://github.com/microsoft/vcpkg",
+    "baseline": "9c7c66471005cb132832786d5d65d83d2cf503ad"
+  },
   "registries": [
     {
 	  "kind": "git",
