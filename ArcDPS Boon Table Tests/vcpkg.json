@@ -15,5 +15,11 @@
         "stdformat"
       ]
     }
+  ],
+  "overrides": [
+    {
+      "name": "imgui",
+	  "version": "1.80#1"
+    }
   ]
 }

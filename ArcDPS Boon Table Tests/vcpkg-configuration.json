@@ -9,8 +9,8 @@
     {
 	  "kind": "git",
 	  "repository": "https://github.com/Zinn-o-Matics/vcpkg-registry",
-	  "baseline": "0648a5a52dce656385b0480b73f12dbeb35ffaeb",
-	  "packages": [ "imgui", "spdlog" ]
+	  "baseline": "4935416c71a44a02fedd2d316557a61997e05792",
+	  "packages": [ "imgui", "spdlog", "cpr" ]
 	}
   ]
 }
