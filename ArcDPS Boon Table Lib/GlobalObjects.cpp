@@ -1,6 +1,6 @@
 #include "GlobalObjects.h"
 
-#include "extension/arcdps_structs.h"
+#include <ArcdpsExtension/arcdps_structs.h>
 
 #include <imgui/imgui.h>
 

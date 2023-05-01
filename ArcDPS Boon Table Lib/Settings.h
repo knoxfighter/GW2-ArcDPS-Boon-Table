@@ -1,6 +1,6 @@
 #pragma once
 
-#include "extension/Singleton.h"
+#include <ArcdpsExtension/Singleton.h>
 
 class Settings final : public Singleton<Settings> {
 	

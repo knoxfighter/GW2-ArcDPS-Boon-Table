@@ -1,6 +1,6 @@
 #pragma once
 
-#include "extension/Singleton.h"
+#include <ArcdpsExtension/Singleton.h>
 
 class BoonWindowHandler : public Singleton<BoonWindowHandler> {
 public:

@@ -3,6 +3,8 @@
   "name": "arcdps-boon-table-plugin-tests",
   "version-string": "0.0.1",
   "dependencies": [
+	"arcdps-extension",
+	"arcdps-unofficial-extras",
     "gtest",
 	"magic-enum",
 	"cpr",

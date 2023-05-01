@@ -2,7 +2,7 @@
 
 #include "IPlayer.h"
 
-#include "extension/arcdps_structs_slim.h"
+#include <ArcdpsExtension/arcdps_structs_slim.h>
 
 class Player;
 

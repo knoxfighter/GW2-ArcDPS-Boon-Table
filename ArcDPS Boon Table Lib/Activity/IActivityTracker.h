@@ -1,6 +1,6 @@
 #pragma once
 
-#include "extension/arcdps_structs_slim.h"
+#include <ArcdpsExtension/arcdps_structs_slim.h>
 
 #include <mutex>
 

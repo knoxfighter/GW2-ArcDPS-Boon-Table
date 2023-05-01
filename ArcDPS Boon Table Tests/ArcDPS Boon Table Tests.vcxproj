@@ -110,12 +110,6 @@
     <ProjectReference Include="..\ArcDPS Boon Table Lib\ArcDPS Boon Table Lib.vcxproj">
       <Project>{f8db8b5a-f6f5-4a84-9c63-d98435254640}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\modules\extension\arcdps_extension.vcxproj">
-      <Project>{5aff3fc8-8e6f-4fda-9867-93bb861ab635}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\modules\unofficial_extras\unofficial_extras.vcxproj">
-      <Project>{dab9bae4-7c01-4d28-90fe-b49387e9fb24}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arcdps_mock\CombatMock.h" />

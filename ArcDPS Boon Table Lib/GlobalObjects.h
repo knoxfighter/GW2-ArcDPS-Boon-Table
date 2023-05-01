@@ -1,10 +1,10 @@
 #pragma once
 
-#include "extension/arcdps_structs.h"
-#include "extension/MumbleLink.h"
-#include "extension/UpdateCheckerBase.h"
+#include <ArcdpsExtension/arcdps_structs.h>
+#include <ArcdpsExtension/MumbleLink.h>
+#include <ArcdpsExtension/UpdateCheckerBase.h>
 
-#include "unofficial_extras/Definitions.h"
+#include <ArcdpsUnofficialExtras/Definitions.h>
 
 #include <Windows.h>
 

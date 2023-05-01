@@ -3,6 +3,8 @@
   "name": "arcdps-boon-table-plugin-lib",
   "version-string": "2.4.3",
   "dependencies": [
+    "arcdps-unofficial-extras",
+	"arcdps-extension",
 	"imgui",
     "cpr",
 	"magic-enum",

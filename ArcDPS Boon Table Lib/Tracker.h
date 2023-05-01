@@ -4,9 +4,9 @@
 #include "Logger.h"
 #include "Player.h"
 
-#include "extension/arcdps_structs_slim.h"
-#include "extension/CombatEventHandler.h"
-#include "extension/Singleton.h"
+#include <ArcdpsExtension/arcdps_structs_slim.h>
+#include <ArcdpsExtension/CombatEventHandler.h>
+#include <ArcdpsExtension/Singleton.h>
 
 #include "Activity/IActivityTracker.h"
 

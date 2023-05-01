@@ -3,7 +3,7 @@
 #include "BoonDef.h"
 #include "Logger.h"
 
-#include "extension/arcdps_structs_slim.h"
+#include <ArcdpsExtension/arcdps_structs_slim.h>
 
 #include <mutex>
 

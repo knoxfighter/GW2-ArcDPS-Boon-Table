@@ -2,8 +2,8 @@
 
 #include "HistoryTracker.h"
 
-#include "extension/SimpleRingBuffer.h"
-#include "extension/Singleton.h"
+#include <ArcdpsExtension/SimpleRingBuffer.h>
+#include <ArcdpsExtension/Singleton.h>
 
 class Tracker;
 

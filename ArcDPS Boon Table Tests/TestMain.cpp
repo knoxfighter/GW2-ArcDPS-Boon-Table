@@ -2,7 +2,7 @@
 #include "HistoryTests.h"
 #include "Logger.h"
 
-#include "extension/arcdps_structs_slim.h"
+#include <ArcdpsExtension/arcdps_structs_slim.h>
 
 #include <gtest/gtest.h>
 

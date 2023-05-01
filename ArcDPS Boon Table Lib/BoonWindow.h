@@ -1,6 +1,6 @@
 #pragma once
 
-#include "extension/Windows/MainWindow.h"
+#include <ArcdpsExtension/Windows/MainWindow.h>
 
 class BoonWindow : public MainWindow {
 	

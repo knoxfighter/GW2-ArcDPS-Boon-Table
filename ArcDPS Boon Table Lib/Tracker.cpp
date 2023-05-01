@@ -6,7 +6,7 @@
 
 #include "Activity/Activities.h"
 
-#include "extension/MobIDs.h"
+#include <ArcdpsExtension/MobIDs.h>
 
 #include <ranges>
 #include <map>

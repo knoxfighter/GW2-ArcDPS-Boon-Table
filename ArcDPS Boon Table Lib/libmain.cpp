@@ -4,17 +4,17 @@
 #include "Settings.h"
 #include "Tracker.h"
 
-#include "extension/arcdps_structs.h"
-#include "extension/IconLoader.h"
-#include "extension/KeyBindHandler.h"
-#include "extension/KeyInput.h"
-#include "extension/MumbleLink.h"
-#include "extension/UpdateChecker.h"
-#include "extension/Windows/PositioningComponent.h"
-#include "extension/Windows/Demo/DemoTableWindow.h"
-#include "extension/Windows/Demo/DemoWindow.h"
+#include <ArcdpsExtension/arcdps_structs.h>
+#include <ArcdpsExtension/IconLoader.h>
+#include <ArcdpsExtension/KeyBindHandler.h>
+#include <ArcdpsExtension/KeyInput.h>
+#include <ArcdpsExtension/MumbleLink.h>
+#include <ArcdpsExtension/UpdateChecker.h>
+#include <ArcdpsExtension/Windows/PositioningComponent.h>
+#include <ArcdpsExtension/Windows/Demo/DemoTableWindow.h>
+#include <ArcdpsExtension/Windows/Demo/DemoWindow.h>
 
-#include "unofficial_extras/Definitions.h"
+#include <ArcdpsUnofficialExtras//Definitions.h>
 
 #include <imgui/imgui.h>
 

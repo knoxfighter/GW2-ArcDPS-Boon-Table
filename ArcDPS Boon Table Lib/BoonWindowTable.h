@@ -1,6 +1,6 @@
 #pragma once
 
-#include "extension/Windows/MainTable.h"
+#include <ArcdpsExtension/Windows/MainTable.h>
 
 class BoonWindowTable : public MainTable<128> {
 

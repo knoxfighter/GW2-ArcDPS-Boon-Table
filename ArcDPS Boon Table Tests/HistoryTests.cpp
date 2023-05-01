@@ -1,6 +1,6 @@
 #include "HistoryTests.h"
 
-#include "extension/MobIDs.h"
+#include <ArcdpsExtension/MobIDs.h>
 
 #include <nlohmann/json.hpp>
 

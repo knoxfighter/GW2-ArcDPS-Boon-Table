@@ -5,7 +5,7 @@
 #include "GlobalObjects.h"
 #include "IPlayer.h"
 
-#include "extension/arcdps_structs_slim.h"
+#include <ArcdpsExtension/arcdps_structs_slim.h>
 
 #include <magic_enum.hpp>
 

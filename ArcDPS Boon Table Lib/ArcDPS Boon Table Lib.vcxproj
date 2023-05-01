@@ -100,9 +100,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\modules\extension\arcdps_extension.vcxproj">
-      <Project>{5aff3fc8-8e6f-4fda-9867-93bb861ab635}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\modules\unofficial_extras\unofficial_extras.vcxproj">
       <Project>{dab9bae4-7c01-4d28-90fe-b49387e9fb24}</Project>
     </ProjectReference>
