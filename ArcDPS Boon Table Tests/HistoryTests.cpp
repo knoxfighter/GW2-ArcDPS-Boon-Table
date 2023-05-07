@@ -117,7 +117,13 @@ uint64_t HistoryTest::GetPhaseNumber(uintptr_t pEncounterId) {
 void RegisterHistoryTests() {
 	::testing::UnitTest::GetInstance()->listeners().Append(new HistoryTestsEventListener);
 
-	std::filesystem::path logFolder("logs/HistoryTests");
+//	auto p = std::filesystem::current_path();
+//	std::cout << "The current path " << p << " decomposes into:\n"
+//	          << "root-path " << p.root_path() << '\n'
+//	          << "relative path " << p.relative_path() << '\n';
+//	p = p.parent_path().parent_path();
+//	p /= "ArcDPS Boon Table Tests/logs/HistoryTests";
+	std::filesystem::path logFolder("../../ArcDPS Boon Table Tests/logs/HistoryTests");
 
 	for (const auto& subFolder : std::filesystem::directory_iterator(logFolder)) {
 		if (subFolder.is_directory()) {
@@ -134,7 +140,7 @@ void RegisterHistoryTests() {
 			// find all json in the folder
 			for (const auto& subFile : std::filesystem::directory_iterator(subFolder)) {
 				// only use json files
-				auto subFilePath = subFile.path();
+				const auto& subFilePath = subFile.path();
 				if (subFilePath.extension() == ".json") {
 					// get id and name to check (separated by `-`)
 					std::string jsonFileName = subFilePath.stem().string();

@@ -504,3 +504,6 @@ vcpkg_installed/
 
 # local overrides
 Directory.Build.props
+
+# ignore extracted test files
+ArcDPS Boon Table Tests/TestLogs/HistoryTests
