@@ -123,7 +123,7 @@ void RegisterHistoryTests() {
 //	          << "relative path " << p.relative_path() << '\n';
 //	p = p.parent_path().parent_path();
 //	p /= "ArcDPS Boon Table Tests/logs/HistoryTests";
-	std::filesystem::path logFolder("../../ArcDPS Boon Table Tests/logs/HistoryTests");
+	std::filesystem::path logFolder("../../ArcDPS Boon Table Tests/TestLogs/HistoryTests");
 
 	for (const auto& subFolder : std::filesystem::directory_iterator(logFolder)) {
 		if (subFolder.is_directory()) {
