@@ -60,6 +60,7 @@ public:
 	// pMaxFuzzWidth determines the maximum amount of indexes by which an events callback can be delayed (it is delayed
 	//               by calling events ahead of it). 0 means no fuzzing.
 	uint32_t ExecuteFromXevtc(const char* pFilePath, uint32_t pMaxParallelEventCount = 0, uint32_t pMaxFuzzWidth = 0);
+	uint32_t ExecuteFromXevtc(std::istream& pInputData, uint32_t pMaxParallelEventCount = 0, uint32_t pMaxFuzzWidth = 0);
 
 	void DisplayWindow();
 

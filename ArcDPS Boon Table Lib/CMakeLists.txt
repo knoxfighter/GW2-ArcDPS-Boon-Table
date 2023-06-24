@@ -57,11 +57,7 @@ target_sources(ArcDPSBoonTableLib
         Activity/RaidNpcTracker.cpp
 )
 
-target_link_libraries(ArcDPSBoonTableLib PRIVATE imgui::imgui)
-target_link_libraries(ArcDPSBoonTableLib PRIVATE cpr::cpr)
-target_link_libraries(ArcDPSBoonTableLib PRIVATE magic_enum::magic_enum)
-target_link_libraries(ArcDPSBoonTableLib PRIVATE ArcdpsUnofficialExtras)
-target_link_libraries(ArcDPSBoonTableLib PRIVATE ArcdpsExtension)
+boontable_link_libraries(ArcDPSBoonTableLib)
 
 # Windows Libs
 target_link_libraries(ArcDPSBoonTableLib PRIVATE Version.lib)

@@ -507,3 +507,4 @@ Directory.Build.props
 
 # ignore extracted test files
 ArcDPS Boon Table Tests/TestLogs/HistoryTests
+ArcDPS Boon Table Tests/TestLogs/HistoryTests.zip

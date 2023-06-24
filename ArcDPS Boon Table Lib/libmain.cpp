@@ -254,13 +254,8 @@ extern "C" __declspec(dllexport) ModInitSignature get_init_addr(const char* arcv
 	ARC_LOG_FILE = (e3_func_ptr)GetProcAddress(ARC_DLL, "e3");
 	ARC_LOG = (e3_func_ptr)GetProcAddress(ARC_DLL, "e8");
 
-	// dx11 not available in older arcdps versions
-	if (dxver == 11) {
-		auto swapChain = static_cast<IDXGISwapChain*>(dxptr);
-		swapChain->GetDevice(__uuidof(d3d11Device), reinterpret_cast<void**>(&d3d11Device));
-	} else {
-		d3d9Device = static_cast<IDirect3DDevice9*>(dxptr);
-	}
+	auto swapChain = static_cast<IDXGISwapChain*>(dxptr);
+	swapChain->GetDevice(__uuidof(d3d11Device), reinterpret_cast<void**>(&d3d11Device));
 
 	// install imgui hooks
 	PositioningComponentImGuiHook::InstallHooks(imguictx);

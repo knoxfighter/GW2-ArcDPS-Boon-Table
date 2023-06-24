@@ -3,14 +3,29 @@
 #include <ArcdpsExtension/MobIDs.h>
 
 #include <nlohmann/json.hpp>
+#include <libzippp/libzippp.h>
 
 #include <filesystem>
 #include <fstream>
 
 void HistoryTest::TestBody() {
+	// extract json from zip
+	libzippp::ZipArchive zipFile(HistoryTests::LOG_FOLDER.string());
+	ASSERT_TRUE(zipFile.open());
+
+	auto jsonEntry = zipFile.getEntry(mJsonPath.generic_string());
+
+	std::vector<char> buffer;
+	buffer.resize(jsonEntry.getSize());
+	std::span<char> bufferSpan(buffer);
+	std::spanstream bufferStream(bufferSpan, std::ios_base::in | std::ios_base::out |std::ios_base::binary);
+	auto res = jsonEntry.readContent(bufferStream);
+	if (res != LIBZIPPP_OK) {
+		GTEST_FAIL() << strerror(errno);
+	}
+
 	// parse json
-	std::ifstream jsonFile(mJsonPath);
-	const auto& root = nlohmann::json::parse(jsonFile);
+	const auto& root = nlohmann::json::parse(bufferStream);
 
 	const ITracker& tracker = History::instance()[mHistoryIndex];
 	const auto logTriggerID = root.at("triggerID").get<uintptr_t>();
@@ -115,52 +130,75 @@ uint64_t HistoryTest::GetPhaseNumber(uintptr_t pEncounterId) {
 }
 
 void RegisterHistoryTests() {
+//	std::filesystem::path path("../../ArcDPS Boon Table Tests/TestLogs/HistoryTests3.zip");
+//	std::filesystem::path folderPath("../../ArcDPS Boon Table Tests/TestLogs");
+//	libzippp::ZipArchive zipFile(path.string());
+//	if (!zipFile.open(libzippp::ZipArchive::Write)) {
+//		std::cout << "Failed to create zip file." << std::endl;
+//		return;
+//	}
+//
+//	for (const auto& entry : std::filesystem::recursive_directory_iterator(folderPath / "HistoryTests")) {
+//		if (!entry.is_directory()) {
+//			const std::filesystem::path& filePath = entry.path();
+//			std::string relativePath = std::filesystem::relative(filePath, folderPath).generic_string();
+//			assert(zipFile.addFile(relativePath, filePath.generic_string()));
+//			std::cout << "Added " << relativePath << " to the zip-file." << std::endl;
+//		}
+//	}
+//
+//	zipFile.close();
+//	std::cout << "Folder compressed successfully." << std::endl;
+
 	::testing::UnitTest::GetInstance()->listeners().Append(new HistoryTestsEventListener);
 
-//	auto p = std::filesystem::current_path();
-//	std::cout << "The current path " << p << " decomposes into:\n"
-//	          << "root-path " << p.root_path() << '\n'
-//	          << "relative path " << p.relative_path() << '\n';
-//	p = p.parent_path().parent_path();
-//	p /= "ArcDPS Boon Table Tests/logs/HistoryTests";
 	std::filesystem::path logFolder("../../ArcDPS Boon Table Tests/TestLogs/HistoryTests");
 
-	for (const auto& subFolder : std::filesystem::directory_iterator(logFolder)) {
-		if (subFolder.is_directory()) {
-			// find xevtc file in subFolder (has to have the same name as the folder)
-			// aka fixture name
-			std::string folderName = subFolder.path().filename().string();
+	libzippp::ZipArchive zipFile(HistoryTests::LOG_FOLDER.string());
+	if (!zipFile.open()) {
+		std::cout << "Failed to open zip archive." << std::endl;
+		assert(false);
+	}
 
-			auto xevtcFile = subFolder.path() / folderName;
-			xevtcFile.replace_extension("xevtc");
+	std::unordered_map<std::string, std::vector<std::filesystem::path>> tests;
+	std::vector<libzippp::ZipEntry> entries = zipFile.getEntries();
+
+	for (const auto& entry : entries) {
+		std::filesystem::path filePath = entry.getName();
+		// check if file is a xevtc file
+		if (!entry.isDirectory() && filePath.extension() == ".json") {
+			std::string testName = filePath.parent_path().filename().string();
+
+			tests[testName].emplace_back(filePath);
+		} else if (!entry.isDirectory() && filePath.extension() == ".xevtc") {
+			std::string testName = filePath.parent_path().filename().string();
 
 			// add xevtc file to static context
-			HistoryTests::FILE_PATHS[folderName] = xevtcFile;
+			HistoryTests::FILE_PATHS[testName] = filePath;
+		}
+	}
+	zipFile.close();
 
-			// find all json in the folder
-			for (const auto& subFile : std::filesystem::directory_iterator(subFolder)) {
-				// only use json files
-				const auto& subFilePath = subFile.path();
-				if (subFilePath.extension() == ".json") {
-					// get id and name to check (separated by `-`)
-					std::string jsonFileName = subFilePath.stem().string();
-					size_t first = jsonFileName.find_first_of('-');
-					std::string name = jsonFileName.substr(first+1);
+	for (const auto& [testName, jsonPaths] : tests) {
+		for (const auto& jsonPath : jsonPaths) {
+			// get id and name to check (separated by `-`)
+			std::string jsonFileName = jsonPath.stem().string();
+			size_t first = jsonFileName.find_first_of('-');
+			std::string name = jsonFileName.substr(first+1);
 
-					std::string id = jsonFileName.substr(0, first);
+			std::string id = jsonFileName.substr(0, first);
 
-					// register new test
-					::testing::RegisterTest(
-						folderName.c_str(),
-						name.c_str(), nullptr,
-						nullptr,
-						__FILE__,
-						__LINE__,
-						[=]() -> HistoryTestFixture* {
-							return new HistoryTest(subFilePath, std::stoll(id));
-						});
-				}
-			}
+			// register new test
+			::testing::RegisterTest(
+					testName.c_str(),
+					name.c_str(), nullptr,
+					nullptr,
+					__FILE__,
+					__LINE__,
+					[=]() -> HistoryTestFixture* {
+						return new HistoryTest(jsonPath, std::stoll(id));
+					}
+			);
 		}
 	}
 }

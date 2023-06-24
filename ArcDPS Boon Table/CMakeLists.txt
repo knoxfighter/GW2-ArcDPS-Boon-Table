@@ -9,9 +9,5 @@ target_sources(ArcDPSBoonTable
         dllmain.cpp
 )
 
-target_link_libraries(ArcDPSBoonTable PRIVATE imgui::imgui)
-target_link_libraries(ArcDPSBoonTable PRIVATE cpr::cpr)
-target_link_libraries(ArcDPSBoonTable PRIVATE magic_enum::magic_enum)
-target_link_libraries(ArcDPSBoonTable PRIVATE ArcdpsUnofficialExtras)
-target_link_libraries(ArcDPSBoonTable PRIVATE ArcdpsExtension)
+boontable_link_libraries(ArcDPSBoonTable)
 target_link_libraries(ArcDPSBoonTable PRIVATE ArcDPSBoonTableLib)

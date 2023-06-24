@@ -3,7 +3,6 @@
 #include "Logger.h"
 
 #include <ArcdpsExtension/arcdps_structs_slim.h>
-
 #include <gtest/gtest.h>
 
 #include <Windows.h>
