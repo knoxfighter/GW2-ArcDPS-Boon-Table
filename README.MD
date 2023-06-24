@@ -44,6 +44,8 @@ To create your own translation you can take the example file in [localization](/
 ## LICENSE
 This project is Licensed with the MIT License.
 
+Original Idea by MarsEdge: https://github.com/MarsEdge/GW2-ArcDPS-Boon-Table
+
 ### Dear ImGui
 [Dear ImGui](https://github.com/ocornut/imgui) is licensed with the MIT License and included as git submodule to this project.
 
