@@ -9,59 +9,32 @@
 #include <gtest/gtest.h>
 #include <nlohmann/json.hpp>
 #include <libzippp/libzippp.h>
+#include <magic_enum.hpp>
 
 #include <filesystem>
 #include <spanstream>
 #include <span>
 
 namespace HistoryTests {
-	inline static std::filesystem::path LOG_FOLDER(std::filesystem::absolute("../../ArcDPS Boon Table Tests/TestLogs/HistoryTests.zip"));
+	inline static std::filesystem::path TEST_LOGS_ZIP(std::filesystem::absolute("../../ArcDPS Boon Table Tests/TestLogs/HistoryTests.zip"));
+	inline static std::filesystem::path TEST_LOGS_FOLDER(std::filesystem::absolute("../../ArcDPS Boon Table Tests/TestLogs/HistoryTests"));
 
-	inline static std::map<std::string, std::filesystem::path> FILE_PATHS;
+	enum class TestDataSource {
+		ZIP,
+		FILE,
+	};
+
+	struct TestData {
+		TestDataSource source;
+		std::filesystem::path filePath;
+	};
+	inline static std::map<std::string, TestData> STATIC_TEST_DATA;
 	inline static const char* CURRENT_SUITE_NAME;
 }
 
 class HistoryTestFixture : public testing::Test {
 public:
-	static void SetUpTestSuite() {
-		using namespace std::chrono_literals;
-
-		Tracker& tracker = Tracker::instance();
-		tracker.Reset();
-		History& history = History::instance();
-		history.Clear();
-		history.Resize(30);
-
-		CombatMock mock(mod_init());
-
-		// open zip
-		libzippp::ZipArchive zipFile(HistoryTests::LOG_FOLDER.string());
-		ASSERT_TRUE(zipFile.open());
-
-		const auto& xevtcPath = HistoryTests::FILE_PATHS.at(HistoryTests::CURRENT_SUITE_NAME).string();
-
-		auto xevtcEntry = zipFile.getEntry(xevtcPath);
-
-		// create buffer, then a spanstream, so we have an in RAM iostream
-		std::vector<char> buffer;
-		buffer.resize(xevtcEntry.getSize());
-		std::span<char> bufferSpan(buffer);
-		std::spanstream bufferStream(bufferSpan, std::ios_base::in | std::ios_base::out |std::ios_base::binary);
-		auto res = xevtcEntry.readContent(bufferStream);
-		if (res != LIBZIPPP_OK) {
-			GTEST_FAIL() << strerror(errno);
-		}
-
-		if (mock.ExecuteFromXevtc(bufferStream)) {
-			GTEST_FAIL();
-		}
-		while(tracker.EventsPending()) {
-			std::this_thread::sleep_for(100ms);
-		}
-
-		zipFile.close();
-	}
-
+	static void SetUpTestSuite();
 	static void TearDownTestSuite() {
 		Tracker::instance().Reset();
 		History::instance().Clear();
@@ -70,12 +43,13 @@ public:
 
 class HistoryTest : public HistoryTestFixture {
 public:
-	explicit HistoryTest(const std::filesystem::path& pJsonPath, size_t pHistoryIndex)
-		: mJsonPath(pJsonPath), mHistoryIndex(pHistoryIndex) {}
+	explicit HistoryTest(const std::filesystem::path& pJsonPath, size_t pHistoryIndex, HistoryTests::TestDataSource pDataSource)
+		: mJsonPath(pJsonPath), mHistoryIndex(pHistoryIndex), mDataSource(pDataSource) {}
 
 private:
 	std::filesystem::path mJsonPath;
 	size_t mHistoryIndex;
+	HistoryTests::TestDataSource mDataSource;
 
 	void TestBody() override;
 	// return: 1. uptime   2. intensity

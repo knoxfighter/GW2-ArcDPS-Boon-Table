@@ -506,5 +506,6 @@ vcpkg_installed/
 Directory.Build.props
 
 # ignore extracted test files
-ArcDPS Boon Table Tests/TestLogs/HistoryTests
+ArcDPS Boon Table Tests/TestLogs/HistoryTests/*
+!ArcDPS Boon Table Tests/TestLogs/HistoryTests/.gitkeep
 ArcDPS Boon Table Tests/TestLogs/HistoryTests.zip
