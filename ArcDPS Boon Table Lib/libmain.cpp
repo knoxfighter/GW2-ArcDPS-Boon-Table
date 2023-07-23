@@ -22,6 +22,9 @@
 #include <d3d9.h>
 #include <format>
 #include <Windows.h>
+#include <chrono>
+
+using namespace std::chrono_literals;
 
 namespace {
 	HMODULE ARC_DLL;
@@ -171,8 +174,7 @@ arcdps_exports* mod_init() {
 		// init logger
 		if (!GlobalObjects::IS_UNIT_TEST) {
 			Log_::Init(false, "addons/logs/GW2-ArcDPS-Boon-Table/GW2-ArcDPS-Boon-Table.txt");
-
-			Log_::SetLevel(spdlog::level::info);
+			Log_::SetLevel(spdlog::level::warn);
 		}
 
 		// Setup iconLoader
@@ -274,12 +276,14 @@ uintptr_t mod_release() {
 	// TODO
 	// Settings::instance().unload();
 
+	// Stop the event handler
+	Tracker::instance().Shutdown();
+
 	g_singletonManagerInstance.Shutdown();
 
 	Log_::FlushLogFile();
 
-	if (!GlobalObjects::IS_UNIT_TEST)
-	{
+	if (!GlobalObjects::IS_UNIT_TEST) {
 		Log_::Shutdown();
 	}
 

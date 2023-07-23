@@ -19,6 +19,7 @@ target_sources(ArcDPSBoonTableTests INTERFACE
 target_sources(ArcDPSBoonTableTests
     PRIVATE
         HistoryTests.cpp
+        GeneralTests.cpp
         TestMain.cpp
         arcdps_mock/CombatMock.cpp
 )

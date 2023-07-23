@@ -42,3 +42,4 @@ extern "C" __declspec(dllexport) ModInitSignature get_init_addr(const char* arcv
 extern "C" __declspec(dllexport) ModReleaseSignature get_release_addr();
 
 arcdps_exports* mod_init();
+uintptr_t mod_release();
