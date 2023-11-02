@@ -241,6 +241,13 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			{
 				io->KeyShift = true;
 			}
+
+			if (io->KeysDown[arc_global_mod1] && io->KeysDown[arc_global_mod2])
+			{
+				for (const auto& shortcut : settings.getShortcuts()) {
+					if (shortcut && io->KeysDown[shortcut]) return 0;
+				}
+			}
 			break;
 		}
 		case WM_ACTIVATEAPP:
@@ -252,13 +259,6 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 			break;
 		}
-		}
-
-		if (io->KeysDown[arc_global_mod1] && io->KeysDown[arc_global_mod2])
-		{
-			for (const auto& shortcut : settings.getShortcuts()) {
-				if (io->KeysDown[shortcut]) return 0;
-			}
 		}
 	} catch (const std::exception& e) {
 		arc_log_file("Boon Table: exception in mod_wnd");
@@ -457,7 +457,7 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 		if (io->KeysDown[arc_global_mod1] && io->KeysDown[arc_global_mod2]) {
 			const auto& shortcuts = settings.getShortcuts();
 			for (size_t i = 0; i < MaxTableWindowAmount; ++i) {
-				if (ImGui::IsKeyPressed(shortcuts[i])) {
+				if (shortcuts[i] && ImGui::IsKeyPressed(shortcuts[i])) {
 					settings.setShowChart(i, !settings.isShowChart(i));
 				}
 			}

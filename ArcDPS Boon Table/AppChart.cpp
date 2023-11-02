@@ -15,6 +15,8 @@
 #include "extension/ImGui_Math.h"
 #include "extension/Icon.h"
 
+#define _DEBUG false
+
 AppChartsContainer charts;
 
 namespace Table = ImGuiEx::BigTable;
