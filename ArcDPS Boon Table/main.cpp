@@ -8,6 +8,7 @@
 #include <regex>
 #include <d3d11.h>
 #include <d3d9.h>
+#include <charconv>
 
 #include "imgui/imgui.h"
 #include "extension/arcdps_structs.h"
@@ -288,12 +289,12 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 		history.Event(dst);
 		
 		if (!ev) {
-			if (src) {
+			if (src && src->name && src->name[0] != '\0') {
 				/* notify tracking change */
 				if (!src->elite) {
 					/* add */
 					if (src->prof) {
-						if (dst && dst->name) {
+						if (dst && dst->name && dst->name[0] != '\0') {
 							liveTracker.addPlayer(src,dst);
 							charts.sortNeeded();
 
@@ -301,10 +302,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 								// this is yourself, check your map and see active "one-logging" if it is WvW
 								if (mapViewOfMumbleFile) {
 									LinkedMem* linkedMem = static_cast<LinkedMem*>(mapViewOfMumbleFile);
-									constexpr std::array<uint32_t, 4> mapIDs {38, 95, 96, 1099};
-									uint32_t mapId = linkedMem->getMumbleContext()->mapId;
-									const auto& mapIdIt = std::find(mapIDs.begin(), mapIDs.end(), mapId);
-									isWvW = mapIdIt != mapIDs.end();
+									isWvW = linkedMem->getMumbleContext()->uiState & 1 << 4; // Bit 5 = Is in Competitive game mode
 								}
 							}
 						}
@@ -314,10 +312,6 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 						liveTracker.removePlayer(src);
 						charts.sortNeeded();
 					}
-				}
-				/* notify target change */
-				else if (src->elite == 1) {
-
 				}
 			}
 		}
