@@ -289,12 +289,12 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 		history.Event(dst);
 		
 		if (!ev) {
-			if (src && src->name && src->name[0] != '\0') {
+			if (src && src->name) {
 				/* notify tracking change */
 				if (!src->elite) {
 					/* add */
 					if (src->prof) {
-						if (dst && dst->name && dst->name[0] != '\0') {
+						if (dst && dst->name && dst->name[0] != '\0' && src->name[0] != '\0') {
 							liveTracker.addPlayer(src,dst);
 							charts.sortNeeded();
 

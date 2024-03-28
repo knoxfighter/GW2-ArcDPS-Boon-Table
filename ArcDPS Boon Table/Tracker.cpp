@@ -98,27 +98,24 @@ void Tracker::removePlayer(ag* src) {
 	uintptr_t id = src->id;
 	std::string characterName = std::string(src->name);
 
-	std::unique_lock<std::mutex> lock(players_mtx);
+	std::lock_guard lock(players_mtx);
 
 	charts.removePlayer(id);
 
 	// remove player from tracked list at all
 	players.erase(id);
-	lock.unlock();
 }
 
 void Tracker::clearPlayers() {
-	std::unique_lock<std::mutex> lock(players_mtx);
+	std::lock_guard lock(players_mtx);
 	players.clear();
 
 	charts.clearPlayers();
-	lock.unlock();
 }
 
 void Tracker::clearNPCs() {
-	std::unique_lock<std::mutex> lock(npcs_mtx);
+	std::lock_guard lock(npcs_mtx);
 	npcs.clear();
-	lock.unlock();
 }
 
 Player* Tracker::getPlayer(uintptr_t new_player) {
