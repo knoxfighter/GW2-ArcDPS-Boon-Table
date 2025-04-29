@@ -102,9 +102,6 @@
     <ClCompile Include="extension\BigTable.cpp">
       <Filter>Source Files\extension</Filter>
     </ClCompile>
-    <ClCompile Include="modernIni\modernIni\modernIni.ixx">
-      <Filter>Source Files\modernIni</Filter>
-    </ClCompile>
     <ClCompile Include="History.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -119,6 +116,9 @@
     </ClCompile>
     <ClCompile Include="SettingsUIGlobal.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="modernIni\modernIni\modernIni.cpp">
+      <Filter>Source Files\modernIni</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="UpdateChecker.h">
       <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="modernIni\modernIni\modernIni.h">
+      <Filter>Header Files\modernIni</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

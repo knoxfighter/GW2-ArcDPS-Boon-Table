@@ -1,4 +1,3 @@
-#define IMGUI_DEFINE_MATH_OPERATORS
 #include "AppChart.h"
 
 #include <algorithm>
@@ -14,8 +13,6 @@
 #include "extension/Widgets.h"
 #include "extension/ImGui_Math.h"
 #include "extension/Icon.h"
-
-#define _DEBUG false
 
 AppChartsContainer charts;
 
@@ -82,7 +79,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 	minHeight = 0;
 	innerTableCursorPos = 0;
 
-	ImGui::PushFont(ImGui::GetIO().Fonts->Fonts.back());
+	ImGui::PushFont(ImGui::GetIO().Fonts->Fonts.front());
 
 	flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 

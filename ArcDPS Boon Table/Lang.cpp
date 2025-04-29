@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-import modernIni;
+#include "modernIni/modernIni/modernIni.h"
 
 Lang lang;
 

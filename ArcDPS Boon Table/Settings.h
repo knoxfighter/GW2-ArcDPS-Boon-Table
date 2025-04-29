@@ -8,8 +8,7 @@
 #include "Helpers.h"
 #include "ITracker.h"
 #include "modernIni/modernIni/modernIniMacros.h"
-
-import modernIni;
+#include "modernIni/modernIni/modernIni.h"
 
 MODERN_INI_DEFINE_TYPE_NON_INTRUSIVE_NO_EXCEPT(ImVec2, x, y)
 MODERN_INI_DEFINE_TYPE_NON_INTRUSIVE_NO_EXCEPT(ImVec4, x, y, z, w)
