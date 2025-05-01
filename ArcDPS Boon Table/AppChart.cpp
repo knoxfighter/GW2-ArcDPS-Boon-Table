@@ -79,8 +79,6 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 	minHeight = 0;
 	innerTableCursorPos = 0;
 
-	ImGui::PushFont(ImGui::GetIO().Fonts->Fonts.front());
-
 	flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
 	SizingPolicy sizingPolicy = settings.getSizingPolicy(index);
@@ -142,8 +140,8 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 
 	// add window paddings to defined height
 	float paddingHeight = ImGui::GetStyle().WindowPadding.y;
-	minHeight += paddingHeight;
-	maxHeight += paddingHeight;
+	minHeight += paddingHeight*2;
+	maxHeight += paddingHeight*2;
 
 #if _DEBUG
 	arc_log(std::format("paddingHeight: {}", paddingHeight).c_str());
@@ -177,8 +175,10 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 
 	switch (sizingPolicy) {
 		case SizingPolicy::ManualWindowSize:
+			tableFlags |= ImGuiTableFlags_ScrollX;
+			[[fallthrough]];
 		case SizingPolicy::SizeToContent:
-			tableFlags |= ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX | ImGuiTableFlags_ScrollY;
+			tableFlags |= ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollY;
 			break;
 		case SizingPolicy::SizeContentToWindow:
 			tableFlags |= ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_ScrollY;
@@ -440,7 +440,6 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 
 	ImGui::End();
 
-	ImGui::PopFont();
 	if (windowPadding) {
 		ImGui::PopStyleVar();
 	}
