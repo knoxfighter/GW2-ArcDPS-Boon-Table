@@ -59,9 +59,9 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 #endif
 		
 		float overriddenHeight = titleBarHeight + ImGui::GetStyle().WindowPadding.y + 5.f;
-		if (overriddenHeight < 50.f) overriddenHeight = 50.f;
-		if (minHeight < overriddenHeight) minHeight = overriddenHeight;
-		if (maxHeight < overriddenHeight) maxHeight = overriddenHeight;
+		overriddenHeight = std::max(overriddenHeight, 50.f);
+		minHeight = std::max(minHeight, overriddenHeight);
+		maxHeight = std::max(maxHeight, overriddenHeight);
 	} else {
 		minHeight = titleBarHeight + ImGui::GetStyle().WindowPadding.y + 5.f;
 		maxHeight = FLT_MAX;
@@ -277,11 +277,11 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 
 				if (sorts_specs->Specs->ColumnUserID == nameColumnId) {
 					// sort by account name.
-					std::sort(playerOrder.begin(), playerOrder.end(), [descend, &tracker](const size_t& playerIdx1, const size_t& playerIdx2) {
+					std::ranges::sort(playerOrder, [descend, &tracker](const size_t& playerIdx1, const size_t& playerIdx2) {
 						std::string charName1 = tracker.getIEntity(playerIdx1)->getName();
 						std::string charName2 = tracker.getIEntity(playerIdx2)->getName();
-						std::transform(charName1.begin(), charName1.end(), charName1.begin(), [](unsigned char c) { return std::tolower(c); });
-						std::transform(charName2.begin(), charName2.end(), charName2.begin(), [](unsigned char c) { return std::tolower(c); });
+						std::ranges::transform(charName1, charName1.begin(), [](unsigned char c) { return std::tolower(c); });
+						std::ranges::transform(charName2, charName2.begin(), [](unsigned char c) { return std::tolower(c); });
 
 						if (descend) {
 							bool res = charName1 < charName2;
@@ -292,7 +292,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 					});
 				} else if (sorts_specs->Specs->ColumnUserID == subgroupColumnId) {
 					// sort by subgroup
-					std::sort(playerOrder.begin(), playerOrder.end(), [descend, &tracker](const size_t& playerIdx1, const size_t& playerIdx2) {
+					std::ranges::sort(playerOrder, [descend, &tracker](const size_t& playerIdx1, const size_t& playerIdx2) {
 						uint8_t player1Subgroup = tracker.getIPlayer(playerIdx1)->getSubgroup();
 						uint8_t player2Subgroup = tracker.getIPlayer(playerIdx2)->getSubgroup();
 						if (descend) {
@@ -303,7 +303,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 					});
 				} else if (sorts_specs->Specs->ColumnUserID == above90ColumnId) {
 					// sort by above 90% hp
-					std::sort(playerOrder.begin(), playerOrder.end(), [descend, &tracker](const size_t& playerIdx1, const size_t& playerIdx2) {
+					std::ranges::sort(playerOrder, [descend, &tracker](const size_t& playerIdx1, const size_t& playerIdx2) {
 						float player1Over90 = tracker.getIEntity(playerIdx1)->getOver90();
 						float player2Over90 = tracker.getIEntity(playerIdx2)->getOver90();
 						if (descend) {
@@ -316,7 +316,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 					// sort by buff
 					const ImGuiID buffId = sorts_specs->Specs->ColumnUserID;
 					const BoonDef& buff = tracked_buffs[buffId];
-					std::sort(playerOrder.begin(), playerOrder.end(), [descend, &tracker, &buff, this](const size_t& playerIdx1, const size_t& playerIdx2) {
+					std::ranges::sort(playerOrder, [descend, &tracker, &buff, this](const size_t& playerIdx1, const size_t& playerIdx2) {
 						float player1Uptime = tracker.getIEntity(playerIdx1)->getBoonUptime(buff);
 						float player2Uptime = tracker.getIEntity(playerIdx2)->getBoonUptime(buff);
 						if (descend) {
@@ -335,7 +335,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		 */
 		if (settings.isShowSelfOnTop(index)) {
 			if (self_player) {
-				DrawRow(alignment, self_player->getName().c_str(), std::to_string(self_player->getSubgroup()).c_str(), [&](const BoonDef& boonDef) {
+				DrawRow(alignment, self_player->getName(), std::to_string(self_player->getSubgroup()).c_str(), [&](const BoonDef& boonDef) {
 							return getEntityDisplayValue(tracker, *self_player, boonDef);
 						}, [&self_player]() {
 							return self_player->getOver90();
@@ -363,7 +363,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 				// for (const Player& player : tracker.players | std::views::filter(group_filter)) {
 				const IPlayer* const player = tracker.getIPlayer(playerIdx);
 
-				DrawRow(alignment, player->getName().c_str(), std::to_string(player->getSubgroup()).c_str(), [&](const BoonDef& boonDef) {
+				DrawRow(alignment, player->getName(), std::to_string(player->getSubgroup()).c_str(), [&](const BoonDef& boonDef) {
 							return getEntityDisplayValue(tracker, *player, boonDef);
 						}, [&player]() {
 							return player->getOver90();
@@ -387,7 +387,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 			};
 
 			for (std::set<uint8_t> subgroups = tracker.getSubgroups(); uint8_t subgroup : subgroups | std::views::filter(group_filter)) {
-				DrawRow(alignment, lang.translate(LangKey::SubgroupNameColumnValue).c_str(), std::to_string(subgroup).c_str(),
+				DrawRow(alignment, lang.translate(LangKey::SubgroupNameColumnValue), std::to_string(subgroup).c_str(),
 						[&](const BoonDef& boonDef) {
 							return tracker.getSubgroupBoonUptime(boonDef, subgroup);
 						}, [&tracker, &subgroup]() {
@@ -400,7 +400,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		 * TOTALS
 		 */
 		if (settings.isShowTotal(index)) {
-			DrawRow(alignment, lang.translate(LangKey::TotalNameColumnValue).c_str(), lang.translate(LangKey::TotalSubgroupColumnValue).c_str(),
+			DrawRow(alignment, lang.translate(LangKey::TotalNameColumnValue), lang.translate(LangKey::TotalSubgroupColumnValue).c_str(),
 					[&](const BoonDef& boonDef) {
 						return tracker.getAverageBoonUptime(boonDef);
 					}, [&tracker]() {

@@ -21,27 +21,28 @@ void init_tracked_buffs() {
     tracked_buffs.emplace_back(std::vector<uint32_t>{743}, lang.translate(LangKey::BuffAegis), StackingType_duration, false, BoonType_boon, ID_Aegis);
     tracked_buffs.emplace_back(std::vector<uint32_t>{719}, lang.translate(LangKey::BuffSwiftness), StackingType_duration, false, BoonType_boon, ID_Swiftness);
     tracked_buffs.emplace_back(std::vector<uint32_t>{26980}, lang.translate(LangKey::BuffResistance), StackingType_duration, false, BoonType_boon, ID_Resistance);
-    tracked_buffs.emplace_back(std::vector<uint32_t>{14222}, lang.translate(LangKey::BuffEmpowerAllies), StackingType_single, false, BoonType_Warrior, ID_Empower_Allies);
-    tracked_buffs.emplace_back(std::vector<uint32_t>{38333}, lang.translate(LangKey::BuffPinpointDistribution), StackingType_single, false, BoonType_Engineer, ID_Pinpoint_Distribution);
-    tracked_buffs.emplace_back(std::vector<uint32_t>{26854}, lang.translate(LangKey::BuffAssassinsPresence), StackingType_single, false, BoonType_Revenant, ID_Assassins_Presence2);
-    tracked_buffs.emplace_back(std::vector<uint32_t>{14055}, lang.translate(LangKey::BuffSpotter), StackingType_single, false, BoonType_Ranger, ID_Spotter);
-    tracked_buffs.emplace_back(std::vector<uint32_t>{5587}, lang.translate(LangKey::BuffSoothingMist), StackingType_single, false, BoonType_Elementalist, ID_Soothing_Mist);
-    tracked_buffs.emplace_back(std::vector<uint32_t>{30285}, lang.translate(LangKey::BuffVampiricAura), StackingType_single, false, BoonType_Necromancer, ID_Vampiric_Presence);
-    tracked_buffs.emplace_back(std::vector<uint32_t>{13796}, lang.translate(LangKey::BuffStrengthInNumbers), StackingType_single, false, BoonType_Guardian, ID_Strength_in_Numbers);
-    // warrior banners
-    tracked_buffs.emplace_back(std::vector<uint32_t>{14417}, lang.translate(LangKey::BuffStrength) /*Banner of Strength*/, StackingType_single, false, BoonType_Warrior, ID_Banner_of_Strength2);
-    tracked_buffs.emplace_back(std::vector<uint32_t>{14449}, lang.translate(LangKey::BuffBannerDiscipline), StackingType_single, false, BoonType_Warrior, ID_Banner_of_Discipline2);
-    tracked_buffs.emplace_back(std::vector<uint32_t>{14450}, lang.translate(LangKey::BuffBannerTactics), StackingType_single, false, BoonType_Warrior, ID_Banner_of_Tactics2);
-    tracked_buffs.emplace_back(std::vector<uint32_t>{14543}, lang.translate(LangKey::BuffBannerDefense), StackingType_single, false, BoonType_Warrior, ID_Banner_of_Defense2);
-    // ranger spirits
-    tracked_buffs.emplace_back(std::vector<uint32_t>{50421}, lang.translate(LangKey::BuffSpiritFrost), StackingType_single, false, BoonType_Ranger, ID_Frost_Spirit2);
-    tracked_buffs.emplace_back(std::vector<uint32_t>{50413}, lang.translate(LangKey::BuffSpiritSun), StackingType_single, false, BoonType_Ranger, ID_Sun_Spirit2);
-    tracked_buffs.emplace_back(std::vector<uint32_t>{50415}, lang.translate(LangKey::BuffSpiritStone), StackingType_single, false, BoonType_Ranger, ID_Stone_Spirit2);
-    tracked_buffs.emplace_back(std::vector<uint32_t>{50381}, lang.translate(LangKey::BuffSpiritStorm), StackingType_single, false, BoonType_Ranger, ID_Storm_Spirit2);
-    tracked_buffs.emplace_back(std::vector<uint32_t>{50386}, lang.translate(LangKey::BuffSpiritWater), StackingType_single, false, BoonType_Ranger, ID_Water_Spirit);
+
+    tracked_buffs.emplace_back("Empowered Allies (legacy)");
+    tracked_buffs.emplace_back("Pinpoint Distribution (legacy)");
+    tracked_buffs.emplace_back("Assassin's Presence (legacy)");
+    tracked_buffs.emplace_back("Spotter (legacy)");
+	tracked_buffs.emplace_back(std::vector<uint32_t>{5587}, lang.translate(LangKey::BuffSoothingMist), StackingType_single, false, BoonType_Elementalist, ID_Soothing_Mist);
+	tracked_buffs.emplace_back(std::vector<uint32_t>{30285}, lang.translate(LangKey::BuffVampiricAura), StackingType_single, false, BoonType_Necromancer, ID_Vampiric_Presence);
+	tracked_buffs.emplace_back("Strength in Numbers (legacy)");
+	// warrior banners
+	tracked_buffs.emplace_back("Banner of Strength (legacy)");
+	tracked_buffs.emplace_back("Banner of Discipline (legacy)");
+	tracked_buffs.emplace_back("Banner of Tactics (legacy)");
+	tracked_buffs.emplace_back("Banner of Defense (legacy)");
+	// ranger spirits
+	tracked_buffs.emplace_back("Frost Spirit (legacy)");
+	tracked_buffs.emplace_back("Sun Spirit (legacy)");
+	tracked_buffs.emplace_back("Stone Spirit (legacy)");
+	tracked_buffs.emplace_back("Storm Spirit (legacy)");
+	tracked_buffs.emplace_back("Water Spirit (legacy)");
     // general
     tracked_buffs.emplace_back(std::vector<uint32_t>{10235}, lang.translate(LangKey::BuffSignetInspiration), StackingType_single, false, BoonType_Mesmer, ID_Signet_of_Inspiration2);
-    tracked_buffs.emplace_back(std::vector<uint32_t>{13017, 26142, 10269 }, lang.translate(LangKey::BuffStealth), StackingType_duration, false, BoonType_other, ID_Stealth2); //stealth + Hide in Shadows 
+    tracked_buffs.emplace_back(std::vector<uint32_t>{10269, 13017, 26142, 32747, 58026}, lang.translate(LangKey::BuffStealth), StackingType_duration, false, BoonType_other, ID_Stealth2); //stealth + Hide in Shadows 
     tracked_buffs.emplace_back(std::vector<uint32_t>{5974}, lang.translate(LangKey::BuffSuperspeed), StackingType_single, false, BoonType_other, ID_Super_Speed2);
     // Guardian Signets
     tracked_buffs.emplace_back(std::vector<uint32_t>{9220, 46554}, lang.translate(LangKey::BuffSignetResolve), StackingType_single, false, BoonType_Guardian, ID_Signet_Resolve);
@@ -66,7 +67,7 @@ void init_tracked_buffs() {
     tracked_buffs.emplace_back(std::vector<uint32_t>{39978}, lang.translate(LangKey::BuffDarkAura), StackingType_single, false, BoonType_Aura, ID_Dark_Aura);
     tracked_buffs.emplace_back(std::vector<uint32_t>{5677}, lang.translate(LangKey::BuffFireAura), StackingType_single, false, BoonType_Aura, ID_Fire_Aura);
     tracked_buffs.emplace_back(std::vector<uint32_t>{5579}, lang.translate(LangKey::BuffFrostAura), StackingType_single, false, BoonType_Aura, ID_Frost_Aura);
-    tracked_buffs.emplace_back(std::vector<uint32_t>{25518}, lang.translate(LangKey::BuffLightAura), StackingType_single, false, BoonType_Aura, ID_Light_Aura);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{25518, 68927}, lang.translate(LangKey::BuffLightAura), StackingType_single, false, BoonType_Aura, ID_Light_Aura);
     tracked_buffs.emplace_back(std::vector<uint32_t>{5684}, lang.translate(LangKey::BuffMagneticAura), StackingType_single, false, BoonType_Aura, ID_Magnetic_Aura);
     tracked_buffs.emplace_back(std::vector<uint32_t>{5577}, lang.translate(LangKey::BuffShockingAura), StackingType_single, false, BoonType_Aura, ID_Shocking_Aura);
 
@@ -76,10 +77,9 @@ void init_tracked_buffs() {
     tracked_buffs.emplace_back(std::vector<uint32_t>{44871}, lang.translate(LangKey::BuffEternalOasis), StackingType_single, false, BoonType_Guardian, ID_Eternal_Oasis);
     tracked_buffs.emplace_back(std::vector<uint32_t>{43194}, lang.translate(LangKey::BuffUnbrokenLines), StackingType_single, false, BoonType_Guardian, ID_Unbroken_Lines);
 	tracked_buffs.emplace_back(std::vector<uint32_t>{26596, 33330}, lang.translate(LangKey::BuffRiteOfTheGreatDwarf), StackingType_single, false, BoonType_Revenant, ID_Rite_of_the_Great_Dwarf);
-	tracked_buffs.emplace_back(std::vector<uint32_t>{31229, 46910}, lang.translate(LangKey::BuffBulwarkGyro), StackingType_single, false, BoonType_Engineer, ID_Bulwark_Gyro);
+    tracked_buffs.emplace_back("Bulwark Gyro (legacy)");
 	tracked_buffs.emplace_back(std::vector<uint32_t>{56890}, lang.translate(LangKey::BuffSymbolicAvenger), StackingType_single, false, BoonType_Guardian, ID_Symbolic_Avenger);
 	tracked_buffs.emplace_back(std::vector<uint32_t>{30207}, lang.translate(LangKey::BuffInvigoratedBulwark), StackingType_single, false, BoonType_Guardian, ID_Invigorated_Bulwark);
-	// tracked_buffs.emplace_back(std::vector<uint32_t>{53932}, lang.translate(LangKey::BuffStickingTogether), StackingType_single, false, BoonType_other, new Icon(ID_Sticking_Together, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{33652}, lang.translate(LangKey::BuffRigorousCertainty), StackingType_single, false, BoonType_other, ID_Rigorous_Certainty);
 
     // Relics

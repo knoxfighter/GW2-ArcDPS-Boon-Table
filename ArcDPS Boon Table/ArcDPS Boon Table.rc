@@ -72,35 +72,9 @@ ID_Swiftness            PNG                     "icons\\Swiftness.png"
 
 ID_Resistance           PNG                     "icons\\Resistance.png"
 
-ID_Empower_Allies       PNG                     "icons\\Empower_Allies.png"
-
-ID_Pinpoint_Distribution PNG                    "icons\\Pinpoint_Distribution.png"
-
-ID_Spotter              PNG                     "icons\\Spotter.png"
-
 ID_Soothing_Mist        PNG                     "icons\\Soothing_Mist.png"
 
 ID_Vampiric_Presence    PNG                     "icons\\Vampiric_Presence.png"
-
-ID_Strength_in_Numbers  PNG                     "icons\\Strength_in_Numbers.png"
-
-ID_Water_Spirit         PNG                     "icons\\Water_Spirit.png"
-
-ID_Banner_of_Strength2  PNG                     "icons\\bannerStrength.png"
-
-ID_Banner_of_Discipline2 PNG                    "icons\\Banner_of_Discipline2.png"
-
-ID_Banner_of_Tactics2   PNG                     "icons\\Banner_of_Tactics2.png"
-
-ID_Banner_of_Defense2   PNG                     "icons\\Banner_of_Defense2.png"
-
-ID_Frost_Spirit2        PNG                     "icons\\Frost_Spirit2.png"
-
-ID_Sun_Spirit2          PNG                     "icons\\Sun_Spirit2.png"
-
-ID_Stone_Spirit2        PNG                     "icons\\Stone_Spirit2.png"
-
-ID_Storm_Spirit2        PNG                     "icons\\Storm_Spirit2.png"
 
 ID_Signet_of_Inspiration2 PNG                   "icons\\Signet_of_Inspiration2.png"
 
@@ -142,8 +116,6 @@ ID_Razorclaws_Rage      PNG                     "icons\\Razorclaws_Rage.png"
 
 ID_Breakrazors_Bastion  PNG                     "icons\\Breakrazors_Bastion.png"
 
-ID_Assassins_Presence2  PNG                     "icons\\Assassin's_Presence2.png"
-
 ID_Chaos_Aura           PNG                     "icons\\Chaos_Aura.png"
 
 ID_Dark_Aura            PNG                     "icons\\Dark_Aura.png"
@@ -167,8 +139,6 @@ ID_Inspiring_Virtue     PNG                     "icons\\Inspiring_Virtue.png"
 ID_Eternal_Oasis        PNG                     "icons\\Eternal_Oasis.png"
 
 ID_Rite_of_the_Great_Dwarf PNG                  "icons\\Rite_of_the_Great_Dwarf.png"
-
-ID_Bulwark_Gyro         PNG                     "icons\\Bulwark_Gyro.png"
 
 ID_Symbolic_Avenger     PNG                     "icons\\Symbolic_Avenger.png"
 
@@ -237,8 +207,8 @@ ID_Relic_Bloodstone     PNG                     "icons\\Relic_Bloodstone.png"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,5,5,6
- PRODUCTVERSION 2,5,5,6
+ FILEVERSION 2,5,5,7
+ PRODUCTVERSION 2,5,5,7
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -253,12 +223,12 @@ BEGIN
     BEGIN
         BLOCK "000004b0"
         BEGIN
-            VALUE "FileVersion", "2.5.5.6"
+            VALUE "FileVersion", "2.5.5.7"
             VALUE "InternalName", "d3d9_arcdps_table.dll"
             VALUE "LegalCopyright", "Copyright (C) 2021"
             VALUE "OriginalFilename", "d3d9_arcdps_table.dll"
             VALUE "ProductName", "Arcdps Boon table plugin"
-            VALUE "ProductVersion", "2.5.5.6"
+            VALUE "ProductVersion", "2.5.5.7"
         END
     END
     BLOCK "VarFileInfo"
