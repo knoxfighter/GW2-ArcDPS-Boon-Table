@@ -30,7 +30,6 @@
 #define ID_Water_Spirit                 128
 #define ID_Signet_of_Inspiration        129
 #define ID_Stealth                      130
-#define IDB_PNG2                        131
 #define ID_Super_Speed                  131
 #define ID_Banner_of_Strength2          132
 #define ID_Banner_of_Discipline2        133
@@ -42,19 +41,15 @@
 #define ID_Storm_Spirit2                140
 #define ID_Signet_of_Inspiration2       141
 #define ID_Stealth2                     142
-#define IDB_PNG1                        143
 #define ID_Super_Speed2                 143
 #define ID_Rune_Scholar                 144
-#define IDB_PNG3                        146
 #define ID_Signet_Resolve               149
 #define ID_Signet_Bane                  150
 #define ID_Signet_Judgment              151
 #define ID_Signet_Mercy                 152
 #define ID_Signet_Wrath                 153
 #define ID_Signet_Courage               154
-#define IDB_PNG4                        155
 #define ID_Unbroken_Lines               155
-#define IDB_PNG5                        156
 #define ID_Dolyak_Stance                157
 #define ID_Griffon_Stance               158
 #define ID_Moa_Stance                   159
@@ -63,9 +58,7 @@
 #define ID_One_Wolf_Pack                162
 #define ID_Soulcleaves_Summit           163
 #define ID_Razorclaws_Rage              164
-#define IDB_PNG6                        165
 #define ID_Breakrazors_Bastion          165
-#define IDB_PNG7                        167
 #define ID_Dark_Aura                    169
 #define ID_Fire_Aura                    170
 #define ID_Frost_Aura                   171
@@ -83,16 +76,39 @@
 #define ID_Symbolic_Avenger             184
 #define ID_Invigorated_Bulwark          185
 #define ID_Sticking_Together            186
-#define IDB_PNG8                        187
 #define ID_Rigorous_Certainty           187
-#define IDB_PNG9                        188
 #define ID_Resolution                   188
+#define ID_Relic_Aristocracy            189
+#define ID_Relic_Monk                   190
+#define ID_Relic_Brawler				191
+#define ID_Relic_Thief					192
+#define ID_Relic_Fireworks				193
+#define ID_Relic_Daredevil				194
+#define ID_Relic_Deadeye				195
+#define ID_Relic_Firebrand				196
+#define ID_Relic_Herald					197
+#define ID_Relic_Scourge				198
+#define ID_Relic_Weaver					199
+#define ID_Relic_Zephyrite				200
+#define ID_Relic_Lyhr					201
+#define ID_Relic_Mabon					202
+#define ID_Relic_Vass					203
+#define ID_Relic_Nourys					204
+#define ID_Relic_Stormsinger			205
+#define ID_Relic_Sorrow					206
+#define ID_Relic_Blightbringer			207
+#define ID_Relic_Claw					208
+#define ID_Relic_MountBalrior			209
+#define ID_Relic_Thorns					210
+#define ID_Relic_SoulOfTheTitan			211
+#define ID_Relic_TitanicPotential		212
+#define ID_Relic_Bloodstone				213
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        189
+#define _APS_NEXT_RESOURCE_VALUE        214
 #define _APS_NEXT_COMMAND_VALUE         40001
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           101

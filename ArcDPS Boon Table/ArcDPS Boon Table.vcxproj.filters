@@ -444,5 +444,11 @@
     <Image Include="icons\Resolution.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="icons\Relic_Aristocracy.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icons\Relic_Monk.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

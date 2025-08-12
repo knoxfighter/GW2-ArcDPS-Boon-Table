@@ -81,6 +81,34 @@ void init_tracked_buffs() {
 	tracked_buffs.emplace_back(std::vector<uint32_t>{30207}, lang.translate(LangKey::BuffInvigoratedBulwark), StackingType_single, false, BoonType_Guardian, ID_Invigorated_Bulwark);
 	// tracked_buffs.emplace_back(std::vector<uint32_t>{53932}, lang.translate(LangKey::BuffStickingTogether), StackingType_single, false, BoonType_other, new Icon(ID_Sticking_Together, self_dll, d3d9device));
 	tracked_buffs.emplace_back(std::vector<uint32_t>{33652}, lang.translate(LangKey::BuffRigorousCertainty), StackingType_single, false, BoonType_other, ID_Rigorous_Certainty);
+
+    // Relics
+    tracked_buffs.emplace_back(std::vector<uint32_t>{69795}, lang.translate(LangKey::BuffRelicAristocracy), StackingType_intensity, false, BoonType_Relic, ID_Relic_Aristocracy);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{71132}, lang.translate(LangKey::BuffRelicMonk), StackingType_intensity, false, BoonType_Relic, ID_Relic_Monk);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{70913}, lang.translate(LangKey::BuffRelicBrawler), StackingType_single, false, BoonType_Relic, ID_Relic_Brawler);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{70767}, lang.translate(LangKey::BuffRelicThief), StackingType_intensity, false, BoonType_Relic, ID_Relic_Thief);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{69855}, lang.translate(LangKey::BuffRelicFireworks), StackingType_single, false, BoonType_Relic, ID_Relic_Fireworks);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{70839}, lang.translate(LangKey::BuffRelicDaredevil), StackingType_single, false, BoonType_Relic, ID_Relic_Daredevil);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{70282}, lang.translate(LangKey::BuffRelicDeadeye), StackingType_single, false, BoonType_Relic, ID_Relic_Deadeye);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{71217}, lang.translate(LangKey::BuffRelicFirebrand), StackingType_single, false, BoonType_Relic, ID_Relic_Firebrand);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{69606}, lang.translate(LangKey::BuffRelicHerald), StackingType_intensity, false, BoonType_Relic, ID_Relic_Herald);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{71217}, lang.translate(LangKey::BuffRelicScourge), StackingType_single, false, BoonType_Relic, ID_Relic_Scourge);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{70390}, lang.translate(LangKey::BuffRelicWeaver), StackingType_single, false, BoonType_Relic, ID_Relic_Weaver);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{70460}, lang.translate(LangKey::BuffRelicZephyrite), StackingType_single, false, BoonType_Relic, ID_Relic_Zephyrite);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{70353}, lang.translate(LangKey::BuffRelicLyhr), StackingType_single, false, BoonType_Relic, ID_Relic_Lyhr);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{69620}, lang.translate(LangKey::BuffRelicMabon), StackingType_intensity, false, BoonType_Relic, ID_Relic_Mabon);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{69961}, lang.translate(LangKey::BuffRelicVass), StackingType_intensity, false, BoonType_Relic, ID_Relic_Vass);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{71431}, lang.translate(LangKey::BuffRelicNourys), StackingType_single, false, BoonType_Relic, ID_Relic_Nourys);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{73455}, lang.translate(LangKey::BuffRelicStormsinger), StackingType_single, false, BoonType_Relic, ID_Relic_Stormsinger);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{74410}, lang.translate(LangKey::BuffRelicSorrow), StackingType_single, false, BoonType_Relic, ID_Relic_Sorrow);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{73181}, lang.translate(LangKey::BuffRelicBlightbringer), StackingType_single, false, BoonType_Relic, ID_Relic_Blightbringer);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{73955}, lang.translate(LangKey::BuffRelicClaw), StackingType_single, false, BoonType_Relic, ID_Relic_Claw);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{74793}, lang.translate(LangKey::BuffRelicMountBalrior), StackingType_single, false, BoonType_Relic, ID_Relic_MountBalrior);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{75432}, lang.translate(LangKey::BuffRelicThorns), StackingType_single, false, BoonType_Relic, ID_Relic_Thorns);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{76372}, lang.translate(LangKey::BuffRelicTitanicPotential), StackingType_intensity, false, BoonType_Relic, ID_Relic_TitanicPotential);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{76351}, lang.translate(LangKey::BuffRelicSoulOfTheTitan), StackingType_single, false, BoonType_Relic, ID_Relic_SoulOfTheTitan);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{104800}, lang.translate(LangKey::BuffRelicBloodstoneVolatility), StackingType_intensity, false, BoonType_Relic, ID_Relic_Bloodstone);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{76326}, lang.translate(LangKey::BuffRelicBloodstoneFervor), StackingType_single, false, BoonType_Relic, ID_Relic_Bloodstone);
 	
 	// above 90
 	above90BoonDef = std::make_shared<BoonDef>(std::vector<uint32_t>{static_cast<uint32_t>(-1)}, lang.translate(LangKey::Above90Hp), StackingType_single, false, BoonType_other, ID_Rune_Scholar); // above 90% hp (e.g. scholar)

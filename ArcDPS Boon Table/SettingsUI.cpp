@@ -105,6 +105,8 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 			ImGui::EndMenu();
 		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeAura).c_str(), BoonType_Aura, 2))
 			ImGui::EndMenu();
+		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeRelic).c_str(), BoonType_Relic, 2))
+			ImGui::EndMenu();
 		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeOther).c_str(), BoonType_other, 2)) {
 			Table::MenuItemTableColumnVisibility(table, tracked_buffs.size() + 2);
 			ImGui::EndMenu();

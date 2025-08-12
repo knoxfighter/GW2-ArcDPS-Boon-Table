@@ -19,6 +19,7 @@ enum BoonType
 	BoonType_Mesmer,
 	BoonType_Aura,
 	BoonType_other,
+	BoonType_Relic,
 };
 
 enum StackingType

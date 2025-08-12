@@ -74,7 +74,7 @@ ID_Resistance           PNG                     "icons\\Resistance.png"
 
 ID_Empower_Allies       PNG                     "icons\\Empower_Allies.png"
 
-ID_Pinpoint_Distribution PNG                     "icons\\Pinpoint_Distribution.png"
+ID_Pinpoint_Distribution PNG                    "icons\\Pinpoint_Distribution.png"
 
 ID_Spotter              PNG                     "icons\\Spotter.png"
 
@@ -88,7 +88,7 @@ ID_Water_Spirit         PNG                     "icons\\Water_Spirit.png"
 
 ID_Banner_of_Strength2  PNG                     "icons\\bannerStrength.png"
 
-ID_Banner_of_Discipline2 PNG                     "icons\\Banner_of_Discipline2.png"
+ID_Banner_of_Discipline2 PNG                    "icons\\Banner_of_Discipline2.png"
 
 ID_Banner_of_Tactics2   PNG                     "icons\\Banner_of_Tactics2.png"
 
@@ -102,7 +102,7 @@ ID_Stone_Spirit2        PNG                     "icons\\Stone_Spirit2.png"
 
 ID_Storm_Spirit2        PNG                     "icons\\Storm_Spirit2.png"
 
-ID_Signet_of_Inspiration2 PNG                     "icons\\Signet_of_Inspiration2.png"
+ID_Signet_of_Inspiration2 PNG                   "icons\\Signet_of_Inspiration2.png"
 
 ID_Stealth2             PNG                     "icons\\Stealth2.png"
 
@@ -166,7 +166,7 @@ ID_Inspiring_Virtue     PNG                     "icons\\Inspiring_Virtue.png"
 
 ID_Eternal_Oasis        PNG                     "icons\\Eternal_Oasis.png"
 
-ID_Rite_of_the_Great_Dwarf PNG                     "icons\\Rite_of_the_Great_Dwarf.png"
+ID_Rite_of_the_Great_Dwarf PNG                  "icons\\Rite_of_the_Great_Dwarf.png"
 
 ID_Bulwark_Gyro         PNG                     "icons\\Bulwark_Gyro.png"
 
@@ -180,6 +180,56 @@ ID_Rigorous_Certainty   PNG                     "icons\\Rigorous_Certainty.png"
 
 ID_Resolution           PNG                     "icons\\Resolution.png"
 
+ID_Relic_Aristocracy    PNG                     "icons\\Relic_Aristocracy.png"
+
+ID_Relic_Monk           PNG                     "icons\\Relic_Monk.png"
+
+ID_Relic_Brawler        PNG                     "icons\\Relic_Brawler.png"
+
+ID_Relic_Thief          PNG                     "icons\\Relic_Thief.png"
+
+ID_Relic_Fireworks      PNG                     "icons\\Relic_Fireworks.png"
+
+ID_Relic_Daredevil      PNG                     "icons\\Relic_Daredevil.png"
+
+ID_Relic_Deadeye        PNG                     "icons\\Relic_Deadeye.png"
+
+ID_Relic_Firebrand      PNG                     "icons\\Relic_Firebrand.png"
+
+ID_Relic_Herald         PNG                     "icons\\Relic_Herald.png"
+
+ID_Relic_Scourge        PNG                     "icons\\Relic_Scourge.png"
+
+ID_Relic_Weaver         PNG                     "icons\\Relic_Weaver.png"
+
+ID_Relic_Zephyrite      PNG                     "icons\\Relic_Zephyrite.png"
+
+ID_Relic_Lyhr           PNG                     "icons\\Relic_Lyhr.png"
+
+ID_Relic_Mabon          PNG                     "icons\\Relic_Mabon.png"
+
+ID_Relic_Vass           PNG                     "icons\\Relic_Vass.png"
+
+ID_Relic_Nourys         PNG                     "icons\\Relic_Nourys.png"
+
+ID_Relic_Stormsinger    PNG                     "icons\\Relic_Stormsinger.png"
+
+ID_Relic_Sorrow         PNG                     "icons\\Relic_Sorrow.png"
+
+ID_Relic_Blightbringer  PNG                     "icons\\Relic_Blightbringer.png"
+
+ID_Relic_Claw           PNG                     "icons\\Relic_Claw.png"
+
+ID_Relic_MountBalrior   PNG                     "icons\\Relic_MountBalrior.png"
+
+ID_Relic_Thorns         PNG                     "icons\\Relic_Thorns.png"
+
+ID_Relic_SoulOfTheTitan PNG                     "icons\\SoulOfTheTitan.png"
+
+ID_Relic_TitanicPotential PNG                   "icons\\Relic_TitanicPotential.png"
+
+ID_Relic_Bloodstone     PNG                     "icons\\Relic_Bloodstone.png"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -187,8 +237,8 @@ ID_Resolution           PNG                     "icons\\Resolution.png"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,5,5,2
- PRODUCTVERSION 2,5,5,2
+ FILEVERSION 2,5,5,6
+ PRODUCTVERSION 2,5,5,6
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -203,12 +253,12 @@ BEGIN
     BEGIN
         BLOCK "000004b0"
         BEGIN
-            VALUE "FileVersion", "2.5.5.2"
+            VALUE "FileVersion", "2.5.5.6"
             VALUE "InternalName", "d3d9_arcdps_table.dll"
             VALUE "LegalCopyright", "Copyright (C) 2021"
             VALUE "OriginalFilename", "d3d9_arcdps_table.dll"
             VALUE "ProductName", "Arcdps Boon table plugin"
-            VALUE "ProductVersion", "2.5.5.2"
+            VALUE "ProductVersion", "2.5.5.6"
         END
     END
     BLOCK "VarFileInfo"
@@ -219,7 +269,6 @@ END
 
 #endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
-
 
 
 #ifndef APSTUDIO_INVOKED
