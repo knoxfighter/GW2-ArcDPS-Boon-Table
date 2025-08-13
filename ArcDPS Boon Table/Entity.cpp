@@ -1,5 +1,7 @@
 #include "Entity.h"
 
+#include <algorithm>
+
 std::mutex boons_mtx;
 
 bool Entity::operator==(uintptr_t other_id) const {
@@ -135,7 +137,7 @@ float Entity::getBoonUptime(const BoonDef& boon) const {
 			break;
 		}
 
-		if (out < 0.0f) out = 0.0f;
+		out = std::max(out, 0.0f);
 
 		return out;
 	}

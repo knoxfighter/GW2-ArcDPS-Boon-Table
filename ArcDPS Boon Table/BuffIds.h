@@ -41,6 +41,11 @@ struct BoonDef
 
 	BoonDef(std::string new_name) : name(std::move(new_name)) {}
 	BoonDef(std::vector<uint32_t> new_ids, std::string new_name, StackingType new_stacking_type, bool new_is_relevant, BoonType new_category, UINT new_icon);
+
+	bool IsValid() const
+	{
+		return !ids.empty();
+	}
 };
 
 BoonDef* getTrackedBoon(uint32_t new_id);

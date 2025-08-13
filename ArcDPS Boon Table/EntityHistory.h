@@ -3,12 +3,14 @@
 #include "Entity.h"
 #include "IEntity.h"
 
+#include <ranges>
+
 class EntityHistory : public virtual IEntity {
 protected:
 	uintptr_t id;
 	std::string name;
-	float over90 = 0;
 	uint64_t combatDuration = 0;
+	float over90 = 0;
 	std::map<uint32_t, float> boonUptime;
 	
 public:
@@ -18,7 +20,7 @@ public:
 		name = entity.getName();
 		over90 = entity.getOver90();
 		combatDuration = entity.getCombatDuration();
-		for (const BoonDef& trackedBuff : tracked_buffs) {
+		for (const BoonDef& trackedBuff : tracked_buffs | std::views::filter(&BoonDef::IsValid)) {
 			boonUptime[trackedBuff.ids[0]] = entity.getBoonUptime(trackedBuff);
 		}
 	}

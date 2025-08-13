@@ -1,6 +1,7 @@
 #pragma once
 
 #include <chrono>
+#include <ranges>
 
 #include "ITracker.h"
 #include "PlayerHistory.h"
@@ -31,16 +32,14 @@ public:
 		// just save it, ignore the difference in combattime for now (eventually adjust it to logtime)
 
 		// average
-		for (const BoonDef& trackedBuff : tracked_buffs) {
-			averageUptime[trackedBuff.ids[0]] = tracker.getAverageBoonUptime(
-				trackedBuff);
-
+		for (const BoonDef& trackedBuff : tracked_buffs | std::views::filter(&BoonDef::IsValid)) {
+			averageUptime[trackedBuff.ids[0]] = tracker.getAverageBoonUptime(trackedBuff);
 		}
 		averageOver90 = tracker.getAverageOver90();
 
 		// subgroups
 		for (uint8_t subgroup : tracker.getSubgroups()) {
-			for (const BoonDef& trackedBuff : tracked_buffs) {
+			for (const BoonDef& trackedBuff : tracked_buffs | std::views::filter(&BoonDef::IsValid)) {
 				float subgroupBoonUptime = tracker.getSubgroupBoonUptime(trackedBuff, subgroup);
 				subgroupUptime[subgroup][trackedBuff.ids[0]] = subgroupBoonUptime;
 
@@ -53,7 +52,6 @@ public:
 		for (auto& player : tracker.getPlayers()) {
 			PlayerHistory hp(player.second);
 			players[player.second.getId()] = hp;
-
 		}
 	}
 
