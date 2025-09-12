@@ -184,16 +184,16 @@ arcdps_exports* mod_init()
 /* release mod -- return ignored */
 uintptr_t mod_release()
 {
-	try {
+	// try {
 		settings.saveToFile();
 
 		lang.saveToFile();
 
 		iconLoader.Shutdown();
-	} catch(const std::exception& e) {
-		arc_log_file("error in mod_release!");
-		arc_log_file(e.what());
-	}
+	// } catch(const std::exception& e) {
+	// 	arc_log_file("error in mod_release!");
+	// 	arc_log_file(e.what());
+	// }
 
 	return 0;
 }
@@ -201,7 +201,7 @@ uintptr_t mod_release()
 /* window callback -- return is assigned to umsg (return zero to not be processed by arcdps or game) */
 uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	try {
+	// try {
 		auto const io = &ImGui::GetIO();
 
 		switch (uMsg)
@@ -261,11 +261,11 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 		}
-	} catch (const std::exception& e) {
-		arc_log_file("Boon Table: exception in mod_wnd");
-		arc_log_file(e.what());
-		throw;
-	}
+	// } catch (const std::exception& e) {
+	// 	arc_log_file("Boon Table: exception in mod_wnd");
+	// 	arc_log_file(e.what());
+	// 	throw;
+	// }
 	return uMsg;
 }
 
@@ -284,7 +284,7 @@ uintptr_t npc_ids[num_of_npcs];
 /* one participant will be party/squad, or minion of. no spawn statechange events. despawn statechange only on marked boss npcs */
 uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision) {
 	PRINT_LINE()
-	try {
+	// try {
 		/* ev is null. dst will only be valid on tracking add. skillname will also be null */
 		history.Event(dst);
 		
@@ -426,18 +426,18 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 
 			/* common */
 		}
-	} catch(const std::exception& e) {
-		arc_log_file("Boon Table: exception in mod_combat");
-		arc_log_file(e.what());
-		throw;
-	}
+	// } catch(const std::exception& e) {
+	// 	arc_log_file("Boon Table: exception in mod_combat");
+	// 	arc_log_file(e.what());
+	// 	throw;
+	// }
 	return 0;
 }
 
 uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 {
 	PRINT_LINE()
-	try {
+	// try {
 		// ImGui::ShowDemoWindow();
 		
 		readArcExports();
@@ -460,23 +460,23 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 		charts.drawAll(!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0);
 
 		updateChecker.Draw();
-	} catch(const std::exception& e) {
-		arc_log_file("Boon Table: exception in mod_imgui");
-		arc_log_file(e.what());
-		throw e;
-	}
+	// } catch(const std::exception& e) {
+	// 	arc_log_file("Boon Table: exception in mod_imgui");
+	// 	arc_log_file(e.what());
+	// 	throw e;
+	// }
 	return 0;
 }
 
 uintptr_t mod_options()
 {
-	try {
+	// try {
 		settingsUiGlobal.Draw();
-	} catch(const std::exception& e) {
-		arc_log_file("Boon Table: exception in mod_options");
-		arc_log_file(e.what());
-		throw;
-	}
+	// } catch(const std::exception& e) {
+	// 	arc_log_file("Boon Table: exception in mod_options");
+	// 	arc_log_file(e.what());
+	// 	throw;
+	// }
 	return 0;
 }
 
@@ -484,7 +484,7 @@ uintptr_t mod_options()
  * @return true to disable this option
  */
 uintptr_t mod_options_windows(const char* windowname) {
-	try {
+	// try {
 		if (!windowname) {
 			ImGui::Checkbox(lang.translate(LangKey::ShowChart).c_str(), &settings.isShowChart(0));
 
@@ -498,11 +498,11 @@ uintptr_t mod_options_windows(const char* windowname) {
 				ImGui::Checkbox(str.c_str(), &settings.isShowChart(i));
 			}
 		}
-	} catch(const std::exception& e) {
-		arc_log_file("Boon Table: exception in mod_options_windows");
-		arc_log_file(e.what());
-		throw;
-	}
+	// } catch(const std::exception& e) {
+	// 	arc_log_file("Boon Table: exception in mod_options_windows");
+	// 	arc_log_file(e.what());
+	// 	throw;
+	// }
 	return 0;
 }
 

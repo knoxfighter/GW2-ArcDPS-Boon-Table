@@ -54,11 +54,10 @@ void Tracker::addNewPlayer(uintptr_t id,
                            std::string characterName,
                            std::string accountName,
 						   bool self = false) {
-	std::unique_lock<std::mutex> lock(players_mtx);
+	std::lock_guard lock(players_mtx);
 	players.try_emplace(id, id, characterName, accountName, subgroup, profession, self);
 	// give charts index to newly player
 	charts.addPlayer(id);
-	lock.unlock();
 }
 
 void Tracker::addNPC(uintptr_t id, std::string name, cbtevent* ev) {
@@ -172,7 +171,7 @@ NPC* Tracker::getNPC(std::string new_name) {
 Player* Tracker::getPlayer(std::string new_player) {
 	if (new_player.empty()) return nullptr;
 	std::lock_guard<std::mutex> lock(players_mtx);
-	auto it = std::find_if(players.begin(), players.end(), [&new_player](const auto& player) {
+	auto it = std::ranges::find_if(players, [&new_player](const auto& player) {
 		return player.second == new_player;
 	});
 
