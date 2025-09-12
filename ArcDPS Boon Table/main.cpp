@@ -264,7 +264,7 @@ uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	} catch (const std::exception& e) {
 		arc_log_file("Boon Table: exception in mod_wnd");
 		arc_log_file(e.what());
-		throw e;
+		throw;
 	}
 	return uMsg;
 }
@@ -429,7 +429,7 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 	} catch(const std::exception& e) {
 		arc_log_file("Boon Table: exception in mod_combat");
 		arc_log_file(e.what());
-		throw e;
+		throw;
 	}
 	return 0;
 }
@@ -475,7 +475,7 @@ uintptr_t mod_options()
 	} catch(const std::exception& e) {
 		arc_log_file("Boon Table: exception in mod_options");
 		arc_log_file(e.what());
-		throw e;
+		throw;
 	}
 	return 0;
 }
@@ -501,7 +501,7 @@ uintptr_t mod_options_windows(const char* windowname) {
 	} catch(const std::exception& e) {
 		arc_log_file("Boon Table: exception in mod_options_windows");
 		arc_log_file(e.what());
-		throw e;
+		throw;
 	}
 	return 0;
 }

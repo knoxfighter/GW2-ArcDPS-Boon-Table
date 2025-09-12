@@ -4,5 +4,6 @@
   "version-string": "2.5.5",
   "dependencies": [
     "cpr"
-  ]
+  ],
+  "builtin-baseline": "25d20d679f8ce2b062d951b07c976dfca8f2aaa3"
 }
