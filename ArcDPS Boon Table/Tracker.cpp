@@ -60,39 +60,6 @@ void Tracker::addNewPlayer(uintptr_t id,
 	charts.addPlayer(id);
 }
 
-void Tracker::addNPC(uintptr_t id, std::string name, cbtevent* ev) {
-	// FIXME: NPC stuff
-	// NPC* npc = getNPC(name);
-	// if (npc) {
-	// 	if (npc && npc->id != id && npc->in_combat) {
-	// 		//If there is a new npc id it means that a new instance was spawned, and the combat timer ran for the old instance without it beeing spawned
-	// 		// this removes the npc from combat, if its actually in combat it will be set later in this function
-	// 		// worst set the combat start to a later point, when the npc got its first buff, which might be later during the fight than you actually could buff it
-	// 		npc->combatExit(ev);
-	// 	}
-	//
-	// 	// if npc already tracked, just update it
-	// 	// npcs get tracked by their name, not their id (respawned npcs get new ids)
-	// 	npc->id = id;
-	// 	//current_npc->name = name;
-	// } else {
-	// 	// add new npc
-	// 	std::unique_lock<std::mutex> lock(npcs_mtx);
-	// 	npcs.emplace_back(id, name);
-	// 	lock.unlock();
-	// }
-	//
-	// if (ev) {
-	// 	Player* self_player = getPlayer(2000);
-	// 	if (self_player && self_player->in_combat && getNPC(id)) {
-	// 		NPC* npc = getNPC(id);
-	// 		if (npc && !npc->in_combat) {
-	// 			npc->combatEnter(ev);
-	// 		}
-	// 	}
-	// }
-}
-
 void Tracker::removePlayer(ag* src) {
 	uintptr_t id = src->id;
 	std::string characterName = std::string(src->name);
@@ -112,11 +79,6 @@ void Tracker::clearPlayers() {
 	charts.clearPlayers();
 }
 
-void Tracker::clearNPCs() {
-	std::lock_guard lock(npcs_mtx);
-	npcs.clear();
-}
-
 Player* Tracker::getPlayer(uintptr_t new_player) {
 	if (!new_player) return nullptr;
 	const auto& it = players.find(new_player);
@@ -124,53 +86,22 @@ Player* Tracker::getPlayer(uintptr_t new_player) {
 	//player not tracked yet
 	if (it == players.end()) {
 		return nullptr;
-	} else //player tracked
-	{
-		return &it->second;
 	}
+	//player tracked
+	return &it->second;
 }
 
 Entity* Tracker::getEntity(uintptr_t new_entity) {
-	Entity* entity = getPlayer(new_entity);
-	if (entity != nullptr) return entity;
-	return getNPC(new_entity);
+	return getPlayer(new_entity);
 }
 
 IEntity* Tracker::getIEntity(uintptr_t new_entity) {
 	return getEntity(new_entity);
 }
 
-NPC* Tracker::getNPC(uintptr_t new_npc) {
-	if (!new_npc) return nullptr;
-	std::lock_guard<std::mutex> lock(npcs_mtx);
-	const auto& it = std::find(npcs.begin(), npcs.end(), new_npc);
-
-	//player not tracked yet
-	if (it == npcs.end()) {
-		return nullptr;
-	} else //npc tracked
-	{
-		return &*it;
-	}
-}
-
-NPC* Tracker::getNPC(std::string new_name) {
-	if (new_name.empty()) return nullptr;
-	std::lock_guard<std::mutex> lock(npcs_mtx);
-	auto it = std::find(npcs.begin(), npcs.end(), new_name);
-
-	//player not tracked yet
-	if (it == npcs.end()) {
-		return nullptr;
-	} else //player tracked
-	{
-		return &*it;
-	}
-}
-
 Player* Tracker::getPlayer(std::string new_player) {
 	if (new_player.empty()) return nullptr;
-	std::lock_guard<std::mutex> lock(players_mtx);
+	std::lock_guard lock(players_mtx);
 	auto it = std::ranges::find_if(players, [&new_player](const auto& player) {
 		return player.second == new_player;
 	});
@@ -178,10 +109,9 @@ Player* Tracker::getPlayer(std::string new_player) {
 	//player not tracked yet
 	if (it == players.end()) {
 		return nullptr;
-	} else //player tracked
-	{
-		return &it->second;
 	}
+	//player tracked
+	return &it->second;
 }
 
 IPlayer* Tracker::getIPlayer(uintptr_t new_player) {
@@ -193,9 +123,9 @@ IPlayer* Tracker::getIPlayer(std::string new_player) {
 }
 
 IPlayer* Tracker::getSelfIPlayer() {
-	for (auto& player : players) {
-		if (player.second.self == true) {
-			return &player.second;
+	for (auto& player : players | std::views::values) {
+		if (player.self == true) {
+			return &player;
 		}
 	}
 

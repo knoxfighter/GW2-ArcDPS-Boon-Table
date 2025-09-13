@@ -8,7 +8,6 @@
 class ITracker {
 public:
 	mutable std::mutex players_mtx;
-	mutable std::mutex npcs_mtx;
 	
 	virtual std::set<uint8_t> getSubgroups() const = 0;
 	virtual float getSubgroupBoonUptime(const BoonDef& boon, uint8_t subgroup) const = 0;

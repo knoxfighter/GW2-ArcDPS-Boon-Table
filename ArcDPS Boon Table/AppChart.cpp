@@ -26,27 +26,6 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, windowPadding.value());
 	}
 
-	// get current tracker
-	ITracker* trackerPtr;
-	auto currentHistory = settings.getCurrentHistory(index);
-	if (currentHistory == 0) {
-		trackerPtr = &liveTracker;
-	} else {
-		trackerPtr = &history[currentHistory - 1];
-	}
-	ITracker& tracker = *trackerPtr;
-
-	// if tracker changed, update the playerOrder (new IDs)
-	if (lastCalculatedHistory != currentHistory) {
-		playerOrder.clear();
-		for (const auto& id : tracker.getAllPlayerIds()) {
-			playerOrder.emplace_back(id);
-		}
-		needSort = true;
-
-		lastCalculatedHistory = currentHistory;
-	}
-
 	bool maxDisplayedEnabled = false;
 	if (settings.getMaxDisplayed(index) > 0 && rowCount >= settings.getMaxDisplayed(index)) {
 		maxDisplayedEnabled = true;
@@ -165,11 +144,6 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 	const unsigned int subgroupColumnId = 128 - 2;
 	const unsigned int above90ColumnId = 128 - 3;
 
-	// we have to get it here, cause it will lock tracker.players_mtx itself (which causes a crash, when it is already locked)
-	IPlayer* self_player = tracker.getSelfIPlayer();
-
-	std::scoped_lock<std::mutex, std::mutex> lock(tracker.players_mtx, tracker.npcs_mtx);
-
 	int tableFlags = ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_Sortable | ImGuiTableFlags_Resizable |
 		ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_NoBordersInBody;
 
@@ -263,6 +237,29 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 			Table::TableHeader(above90BoonDef->name.c_str(), showLabel, iconLoader.getTexture(above90BoonDef->icon), alignment);
 		}
 
+		// get current tracker
+		ITracker* trackerPtr;
+		auto currentHistory = settings.getCurrentHistory(index);
+		if (currentHistory == 0) {
+			trackerPtr = &liveTracker;
+		} else {
+			trackerPtr = &history[currentHistory - 1];
+		}
+		ITracker& tracker = *trackerPtr;
+
+		std::lock_guard lock(tracker.players_mtx);
+
+		// if tracker changed, update the playerOrder (new IDs)
+		if (lastCalculatedHistory != currentHistory) {
+			playerOrder.clear();
+			for (const auto& id : tracker.getAllPlayerIds()) {
+				playerOrder.emplace_back(id);
+			}
+			needSort = true;
+
+			lastCalculatedHistory = currentHistory;
+		}
+
 		/*
 		 * SORTING
 		 */
@@ -286,9 +283,8 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 						if (descend) {
 							bool res = charName1 < charName2;
 							return res;
-						} else {
-							return charName1 > charName2;
 						}
+						return charName1 > charName2;
 					});
 				} else if (sorts_specs->Specs->ColumnUserID == subgroupColumnId) {
 					// sort by subgroup
@@ -297,9 +293,8 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 						uint8_t player2Subgroup = tracker.getIPlayer(playerIdx2)->getSubgroup();
 						if (descend) {
 							return player1Subgroup < player2Subgroup;
-						} else {
-							return player1Subgroup > player2Subgroup;
 						}
+						return player1Subgroup > player2Subgroup;
 					});
 				} else if (sorts_specs->Specs->ColumnUserID == above90ColumnId) {
 					// sort by above 90% hp
@@ -308,9 +303,8 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 						float player2Over90 = tracker.getIEntity(playerIdx2)->getOver90();
 						if (descend) {
 							return player1Over90 < player2Over90;
-						} else {
-							return player1Over90 > player2Over90;
 						}
+						return player1Over90 > player2Over90;
 					});
 				} else {
 					// sort by buff
@@ -321,14 +315,15 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 						float player2Uptime = tracker.getIEntity(playerIdx2)->getBoonUptime(buff);
 						if (descend) {
 							return player1Uptime < player2Uptime;
-						} else {
-							return player1Uptime > player2Uptime;
 						}
+						return player1Uptime > player2Uptime;
 					});
 				}
 				sorts_specs->SpecsDirty = false;
 			}
 		}
+
+		IPlayer* self_player = tracker.getSelfIPlayer();
 
 		/**
 		 * SELF
@@ -407,24 +402,6 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 						return tracker.getAverageOver90();
 					});
 		}
-
-		/*
-		 * NPCs
-		 */
-		// FIXME: Enable if player tracking works again
-		// if (settings.isShowNpcs(index) && !tracker.npcs.empty()) {
-		// 	Table::TableNextRow();
-		// 	Table::TableSetBgColor(ImGuiTableBgTarget_RowBg0, ImGui::GetColorU32(ImGuiCol_Separator));
-		//
-		// 	for (const NPC& npc : tracker.npcs) {
-		// 		DrawRow(alignment, npc.name.c_str(), lang.translate(LangKey::NPCSubgroupColumnValue).c_str(),
-		// 		        [&](const BoonDef& boonDef) {
-		// 			        return getEntityDisplayValue(tracker, npc, boonDef);
-		// 		        }, [&npc]() {
-		// 			        return npc.getOver90();
-		// 		        }, true, npc);
-		// 	}
-		// }
 
 		Table::EndTable();
 	}

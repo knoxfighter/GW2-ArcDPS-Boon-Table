@@ -14,7 +14,6 @@
 class Tracker : public ITracker {
 protected:
 	std::unordered_map<uintptr_t, Player> players;
-	std::list<NPC> npcs;
 
 public:
 	Tracker() = default;
@@ -24,10 +23,8 @@ public:
 	void addPlayer(ag* src, ag* dst);
 	void addPlayer(uintptr_t id, uint8_t subgroup, Prof profession, std::string characterName, std::string accountName, bool self);
 	void addNewPlayer(uintptr_t id, uint8_t subgroup, Prof profession, std::string characterName, std::string accountName, bool self);
-	void addNPC(uintptr_t id, std::string name, cbtevent* ev);
 	void removePlayer(ag* src);
 	void clearPlayers();//marks all players as not in squad
-	void clearNPCs();//marks all npcs as not in squad
 
 	Player* getPlayer(uintptr_t new_player);
 	Player* getPlayer(std::string new_player);
@@ -36,9 +33,6 @@ public:
 	IPlayer* getSelfIPlayer() override;
 	std::unordered_map<uintptr_t, Player>& getPlayers();
 	std::set<uintptr_t> getAllPlayerIds() override;
-
-	NPC* getNPC(uintptr_t new_npc);
-	NPC* getNPC(std::string new_name);
 
 	Entity* getEntity(uintptr_t new_entity);
 	IEntity* getIEntity(uintptr_t new_entity) override;

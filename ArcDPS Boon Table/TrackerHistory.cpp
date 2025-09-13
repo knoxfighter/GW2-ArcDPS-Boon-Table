@@ -39,18 +39,17 @@ IPlayer* TrackerHistory::getIPlayer(uintptr_t new_player) {
 
 IPlayer* TrackerHistory::getIPlayer(std::string new_player) {
 	if (new_player.empty()) return nullptr;
-	std::lock_guard<std::mutex> lock(players_mtx);
-	auto it = std::find_if(players.begin(), players.end(), [&new_player](const auto& player) {
+	std::lock_guard lock(players_mtx);
+	auto it = std::ranges::find_if(players, [&new_player](const auto& player) {
 		return player.second == new_player;
 	});
 
 	//player not tracked yet
 	if (it == players.end()) {
 		return nullptr;
-	} else //player tracked
-	{
-		return &it->second;
 	}
+	//player tracked
+	return &it->second;
 }
 
 IPlayer* TrackerHistory::getSelfIPlayer() {
