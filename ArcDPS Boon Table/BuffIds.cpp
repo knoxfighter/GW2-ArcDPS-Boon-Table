@@ -104,7 +104,7 @@ void init_tracked_buffs() {
     tracked_buffs.emplace_back(std::vector<uint32_t>{73181}, lang.translate(LangKey::BuffRelicBlightbringer), StackingType_single, false, BoonType_Relic, ID_Relic_Blightbringer);
     tracked_buffs.emplace_back(std::vector<uint32_t>{73955}, lang.translate(LangKey::BuffRelicClaw), StackingType_single, false, BoonType_Relic, ID_Relic_Claw);
     tracked_buffs.emplace_back(std::vector<uint32_t>{74793}, lang.translate(LangKey::BuffRelicMountBalrior), StackingType_single, false, BoonType_Relic, ID_Relic_MountBalrior);
-    tracked_buffs.emplace_back(std::vector<uint32_t>{75432}, lang.translate(LangKey::BuffRelicThorns), StackingType_single, false, BoonType_Relic, ID_Relic_Thorns);
+    tracked_buffs.emplace_back(std::vector<uint32_t>{75432}, lang.translate(LangKey::BuffRelicThorns), StackingType_intensity, false, BoonType_Relic, ID_Relic_Thorns, 10);
     tracked_buffs.emplace_back(std::vector<uint32_t>{76372}, lang.translate(LangKey::BuffRelicTitanicPotential), StackingType_intensity, false, BoonType_Relic, ID_Relic_TitanicPotential);
     tracked_buffs.emplace_back(std::vector<uint32_t>{76351}, lang.translate(LangKey::BuffRelicSoulOfTheTitan), StackingType_single, false, BoonType_Relic, ID_Relic_SoulOfTheTitan);
     tracked_buffs.emplace_back(std::vector<uint32_t>{104800}, lang.translate(LangKey::BuffRelicBloodstoneVolatility), StackingType_intensity, false, BoonType_Relic, ID_Relic_Bloodstone);
@@ -123,6 +123,6 @@ BoonDef* getTrackedBoon(uint32_t new_id) {
 	return nullptr;
 }
 
-BoonDef::BoonDef(std::vector<uint32_t> new_ids, std::string new_name, StackingType new_stacking_type, bool new_is_relevant, BoonType new_category, UINT new_icon)
-: ids(new_ids), name(new_name), stacking_type(new_stacking_type), is_relevant(new_is_relevant), category(new_category), icon(new_icon) {
+BoonDef::BoonDef(std::vector<uint32_t> new_ids, std::string new_name, StackingType new_stacking_type, bool new_is_relevant, BoonType new_category, UINT new_icon, uint32_t new_max_stacks)
+: ids(new_ids), name(new_name), stacking_type(new_stacking_type), is_relevant(new_is_relevant), category(new_category), icon(new_icon), max_stacks(new_max_stacks) {
 }

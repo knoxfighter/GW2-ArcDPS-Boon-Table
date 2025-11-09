@@ -130,8 +130,11 @@ float Entity::getBoonUptime(const BoonDef& boon) const {
 			out = out > 1.0f ? 1.0f : out;
 			break;
 		case StackingType_intensity:
-			out = out > 25.0f ? 25.0f : out;
+		{
+			auto max_stacks = static_cast<float>(boon.max_stacks);
+			out = out > max_stacks ? max_stacks : out;
 			break;
+		}
 		default:
 			out = out > 1.0f ? 1.0f : out;
 			break;

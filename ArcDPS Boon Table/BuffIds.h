@@ -38,9 +38,10 @@ struct BoonDef
 	bool is_relevant = false;
 	BoonType category = BoonType_None;
 	UINT icon = 0;
+	uint8_t max_stacks = 25; // Only used if StackingType == StackingType_intensity
 
 	BoonDef(std::string new_name) : name(std::move(new_name)) {}
-	BoonDef(std::vector<uint32_t> new_ids, std::string new_name, StackingType new_stacking_type, bool new_is_relevant, BoonType new_category, UINT new_icon);
+	BoonDef(std::vector<uint32_t> new_ids, std::string new_name, StackingType new_stacking_type, bool new_is_relevant, BoonType new_category, UINT new_icon, uint32_t new_max_stacks = 25);
 
 	bool IsValid() const
 	{

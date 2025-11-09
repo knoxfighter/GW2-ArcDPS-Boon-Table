@@ -490,7 +490,7 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 		char label[10];
 		if (current_buff.stacking_type == StackingType_intensity) {
 			sprintf(label, "%.1f", current_boon_uptime);
-			current_boon_uptime /= 25;
+			current_boon_uptime /= current_buff.max_stacks;
 			// ImGui::ProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label);
 			ImGuiEx::AlignedProgressBar(current_boon_uptime, ImVec2(width, ImGui::GetFontSize()), label, alignment);
 		} else {
@@ -522,7 +522,7 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 		case ProgressBarColoringMode::ByPercentage: {
 			float percentage = 0;
 			if (current_buff.stacking_type == StackingType_intensity) {
-				percentage = current_boon_uptime / 25;
+				percentage = current_boon_uptime / current_buff.max_stacks;
 			} else {
 				percentage = current_boon_uptime;
 			}
@@ -546,7 +546,7 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 		case ProgressBarColoringMode::ByPercentage: {
 			float percentage = 0;
 			if (current_buff.stacking_type == StackingType_intensity) {
-				percentage = current_boon_uptime / 25;
+				percentage = current_boon_uptime / current_buff.max_stacks;
 			} else {
 				percentage = current_boon_uptime;
 			}
