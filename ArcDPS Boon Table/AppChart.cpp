@@ -22,6 +22,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 	PRINT_LINE()
 
 	const std::optional<ImVec2>& windowPadding = settings.getWindowPadding(index);
+	bool windowPaddingActive = windowPadding.has_value();
 	if (windowPadding) {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, windowPadding.value());
 	}
@@ -417,7 +418,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 
 	ImGui::End();
 
-	if (windowPadding) {
+	if (windowPaddingActive) {
 		ImGui::PopStyleVar();
 	}
 }

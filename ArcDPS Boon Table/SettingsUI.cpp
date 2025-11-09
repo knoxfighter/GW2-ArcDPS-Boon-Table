@@ -174,7 +174,7 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		// window padding
 		std::string windowPaddingText = lang.translate(LangKey::SettingsWindowPadding);
 		windowPaddingText.append("##WindowPadding");
-		if (ImGui::InputFloat2(windowPaddingText.c_str(), windowPadding)) {
+		if (ImGui::DragFloat2(windowPaddingText.c_str(), windowPadding)) {
 			std::optional<ImVec2>& settingsWindowPadding = settings.tables[tableIndex].window_padding;
 			if (settingsWindowPadding) {
 				settingsWindowPadding->x = windowPadding[0];
