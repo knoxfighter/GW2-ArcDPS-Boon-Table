@@ -156,6 +156,7 @@
     <ClCompile Include="EntityHistory.cpp" />
     <ClCompile Include="extension\arcdps_structs.cpp" />
     <ClCompile Include="extension\BigTable.cpp" />
+    <ClCompile Include="extension\Localization.cpp" />
     <ClCompile Include="extension\Singleton.cpp" />
     <ClCompile Include="extension\UpdateCheckerBase.cpp" />
     <ClCompile Include="extension\Widgets.cpp" />

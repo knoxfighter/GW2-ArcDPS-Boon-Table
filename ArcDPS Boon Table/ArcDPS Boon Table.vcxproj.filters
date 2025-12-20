@@ -120,6 +120,9 @@
     <ClCompile Include="extension\Singleton.cpp">
       <Filter>Source Files\extension</Filter>
     </ClCompile>
+    <ClCompile Include="extension\Localization.cpp">
+      <Filter>Source Files\extension</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
