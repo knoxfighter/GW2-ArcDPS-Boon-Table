@@ -181,16 +181,6 @@
     <ClInclude Include="BuffIds.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityHistory.h" />
-    <ClInclude Include="extension\arcdps_structs.h" />
-    <ClInclude Include="extension\arcdps_structs_slim.h" />
-    <ClInclude Include="extension\BigTable.h" />
-    <ClInclude Include="extension\Icon.h" />
-    <ClInclude Include="extension\ImGui_Math.h" />
-    <ClInclude Include="extension\json.hpp" />
-    <ClInclude Include="extension\map.h" />
-    <ClInclude Include="extension\MumbleLink.h" />
-    <ClInclude Include="extension\UpdateCheckerBase.h" />
-    <ClInclude Include="extension\Widgets.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="History.h" />
     <ClInclude Include="IEntity.h" />
