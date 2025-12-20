@@ -93,7 +93,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions);IMGUI_DEFINE_MATH_OPERATORS;NOMINMAX</PreprocessorDefinitions>
       <EnableModules>false</EnableModules>
@@ -150,16 +150,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AppChart.cpp" />
+    <ClCompile Include="BigTable\BigTable.cpp" />
     <ClCompile Include="Boon.cpp" />
     <ClCompile Include="BuffIds.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityHistory.cpp" />
-    <ClCompile Include="extension\arcdps_structs.cpp" />
-    <ClCompile Include="extension\BigTable.cpp" />
-    <ClCompile Include="extension\Localization.cpp" />
-    <ClCompile Include="extension\Singleton.cpp" />
-    <ClCompile Include="extension\UpdateCheckerBase.cpp" />
-    <ClCompile Include="extension\Widgets.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="History.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
@@ -293,6 +288,11 @@
     <Image Include="icons\Vigor.png" />
     <Image Include="icons\Vulture_Stance.png" />
     <Image Include="icons\Water_Spirit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="extension\arcdps_extension.vcxproj">
+      <Project>{5aff3fc8-8e6f-4fda-9867-93bb861ab635}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

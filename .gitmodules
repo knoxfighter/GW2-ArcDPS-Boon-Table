@@ -7,3 +7,6 @@
 [submodule "ArcDPS Boon Table/modernIni"]
 	path = ArcDPS Boon Table/modernIni
 	url = https://github.com/knoxfighter/modernIni.git
+[submodule "ArcDPS Boon Table/unofficial_extras"]
+	path = ArcDPS Boon Table/unofficial_extras
+	url = https://github.com/Krappa322/arcdps_unofficial_extras_releases.git

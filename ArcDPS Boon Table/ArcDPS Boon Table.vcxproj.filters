@@ -31,6 +31,9 @@
     <Filter Include="Source Files\modernIni">
       <UniqueIdentifier>{6c5c4668-fbb5-4888-83d1-e38176a44867}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\BigTable">
+      <UniqueIdentifier>{02471a74-fbe7-415f-b71f-43d8fe1dad66}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -75,12 +78,6 @@
     <ClCompile Include="NPC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="extension\arcdps_structs.cpp">
-      <Filter>Source Files\extension</Filter>
-    </ClCompile>
-    <ClCompile Include="extension\Widgets.cpp">
-      <Filter>Source Files\extension</Filter>
-    </ClCompile>
     <ClCompile Include="Lang.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -92,12 +89,6 @@
     </ClCompile>
     <ClCompile Include="UpdateChecker.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="extension\UpdateCheckerBase.cpp">
-      <Filter>Source Files\extension</Filter>
-    </ClCompile>
-    <ClCompile Include="extension\BigTable.cpp">
-      <Filter>Source Files\extension</Filter>
     </ClCompile>
     <ClCompile Include="History.cpp">
       <Filter>Source Files</Filter>
@@ -117,11 +108,8 @@
     <ClCompile Include="modernIni\modernIni\modernIni.cpp">
       <Filter>Source Files\modernIni</Filter>
     </ClCompile>
-    <ClCompile Include="extension\Singleton.cpp">
-      <Filter>Source Files\extension</Filter>
-    </ClCompile>
-    <ClCompile Include="extension\Localization.cpp">
-      <Filter>Source Files\extension</Filter>
+    <ClCompile Include="BigTable\BigTable.cpp">
+      <Filter>Source Files\BigTable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

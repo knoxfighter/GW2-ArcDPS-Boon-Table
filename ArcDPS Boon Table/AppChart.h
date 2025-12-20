@@ -7,7 +7,7 @@
 #include "ITracker.h"
 #include "BuffIds.h"
 #include "Settings.h"
-#include "extension/BigTable.h"
+#include "BigTable/BigTable.h"
 
 class AppChart
 {
