@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-#include "extension/Icon.h"
+#include "extension/IconLoader.h"
 
 enum BoonType
 {

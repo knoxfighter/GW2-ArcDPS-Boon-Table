@@ -9,6 +9,7 @@
 TMP="D:\Guild Wars 2\debug_data\tmp"
 USERPROFILE="D:\Guild Wars 2"</LocalDebuggerEnvironment>
     <LocalDebuggerMergeEnvironment>true</LocalDebuggerMergeEnvironment>
+    <LocalDebuggerCommandArgumentsHistory>-autologin|</LocalDebuggerCommandArgumentsHistory>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Mock|x64'">
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>

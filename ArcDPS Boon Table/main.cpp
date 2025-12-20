@@ -148,6 +148,7 @@ arcdps_exports* mod_init()
 		}
 
 		// setup icon loader
+		auto& iconLoader = IconLoader<size_t>::instance();
 		iconLoader.Setup(self_dll, id3dd9, id3d11d);
 	} catch (std::exception& e) {
 		loading_successful = false;
@@ -202,8 +203,6 @@ uintptr_t mod_release()
 		settings.saveToFile();
 
 		lang.saveToFile();
-
-		iconLoader.Shutdown();
 
 		updateChecker.FinishPendingTasks();
 	// } catch(const std::exception& e) {

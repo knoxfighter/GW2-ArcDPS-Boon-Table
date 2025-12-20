@@ -12,7 +12,7 @@
 #include "Tracker.h"
 #include "extension/Widgets.h"
 #include "extension/ImGui_Math.h"
-#include "extension/Icon.h"
+#include "extension/IconLoader.h"
 
 AppChartsContainer charts;
 
@@ -226,16 +226,17 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		if (Table::TableNextColumn())
 			Table::TableHeader(subgroupName.c_str(), true, nullptr);
 
+		auto& iconLoader = IconLoader<size_t>::instance();
 		// buff headers
 		for (const BoonDef& trackedBuff : tracked_buffs) {
 			if (Table::TableNextColumn()) {
-				Table::TableHeader(trackedBuff.name.c_str(), showLabel, iconLoader.getTexture(trackedBuff.icon), alignment);
+				Table::TableHeader(trackedBuff.name.c_str(), showLabel, iconLoader.GetTexture(trackedBuff.icon, trackedBuff.icon), alignment);
 			}
 		}
 
 		// above90 header
 		if (Table::TableNextColumn()) {
-			Table::TableHeader(above90BoonDef->name.c_str(), showLabel, iconLoader.getTexture(above90BoonDef->icon), alignment);
+			Table::TableHeader(above90BoonDef->name.c_str(), showLabel, iconLoader.GetTexture(above90BoonDef->icon, above90BoonDef->icon), alignment);
 		}
 
 		// get current tracker

@@ -78,9 +78,6 @@
     <ClCompile Include="extension\arcdps_structs.cpp">
       <Filter>Source Files\extension</Filter>
     </ClCompile>
-    <ClCompile Include="extension\Icon.cpp">
-      <Filter>Source Files\extension</Filter>
-    </ClCompile>
     <ClCompile Include="extension\Widgets.cpp">
       <Filter>Source Files\extension</Filter>
     </ClCompile>
@@ -119,6 +116,9 @@
     </ClCompile>
     <ClCompile Include="modernIni\modernIni\modernIni.cpp">
       <Filter>Source Files\modernIni</Filter>
+    </ClCompile>
+    <ClCompile Include="extension\Singleton.cpp">
+      <Filter>Source Files\extension</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
