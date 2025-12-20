@@ -38,6 +38,7 @@ struct BoonDef
 	bool is_relevant = false;
 	BoonType category = BoonType_None;
 	UINT icon = 0;
+	size_t iconTextureId = 0;
 	uint8_t max_stacks = 25; // Only used if StackingType == StackingType_intensity
 
 	BoonDef(std::string new_name) : name(std::move(new_name)) {}
@@ -54,4 +55,4 @@ BoonDef* getTrackedBoon(uint32_t new_id);
 extern std::vector<BoonDef> tracked_buffs;
 extern std::shared_ptr<BoonDef> above90BoonDef;
 
-void init_tracked_buffs();
+void init_tracked_buffs(HMODULE dll, IDirect3DDevice9* d3d9Device, ID3D11Device* d3d11device);

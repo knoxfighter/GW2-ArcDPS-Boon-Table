@@ -137,7 +137,7 @@ arcdps_exports* mod_init()
 		lang.readFromFile();
 
 		// init buffs, this will load the icons into RAM
-		init_tracked_buffs();
+		init_tracked_buffs(self_dll, id3dd9, id3d11d);
 
 		updateChecker.ClearFiles(self_dll);
 
@@ -146,10 +146,6 @@ arcdps_exports* mod_init()
 		if (currentVersion) {
 			updateChecker.CheckForUpdate(self_dll, currentVersion.value(), "knoxfighter/GW2-ArcDPS-Boon-Table", false);
 		}
-
-		// setup icon loader
-		auto& iconLoader = IconLoader<size_t>::instance();
-		iconLoader.Setup(self_dll, id3dd9, id3d11d);
 	} catch (std::exception& e) {
 		loading_successful = false;
 		error_message = "Error starting up: ";

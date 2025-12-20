@@ -7,7 +7,7 @@
 std::vector<BoonDef> tracked_buffs;
 std::shared_ptr<BoonDef> above90BoonDef;
 
-void init_tracked_buffs() {
+void init_tracked_buffs(HMODULE dll, IDirect3DDevice9* d3d9Device, ID3D11Device* d3d11device) {
 	// Gereral Buffs
     tracked_buffs.emplace_back(std::vector<uint32_t>{740}, lang.translate(LangKey::BuffMight), StackingType_intensity, true, BoonType_boon, ID_Might);
     tracked_buffs.emplace_back(std::vector<uint32_t>{725}, lang.translate(LangKey::BuffFury), StackingType_duration, true, BoonType_boon, ID_Fury);
@@ -112,6 +112,24 @@ void init_tracked_buffs() {
 	
 	// above 90
 	above90BoonDef = std::make_shared<BoonDef>(std::vector<uint32_t>{static_cast<uint32_t>(-1)}, lang.translate(LangKey::Above90Hp), StackingType_single, false, BoonType_other, ID_Rune_Scholar); // above 90% hp (e.g. scholar)
+
+    // setup icon loader
+    auto& iconLoader = IconLoader::instance();
+    iconLoader.Setup(self_dll, d3d9Device, d3d11device);
+
+    // This happens only in unit tests
+    if (d3d11device == nullptr)
+    {
+        return;
+    }
+
+    size_t iconTextureId = 0;
+
+    for (auto& tracked_buff : tracked_buffs)
+    {
+        tracked_buff.iconTextureId = ++iconTextureId;
+        iconLoader.LoadTexture(tracked_buff.icon);
+    }
 }
 
 BoonDef* getTrackedBoon(uint32_t new_id) {
