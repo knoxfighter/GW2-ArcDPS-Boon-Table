@@ -9,9 +9,21 @@
 UpdateChecker updateChecker;
 
 void UpdateChecker::Draw() {
-	if (update_status != Status::Unknown && shown) {
+	if (!update_state)
+	{
+		return;
+	}
+
+	std::lock_guard lock(update_state->Lock);
+
+	if (update_state->UpdateStatus != Status::Unknown && update_state->UpdateStatus != Status::Dismissed)
+	{
+		const Version& version = *update_state->CurrentVersion;
+		const Version& newVersion = update_state->NewVersion;
+
 		std::string headerName = lang.translate(LangKey::UpdateWindowHeader);
 		headerName.append("##BoonTableUpdate");
+		bool shown = true;
 		ImGui::Begin(headerName.c_str(), &shown, ImGuiWindowFlags_AlwaysAutoResize);
 		ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), lang.translate(LangKey::UpdateDesc).c_str());
 		ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "%s: %i.%i.%i", lang.translate(LangKey::UpdateCurrentVersion).c_str(), version[0], version[1],
@@ -24,18 +36,18 @@ void UpdateChecker::Draw() {
 			}).detach();
 		}
 
-		switch (update_status) {
+		switch (update_state->UpdateStatus) {
 			case Status::UpdateAvailable: {
 				if (ImGui::Button(lang.translate(LangKey::UpdateAutoButton).c_str())) {
-					UpdateAutomatically(self_dll);
+					PerformInstallOrUpdate(*update_state);
 				}
 				break;
 			}
-			case Status::UpdatingInProgress: {
+			case Status::UpdateInProgress: {
 				ImGui::TextUnformatted(lang.translate(LangKey::UpdateInProgress).c_str());
 				break;
 			}
-			case Status::RestartPending: {
+			case Status::UpdateSuccessful: {
 				ImGui::TextColored(ImVec4(0.f, 1.f, 0.f, 1.f), lang.translate(LangKey::UpdateRestartPending).c_str());
 				break;
 			}
@@ -45,5 +57,24 @@ void UpdateChecker::Draw() {
 		}
 
 		ImGui::End();
+
+		if (!shown)
+		{
+			update_state->UpdateStatus = Status::Dismissed;
+		}
+	}
+}
+
+void UpdateChecker::CheckForUpdate(HMODULE dll, const Version& currentVersion, std::string&& repo, bool allowPreRelease)
+{
+	ClearFiles(dll);
+	update_state = UpdateCheckerBase::CheckForUpdate(dll, currentVersion, std::move(repo), allowPreRelease);
+}
+
+void UpdateChecker::FinishPendingTasks()
+{
+	if (update_state)
+	{
+		update_state->FinishPendingTasks();
 	}
 }

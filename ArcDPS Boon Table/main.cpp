@@ -127,6 +127,7 @@ arcdps_exports* mod_init()
 	PRINT_LINE()
 	bool loading_successful = true;
 	std::string error_message = "Unknown error";
+	std::optional<UpdateCheckerBase::Version> currentVersion = std::nullopt;
 	
 	try {
 		// load settings
@@ -138,12 +139,12 @@ arcdps_exports* mod_init()
 		// init buffs, this will load the icons into RAM
 		init_tracked_buffs();
 
-		UpdateCheckerBase::ClearFiles(self_dll);
+		updateChecker.ClearFiles(self_dll);
 
 		// check for new version on github
-		const auto& version = UpdateCheckerBase::GetCurrentVersion(self_dll);
-		if (version) {
-			updateChecker.CheckForUpdate(version.value(), "knoxfighter/GW2-ArcDPS-Boon-Table", false);
+		currentVersion = updateChecker.GetCurrentVersion(self_dll);
+		if (currentVersion) {
+			updateChecker.CheckForUpdate(self_dll, currentVersion.value(), "knoxfighter/GW2-ArcDPS-Boon-Table", false);
 		}
 
 		// setup icon loader
@@ -158,7 +159,20 @@ arcdps_exports* mod_init()
 	arc_exports.imguivers = IMGUI_VERSION_NUM;
 	arc_exports.out_name = "Boon Table";
 
-	const std::string& version = UpdateCheckerBase::GetVersionAsString(self_dll);
+	if (currentVersion.has_value() == false)
+	{
+		currentVersion = UpdateCheckerBase::Version{ 0, 0, 0, 0 };
+	}
+
+	std::string version;
+	if (currentVersion.has_value())
+	{
+		version = updateChecker.GetVersionAsString(*currentVersion);
+	}
+	else
+	{
+		version = std::string(__DATE__);
+	}
     char* version_c_str = new char[version.length() + 1];
     strcpy_s(version_c_str, version.length() + 1, version.c_str());
 	arc_exports.out_build = version_c_str;
@@ -190,6 +204,8 @@ uintptr_t mod_release()
 		lang.saveToFile();
 
 		iconLoader.Shutdown();
+
+		updateChecker.FinishPendingTasks();
 	// } catch(const std::exception& e) {
 	// 	arc_log_file("error in mod_release!");
 	// 	arc_log_file(e.what());
