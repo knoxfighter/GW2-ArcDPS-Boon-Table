@@ -1,5 +1,6 @@
 #pragma once
 
+#include <mutex>
 #include <set>
 
 #include "BuffIds.h"
