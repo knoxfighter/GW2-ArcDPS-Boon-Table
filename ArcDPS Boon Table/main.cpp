@@ -31,11 +31,11 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 extern "C" __declspec(dllexport) void* get_release_addr();
 arcdps_exports* mod_init();
 uintptr_t mod_release();
-uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision);
-uintptr_t mod_imgui(uint32_t not_charsel_or_loading); /* id3dd9::present callback, before imgui::render, fn(uint32_t not_charsel_or_loading) */
-uintptr_t mod_options(); /* id3dd9::present callback, appending to the end of options window in arcdps, fn() */
-uintptr_t mod_options_windows(const char* windowname); // fn(char* windowname) 
+UINT mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+void mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision);
+void mod_imgui(uint32_t not_charsel_or_loading); /* id3dd9::present callback, before imgui::render, fn(uint32_t not_charsel_or_loading) */
+void mod_options(); /* id3dd9::present callback, appending to the end of options window in arcdps, fn() */
+void mod_options_windows(const char* windowname); // fn(char* windowname) 
 void readArcExports();
 bool modsPressed();
 bool canMoveWindows();
@@ -207,7 +207,7 @@ uintptr_t mod_release()
 }
 
 /* window callback -- return is assigned to umsg (return zero to not be processed by arcdps or game) */
-uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+UINT mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	// try {
 		auto const io = &ImGui::GetIO();
@@ -290,7 +290,7 @@ uintptr_t npc_ids[num_of_npcs];
 
 /* combat callback -- may be called asynchronously. return ignored */
 /* one participant will be party/squad, or minion of. no spawn statechange events. despawn statechange only on marked boss npcs */
-uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision) {
+void mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision) {
 	PRINT_LINE()
 	// try {
 		/* ev is null. dst will only be valid on tracking add. skillname will also be null */
@@ -439,10 +439,9 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 	// 	arc_log_file(e.what());
 	// 	throw;
 	// }
-	return 0;
 }
 
-uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
+void mod_imgui(uint32_t not_charsel_or_loading)
 {
 	PRINT_LINE()
 	// try {
@@ -450,7 +449,7 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 		
 		readArcExports();
 
-		if (!not_charsel_or_loading) return 0;
+		if (!not_charsel_or_loading) return;
 
 		PRINT_LINE()
 
@@ -473,10 +472,9 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 	// 	arc_log_file(e.what());
 	// 	throw e;
 	// }
-	return 0;
 }
 
-uintptr_t mod_options()
+void mod_options()
 {
 	// try {
 		settingsUiGlobal.Draw();
@@ -485,13 +483,12 @@ uintptr_t mod_options()
 	// 	arc_log_file(e.what());
 	// 	throw;
 	// }
-	return 0;
 }
 
 /**
  * @return true to disable this option
  */
-uintptr_t mod_options_windows(const char* windowname) {
+void mod_options_windows(const char* windowname) {
 	// try {
 		if (!windowname) {
 			ImGui::Checkbox(lang.translate(LangKey::ShowChart).c_str(), &settings.isShowChart(0));
@@ -511,7 +508,6 @@ uintptr_t mod_options_windows(const char* windowname) {
 	// 	arc_log_file(e.what());
 	// 	throw;
 	// }
-	return 0;
 }
 
 void readArcExports()
