@@ -33,7 +33,7 @@ arcdps_exports* mod_init();
 uintptr_t mod_release();
 UINT mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 void mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision);
-void mod_imgui(uint32_t not_charsel_or_loading); /* id3dd9::present callback, before imgui::render, fn(uint32_t not_charsel_or_loading) */
+void mod_imgui(uint32_t not_charsel_or_loading, uint32_t hide_if_combat_or_ooc); /* id3dd9::present callback, before imgui::render, fn(uint32_t not_charsel_or_loading) */
 void mod_options(); /* id3dd9::present callback, appending to the end of options window in arcdps, fn() */
 void mod_options_windows(const char* windowname); // fn(char* windowname) 
 void readArcExports();
@@ -129,7 +129,7 @@ arcdps_exports* mod_init()
 	PRINT_LINE()
 	bool loading_successful = true;
 	std::string error_message = "Unknown error";
-	std::optional<ArcdpsExtension::UpdateCheckerBase::Version> currentVersion = std::nullopt;
+	std::expected<ArcdpsExtension::UpdateCheckerBase::Version, std::string> currentVersion = std::unexpected("Not initialized");
 	
 	try {
 		// load settings
@@ -144,7 +144,7 @@ arcdps_exports* mod_init()
 		ArcdpsExtension::UpdateChecker::instance().ClearFiles(self_dll);
 
 		// check for new version on github
-		currentVersion = ArcdpsExtension::UpdateChecker::instance().GetCurrentVersion(self_dll);
+		currentVersion = ArcdpsExtension::UpdateChecker::GetCurrentVersion(self_dll);
 		if (currentVersion) {
 			update_state = ArcdpsExtension::UpdateChecker::instance().CheckForUpdate(self_dll, currentVersion.value(), "knoxfighter/GW2-ArcDPS-Boon-Table", false);
 		}
@@ -441,7 +441,7 @@ void mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t 
 	// }
 }
 
-void mod_imgui(uint32_t not_charsel_or_loading)
+void mod_imgui(uint32_t not_charsel_or_loading, uint32_t hide_if_combat_or_ooc)
 {
 	PRINT_LINE()
 	// try {
