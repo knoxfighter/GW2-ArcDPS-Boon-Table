@@ -6,8 +6,8 @@
 #include "Lang.h"
 #include "Settings.h"
 #include "SettingsUIGlobal.h"
-#include "extension/Widgets.h"
-#include  <magic_enum.hpp>
+#include <ArcdpsExtension/Widgets.h>
+#include <magic_enum/magic_enum.hpp>
 
 SettingsUI settingsUi;
 

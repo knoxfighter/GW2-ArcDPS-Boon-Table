@@ -4,7 +4,7 @@
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
-#include "../extension/arcdps_structs.h"
+#include <ArcdpsExtension/arcdps_structs.h>
 
 #define IM_COL32_DISABLE                IM_COL32(0,0,0,1)    // Special sentinel code which cannot be used as a regular color.
 #define IMGUIEX_TABLE_MAX_COLUMNS         128                // sizeof(ImU64) * 8. This is solely because we frequently encode columns set in a ImU64.

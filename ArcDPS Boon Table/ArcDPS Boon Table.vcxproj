@@ -268,11 +268,6 @@
     <Image Include="icons\Vulture_Stance.png" />
     <Image Include="icons\Water_Spirit.png" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="extension\arcdps_extension.vcxproj">
-      <Project>{5aff3fc8-8e6f-4fda-9867-93bb861ab635}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

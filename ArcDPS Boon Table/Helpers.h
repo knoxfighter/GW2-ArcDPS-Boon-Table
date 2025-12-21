@@ -3,8 +3,8 @@
 #include <cstdint>
 #include <optional>
 
-#include "extension/arcdps_structs.h"
-#include "imgui/imgui.h"
+#include <ArcdpsExtension/arcdps_structs.h>
+#include <imgui/imgui.h>
 
 // #define PRINT_LINE() arc_log_file(std::format("{}:{}#{}", __FILE__, __FUNCTION__, __LINE__).c_str());
 #define PRINT_LINE();

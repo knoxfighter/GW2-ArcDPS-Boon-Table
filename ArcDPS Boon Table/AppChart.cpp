@@ -10,9 +10,9 @@
 #include "Settings.h"
 #include "SettingsUI.h"
 #include "Tracker.h"
-#include "extension/Widgets.h"
-#include "extension/ImGui_Math.h"
-#include "extension/IconLoader.h"
+#include <ArcdpsExtension/Widgets.h>
+#include <ArcdpsExtension/ImGui_Math.h>
+#include <ArcdpsExtension/IconLoader.h>
 
 AppChartsContainer charts;
 

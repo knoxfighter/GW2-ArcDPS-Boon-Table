@@ -10,8 +10,8 @@
 #include <d3d9.h>
 #include <charconv>
 
-#include "imgui/imgui.h"
-#include "extension/arcdps_structs.h"
+#include <imgui/imgui.h>
+#include <ArcdpsExtension/arcdps_structs.h>
 #include "Player.h"
 #include "Tracker.h"
 #include "AppChart.h"
@@ -20,10 +20,10 @@
 #include "Lang.h"
 #include "Settings.h"
 #include "SettingsUIGlobal.h"
-#include "extension/MumbleLink.h"
-#include "extension/UpdateChecker.h"
-#include "extension/Widgets.h"
-#include "imgui/imgui_internal.h"
+#include <ArcdpsExtension/MumbleLink.h>
+#include <ArcdpsExtension/UpdateChecker.h>
+#include <ArcdpsExtension/Widgets.h>
+#include <imgui/imgui_internal.h>
 
 /* proto/globals */
 arcdps_exports arc_exports{};

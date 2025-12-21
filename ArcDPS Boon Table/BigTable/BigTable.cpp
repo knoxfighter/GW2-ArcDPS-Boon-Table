@@ -1,7 +1,7 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "BigTable.h"
 
-#include "../extension/ImGui_Math.h"
+#include <ArcdpsExtension/ImGui_Math.h>
 
 namespace ImGuiEx::BigTable {
     // storage

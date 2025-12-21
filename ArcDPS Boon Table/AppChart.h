@@ -2,8 +2,8 @@
 
 #include <functional>
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_internal.h"
+#include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
 #include "ITracker.h"
 #include "BuffIds.h"
 #include "Settings.h"

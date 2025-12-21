@@ -1,6 +1,3 @@
-[submodule "ArcDPS Boon Table/extension"]
-	path = ArcDPS Boon Table/extension
-	url = https://github.com/knoxfighter/arcdps-extension.git
 [submodule "ArcDPS Boon Table/modernIni"]
 	path = ArcDPS Boon Table/modernIni
 	url = https://github.com/knoxfighter/modernIni.git
