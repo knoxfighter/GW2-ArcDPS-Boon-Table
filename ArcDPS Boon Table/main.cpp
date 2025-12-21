@@ -49,7 +49,7 @@ UINT directxVersion;
 IDirect3DDevice9* id3dd9 = nullptr;
 ID3D11Device* id3d11d = nullptr;
 
-std::unique_ptr<UpdateChecker::UpdateState> update_state = nullptr;
+std::unique_ptr<ArcdpsExtension::UpdateChecker::UpdateState> update_state = nullptr;
 
 // get exports
 arc_color_func arc_export_e5;
@@ -129,7 +129,7 @@ arcdps_exports* mod_init()
 	PRINT_LINE()
 	bool loading_successful = true;
 	std::string error_message = "Unknown error";
-	std::optional<UpdateCheckerBase::Version> currentVersion = std::nullopt;
+	std::optional<ArcdpsExtension::UpdateCheckerBase::Version> currentVersion = std::nullopt;
 	
 	try {
 		// load settings
@@ -141,12 +141,12 @@ arcdps_exports* mod_init()
 		// init buffs, this will load the icons into RAM
 		init_tracked_buffs(self_dll, id3dd9, id3d11d);
 
-		UpdateChecker::instance().ClearFiles(self_dll);
+		ArcdpsExtension::UpdateChecker::instance().ClearFiles(self_dll);
 
 		// check for new version on github
-		currentVersion = UpdateChecker::instance().GetCurrentVersion(self_dll);
+		currentVersion = ArcdpsExtension::UpdateChecker::instance().GetCurrentVersion(self_dll);
 		if (currentVersion) {
-			update_state = UpdateChecker::instance().CheckForUpdate(self_dll, currentVersion.value(), "knoxfighter/GW2-ArcDPS-Boon-Table", false);
+			update_state = ArcdpsExtension::UpdateChecker::instance().CheckForUpdate(self_dll, currentVersion.value(), "knoxfighter/GW2-ArcDPS-Boon-Table", false);
 		}
 	} catch (std::exception& e) {
 		loading_successful = false;
@@ -161,7 +161,7 @@ arcdps_exports* mod_init()
 	std::string version;
 	if (currentVersion.has_value())
 	{
-		version = UpdateChecker::instance().GetVersionAsString(*currentVersion);
+		version = ArcdpsExtension::UpdateChecker::instance().GetVersionAsString(*currentVersion);
 	}
 	else
 	{
@@ -197,7 +197,7 @@ uintptr_t mod_release()
 
 		lang.saveToFile();
 
-		g_singletonManagerInstance.Shutdown();
+		ArcdpsExtension::g_singletonManagerInstance.Shutdown();
 	// } catch(const std::exception& e) {
 	// 	arc_log_file("error in mod_release!");
 	// 	arc_log_file(e.what());
@@ -467,7 +467,7 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 
 		charts.drawAll(!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0);
 
-		UpdateChecker::instance().Draw(nullptr, "BoonTable", "https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/releases/latest");
+		ArcdpsExtension::UpdateChecker::instance().Draw(nullptr, "BoonTable", "https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/releases/latest");
 	// } catch(const std::exception& e) {
 	// 	arc_log_file("Boon Table: exception in mod_imgui");
 	// 	arc_log_file(e.what());

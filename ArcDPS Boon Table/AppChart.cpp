@@ -226,7 +226,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		if (Table::TableNextColumn())
 			Table::TableHeader(subgroupName.c_str(), true, nullptr);
 
-		auto& iconLoader = IconLoader::instance();
+		auto& iconLoader = ArcdpsExtension::IconLoader::instance();
 		// buff headers
 		for (const BoonDef& trackedBuff : tracked_buffs) {
 			if (Table::TableNextColumn()) {
