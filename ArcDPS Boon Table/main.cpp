@@ -467,7 +467,7 @@ void mod_imgui(uint32_t not_charsel_or_loading, uint32_t hide_if_combat_or_ooc)
 
 		charts.drawAll(!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0);
 
-		ArcdpsExtension::UpdateChecker::instance().Draw(nullptr, "BoonTable", "https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/releases/latest");
+		ArcdpsExtension::UpdateChecker::instance().Draw(update_state, "BoonTable", "https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/releases/latest");
 	// } catch(const std::exception& e) {
 	// 	arc_log_file("Boon Table: exception in mod_imgui");
 	// 	arc_log_file(e.what());
