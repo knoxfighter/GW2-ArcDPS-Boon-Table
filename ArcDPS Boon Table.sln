@@ -7,8 +7,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArcDPS Boon Table", "ArcDPS
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "arcdps_extension", "ArcDPS Boon Table\extension\arcdps_extension.vcxproj", "{5AFF3FC8-8E6F-4FDA-9867-93BB861AB635}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unofficial_extras", "ArcDPS Boon Table\unofficial_extras\unofficial_extras.vcxproj", "{DAB9BAE4-7C01-4D28-90FE-B49387E9FB24}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Mock|x64 = Debug Mock|x64
@@ -28,12 +26,6 @@ Global
 		{5AFF3FC8-8E6F-4FDA-9867-93BB861AB635}.Debug|x64.Build.0 = Debug|x64
 		{5AFF3FC8-8E6F-4FDA-9867-93BB861AB635}.Release|x64.ActiveCfg = Release|x64
 		{5AFF3FC8-8E6F-4FDA-9867-93BB861AB635}.Release|x64.Build.0 = Release|x64
-		{DAB9BAE4-7C01-4D28-90FE-B49387E9FB24}.Debug Mock|x64.ActiveCfg = Debug|x64
-		{DAB9BAE4-7C01-4D28-90FE-B49387E9FB24}.Debug Mock|x64.Build.0 = Debug|x64
-		{DAB9BAE4-7C01-4D28-90FE-B49387E9FB24}.Debug|x64.ActiveCfg = Debug|x64
-		{DAB9BAE4-7C01-4D28-90FE-B49387E9FB24}.Debug|x64.Build.0 = Debug|x64
-		{DAB9BAE4-7C01-4D28-90FE-B49387E9FB24}.Release|x64.ActiveCfg = Release|x64
-		{DAB9BAE4-7C01-4D28-90FE-B49387E9FB24}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
