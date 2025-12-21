@@ -2,8 +2,8 @@
 #include <compare>
 #include <cstdint>
 
-#include "../imgui/imgui.h"
-#include "../imgui/imgui_internal.h"
+#include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
 #include "../extension/arcdps_structs.h"
 
 #define IM_COL32_DISABLE                IM_COL32(0,0,0,1)    // Special sentinel code which cannot be used as a regular color.

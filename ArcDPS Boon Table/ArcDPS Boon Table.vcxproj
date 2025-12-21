@@ -158,11 +158,6 @@
     <ClCompile Include="EntityHistory.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="History.cpp" />
-    <ClCompile Include="imgui\imgui.cpp" />
-    <ClCompile Include="imgui\imgui_demo.cpp" />
-    <ClCompile Include="imgui\imgui_draw.cpp" />
-    <ClCompile Include="imgui\imgui_tables.cpp" />
-    <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Lang.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="modernIni\modernIni\modernIni.cpp" />
@@ -184,12 +179,6 @@
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="History.h" />
     <ClInclude Include="IEntity.h" />
-    <ClInclude Include="imgui\imconfig.h" />
-    <ClInclude Include="imgui\imgui.h" />
-    <ClInclude Include="imgui\imgui_internal.h" />
-    <ClInclude Include="imgui\stb_rect_pack.h" />
-    <ClInclude Include="imgui\stb_textedit.h" />
-    <ClInclude Include="imgui\stb_truetype.h" />
     <ClInclude Include="IPlayer.h" />
     <ClInclude Include="ITracker.h" />
     <ClInclude Include="Lang.h" />

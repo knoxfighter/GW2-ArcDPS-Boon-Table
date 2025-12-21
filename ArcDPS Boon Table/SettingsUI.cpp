@@ -7,7 +7,7 @@
 #include "Settings.h"
 #include "SettingsUIGlobal.h"
 #include "extension/Widgets.h"
-#include  <magic_enum/magic_enum.hpp>
+#include  <magic_enum.hpp>
 
 SettingsUI settingsUi;
 
