@@ -3,14 +3,7 @@
   "name": "arcdps-boon-table-plugin",
   "version-string": "2.6.2",
   "dependencies": [
-    "imgui",
     "arcdps-extension"
-  ],
-  "overrides": [
-    {
-      "name": "imgui",
-      "version": "1.80#1"
-    }
   ],
   "builtin-baseline": "25d20d679f8ce2b062d951b07c976dfca8f2aaa3"
 }
