@@ -156,11 +156,6 @@ arcdps_exports* mod_init()
 	arc_exports.imguivers = IMGUI_VERSION_NUM;
 	arc_exports.out_name = "Boon Table";
 
-	if (currentVersion.has_value() == false)
-	{
-		currentVersion = UpdateCheckerBase::Version{ 0, 0, 0, 0 };
-	}
-
 	std::string version;
 	if (currentVersion.has_value())
 	{
