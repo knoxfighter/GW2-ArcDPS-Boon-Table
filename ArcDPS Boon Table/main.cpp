@@ -197,6 +197,7 @@ uintptr_t mod_release()
 
 		lang.saveToFile();
 
+		update_state->FinishPendingTasks();
 		ArcdpsExtension::g_singletonManagerInstance.Shutdown();
 	// } catch(const std::exception& e) {
 	// 	arc_log_file("error in mod_release!");
