@@ -173,7 +173,6 @@
     <ClCompile Include="SettingsUIGlobal.cpp" />
     <ClCompile Include="Tracker.cpp" />
     <ClCompile Include="TrackerHistory.cpp" />
-    <ClCompile Include="UpdateChecker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppChart.h" />

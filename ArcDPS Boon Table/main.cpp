@@ -20,8 +20,8 @@
 #include "Lang.h"
 #include "Settings.h"
 #include "SettingsUIGlobal.h"
-#include "UpdateChecker.h"
 #include "extension/MumbleLink.h"
+#include "extension/UpdateChecker.h"
 #include "extension/Widgets.h"
 #include "imgui/imgui_internal.h"
 
@@ -48,6 +48,8 @@ LPVOID mapViewOfMumbleFile = nullptr;
 UINT directxVersion;
 IDirect3DDevice9* id3dd9 = nullptr;
 ID3D11Device* id3d11d = nullptr;
+
+std::unique_ptr<UpdateChecker::UpdateState> update_state = nullptr;
 
 // get exports
 arc_color_func arc_export_e5;
@@ -139,12 +141,12 @@ arcdps_exports* mod_init()
 		// init buffs, this will load the icons into RAM
 		init_tracked_buffs(self_dll, id3dd9, id3d11d);
 
-		updateChecker.ClearFiles(self_dll);
+		UpdateChecker::instance().ClearFiles(self_dll);
 
 		// check for new version on github
-		currentVersion = updateChecker.GetCurrentVersion(self_dll);
+		currentVersion = UpdateChecker::instance().GetCurrentVersion(self_dll);
 		if (currentVersion) {
-			updateChecker.CheckForUpdate(self_dll, currentVersion.value(), "knoxfighter/GW2-ArcDPS-Boon-Table", false);
+			update_state = UpdateChecker::instance().CheckForUpdate(self_dll, currentVersion.value(), "knoxfighter/GW2-ArcDPS-Boon-Table", false);
 		}
 	} catch (std::exception& e) {
 		loading_successful = false;
@@ -159,7 +161,7 @@ arcdps_exports* mod_init()
 	std::string version;
 	if (currentVersion.has_value())
 	{
-		version = updateChecker.GetVersionAsString(*currentVersion);
+		version = UpdateChecker::instance().GetVersionAsString(*currentVersion);
 	}
 	else
 	{
@@ -195,7 +197,7 @@ uintptr_t mod_release()
 
 		lang.saveToFile();
 
-		updateChecker.FinishPendingTasks();
+		g_singletonManagerInstance.Shutdown();
 	// } catch(const std::exception& e) {
 	// 	arc_log_file("error in mod_release!");
 	// 	arc_log_file(e.what());
@@ -465,7 +467,7 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 
 		charts.drawAll(!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0);
 
-		updateChecker.Draw();
+		UpdateChecker::instance().Draw(nullptr, "BoonTable", "https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/releases/latest");
 	// } catch(const std::exception& e) {
 	// 	arc_log_file("Boon Table: exception in mod_imgui");
 	// 	arc_log_file(e.what());
