@@ -115,7 +115,7 @@ void init_tracked_buffs(HMODULE dll, IDirect3DDevice9* d3d9Device, ID3D11Device*
 
     // setup icon loader
     auto& iconLoader = IconLoader::instance();
-    iconLoader.Setup(self_dll, d3d9Device, d3d11device);
+    iconLoader.Setup(self_dll, d3d11device);
 
     // This happens only in unit tests
     if (d3d11device == nullptr)
@@ -128,7 +128,7 @@ void init_tracked_buffs(HMODULE dll, IDirect3DDevice9* d3d9Device, ID3D11Device*
     for (auto& tracked_buff : tracked_buffs)
     {
         tracked_buff.iconTextureId = ++iconTextureId;
-        iconLoader.LoadTexture(tracked_buff.icon);
+        iconLoader.RegisterResource(tracked_buff.iconTextureId, tracked_buff.icon);
     }
 }
 

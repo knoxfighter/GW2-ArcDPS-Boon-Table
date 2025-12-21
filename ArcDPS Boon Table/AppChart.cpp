@@ -230,13 +230,13 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		// buff headers
 		for (const BoonDef& trackedBuff : tracked_buffs) {
 			if (Table::TableNextColumn()) {
-				Table::TableHeader(trackedBuff.name.c_str(), showLabel, iconLoader.GetTexture(trackedBuff.iconTextureId), alignment);
+				Table::TableHeader(trackedBuff.name.c_str(), showLabel, iconLoader.Draw(trackedBuff.iconTextureId), alignment);
 			}
 		}
 
 		// above90 header
 		if (Table::TableNextColumn()) {
-			Table::TableHeader(above90BoonDef->name.c_str(), showLabel, iconLoader.GetTexture(above90BoonDef->iconTextureId), alignment);
+			Table::TableHeader(above90BoonDef->name.c_str(), showLabel, iconLoader.Draw(above90BoonDef->iconTextureId), alignment);
 		}
 
 		// get current tracker
