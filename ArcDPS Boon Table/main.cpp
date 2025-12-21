@@ -139,7 +139,7 @@ arcdps_exports* mod_init()
 		lang.readFromFile();
 
 		// init buffs, this will load the icons into RAM
-		init_tracked_buffs(self_dll, id3dd9, id3d11d);
+		init_tracked_buffs(self_dll, id3d11d);
 
 		ArcdpsExtension::UpdateChecker::instance().ClearFiles(self_dll);
 
