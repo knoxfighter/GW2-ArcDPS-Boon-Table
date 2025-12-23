@@ -7,7 +7,7 @@
 std::vector<BoonDef> tracked_buffs;
 std::shared_ptr<BoonDef> above90BoonDef;
 
-void init_tracked_buffs(HMODULE dll, ID3D11Device* d3d11device) {
+void init_tracked_buffs() {
 	// Gereral Buffs
     tracked_buffs.emplace_back(std::vector<uint32_t>{740}, lang.translate(LangKey::BuffMight), StackingType_intensity, true, BoonType_boon, ID_Might);
     tracked_buffs.emplace_back(std::vector<uint32_t>{725}, lang.translate(LangKey::BuffFury), StackingType_duration, true, BoonType_boon, ID_Fury);
@@ -113,8 +113,6 @@ void init_tracked_buffs(HMODULE dll, ID3D11Device* d3d11device) {
 	// above 90
 	above90BoonDef = std::make_shared<BoonDef>(std::vector<uint32_t>{static_cast<uint32_t>(-1)}, lang.translate(LangKey::Above90Hp), StackingType_single, false, BoonType_other, ID_Rune_Scholar); // above 90% hp (e.g. scholar)
 
-    // setup icon loader
-    ArcdpsExtension::IconLoader::init(self_dll, d3d11device);
     auto& iconLoader = ArcdpsExtension::IconLoader::instance();
 
     size_t iconTextureId = 0;

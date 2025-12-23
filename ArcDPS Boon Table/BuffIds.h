@@ -55,4 +55,4 @@ BoonDef* getTrackedBoon(uint32_t new_id);
 extern std::vector<BoonDef> tracked_buffs;
 extern std::shared_ptr<BoonDef> above90BoonDef;
 
-void init_tracked_buffs(HMODULE dll, ID3D11Device* d3d11device);
+void init_tracked_buffs();

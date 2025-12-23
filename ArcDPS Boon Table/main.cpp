@@ -138,8 +138,11 @@ arcdps_exports* mod_init()
 		// load translation
 		lang.readFromFile();
 
+		// setup icon loader
+		ArcdpsExtension::IconLoader::init(self_dll, id3d11d);
+
 		// init buffs, this will load the icons into RAM
-		init_tracked_buffs(self_dll, id3d11d);
+		init_tracked_buffs();
 
 		ArcdpsExtension::UpdateChecker::instance().ClearFiles(self_dll);
 
