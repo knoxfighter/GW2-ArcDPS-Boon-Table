@@ -117,12 +117,6 @@ void init_tracked_buffs(HMODULE dll, ID3D11Device* d3d11device) {
     ArcdpsExtension::IconLoader::init(self_dll, d3d11device);
     auto& iconLoader = ArcdpsExtension::IconLoader::instance();
 
-    // This happens only in unit tests
-    if (d3d11device == nullptr)
-    {
-        return;
-    }
-
     size_t iconTextureId = 0;
 
     for (auto& tracked_buff : tracked_buffs)
