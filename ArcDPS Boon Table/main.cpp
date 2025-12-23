@@ -10,8 +10,8 @@
 #include <d3d9.h>
 #include <charconv>
 
-#include "imgui/imgui.h"
-#include "extension/arcdps_structs.h"
+#include <imgui/imgui.h>
+#include <ArcdpsExtension/arcdps_structs.h>
 #include "Player.h"
 #include "Tracker.h"
 #include "AppChart.h"
@@ -20,10 +20,10 @@
 #include "Lang.h"
 #include "Settings.h"
 #include "SettingsUIGlobal.h"
-#include "UpdateChecker.h"
-#include "extension/MumbleLink.h"
-#include "extension/Widgets.h"
-#include "imgui/imgui_internal.h"
+#include <ArcdpsExtension/MumbleLink.h>
+#include <ArcdpsExtension/UpdateChecker.h>
+#include <ArcdpsExtension/Widgets.h>
+#include <imgui/imgui_internal.h>
 
 /* proto/globals */
 arcdps_exports arc_exports{};
@@ -31,11 +31,11 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 extern "C" __declspec(dllexport) void* get_release_addr();
 arcdps_exports* mod_init();
 uintptr_t mod_release();
-uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision);
-uintptr_t mod_imgui(uint32_t not_charsel_or_loading); /* id3dd9::present callback, before imgui::render, fn(uint32_t not_charsel_or_loading) */
-uintptr_t mod_options(); /* id3dd9::present callback, appending to the end of options window in arcdps, fn() */
-uintptr_t mod_options_windows(const char* windowname); // fn(char* windowname) 
+UINT mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+void mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision);
+void mod_imgui(uint32_t not_charsel_or_loading, uint32_t hide_if_combat_or_ooc); /* id3dd9::present callback, before imgui::render, fn(uint32_t not_charsel_or_loading) */
+void mod_options(); /* id3dd9::present callback, appending to the end of options window in arcdps, fn() */
+void mod_options_windows(const char* windowname); // fn(char* windowname) 
 void readArcExports();
 bool modsPressed();
 bool canMoveWindows();
@@ -48,6 +48,8 @@ LPVOID mapViewOfMumbleFile = nullptr;
 UINT directxVersion;
 IDirect3DDevice9* id3dd9 = nullptr;
 ID3D11Device* id3d11d = nullptr;
+
+std::unique_ptr<ArcdpsExtension::UpdateChecker::UpdateState> update_state = nullptr;
 
 // get exports
 arc_color_func arc_export_e5;
@@ -127,6 +129,7 @@ arcdps_exports* mod_init()
 	PRINT_LINE()
 	bool loading_successful = true;
 	std::string error_message = "Unknown error";
+	std::expected<ArcdpsExtension::UpdateCheckerBase::Version, std::string> currentVersion = std::unexpected("Not initialized");
 	
 	try {
 		// load settings
@@ -135,19 +138,19 @@ arcdps_exports* mod_init()
 		// load translation
 		lang.readFromFile();
 
+		// setup icon loader
+		ArcdpsExtension::IconLoader::init(self_dll, id3d11d);
+
 		// init buffs, this will load the icons into RAM
 		init_tracked_buffs();
 
-		UpdateCheckerBase::ClearFiles(self_dll);
+		ArcdpsExtension::UpdateChecker::instance().ClearFiles(self_dll);
 
 		// check for new version on github
-		const auto& version = UpdateCheckerBase::GetCurrentVersion(self_dll);
-		if (version) {
-			updateChecker.CheckForUpdate(version.value(), "knoxfighter/GW2-ArcDPS-Boon-Table", false);
+		currentVersion = ArcdpsExtension::UpdateChecker::GetCurrentVersion(self_dll);
+		if (currentVersion) {
+			update_state = ArcdpsExtension::UpdateChecker::instance().CheckForUpdate(self_dll, currentVersion.value(), "knoxfighter/GW2-ArcDPS-Boon-Table", false);
 		}
-
-		// setup icon loader
-		iconLoader.Setup(self_dll, id3dd9, id3d11d);
 	} catch (std::exception& e) {
 		loading_successful = false;
 		error_message = "Error starting up: ";
@@ -158,7 +161,15 @@ arcdps_exports* mod_init()
 	arc_exports.imguivers = IMGUI_VERSION_NUM;
 	arc_exports.out_name = "Boon Table";
 
-	const std::string& version = UpdateCheckerBase::GetVersionAsString(self_dll);
+	std::string version;
+	if (currentVersion.has_value())
+	{
+		version = ArcdpsExtension::UpdateChecker::instance().GetVersionAsString(*currentVersion);
+	}
+	else
+	{
+		version = std::string(__DATE__);
+	}
     char* version_c_str = new char[version.length() + 1];
     strcpy_s(version_c_str, version.length() + 1, version.c_str());
 	arc_exports.out_build = version_c_str;
@@ -189,7 +200,8 @@ uintptr_t mod_release()
 
 		lang.saveToFile();
 
-		iconLoader.Shutdown();
+		update_state->FinishPendingTasks();
+		ArcdpsExtension::g_singletonManagerInstance.Shutdown();
 	// } catch(const std::exception& e) {
 	// 	arc_log_file("error in mod_release!");
 	// 	arc_log_file(e.what());
@@ -199,7 +211,7 @@ uintptr_t mod_release()
 }
 
 /* window callback -- return is assigned to umsg (return zero to not be processed by arcdps or game) */
-uintptr_t mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+UINT mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	// try {
 		auto const io = &ImGui::GetIO();
@@ -282,7 +294,7 @@ uintptr_t npc_ids[num_of_npcs];
 
 /* combat callback -- may be called asynchronously. return ignored */
 /* one participant will be party/squad, or minion of. no spawn statechange events. despawn statechange only on marked boss npcs */
-uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision) {
+void mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision) {
 	PRINT_LINE()
 	// try {
 		/* ev is null. dst will only be valid on tracking add. skillname will also be null */
@@ -431,10 +443,9 @@ uintptr_t mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint
 	// 	arc_log_file(e.what());
 	// 	throw;
 	// }
-	return 0;
 }
 
-uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
+void mod_imgui(uint32_t not_charsel_or_loading, uint32_t hide_if_combat_or_ooc)
 {
 	PRINT_LINE()
 	// try {
@@ -442,7 +453,7 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 		
 		readArcExports();
 
-		if (!not_charsel_or_loading) return 0;
+		if (!not_charsel_or_loading) return;
 
 		PRINT_LINE()
 
@@ -459,16 +470,15 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 
 		charts.drawAll(!canMoveWindows() ? ImGuiWindowFlags_NoMove : 0);
 
-		updateChecker.Draw();
+		ArcdpsExtension::UpdateChecker::instance().Draw(update_state, "BoonTable", "https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/releases/latest");
 	// } catch(const std::exception& e) {
 	// 	arc_log_file("Boon Table: exception in mod_imgui");
 	// 	arc_log_file(e.what());
 	// 	throw e;
 	// }
-	return 0;
 }
 
-uintptr_t mod_options()
+void mod_options()
 {
 	// try {
 		settingsUiGlobal.Draw();
@@ -477,13 +487,12 @@ uintptr_t mod_options()
 	// 	arc_log_file(e.what());
 	// 	throw;
 	// }
-	return 0;
 }
 
 /**
  * @return true to disable this option
  */
-uintptr_t mod_options_windows(const char* windowname) {
+void mod_options_windows(const char* windowname) {
 	// try {
 		if (!windowname) {
 			ImGui::Checkbox(lang.translate(LangKey::ShowChart).c_str(), &settings.isShowChart(0));
@@ -503,7 +512,6 @@ uintptr_t mod_options_windows(const char* windowname) {
 	// 	arc_log_file(e.what());
 	// 	throw;
 	// }
-	return 0;
 }
 
 void readArcExports()

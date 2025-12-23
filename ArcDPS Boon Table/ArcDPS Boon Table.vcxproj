@@ -145,27 +145,19 @@
       <AdditionalDependencies>version.lib;crypt32.lib;Ws2_32.lib;Wldap32.lib;secur32.lib;Iphlpapi.lib;d3d11.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>powershell.exe -noprofile -executionpolicy bypass "&amp; '.\extension\updateVersion.ps1' '.\ArcDPS Boon Table.rc'"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AppChart.cpp" />
+    <ClCompile Include="BigTable\BigTable.cpp" />
     <ClCompile Include="Boon.cpp" />
     <ClCompile Include="BuffIds.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityHistory.cpp" />
-    <ClCompile Include="extension\arcdps_structs.cpp" />
-    <ClCompile Include="extension\BigTable.cpp" />
-    <ClCompile Include="extension\Icon.cpp" />
-    <ClCompile Include="extension\UpdateCheckerBase.cpp" />
-    <ClCompile Include="extension\Widgets.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="History.cpp" />
-    <ClCompile Include="imgui\imgui.cpp" />
-    <ClCompile Include="imgui\imgui_demo.cpp" />
-    <ClCompile Include="imgui\imgui_draw.cpp" />
-    <ClCompile Include="imgui\imgui_tables.cpp" />
-    <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Lang.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="modernIni\modernIni\modernIni.cpp" />
@@ -177,7 +169,6 @@
     <ClCompile Include="SettingsUIGlobal.cpp" />
     <ClCompile Include="Tracker.cpp" />
     <ClCompile Include="TrackerHistory.cpp" />
-    <ClCompile Include="UpdateChecker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppChart.h" />
@@ -185,25 +176,9 @@
     <ClInclude Include="BuffIds.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityHistory.h" />
-    <ClInclude Include="extension\arcdps_structs.h" />
-    <ClInclude Include="extension\arcdps_structs_slim.h" />
-    <ClInclude Include="extension\BigTable.h" />
-    <ClInclude Include="extension\Icon.h" />
-    <ClInclude Include="extension\ImGui_Math.h" />
-    <ClInclude Include="extension\json.hpp" />
-    <ClInclude Include="extension\map.h" />
-    <ClInclude Include="extension\MumbleLink.h" />
-    <ClInclude Include="extension\UpdateCheckerBase.h" />
-    <ClInclude Include="extension\Widgets.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="History.h" />
     <ClInclude Include="IEntity.h" />
-    <ClInclude Include="imgui\imconfig.h" />
-    <ClInclude Include="imgui\imgui.h" />
-    <ClInclude Include="imgui\imgui_internal.h" />
-    <ClInclude Include="imgui\stb_rect_pack.h" />
-    <ClInclude Include="imgui\stb_textedit.h" />
-    <ClInclude Include="imgui\stb_truetype.h" />
     <ClInclude Include="IPlayer.h" />
     <ClInclude Include="ITracker.h" />
     <ClInclude Include="Lang.h" />

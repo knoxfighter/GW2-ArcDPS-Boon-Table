@@ -3,7 +3,7 @@
 #include <string>
 #include <mutex>
 
-#include "extension/arcdps_structs.h"
+#include <ArcdpsExtension/arcdps_structs.h>
 #include "Boon.h"
 #include "Entity.h"
 #include "IPlayer.h"

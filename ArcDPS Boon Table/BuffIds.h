@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-#include "extension/Icon.h"
+#include <ArcdpsExtension/IconLoader.h>
 
 enum BoonType
 {
@@ -38,6 +38,7 @@ struct BoonDef
 	bool is_relevant = false;
 	BoonType category = BoonType_None;
 	UINT icon = 0;
+	size_t iconTextureId = 0;
 	uint8_t max_stacks = 25; // Only used if StackingType == StackingType_intensity
 
 	BoonDef(std::string new_name) : name(std::move(new_name)) {}

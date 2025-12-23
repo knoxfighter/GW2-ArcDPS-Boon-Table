@@ -8,8 +8,8 @@
 // ┬─┬ ノ( ゜-゜ノ)
 
 #include "Lang.h"
-#include "imgui/imgui.h"
-#include "extension/Widgets.h"
+#include <imgui/imgui.h>
+#include <ArcdpsExtension/Widgets.h>
 
 SettingsUIGlobal settingsUiGlobal;
 

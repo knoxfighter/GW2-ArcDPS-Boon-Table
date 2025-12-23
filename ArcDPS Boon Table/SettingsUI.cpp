@@ -6,7 +6,8 @@
 #include "Lang.h"
 #include "Settings.h"
 #include "SettingsUIGlobal.h"
-#include "extension/Widgets.h"
+#include <ArcdpsExtension/Widgets.h>
+#include <magic_enum/magic_enum.hpp>
 
 SettingsUI settingsUi;
 
@@ -168,7 +169,7 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		std::string alignmentText = lang.translate(LangKey::SettingsAlignment);
 		alignmentText.append("###Alignment");
 		ImGui::PushItemWidth(120);
-		ImGuiEx::EnumCombo(alignmentText.c_str(), alignment, Alignment::FINAL_ENTRY);
+		ImGuiEx::EnumCombo(alignmentText.c_str(), alignment, magic_enum::enum_values<Alignment>());
 		ImGui::PopItemWidth();
 
 		// window padding
@@ -193,7 +194,7 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		SizingPolicy& sizingPolicy = settings.tables[tableIndex].sizing_policy;
 		std::string sizingPolicyText = lang.translate(LangKey::SettingsSizingPolicy);
 		sizingPolicyText.append("###SizingPolicy");
-		ImGuiEx::EnumCombo(sizingPolicyText.c_str(), sizingPolicy, SizingPolicy::FINAL_ENTRY);
+		ImGuiEx::EnumCombo(sizingPolicyText.c_str(), sizingPolicy, magic_enum::enum_values<SizingPolicy>());
 
 		if (sizingPolicy == SizingPolicy::SizeToContent || sizingPolicy == SizingPolicy::ManualWindowSize) {
 			ImGui::Indent(20.f);

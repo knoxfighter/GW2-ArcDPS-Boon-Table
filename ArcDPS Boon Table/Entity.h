@@ -4,7 +4,7 @@
 #include <map>
 #include <mutex>
 
-#include "extension/arcdps_structs.h"
+#include <ArcdpsExtension/arcdps_structs.h>
 #include "Helpers.h"
 #include "Boon.h"
 #include "BuffIds.h"

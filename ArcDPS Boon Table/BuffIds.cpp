@@ -112,6 +112,16 @@ void init_tracked_buffs() {
 	
 	// above 90
 	above90BoonDef = std::make_shared<BoonDef>(std::vector<uint32_t>{static_cast<uint32_t>(-1)}, lang.translate(LangKey::Above90Hp), StackingType_single, false, BoonType_other, ID_Rune_Scholar); // above 90% hp (e.g. scholar)
+
+    auto& iconLoader = ArcdpsExtension::IconLoader::instance();
+
+    size_t iconTextureId = 0;
+
+    for (auto& tracked_buff : tracked_buffs)
+    {
+        tracked_buff.iconTextureId = ++iconTextureId;
+        iconLoader.RegisterResource(tracked_buff.iconTextureId, tracked_buff.icon);
+    }
 }
 
 BoonDef* getTrackedBoon(uint32_t new_id) {

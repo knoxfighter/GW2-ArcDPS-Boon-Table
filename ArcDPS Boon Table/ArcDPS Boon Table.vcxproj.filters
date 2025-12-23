@@ -13,23 +13,14 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\imgui">
-      <UniqueIdentifier>{d358da1f-d274-4a5f-a268-dea31e80104e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\imgui">
-      <UniqueIdentifier>{6efe4edd-3146-48b9-adb8-f4574313337f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\extension">
-      <UniqueIdentifier>{7e3c8b45-262a-4d67-a61a-03ff680c9916}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\extension">
-      <UniqueIdentifier>{6320364a-059b-4af3-94a0-83ce70b2f352}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\modernIni">
       <UniqueIdentifier>{918ddf9b-285b-4ae5-bbc4-e3e720687e98}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\modernIni">
       <UniqueIdentifier>{6c5c4668-fbb5-4888-83d1-e38176a44867}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\BigTable">
+      <UniqueIdentifier>{02471a74-fbe7-415f-b71f-43d8fe1dad66}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -48,41 +39,17 @@
     <ClCompile Include="BuffIds.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_demo.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_draw.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="AppChart.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Helpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui_tables.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_widgets.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NPC.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="extension\arcdps_structs.cpp">
-      <Filter>Source Files\extension</Filter>
-    </ClCompile>
-    <ClCompile Include="extension\Icon.cpp">
-      <Filter>Source Files\extension</Filter>
-    </ClCompile>
-    <ClCompile Include="extension\Widgets.cpp">
-      <Filter>Source Files\extension</Filter>
     </ClCompile>
     <ClCompile Include="Lang.cpp">
       <Filter>Source Files</Filter>
@@ -92,15 +59,6 @@
     </ClCompile>
     <ClCompile Include="SettingsUI.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UpdateChecker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="extension\UpdateCheckerBase.cpp">
-      <Filter>Source Files\extension</Filter>
-    </ClCompile>
-    <ClCompile Include="extension\BigTable.cpp">
-      <Filter>Source Files\extension</Filter>
     </ClCompile>
     <ClCompile Include="History.cpp">
       <Filter>Source Files</Filter>
@@ -120,6 +78,9 @@
     <ClCompile Include="modernIni\modernIni\modernIni.cpp">
       <Filter>Source Files\modernIni</Filter>
     </ClCompile>
+    <ClCompile Include="BigTable\BigTable.cpp">
+      <Filter>Source Files\BigTable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -134,24 +95,6 @@
     <ClInclude Include="BuffIds.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="imgui\imconfig.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imgui.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imgui_internal.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\stb_rect_pack.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\stb_textedit.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\stb_truetype.h">
-      <Filter>Header Files\imgui</Filter>
-    </ClInclude>
     <ClInclude Include="AppChart.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -164,20 +107,8 @@
     <ClInclude Include="NPC.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="extension\arcdps_structs.h">
-      <Filter>Header Files\extension</Filter>
-    </ClInclude>
-    <ClInclude Include="extension\Icon.h">
-      <Filter>Header Files\extension</Filter>
-    </ClInclude>
-    <ClInclude Include="extension\Widgets.h">
-      <Filter>Header Files\extension</Filter>
-    </ClInclude>
     <ClInclude Include="Lang.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="extension\map.h">
-      <Filter>Header Files\extension</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
@@ -188,26 +119,11 @@
     <ClInclude Include="SettingsUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="extension\UpdateCheckerBase.h">
-      <Filter>Header Files\extension</Filter>
-    </ClInclude>
-    <ClInclude Include="extension\json.hpp">
-      <Filter>Header Files\extension</Filter>
-    </ClInclude>
-    <ClInclude Include="extension\BigTable.h">
-      <Filter>Header Files\extension</Filter>
-    </ClInclude>
-    <ClInclude Include="extension\ImGui_Math.h">
-      <Filter>Header Files\extension</Filter>
-    </ClInclude>
     <ClInclude Include="modernIni\modernIni\map.h">
       <Filter>Header Files\modernIni</Filter>
     </ClInclude>
     <ClInclude Include="modernIni\modernIni\modernIniMacros.h">
       <Filter>Header Files\modernIni</Filter>
-    </ClInclude>
-    <ClInclude Include="extension\arcdps_structs_slim.h">
-      <Filter>Header Files\extension</Filter>
     </ClInclude>
     <ClInclude Include="History.h">
       <Filter>Header Files</Filter>
@@ -232,9 +148,6 @@
     </ClInclude>
     <ClInclude Include="SettingsUIGlobal.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="extension\MumbleLink.h">
-      <Filter>Header Files\extension</Filter>
     </ClInclude>
     <ClInclude Include="UpdateChecker.h">
       <Filter>Resource Files</Filter>

@@ -7,7 +7,7 @@
 #include <chrono>
 
 #include "TrackerHistory.h"
-#include "extension/arcdps_structs_slim.h"
+#include <ArcdpsExtension/arcdps_structs_slim.h>
 
 class History {
 private:

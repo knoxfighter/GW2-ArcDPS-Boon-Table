@@ -3,7 +3,7 @@
 #include <cstdint>
 
 #include "IEntity.h"
-#include "extension/arcdps_structs_slim.h"
+#include <ArcdpsExtension/arcdps_structs_slim.h>
 
 class IPlayer : public virtual IEntity{
 public:

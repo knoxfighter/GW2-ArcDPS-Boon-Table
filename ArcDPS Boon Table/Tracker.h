@@ -7,7 +7,7 @@
 #include <unordered_map>
 
 #include "ITracker.h"
-#include "extension/arcdps_structs.h"
+#include <ArcdpsExtension/arcdps_structs.h>
 #include "Player.h"
 #include "NPC.h"
 

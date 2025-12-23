@@ -10,9 +10,9 @@
 #include "Settings.h"
 #include "SettingsUI.h"
 #include "Tracker.h"
-#include "extension/Widgets.h"
-#include "extension/ImGui_Math.h"
-#include "extension/Icon.h"
+#include <ArcdpsExtension/Widgets.h>
+#include <ArcdpsExtension/ImGui_Math.h>
+#include <ArcdpsExtension/IconLoader.h>
 
 AppChartsContainer charts;
 
@@ -226,16 +226,17 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		if (Table::TableNextColumn())
 			Table::TableHeader(subgroupName.c_str(), true, nullptr);
 
+		auto& iconLoader = ArcdpsExtension::IconLoader::instance();
 		// buff headers
 		for (const BoonDef& trackedBuff : tracked_buffs) {
 			if (Table::TableNextColumn()) {
-				Table::TableHeader(trackedBuff.name.c_str(), showLabel, iconLoader.getTexture(trackedBuff.icon), alignment);
+				Table::TableHeader(trackedBuff.name.c_str(), showLabel, iconLoader.Draw(trackedBuff.iconTextureId), alignment);
 			}
 		}
 
 		// above90 header
 		if (Table::TableNextColumn()) {
-			Table::TableHeader(above90BoonDef->name.c_str(), showLabel, iconLoader.getTexture(above90BoonDef->icon), alignment);
+			Table::TableHeader(above90BoonDef->name.c_str(), showLabel, iconLoader.Draw(above90BoonDef->iconTextureId), alignment);
 		}
 
 		// get current tracker
@@ -409,7 +410,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 
 	if (nthTick >= 10) {
 		nthTick = 0;
-		ImGuiEx::WindowReposition(settings.getPosition(index), settings.getCornerVector(index),
+		ImGuiEx::WindowReposition(nullptr, settings.getPosition(index), settings.getCornerVector(index),
 								  settings.getCornerPosition(index), settings.getFromWindowID(index),
 								  settings.getAnchorPanelCornerPosition(index), settings.getSelfPanelCornerPosition(index));
 	} else {
