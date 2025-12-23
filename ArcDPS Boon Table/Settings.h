@@ -16,8 +16,6 @@ MODERN_INI_DEFINE_TYPE_NON_INTRUSIVE_NO_EXCEPT(ImVec4, x, y, z, w)
 class SettingsUI;
 class SettingsUIGlobal;
 
-std::string to_string(SizingPolicy sizingPolicy);
-
 #define MaxTableWindowAmount 5
 
 class Settings {

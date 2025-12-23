@@ -114,8 +114,8 @@ void init_tracked_buffs(HMODULE dll, ID3D11Device* d3d11device) {
 	above90BoonDef = std::make_shared<BoonDef>(std::vector<uint32_t>{static_cast<uint32_t>(-1)}, lang.translate(LangKey::Above90Hp), StackingType_single, false, BoonType_other, ID_Rune_Scholar); // above 90% hp (e.g. scholar)
 
     // setup icon loader
+    ArcdpsExtension::IconLoader::init(self_dll, d3d11device);
     auto& iconLoader = ArcdpsExtension::IconLoader::instance();
-    iconLoader.Setup(self_dll, d3d11device);
 
     // This happens only in unit tests
     if (d3d11device == nullptr)
