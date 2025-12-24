@@ -21,6 +21,7 @@
 #include "Settings.h"
 #include "SettingsUIGlobal.h"
 #include <ArcdpsExtension/MumbleLink.h>
+#include <ArcdpsExtension/EventSequencer.h>
 #include <ArcdpsExtension/UpdateChecker.h>
 #include <ArcdpsExtension/Widgets.h>
 #include <imgui/imgui_internal.h>
@@ -39,6 +40,7 @@ void mod_options_windows(const char* windowname); // fn(char* windowname)
 void readArcExports();
 bool modsPressed();
 bool canMoveWindows();
+uintptr_t ProcessEvent(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision);
 
 typedef uint64_t(*arc_export_func_u64)();
 
@@ -50,6 +52,7 @@ IDirect3DDevice9* id3dd9 = nullptr;
 ID3D11Device* id3d11d = nullptr;
 
 std::unique_ptr<ArcdpsExtension::UpdateChecker::UpdateState> update_state = nullptr;
+ArcdpsExtension::EventSequencer sequencer = ArcdpsExtension::EventSequencer(ProcessEvent);
 
 // get exports
 arc_color_func arc_export_e5;
@@ -201,6 +204,7 @@ uintptr_t mod_release()
 		lang.saveToFile();
 
 		update_state->FinishPendingTasks();
+		sequencer.Shutdown();
 		ArcdpsExtension::g_singletonManagerInstance.Shutdown();
 	// } catch(const std::exception& e) {
 	// 	arc_log_file("error in mod_release!");
@@ -295,6 +299,10 @@ uintptr_t npc_ids[num_of_npcs];
 /* combat callback -- may be called asynchronously. return ignored */
 /* one participant will be party/squad, or minion of. no spawn statechange events. despawn statechange only on marked boss npcs */
 void mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision) {
+	sequencer.ProcessEvent(ev, src, dst, skillname, id, revision);
+}
+
+uintptr_t ProcessEvent(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision) {
 	PRINT_LINE()
 	// try {
 		/* ev is null. dst will only be valid on tracking add. skillname will also be null */
@@ -443,6 +451,7 @@ void mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t 
 	// 	arc_log_file(e.what());
 	// 	throw;
 	// }
+	return 0;
 }
 
 void mod_imgui(uint32_t not_charsel_or_loading, uint32_t hide_if_combat_or_ooc)
