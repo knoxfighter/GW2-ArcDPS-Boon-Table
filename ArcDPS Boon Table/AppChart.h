@@ -31,6 +31,8 @@ public:
 	void addPlayer(size_t playerId);
 
 private:
+	uint8_t getCurrentHistory() const;
+
 	ImGuiEx::BigTable::ImGuiTable* imGuiTable = nullptr;
 	int index = 0;
 	std::vector<size_t> playerOrder;

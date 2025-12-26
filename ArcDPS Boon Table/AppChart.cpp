@@ -569,6 +569,12 @@ float AppChart::getEntityDisplayValue(const ITracker& tracker, const IEntity& en
 }
 
 void AppChart::removePlayer(size_t playerId) {
+	if (getCurrentHistory() != 0) {
+		// We are showing a historical tracker, do not change the player order.
+		// Note that main.cpp never acquires locks on historical trackers, meaing if AppChart::Draw() is iterating over playerOrder, the code below will cause a race condition.
+		return;
+	}
+
 	auto s = playerOrder.size();
 	std::erase_if(playerOrder, [&playerId](const size_t& idx) {
 		return idx == playerId;
@@ -576,6 +582,12 @@ void AppChart::removePlayer(size_t playerId) {
 }
 
 void AppChart::addPlayer(size_t playerId) {
+	if (getCurrentHistory() != 0) {
+		// We are showing a historical tracker, do not change the player order.
+		// Note that main.cpp never acquires locks on historical trackers, meaing if AppChart::Draw() is iterating over playerOrder, the code below will cause a race condition.
+		return;
+	}
+
 	playerOrder.emplace_back(playerId);
 }
 
@@ -586,6 +598,10 @@ void AppChart::endOfRow() {
 	}
 
 	++rowCount;
+}
+
+uint8_t AppChart::getCurrentHistory() const {
+	return settings.getCurrentHistory(index);
 }
 
 void AppChartsContainer::removePlayer(uintptr_t playerId) {
