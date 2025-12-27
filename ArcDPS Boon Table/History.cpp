@@ -86,3 +86,11 @@ std::optional<size_t> History::GetTrackerIndexById(uint64_t trackerId)
 
 	return std::nullopt;
 }
+
+std::vector<std::reference_wrapper<TrackerHistory>> History::GetIteratorCopy()
+{
+	std::lock_guard<std::mutex> lock(entriesMutex);
+
+	std::vector<std::reference_wrapper<TrackerHistory>> entriesCopy(entries.begin(), entries.end());
+	return entriesCopy;
+}
