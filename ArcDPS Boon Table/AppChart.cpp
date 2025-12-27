@@ -239,6 +239,8 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 			Table::TableHeader(above90BoonDef->name.c_str(), showLabel, iconLoader.Draw(above90BoonDef->iconTextureId), alignment);
 		}
 
+		std::lock_guard lockPlayerOrder(playerOrderMtx);
+
 		// get current tracker
 		ITracker* trackerPtr;
 		auto currentHistory = settings.getCurrentHistory(index);
@@ -248,6 +250,29 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 			trackerPtr = &history[currentHistory - 1];
 		}
 		ITracker& tracker = *trackerPtr;
+
+		// Check if the tracker id changed without the user changing anything.
+		// This happens when a new log is pushed to the history.
+		if (lastTrackerId != tracker.getId() && lastCalculatedHistory == currentHistory)
+		{
+			// Try finding the new index of the tracker
+			std::optional<size_t> newHistoryIndex = history.GetTrackerIndexById(lastTrackerId);
+			if (newHistoryIndex.has_value())
+			{
+				// Found the tracker in history
+				currentHistory = newHistoryIndex.value() + 1;
+				lastCalculatedHistory = currentHistory;
+				trackerPtr = &history[currentHistory - 1];
+			}
+			else
+			{
+				// Tracker not found, switch to liveTracker
+				currentHistory = 0;
+				trackerPtr = &liveTracker;
+			}
+
+			settings.setCurrentHistory(index, currentHistory);
+		}
 
 		std::lock_guard lock(tracker.players_mtx);
 
@@ -569,9 +594,10 @@ float AppChart::getEntityDisplayValue(const ITracker& tracker, const IEntity& en
 }
 
 void AppChart::removePlayer(size_t playerId) {
+	std::lock_guard lock(playerOrderMtx);
+
 	if (getCurrentHistory() != 0) {
 		// We are showing a historical tracker, do not change the player order.
-		// Note that main.cpp never acquires locks on historical trackers, meaing if AppChart::Draw() is iterating over playerOrder, the code below will cause a race condition.
 		return;
 	}
 
@@ -582,9 +608,10 @@ void AppChart::removePlayer(size_t playerId) {
 }
 
 void AppChart::addPlayer(size_t playerId) {
+	std::lock_guard lock(playerOrderMtx);
+
 	if (getCurrentHistory() != 0) {
 		// We are showing a historical tracker, do not change the player order.
-		// Note that main.cpp never acquires locks on historical trackers, meaing if AppChart::Draw() is iterating over playerOrder, the code below will cause a race condition.
 		return;
 	}
 
@@ -613,12 +640,6 @@ void AppChartsContainer::removePlayer(uintptr_t playerId) {
 void AppChartsContainer::addPlayer(uintptr_t playerId) {
 	for (AppChart& chart : charts) {
 		chart.addPlayer(playerId);
-	}
-}
-
-void AppChartsContainer::clearPlayers() {
-	for (AppChart& chart : charts) {
-		chart.playerOrder.clear();
 	}
 }
 

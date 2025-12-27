@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <mutex>
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
@@ -36,7 +37,9 @@ private:
 	ImGuiEx::BigTable::ImGuiTable* imGuiTable = nullptr;
 	int index = 0;
 	std::vector<size_t> playerOrder;
+	std::mutex playerOrderMtx;
 	uint8_t lastCalculatedHistory = 0;
+	uint64_t lastTrackerId = 0;
 
 	uint8_t rowCount = 0;
 	float maxHeight = 0;
