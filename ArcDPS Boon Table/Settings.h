@@ -67,6 +67,7 @@ public:
 	[[nodiscard]] int getFightsToKeep() const;
 
 	void setShowChart(int tableIndex, bool status);
+	void setCurrentHistory(int tableIndex, uint8_t currentHistory);
 
 	// delete copy/move
 	Settings(const Settings& other) = delete;

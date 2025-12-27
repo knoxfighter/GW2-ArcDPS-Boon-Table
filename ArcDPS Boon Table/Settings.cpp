@@ -117,6 +117,10 @@ uint8_t Settings::getCurrentHistory(int tableIndex) const {
 	return tables[tableIndex].current_history;
 }
 
+void Settings::setCurrentHistory(int tableIndex, uint8_t currentHistory) {
+	tables[tableIndex].current_history = currentHistory;
+}
+
 int Settings::getMaxPlayerLength(int tableIndex) const {
 	return tables[tableIndex].max_player_length;
 }

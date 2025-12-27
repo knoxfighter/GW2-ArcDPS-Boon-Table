@@ -14,6 +14,7 @@ private:
 	using EntryType = std::deque<TrackerHistory>;
 	// this holds the last X of fights as history
 	EntryType entries;
+	std::mutex entriesMutex;
 	std::mutex historyMutex;
 
 public:
@@ -21,6 +22,7 @@ public:
 	void LogEnd(cbtevent* event);
 	void Event(ag* dst);
 	void Reset(cbtevent* event);
+	std::optional<size_t> GetTrackerIndexById(uint64_t trackerId);
 
 	[[nodiscard]] EntryType::const_iterator begin() const {
 		return entries.begin();
@@ -35,6 +37,7 @@ public:
 		return entries.end();
 	}
 	TrackerHistory& operator[](EntryType::size_type val) {
+		std::lock_guard<std::mutex> guard(entriesMutex);
 		return entries[val];
 	}
 
@@ -50,6 +53,7 @@ private:
 	std::string currentName;
 	uint32_t currentBeginTimestamp = 0;
 	std::chrono::hh_mm_ss<std::chrono::system_clock::duration> beginTimestamp;
+	uint64_t trackerIdCounter = 0;
 };
 
 extern History history;

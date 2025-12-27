@@ -16,7 +16,7 @@ protected:
 	std::unordered_map<uintptr_t, Player> players;
 
 public:
-	Tracker() = default;
+	Tracker(uint64_t id);
 
 	bool isSquad() const override;
 	
@@ -24,7 +24,6 @@ public:
 	void addPlayer(uintptr_t id, uint8_t subgroup, Prof profession, std::string characterName, std::string accountName, bool self);
 	void addNewPlayer(uintptr_t id, uint8_t subgroup, Prof profession, std::string characterName, std::string accountName, bool self);
 	void removePlayer(ag* src);
-	void clearPlayers();//marks all players as not in squad
 
 	Player* getPlayer(uintptr_t new_player);
 	Player* getPlayer(std::string new_player);

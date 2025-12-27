@@ -2,7 +2,11 @@
 
 #include "AppChart.h"
 
-Tracker liveTracker;
+Tracker liveTracker(0);
+
+Tracker::Tracker(uint64_t id) : ITracker(id)
+{
+}
 
 bool Tracker::isSquad() const {
 	return players.size() > 5;
@@ -70,13 +74,6 @@ void Tracker::removePlayer(ag* src) {
 
 	// remove player from tracked list at all
 	players.erase(id);
-}
-
-void Tracker::clearPlayers() {
-	std::lock_guard lock(players_mtx);
-	players.clear();
-
-	charts.clearPlayers();
 }
 
 Player* Tracker::getPlayer(uintptr_t new_player) {

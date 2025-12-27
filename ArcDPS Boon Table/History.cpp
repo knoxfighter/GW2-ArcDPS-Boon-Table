@@ -31,11 +31,12 @@ void History::LogStart(cbtevent* event) {
 
 void History::LogEnd(cbtevent* event) {
 	if (status == Status::NameAcquired) {
+		std::lock_guard<std::mutex> guard(entriesMutex);
 		// get fight duration
 		uint32_t duration = event->buff_dmg - currentBeginTimestamp;
 
 		// save stuff to historylist
-		entries.emplace_front(liveTracker, duration, beginTimestamp, currentName);
+		entries.emplace_front(liveTracker, duration, beginTimestamp, currentName, ++trackerIdCounter);
 
 		if (entries.size() > settings.getFightsToKeep()) {
 			entries.pop_back();
@@ -69,4 +70,19 @@ void History::Reset(cbtevent* event) {
 
 	status = Status::WaitingForName;
 	currentID = event->src_agent;
+}
+
+std::optional<size_t> History::GetTrackerIndexById(uint64_t trackerId)
+{
+	std::lock_guard<std::mutex> guard(historyMutex);
+	// Find the index of the entries object with Id set to trackerId
+	for (size_t i = 0; i < entries.size(); ++i)
+	{
+		if (entries[i].getId() == trackerId)
+		{
+			return i;
+		}
+	}
+
+	return std::nullopt;
 }

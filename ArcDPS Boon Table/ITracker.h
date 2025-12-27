@@ -8,6 +8,8 @@
 
 class ITracker {
 public:
+	ITracker(uint64_t id) : id(id) {}
+
 	mutable std::mutex players_mtx;
 	
 	virtual std::set<uint8_t> getSubgroups() const = 0;
@@ -25,4 +27,12 @@ public:
 	virtual IEntity* getIEntity(uintptr_t new_entity) = 0;
 
 	virtual bool isSquad() const = 0;
+
+	// Returns the id of the tracker. 0 means liveTracker.
+	uint64_t getId() const
+	{
+		return id;
+	}
+private:
+	uint64_t id;
 };
