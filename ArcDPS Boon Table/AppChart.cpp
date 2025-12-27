@@ -249,11 +249,10 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		} else {
 			trackerPtr = &history[currentHistory - 1];
 		}
-		ITracker& tracker = *trackerPtr;
 
 		// Check if the tracker id changed without the user changing anything.
 		// This happens when a new log is pushed to the history.
-		if (lastTrackerId != tracker.getId() && lastCalculatedHistory == currentHistory)
+		if (lastTrackerId != trackerPtr->getId() && lastCalculatedHistory == currentHistory)
 		{
 			// Try finding the new index of the tracker
 			std::optional<size_t> newHistoryIndex = history.GetTrackerIndexById(lastTrackerId);
@@ -273,6 +272,9 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 
 			settings.setCurrentHistory(index, currentHistory);
 		}
+
+		ITracker& tracker = *trackerPtr;
+		lastTrackerId = tracker.getId();
 
 		std::lock_guard lock(tracker.players_mtx);
 
