@@ -24,22 +24,12 @@ public:
 	void Reset(cbtevent* event);
 	std::optional<size_t> GetTrackerIndexById(uint64_t trackerId);
 
-	[[nodiscard]] EntryType::const_iterator begin() const {
-		return entries.begin();
-	}
-	[[nodiscard]] EntryType::const_iterator end() const {
-		return entries.end();
-	}
-	EntryType::iterator begin() {
-		return entries.begin();
-	}
-	EntryType::iterator end() {
-		return entries.end();
-	}
 	TrackerHistory& operator[](EntryType::size_type val) {
 		std::lock_guard<std::mutex> guard(entriesMutex);
 		return entries[val];
 	}
+
+	std::vector<std::reference_wrapper<TrackerHistory>> GetIteratorCopy();
 
 private:
 	enum class Status {
