@@ -35,9 +35,10 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 			settings.tables[tableIndex].current_history = 0;
 		}
 
+		std::unique_lock<std::mutex> guard = history.lock();
 		// 1-based, 0 = current
 		int historyIndex = 1;
-		for (const TrackerHistory& trackerHistory : history.GetIteratorCopy()) {
+		for (const TrackerHistory& trackerHistory : history) {
 			auto duration = trackerHistory.getDuration();
 
 			// "<starttime>, <mm>m<ss.uu>s (<name>)"

@@ -22,14 +22,38 @@ public:
 	void LogEnd(cbtevent* event);
 	void Event(ag* dst);
 	void Reset(cbtevent* event);
-	std::optional<size_t> GetTrackerIndexById(uint64_t trackerId);
 
+	// Requires a call to lock() for the whole duration of the usage of the return value.
+	std::optional<size_t> GetTrackerIndexById(uint64_t trackerId);
+	// Requires a call to lock() for the whole duration of the usage of the return value.
+	[[nodiscard]] EntryType::const_iterator begin() const {
+		return entries.begin();
+	}
+	// Requires a call to lock() for the whole duration of the usage of the return value.
+	[[nodiscard]] EntryType::const_iterator end() const {
+		return entries.end();
+	}
+	// Requires a call to lock() for the whole duration of the usage of the return value.
+	EntryType::iterator begin() {
+		return entries.begin();
+	}
+	// Requires a call to lock() for the whole duration of the usage of the return value.
+	EntryType::iterator end() {
+		return entries.end();
+	}
+	// Requires a call to lock() for the whole duration of the usage of the return value.
 	TrackerHistory& operator[](EntryType::size_type val) {
-		std::lock_guard<std::mutex> guard(entriesMutex);
 		return entries[val];
 	}
 
-	std::vector<std::reference_wrapper<TrackerHistory>> GetIteratorCopy();
+	// Locks the entries mutex and returns the lock object. This must be called before all methods marked as such.
+	std::unique_lock<std::mutex> lock() {
+		return std::unique_lock<std::mutex>(entriesMutex);
+	}
+	// Returns a lock object for the entries mutex not yet locked. The lock must be acquired by the caller before all methods marked as such.
+	std::unique_lock<std::mutex> lock(std::defer_lock_t defer_lock) {
+		return std::unique_lock<std::mutex>(entriesMutex, defer_lock);
+	}
 
 private:
 	enum class Status {
