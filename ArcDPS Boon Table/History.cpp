@@ -74,7 +74,6 @@ void History::Reset(cbtevent* event) {
 
 std::optional<size_t> History::GetTrackerIndexById(uint64_t trackerId)
 {
-	std::lock_guard<std::mutex> guard(entriesMutex);
 	// Find the index of the entries object with Id set to trackerId
 	for (size_t i = 0; i < entries.size(); ++i)
 	{
@@ -85,12 +84,4 @@ std::optional<size_t> History::GetTrackerIndexById(uint64_t trackerId)
 	}
 
 	return std::nullopt;
-}
-
-std::vector<std::reference_wrapper<TrackerHistory>> History::GetIteratorCopy()
-{
-	std::lock_guard<std::mutex> guard(entriesMutex);
-
-	std::vector<std::reference_wrapper<TrackerHistory>> entriesCopy(entries.begin(), entries.end());
-	return entriesCopy;
 }

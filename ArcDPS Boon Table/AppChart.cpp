@@ -240,6 +240,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		}
 
 		std::lock_guard lockPlayerOrder(playerOrderMtx);
+		std::unique_lock<std::mutex> guardHistory = history.lock(std::defer_lock);
 
 		// get current tracker
 		ITracker* trackerPtr;
@@ -247,6 +248,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		if (currentHistory == 0) {
 			trackerPtr = &liveTracker;
 		} else {
+			guardHistory.lock();
 			trackerPtr = &history[currentHistory - 1];
 		}
 
@@ -268,6 +270,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 				// Tracker not found, switch to liveTracker
 				currentHistory = 0;
 				trackerPtr = &liveTracker;
+				guardHistory.unlock();
 			}
 
 			settings.setCurrentHistory(index, currentHistory);
