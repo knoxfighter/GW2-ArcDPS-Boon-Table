@@ -44,9 +44,7 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 			// starttime: <hh>:<mm>:<ss>
 			std::stringstream ss;
 			auto starttime = trackerHistory.getStarttime();
-			ss << (starttime.hours() % 24).count() << ":";
-			ss << starttime.minutes().count() << ":";
-			ss << starttime.seconds().count() << ",";
+			ss << std::format("{:02}:{:02}:{:02},", starttime.hours().count() % 24, starttime.minutes().count(), starttime.seconds().count());
 			if (duration>= 60) {
 				ss << " " << duration/60 << "m";
 			}

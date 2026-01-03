@@ -24,9 +24,20 @@ void History::LogStart(cbtevent* event) {
 
 	currentBeginTimestamp = event->buff_dmg;
 
-	auto milliseconds = std::chrono::milliseconds(currentBeginTimestamp);
-	auto sinceEpoch = std::chrono::duration_cast<std::chrono::system_clock::duration>(milliseconds);
-	beginTimestamp = std::chrono::hh_mm_ss(sinceEpoch);
+	auto seconds = std::chrono::seconds(currentBeginTimestamp);
+	auto timePoint = std::chrono::system_clock::time_point(seconds);
+	auto timeT = std::chrono::system_clock::to_time_t(timePoint);
+	tm tm;
+	// convert to local time. 0 as return value means success.
+	if (localtime_s(&tm, &timeT) == 0)
+	{
+		beginTimestamp = std::chrono::hh_mm_ss<std::chrono::system_clock::duration>(std::chrono::hours(tm.tm_hour) + std::chrono::minutes(tm.tm_min) + std::chrono::seconds(tm.tm_sec));
+	}
+	else
+	{
+		// fallback to UTC time in case of error 
+		beginTimestamp = std::chrono::hh_mm_ss<std::chrono::system_clock::duration>(seconds);
+	}
 }
 
 void History::LogEnd(cbtevent* event) {
