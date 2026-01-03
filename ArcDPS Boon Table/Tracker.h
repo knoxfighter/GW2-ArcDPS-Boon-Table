@@ -16,7 +16,7 @@ protected:
 	std::unordered_map<uintptr_t, Player> players;
 
 public:
-	Tracker(uint64_t id);
+	explicit Tracker(uint64_t id);
 
 	bool isSquad() const override;
 	
