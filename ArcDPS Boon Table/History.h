@@ -65,8 +65,7 @@ private:
 	uintptr_t currentID = 0;
 	Status status = Status::Empty;
 	std::string currentName;
-	uint32_t currentBeginTimestamp = 0;
-	std::chrono::hh_mm_ss<std::chrono::system_clock::duration> beginTimestamp;
+	std::chrono::system_clock::time_point beginTimestamp;
 	uint64_t trackerIdCounter = 0;
 };
 

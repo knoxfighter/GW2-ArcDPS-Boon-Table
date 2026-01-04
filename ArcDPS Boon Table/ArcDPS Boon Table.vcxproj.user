@@ -13,7 +13,7 @@ USERPROFILE="D:\Guild Wars 2"</LocalDebuggerEnvironment>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Mock|x64'">
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerAttach>false</LocalDebuggerAttach>
-    <LocalDebuggerCommand>D:\ProgrammeSelbst\C++\arcdps_mock\x64\Debug\arcdps_mock.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommand>C:\Data\Development\C++\arcdps_mock\cmake-build\release-windows\arcdps_mock\ArcdpsMockProgram.exe</LocalDebuggerCommand>
     <LocalDebuggerCommandArguments>"$(OutDirFullPath)$(TargetFileName)"</LocalDebuggerCommandArguments>
     <LocalDebuggerWorkingDirectory>$(OutDirFullPath)</LocalDebuggerWorkingDirectory>
   </PropertyGroup>

@@ -10,9 +10,9 @@
 class TrackerHistory : public ITracker {
 private:
 	bool squad = false;
-	uint32_t logDuration = 0;
-	uint64_t id;
-	std::chrono::hh_mm_ss<std::chrono::system_clock::duration> logStartTimestamp;
+	std::chrono::system_clock::duration logDuration;
+	uint64_t id = 0;
+	std::chrono::system_clock::time_point logStartTimestamp;
 	std::string logName;
 	std::set<uint8_t> subgroups;
 
@@ -28,7 +28,7 @@ private:
 	std::unordered_map<uintptr_t, PlayerHistory> players;
 
 public:
-	TrackerHistory(Tracker& tracker, uint32_t logDuration, std::chrono::hh_mm_ss<std::chrono::system_clock::duration> logStarttime, const std::string& logName, uint64_t id) : ITracker(id), squad(tracker.isSquad()),
+	TrackerHistory(Tracker& tracker, std::chrono::system_clock::duration logDuration, std::chrono::system_clock::time_point logStarttime, const std::string& logName, uint64_t id) : ITracker(id), squad(tracker.isSquad()),
 		subgroups(tracker.getSubgroups()), logDuration(logDuration), logStartTimestamp(logStarttime), logName(logName) {
 		// just save it, ignore the difference in combattime for now (eventually adjust it to logtime)
 
@@ -56,8 +56,8 @@ public:
 		}
 	}
 
-	[[nodiscard]] uint32_t getDuration() const;
-	[[nodiscard]] std::chrono::hh_mm_ss<std::chrono::system_clock::duration> getStarttime() const;
+	[[nodiscard]] std::chrono::system_clock::duration getDuration() const;
+	[[nodiscard]] std::chrono::system_clock::time_point getStarttime() const;
 	[[nodiscard]] const std::string& getLogName() const;
 	float getSubgroupBoonUptime(const BoonDef& boon, uint8_t subgroup) const override;
 	float getSubgroupOver90(uint8_t subgroup) const override;

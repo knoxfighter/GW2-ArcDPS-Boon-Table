@@ -1,10 +1,10 @@
 #include "TrackerHistory.h"
 
-uint32_t TrackerHistory::getDuration() const {
+std::chrono::system_clock::duration TrackerHistory::getDuration() const {
 	return logDuration;
 }
 
-std::chrono::hh_mm_ss<std::chrono::system_clock::duration> TrackerHistory::getStarttime() const {
+std::chrono::system_clock::time_point TrackerHistory::getStarttime() const {
 	return logStartTimestamp;
 }
 
