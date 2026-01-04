@@ -57,9 +57,12 @@ void Tracker::addNewPlayer(uintptr_t id,
                            Prof profession,
                            std::string characterName,
                            std::string accountName,
-						   bool self = false) {
-	std::lock_guard lock(players_mtx);
-	players.try_emplace(id, id, characterName, accountName, subgroup, profession, self);
+						   bool self = false)
+{
+	{
+		std::lock_guard lock(players_mtx);
+		players.try_emplace(id, id, characterName, accountName, subgroup, profession, self);
+	}
 	// give charts index to newly player
 	charts.addPlayer(id);
 }
@@ -68,12 +71,13 @@ void Tracker::removePlayer(ag* src) {
 	uintptr_t id = src->id;
 	std::string characterName = std::string(src->name);
 
-	std::lock_guard lock(players_mtx);
-
 	charts.removePlayer(id);
 
-	// remove player from tracked list at all
-	players.erase(id);
+	{
+		std::lock_guard lock(players_mtx);
+		// remove player from tracked list at all
+		players.erase(id);
+	}
 }
 
 Player* Tracker::getPlayer(uintptr_t new_player) {
