@@ -41,23 +41,18 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		for (const TrackerHistory& trackerHistory : history) {
 			auto duration = trackerHistory.getDuration();
 
-			// "<starttime>, <mm>m<ss.uu>s (<name>)"
-			// starttime: <hh>:<mm>:<ss>
-			std::stringstream ss;
-			auto starttime = trackerHistory.getStarttime();
-			ss << (starttime.hours() % 24).count() << ":";
-			ss << starttime.minutes().count() << ":";
-			ss << starttime.seconds().count() << ",";
-			if (duration>= 60) {
-				ss << " " << duration/60 << "m";
-			}
-			ss << " " << duration%60 << "s";
-			ss << " (" << trackerHistory.getLogName() << ")";
+			// starttime: <hh>:<mm>:<ss>, <mm>m <ss>s (<name>)
+			auto starttime = std::chrono::time_point_cast<std::chrono::seconds>(trackerHistory.getStarttime());
+			// convert to local time
+			std::chrono::zoned_time starttimeLocal{std::chrono::current_zone(), starttime};
+
+			auto durationMinutes = duration >= std::chrono::minutes(1) ? std::format(" {:%M}m", duration) : "";
+			auto str = std::format("{:%T},{} {:%S}s ({})", starttimeLocal, durationMinutes, std::chrono::duration_cast<std::chrono::seconds>(duration), trackerHistory.getLogName());
 
 			if (settings.tables[tableIndex].current_history != historyIndex) {
 				ImGui::PushStyleColor(ImGuiCol_Text, arc_colors[0][CCOL_LGREY]);
 			}
-			ImGui::TextUnformatted(ss.str().c_str());
+			ImGui::TextUnformatted(str.c_str());
 			if (settings.tables[tableIndex].current_history != historyIndex) {
 				ImGui::PopStyleColor();
 			}

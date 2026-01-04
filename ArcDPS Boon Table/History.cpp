@@ -24,18 +24,17 @@ void History::LogStart(cbtevent* event) {
 		currentID = event->src_agent;
 	}
 
-	currentBeginTimestamp = event->buff_dmg;
-
-	auto milliseconds = std::chrono::milliseconds(currentBeginTimestamp);
-	auto sinceEpoch = std::chrono::duration_cast<std::chrono::system_clock::duration>(milliseconds);
-	beginTimestamp = std::chrono::hh_mm_ss(sinceEpoch);
+	std::chrono::seconds seconds(event->value);
+	beginTimestamp = std::chrono::system_clock::time_point(seconds);
 }
 
 void History::LogEnd(cbtevent* event) {
 	if (status == Status::NameAcquired) {
 		std::lock_guard guard(entriesMutex);
 		// get fight duration
-		uint32_t duration = event->buff_dmg - currentBeginTimestamp;
+		std::chrono::seconds seconds(event->value);
+		std::chrono::system_clock::time_point endTimestamp(seconds);
+		std::chrono::system_clock::duration duration = endTimestamp - beginTimestamp;
 
 		// save stuff to historylist
 		entries.emplace_front(liveTracker, duration, beginTimestamp, currentName, ++trackerIdCounter);
@@ -48,7 +47,6 @@ void History::LogEnd(cbtevent* event) {
 	status = Status::Empty;
 	currentID = 0;
 	currentName = lang.translate(LangKey::Unknown);
-	currentBeginTimestamp = 0;
 }
 
 void History::Event(ag* dst) {
