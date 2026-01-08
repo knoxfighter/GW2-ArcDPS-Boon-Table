@@ -41,13 +41,21 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		for (const TrackerHistory& trackerHistory : history) {
 			auto duration = trackerHistory.getDuration();
 
-			// starttime: <hh>:<mm>:<ss>, <mm>m <ss>s (<name>)
-			auto starttime = std::chrono::time_point_cast<std::chrono::seconds>(trackerHistory.getStarttime());
-			// convert to local time
-			std::chrono::zoned_time starttimeLocal{std::chrono::current_zone(), starttime};
+			using namespace std::chrono;
 
-			auto durationMinutes = duration >= std::chrono::minutes(1) ? std::format(" {:%M}m", duration) : "";
-			auto str = std::format("{:%T},{} {:%S}s ({})", starttimeLocal, durationMinutes, std::chrono::duration_cast<std::chrono::seconds>(duration), trackerHistory.getLogName());
+			// starttime: <hh>:<mm>:<ss>, <mm>m <ss>s (<name>)
+			auto starttime = time_point_cast<seconds>(trackerHistory.getStarttime());
+			auto starttime_t = system_clock::to_time_t(starttime);
+
+			// convert starttime to local and replace if successful
+			tm tm;
+			if (localtime_s(&tm, &starttime_t) == S_OK) {
+				starttime = time_point_cast<seconds>(system_clock::time_point(hours(tm.tm_hour) + minutes(tm.tm_min) + seconds(tm.tm_sec)));
+			}
+
+
+			auto durationMinutes = duration >= minutes(1) ? std::format(" {:%M}m", duration) : "";
+			auto str = std::format("{:%T},{} {:%S}s ({})", starttime, durationMinutes, duration_cast<seconds>(duration), trackerHistory.getLogName());
 
 			if (settings.tables[tableIndex].current_history != historyIndex) {
 				ImGui::PushStyleColor(ImGuiCol_Text, arc_colors[0][CCOL_LGREY]);
