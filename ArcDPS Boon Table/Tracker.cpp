@@ -57,12 +57,12 @@ void Tracker::addNewPlayer(uintptr_t id,
                            Prof profession,
                            std::string characterName,
                            std::string accountName,
-						   bool self = false)
-{
+						   bool self = false) {
 	{
 		std::lock_guard lock(players_mtx);
 		players.try_emplace(id, id, characterName, accountName, subgroup, profession, self);
 	}
+
 	// give charts index to newly player
 	charts.addPlayer(id);
 }
