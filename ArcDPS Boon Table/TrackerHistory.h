@@ -11,7 +11,6 @@ class TrackerHistory : public ITracker {
 private:
 	bool squad = false;
 	std::chrono::system_clock::duration logDuration;
-	uint64_t id = 0;
 	std::chrono::system_clock::time_point logStartTimestamp;
 	std::string logName;
 	std::set<uint8_t> subgroups;
