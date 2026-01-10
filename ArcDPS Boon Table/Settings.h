@@ -61,9 +61,9 @@ public:
 	[[nodiscard]] bool isTablePaddingX(int tableIndex) const;
 
 	[[nodiscard]] std::array<WPARAM, MaxTableWindowAmount> getShortcuts() const;
-	[[nodiscard]] const ImVec4& getSelfColor() const;
-	[[nodiscard]] const ImVec4& get100Color() const;
-	[[nodiscard]] const ImVec4& get0Color() const;
+	[[nodiscard]] ImVec4 getSelfColor() const;
+	[[nodiscard]] ImVec4 get100Color() const;
+	[[nodiscard]] ImVec4 get0Color() const;
 	[[nodiscard]] int getFightsToKeep() const;
 
 	void setShowChart(int tableIndex, bool status);
