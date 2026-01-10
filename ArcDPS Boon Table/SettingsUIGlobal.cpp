@@ -13,6 +13,31 @@
 
 SettingsUIGlobal settingsUiGlobal;
 
+template<typename T>
+bool OptionalSetting(std::optional<T>& setting, const char* title, const char* checkboxId, std::function<T()> constructValue, std::function<void()> children) {
+	ImGui::TextUnformatted(title);
+	ImGui::SameLine();
+	bool settingActive = setting.has_value();
+	
+	if (ImGui::Checkbox(checkboxId, &settingActive)) {
+		if (settingActive) {
+			setting = constructValue();
+		} else {
+			setting.reset();
+		}
+	}
+	ImGui::SameLine();
+
+	ImGui::PushItemFlag(ImGuiItemFlags_Disabled, !settingActive);
+
+	children();
+
+	// Pop ImGuiItemFlags_Disabled
+	ImGui::PopItemFlag();
+
+	return false;
+}
+
 void SettingsUIGlobal::Draw() {
 	if (!initialized) {
 		initialize();
@@ -33,48 +58,26 @@ void SettingsUIGlobal::Draw() {
 	// fights to keep
 	ImGui::InputInt(lang.translate(LangKey::SettingsFightsToKeep).c_str(), &settings.fights_to_keep);
 
-	if (ImGui::ColorEdit4(lang.translate(LangKey::Settings100Color).c_str(), _100color)) {
-		// i think the color changed
-		if (settings._100_color) {
-			settings._100_color->x = _100color[0];
-			settings._100_color->y = _100color[1];
-			settings._100_color->z = _100color[2];
-			settings._100_color->w = _100color[3];
-		} else {
-			settings._100_color = ImVec4(_100color[0], _100color[1], _100color[2], _100color[3]);
+	OptionalSetting<ImVec4>(settings._100_color, lang.translate(LangKey::Settings100Color).c_str(), "###100colorCheckbox", []{return settings.get100Color();}, [] {
+		auto color = settings.get100Color();
+		if (ImGui::ColorEdit4("###100colorEdit", &color.x)) {
+			settings._100_color = color;
 		}
-	}
-	if (ImGui::ColorEdit4(lang.translate(LangKey::Settings0Color).c_str(), _0color)) {
-		// i think the color changed
-		if (settings._0_color) {
-			settings._0_color->x = _0color[0];
-			settings._0_color->y = _0color[1];
-			settings._0_color->z = _0color[2];
-			settings._0_color->w = _0color[3];
-		} else {
-			settings._0_color = ImVec4(_0color[0], _0color[1], _0color[2], _0color[3]);
+	});
+	
+	OptionalSetting<ImVec4>(settings._0_color, lang.translate(LangKey::Settings100Color).c_str(), "###0colorCheckbox", []{return settings.get0Color();}, [] {
+		auto color = settings.get0Color();
+		if (ImGui::ColorEdit4("###0colorEdit", &color.x)) {
+			settings._0_color = color;
 		}
-	}
+	});
 
-	if (ImGui::ColorEdit4(lang.translate(LangKey::SettingsSelfColor).c_str(), self_color)) {
-		// color changed
-		if (settings.self_color) {
-			settings.self_color->x = self_color[0];
-			settings.self_color->y = self_color[1];
-			settings.self_color->z = self_color[2];
-			settings.self_color->w = self_color[3];
-		} else {
-			settings.self_color = ImVec4(self_color[0], self_color[1], self_color[2], self_color[3]);
+	OptionalSetting<ImVec4>(settings.self_color, lang.translate(LangKey::SettingsSelfColor).c_str(), "###self_color_checkbox", [] {return settings.getSelfColor();}, [&] {
+		auto color = settings.getSelfColor();
+		if (ImGui::ColorEdit4("###self_color_edit", &color.x)) {
+			settings.self_color = color;
 		}
-	}
-	// always update to current selfColor, when selfColor is controlled by arcdps
-	if (!settings.self_color) {
-		ImVec4 imVec4 = settings.getSelfColor();
-		self_color[0] = imVec4.x;
-		self_color[1] = imVec4.y;
-		self_color[2] = imVec4.z;
-		self_color[3] = imVec4.w;
-	}
+	});
 
 	ImGui::TableNextColumn();
 
@@ -92,24 +95,6 @@ void SettingsUIGlobal::Draw() {
 }
 
 void SettingsUIGlobal::initialize() {
-	ImVec4 imVec4 = settings.getSelfColor();
-	self_color[0] = imVec4.x;
-	self_color[1] = imVec4.y;
-	self_color[2] = imVec4.z;
-	self_color[3] = imVec4.w;
-
-	ImVec4 imVec4_2 = settings.get100Color();
-	_100color[0] = imVec4_2.x;
-	_100color[1] = imVec4_2.y;
-	_100color[2] = imVec4_2.z;
-	_100color[3] = imVec4_2.w;
-
-	ImVec4 imVec4_3 = settings.get0Color();
-	_0color[0] = imVec4_3.x;
-	_0color[1] = imVec4_3.y;
-	_0color[2] = imVec4_3.z;
-	_0color[3] = imVec4_3.w;
-
 	for (size_t i = 0; i < MaxTableWindowAmount; ++i) {
 		if (settings.tables[i].shortcut != 0) {
 			std::to_string(settings.tables[i].shortcut).copy(shortcut[i], 4);
