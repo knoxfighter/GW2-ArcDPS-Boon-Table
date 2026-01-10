@@ -137,7 +137,7 @@ bool Settings::isTablePaddingX(int tableIndex) const {
 	return tables[tableIndex].table_padding_x;
 }
 
-const ImVec4 Settings::getSelfColor() const {
+ImVec4 Settings::getSelfColor() const {
 	if (self_color) {
 		return self_color.value();
 	} else {
@@ -147,7 +147,7 @@ const ImVec4 Settings::getSelfColor() const {
 	}
 }
 
-const ImVec4 Settings::get100Color() const {
+ImVec4 Settings::get100Color() const {
 	if (_100_color) {
 		return _100_color.value();
 	}
@@ -155,7 +155,7 @@ const ImVec4 Settings::get100Color() const {
 		return ImVec4(0, 1, 0, (float)125 / 255);
 	}
 }
-const ImVec4 Settings::get0Color() const {
+ImVec4 Settings::get0Color() const {
 	if (_0_color) {
 		return _0_color.value();
 	}

@@ -69,7 +69,7 @@ void SettingsUIGlobal::Draw() {
 	}
 	// always update to current selfColor, when selfColor is controlled by arcdps
 	if (!settings.self_color) {
-		const ImVec4& imVec4 = settings.getSelfColor();
+		ImVec4 imVec4 = settings.getSelfColor();
 		self_color[0] = imVec4.x;
 		self_color[1] = imVec4.y;
 		self_color[2] = imVec4.z;
@@ -92,19 +92,19 @@ void SettingsUIGlobal::Draw() {
 }
 
 void SettingsUIGlobal::initialize() {
-	const ImVec4& imVec4 = settings.getSelfColor();
+	ImVec4 imVec4 = settings.getSelfColor();
 	self_color[0] = imVec4.x;
 	self_color[1] = imVec4.y;
 	self_color[2] = imVec4.z;
 	self_color[3] = imVec4.w;
 
-	const ImVec4& imVec4_2 = settings.get100Color();
+	ImVec4 imVec4_2 = settings.get100Color();
 	_100color[0] = imVec4_2.x;
 	_100color[1] = imVec4_2.y;
 	_100color[2] = imVec4_2.z;
 	_100color[3] = imVec4_2.w;
 
-	const ImVec4& imVec4_3 = settings.get0Color();
+	ImVec4 imVec4_3 = settings.get0Color();
 	_0color[0] = imVec4_3.x;
 	_0color[1] = imVec4_3.y;
 	_0color[2] = imVec4_3.z;
