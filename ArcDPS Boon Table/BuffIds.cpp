@@ -122,6 +122,9 @@ void init_tracked_buffs() {
         tracked_buff.iconTextureId = ++iconTextureId;
         iconLoader.RegisterResource(tracked_buff.iconTextureId, tracked_buff.icon);
     }
+
+    above90BoonDef->iconTextureId = ++iconTextureId;
+    iconLoader.RegisterResource(above90BoonDef->iconTextureId, above90BoonDef->icon);
 }
 
 BoonDef* getTrackedBoon(uint32_t new_id) {
