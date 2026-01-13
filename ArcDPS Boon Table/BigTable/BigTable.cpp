@@ -1,4 +1,3 @@
-#define IMGUI_DEFINE_MATH_OPERATORS
 #include "BigTable.h"
 
 #include <ArcdpsExtension/ImGui_Math.h>
@@ -2674,7 +2673,8 @@ namespace ImGuiEx::BigTable {
                 newX = ellipsis_max - label_size.x;
                 // ImGui::SetCursorPosX(cursorPosX + textSpace - contentSize.x);
                 break;
-            default: [[fallthrough]];
+            default:
+                break;
             }
 
             ImGui::RenderTextEllipsis(window->DrawList, ImVec2(newX, label_pos.y), ImVec2(ellipsis_max, label_pos.y + label_height + g.Style.FramePadding.y), ellipsis_max,
