@@ -111,7 +111,7 @@ void init_tracked_buffs() {
     tracked_buffs.emplace_back(std::vector<uint32_t>{76326}, lang.translate(LangKey::BuffRelicBloodstoneFervor), StackingType_single, false, BoonType_Relic, ID_Relic_Bloodstone);
 	
 	// above 90
-	above90BoonDef = std::make_shared<BoonDef>(std::vector<uint32_t>{static_cast<uint32_t>(-1)}, lang.translate(LangKey::Above90Hp), StackingType_single, false, BoonType_other, ID_Rune_Scholar); // above 90% hp (e.g. scholar)
+	above90BoonDef = std::make_shared<BoonDef>(std::vector<uint32_t>{static_cast<uint32_t>(-1)}, lang.translate(LangKey::Above90Hp), StackingType_single, false, BoonType_other, ID_Writ_of_Masterful_Strength); // above 90% hp (e.g. scholar)
 
     auto& iconLoader = ArcdpsExtension::IconLoader::instance();
 
