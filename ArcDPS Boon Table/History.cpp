@@ -3,10 +3,13 @@
 #include "Lang.h"
 #include "Settings.h"
 #include "Tracker.h"
+#include "Lang.h"
 
 #include <ranges>
 
 History history;
+
+using ArcdpsExtension::Localization;
 
 void History::LogStart(cbtevent* event) {
 	if (status != Status::Empty) {
@@ -15,7 +18,7 @@ void History::LogStart(cbtevent* event) {
 
 	if (isWvW && event->src_agent == 1) {
 		status = Status::NameAcquired;
-		currentName = lang.translate(LangKey::WvW);
+		currentName = Localization::STranslate(BT_Wvw);
 	} else if (event->src_agent == 1) {
 		// id for pre-events (e.g. Deimos)
 		status = Status::WaitingForReset;
@@ -46,7 +49,7 @@ void History::LogEnd(cbtevent* event) {
 
 	status = Status::Empty;
 	currentID = 0;
-	currentName = lang.translate(LangKey::Unknown);
+	currentName = Localization::STranslate(ArcdpsExtension::ET_Unknown);
 }
 
 void History::Event(ag* dst) {

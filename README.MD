@@ -36,10 +36,7 @@ Sort by column by clicking on the header, it is sorted by character name by defa
     - Self Color: Change the color of yourself in the list. (Default: arcdps CCOL_YELLOW)
 
 ## Translations
-Translations can be added by creating a file in `<Guild Wars 2>/addons/arcdps` called `arcdps_table_lang.ini`.
-To create your own translation you can take the example file in [localization](/localization).
-
-- [Chinese Translation by Snowy](https://github.com/Snowy1794/Arcdps-boon-table-translation-Chinese-simplified)
+The plugin is translated to English, French, German, Spanish and simplified Chinese. French and Spanish Translations are only roughly, so please report any problems with them.
 
 ## LICENSE
 This project is Licensed with the MIT License.

@@ -6,10 +6,14 @@
 #include "Lang.h"
 #include "Settings.h"
 #include "SettingsUIGlobal.h"
+
+#include <ArcdpsExtension/ExtensionTranslations.h>
 #include <ArcdpsExtension/Widgets.h>
 #include <magic_enum/magic_enum.hpp>
 
 SettingsUI settingsUi;
+
+using ArcdpsExtension::Localization;
 
 namespace Table = ImGuiEx::BigTable;
 
@@ -20,14 +24,14 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.f, 0.f));
 
-	if (ImGui::BeginMenu(lang.translate(LangKey::SettingsHistory).c_str())) {
+	if (ImGui::BeginMenu(Localization::STranslate(BT_SettingsHistory).data())) {
 		ImVec4* arc_colors[5];
 		arc_export_e5(arc_colors);
 		
 		if (settings.tables[tableIndex].current_history != 0) {
 			ImGui::PushStyleColor(ImGuiCol_Text, arc_colors[0][CCOL_LGREY]);
 		}
-		ImGui::TextUnformatted(lang.translate(LangKey::SettingsHistoryCurrent).c_str());
+		ImGui::TextUnformatted(Localization::STranslate(BT_SettingsHistoryCurrent).data());
 		if (settings.tables[tableIndex].current_history != 0) {
 			ImGui::PopStyleColor();
 		}
@@ -74,14 +78,13 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		ImGui::EndMenu();
 	}
 
-	ImGui::Checkbox(lang.translate(LangKey::SettingsSelfOnTop).c_str(), &settings.tables[tableIndex].show_self_on_top);
-	ImGui::Checkbox(lang.translate(LangKey::SettingsPlayers).c_str(), &settings.tables[tableIndex].show_players);
-	ImGui::Checkbox(lang.translate(LangKey::SettingsSubgroups).c_str(), &settings.tables[tableIndex].show_subgroups);
-	ImGui::Checkbox(lang.translate(LangKey::SettingsTotal).c_str(), &settings.tables[tableIndex].show_total);
-	// ImGui::Checkbox(lang.translate(LangKey::SettingsNPC).c_str(), &settings.tables[tableIndex].show_npcs);
+	ImGui::Checkbox(Localization::STranslate(BT_SettingsSelfOnTop).data(), &settings.tables[tableIndex].show_self_on_top);
+	ImGui::Checkbox(Localization::STranslate(BT_SettingsPlayers).data(), &settings.tables[tableIndex].show_players);
+	ImGui::Checkbox(Localization::STranslate(BT_SettingsSubgroups).data(), &settings.tables[tableIndex].show_subgroups);
+	ImGui::Checkbox(Localization::STranslate(BT_SettingsTotal).data(), &settings.tables[tableIndex].show_total);
 
 	ImGui::Separator();
-	if (ImGui::BeginMenu(lang.translate(LangKey::SettingsColumnSetup).c_str(), table != nullptr)) {
+	if (ImGui::BeginMenu(Localization::STranslate(ArcdpsExtension::ET_ColumnSetup).data(), table != nullptr)) {
 		ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
 
 		// username
@@ -90,34 +93,34 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		Table::MenuItemTableColumnVisibility(table, 1);
 
 		// Submenus for controlling visibility
-		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeBoon).c_str(), BoonType_boon, 2))
+		if (tableColumnSubMenu(table, Localization::STranslate(BT_BoonTypeBoon).data(), BoonType_boon, 2))
 			ImGui::EndMenu();
-		// if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeWarrior).c_str(), BoonType_Warrior, 2))
+		// if (tableColumnSubMenu(table, Localization::STranslate(BT_BoonTypeWarrior).data(), BoonType_Warrior, 2))
 		// 	ImGui::EndMenu();
-		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeRevenant).c_str(), BoonType_Revenant, 2))
+		if (tableColumnSubMenu(table, Localization::STranslate(BT_BoonTypeRevenant).data(), BoonType_Revenant, 2))
 			ImGui::EndMenu();
-		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeGuardian).c_str(), BoonType_Guardian, 2))
+		if (tableColumnSubMenu(table, Localization::STranslate(BT_BoonTypeGuardian).data(), BoonType_Guardian, 2))
 			ImGui::EndMenu();
-		// if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeEngineer).c_str(), BoonType_Engineer, 2))
+		// if (tableColumnSubMenu(table, Localization::STranslate(BT_BoonTypeEngineer).data(), BoonType_Engineer, 2))
 		// 	ImGui::EndMenu();
-		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeRanger).c_str(), BoonType_Ranger, 2))
+		if (tableColumnSubMenu(table, Localization::STranslate(BT_BoonTypeRanger).data(), BoonType_Ranger, 2))
 			ImGui::EndMenu();
-		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeElementalist).c_str(), BoonType_Elementalist, 2))
+		if (tableColumnSubMenu(table, Localization::STranslate(BT_BoonTypeEngineer).data(), BoonType_Elementalist, 2))
 			ImGui::EndMenu();
-		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeMesmer).c_str(), BoonType_Mesmer, 2))
+		if (tableColumnSubMenu(table, Localization::STranslate(BT_BoonTypeMesmer).data(), BoonType_Mesmer, 2))
 			ImGui::EndMenu();
-		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeNecromancer).c_str(), BoonType_Necromancer, 2))
+		if (tableColumnSubMenu(table, Localization::STranslate(BT_BoonTypeNecromancer).data(), BoonType_Necromancer, 2))
 			ImGui::EndMenu();
-		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeAura).c_str(), BoonType_Aura, 2))
+		if (tableColumnSubMenu(table, Localization::STranslate(BT_BoonTypeAura).data(), BoonType_Aura, 2))
 			ImGui::EndMenu();
-		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeRelic).c_str(), BoonType_Relic, 2))
+		if (tableColumnSubMenu(table, Localization::STranslate(BT_BoonTypeRelic).data(), BoonType_Relic, 2))
 			ImGui::EndMenu();
-		if (tableColumnSubMenu(table, lang.translate(LangKey::BoonTypeOther).c_str(), BoonType_other, 2)) {
+		if (tableColumnSubMenu(table, Localization::STranslate(BT_BoonTypeOther).data(), BoonType_other, 2)) {
 			Table::MenuItemTableColumnVisibility(table, tracked_buffs.size() + 2);
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::Button(lang.translate(LangKey::SettingsResetTableColumns).c_str())) {
+		if (ImGui::Button(Localization::STranslate(BT_SettingsResetTableColumns).data())) {
 			Table::TableResetSettings(table);
 		}
 
@@ -126,60 +129,51 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		ImGui::EndMenu();
 	}
 
-	if (ImGui::BeginMenu(lang.translate(LangKey::SettingsDisplay).c_str())) {
-		if (directxVersion == 9) {
-			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-			ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled));
-			bool tmp = true;
-			ImGui::Checkbox(lang.translate(LangKey::SettingsShowLabel).c_str(), &tmp);
-			ImGui::PopStyleColor();
-			ImGui::PopItemFlag();
-		} else {
-			ImGui::Checkbox(lang.translate(LangKey::SettingsShowLabel).c_str(), &settings.tables[tableIndex].show_label);
-		}
+	if (ImGui::BeginMenu(Localization::STranslate(BT_SettingsDisplay).data())) {
+		ImGui::Checkbox(Localization::STranslate(BT_SettingsShowLabel).data(), &settings.tables[tableIndex].show_label);
 
-		std::string maxDisplayedInputLabel = lang.translate(LangKey::SettingsMaxDisplayed);
-		maxDisplayedInputLabel.append("##maxDisplayedInput");
-		ImGui::InputInt(maxDisplayedInputLabel.c_str(), &settings.tables[tableIndex].max_displayed);
+		std::string_view maxDisplayedInputLabel = Localization::STranslate(ArcdpsExtension::ET_MaxDisplayed);
+		ImGui::InputInt(std::format("{}###maxDisplayedInput", maxDisplayedInputLabel).c_str(), &settings.tables[tableIndex].max_displayed);
 		ImGui::SameLine();
-		HelpMarker(lang.translate(LangKey::SettingsMaxDisplayedPopup).c_str());
+		HelpMarker(Localization::STranslate(BT_SettingsMaxDisplayedPopup).data());
 
-		std::string maxPlayerLengthStr = lang.translate(LangKey::SettingsMaxPlayerLength);
-		maxPlayerLengthStr.append("##MaxPlayerLength");
-		ImGui::InputInt(maxPlayerLengthStr.c_str(), &settings.tables[tableIndex].max_player_length);
+		std::string_view maxPlayerLengthStr = Localization::STranslate(BT_SettingsMaxPlayerLength);
+		ImGui::InputInt(std::format("{}###maxPlayerLength", maxPlayerLengthStr).c_str(), &settings.tables[tableIndex].max_player_length);
 		
 		ProgressBarColoringMode& show_colored = settings.tables[tableIndex].show_colored;
-		std::string showColoredText = lang.translate(LangKey::SettingsColoringMode);
-		showColoredText.append("###ShowColored");
+		std::string_view showColoredText = Localization::STranslate(BT_SettingsColoringMode);
 		ImGui::PushItemWidth(120);
-		ImGuiEx::EnumCombo(showColoredText.c_str(), show_colored, ProgressBarColoringMode::LAST_ENTRY);
+		ImGuiEx::EnumCombo(std::format("{}###ShowColored", showColoredText).c_str(), show_colored, ProgressBarColoringMode::LAST_ENTRY);
 		ImGui::PopItemWidth();
 
 		ImGui::EndMenu();
 	}
 
-	if (ImGui::BeginMenu(lang.translate(LangKey::SettingsStyle).c_str())) {
-		ImGui::Checkbox(lang.translate(LangKey::SettingsShowProgressBar).c_str(), &settings.tables[tableIndex].show_uptime_as_progress_bar);
-		ImGui::Checkbox(lang.translate(LangKey::SettingsAlternatingRow).c_str(), &settings.tables[tableIndex].alternating_row_bg);
-		ImGui::Checkbox(lang.translate(LangKey::SettingsHideHeader).c_str(), &settings.tables[tableIndex].hide_header);
-		ImGui::Checkbox(lang.translate(LangKey::SettingsShowOnlySubgroup).c_str(), &settings.tables[tableIndex].show_only_subgroup);
-		ImGui::Checkbox(lang.translate(LangKey::SettingsShowBackground).c_str(), &settings.tables[tableIndex].show_background);
-		ImGui::Checkbox(lang.translate(LangKey::SettingsScrollbar).c_str(), &settings.tables[tableIndex].scrollbar);
-		ImGui::Checkbox(lang.translate(LangKey::SettingsTablePaddingX).c_str(), &settings.tables[tableIndex].table_padding_x);
+	if (ImGui::BeginMenu(Localization::STranslate(ArcdpsExtension::ET_Style).data())) {
+		ImGui::Checkbox(Localization::STranslate(BT_SettingsShowProgressBar).data(), &settings.tables[tableIndex].show_uptime_as_progress_bar);
+		ImGui::Checkbox(Localization::STranslate(ArcdpsExtension::ET_AlternatingRowBg).data(), &settings.tables[tableIndex].alternating_row_bg);
+		
+		// We use the text "Show Header" here, which means we have to negate the settings-value
+		bool hide_header_tmp = !settings.tables[tableIndex].hide_header;
+		if (ImGui::Checkbox(Localization::STranslate(ArcdpsExtension::ExtensionTranslation::ET_TitleBar).data(), &hide_header_tmp)) {
+			settings.tables[tableIndex].hide_header = !hide_header_tmp;
+		}
+		ImGui::Checkbox(Localization::STranslate(BT_SettingsShowOnlySubgroup).data(), &settings.tables[tableIndex].show_only_subgroup);
+		ImGui::Checkbox(Localization::STranslate(ArcdpsExtension::ET_Background).data(), &settings.tables[tableIndex].show_background);
+		ImGui::Checkbox(Localization::STranslate(ArcdpsExtension::ET_Scrollbar).data(), &settings.tables[tableIndex].scrollbar);
+		ImGui::Checkbox(Localization::STranslate(BT_SettingsTablePaddingX).data(), &settings.tables[tableIndex].table_padding_x);
 
 		ImGui::Separator();
 
 		Alignment& alignment = settings.tables[tableIndex].alignment;
-		std::string alignmentText = lang.translate(LangKey::SettingsAlignment);
-		alignmentText.append("###Alignment");
+		std::string_view alignmentText = Localization::STranslate(BT_SettingsAlignment);
 		ImGui::PushItemWidth(120);
-		ImGuiEx::EnumCombo(alignmentText.c_str(), alignment, magic_enum::enum_values<Alignment>());
+		ImGuiEx::EnumCombo(std::format("{}###Alignment", alignmentText).c_str(), alignment, magic_enum::enum_values<Alignment>());
 		ImGui::PopItemWidth();
 
 		// window padding
-		std::string windowPaddingText = lang.translate(LangKey::SettingsWindowPadding);
-		windowPaddingText.append("##WindowPadding");
-		if (ImGui::DragFloat2(windowPaddingText.c_str(), windowPadding)) {
+		std::string_view windowPaddingText = Localization::STranslate(ArcdpsExtension::ET_Padding);
+		if (ImGui::DragFloat2(std::format("{}###WindowPadding", windowPaddingText).c_str(), windowPadding)) {
 			std::optional<ImVec2>& settingsWindowPadding = settings.tables[tableIndex].window_padding;
 			if (settingsWindowPadding) {
 				settingsWindowPadding->x = windowPadding[0];
@@ -196,17 +190,15 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		}
 
 		SizingPolicy& sizingPolicy = settings.tables[tableIndex].sizing_policy;
-		std::string sizingPolicyText = lang.translate(LangKey::SettingsSizingPolicy);
-		sizingPolicyText.append("###SizingPolicy");
-		ImGuiEx::EnumCombo(sizingPolicyText.c_str(), sizingPolicy, magic_enum::enum_values<SizingPolicy>());
+		std::string_view sizingPolicyText = Localization::STranslate(ArcdpsExtension::ET_SizingPolicy);
+		ImGuiEx::EnumCombo(std::format("{}###SizingPolicy", sizingPolicyText).c_str(), sizingPolicy, magic_enum::enum_values<SizingPolicy>());
 
 		if (sizingPolicy == SizingPolicy::SizeToContent || sizingPolicy == SizingPolicy::ManualWindowSize) {
 			ImGui::Indent(20.f);
-			std::string column_width_label = lang.translate(LangKey::SettingsBoonColumnWidth);
-			column_width_label.append("###BoonColumnWidth");
-			ImGui::SliderFloat(column_width_label.c_str(), &settings.tables[tableIndex].boon_column_width, 20, 200);
+			std::string_view column_width_label = Localization::STranslate(BT_SettingsBoonColumnWidth);
+			ImGui::SliderFloat(std::format("{}###BoonColumnWidth", column_width_label).c_str(), &settings.tables[tableIndex].boon_column_width, 20, 200);
 			if (ImGui::IsItemHovered()) {
-				ImGui::SetTooltip(lang.translate(LangKey::SettingsWidthSlideTooltip).c_str());
+				ImGui::SetTooltip("%s", Localization::STranslate(BT_SettingsWidthSlideTooltip).data());
 			}
 			ImGui::Unindent(20.f);
 		}
@@ -214,17 +206,22 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		std::string id("##singleShortcut");
 		id.append(std::to_string(tableIndex));
 		// use the buffer in `SettingsUIGlobal`
-		ImGuiEx::KeyInput(lang.translate(static_cast<LangKey>(static_cast<size_t>(LangKey::SettingsShortcut) + tableIndex)).c_str(), id.c_str(), settingsUiGlobal.shortcut[tableIndex], 4, settings.tables[tableIndex].shortcut, lang.translate(LangKey::SettingsKeyNotSetText).c_str());
+		ImGuiEx::KeyInput(
+			std::format("{} #{}", Localization::STranslate(ArcdpsExtension::ET_Shortcut), tableIndex).c_str(),
+			id.c_str(),
+			settingsUiGlobal.shortcut[tableIndex],
+			4,
+			settings.tables[tableIndex].shortcut,
+			Localization::STranslate(BT_SettingsKeyNotSetText).data()
+		);
 
-		std::string appearAsInOptionStr = lang.translate(LangKey::SettingsAppearAsInOption);
-		appearAsInOptionStr.append("##appearAsInOption");
-		if (ImGui::InputText(appearAsInOptionStr.c_str(), appearAsInOption, 128)) {
+		std::string_view appearAsInOptionStr = Localization::STranslate(ArcdpsExtension::ET_AppearAsInOption);
+		if (ImGui::InputText(std::format("{}###appearAsInOption", appearAsInOptionStr).c_str(), appearAsInOption, 128)) {
 			settings.tables[tableIndex].appear_as_in_option = appearAsInOption;
 		}
 
-		std::string titleBarStr = lang.translate(LangKey::SettingsTitleBar);
-		titleBarStr.append("##titleBar");
-		if (ImGui::InputText(titleBarStr.c_str(), titleBar, 128)) {
+		std::string_view titleBarStr = Localization::STranslate(ArcdpsExtension::ET_TitleBar);
+		if (ImGui::InputText(std::format("{}###titleBar", titleBarStr).c_str(), titleBar, 128)) {
 			std::optional<std::string>& optTitleBar = settings.tables[tableIndex].title_bar;
 			if (optTitleBar) {
 				optTitleBar = titleBar;
@@ -236,7 +233,7 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		ImGui::EndMenu();
 	}
 
-	if (ImGui::BeginMenu(lang.translate(LangKey::SettingsPosition).c_str())) {
+	if (ImGui::BeginMenu(Localization::STranslate(ArcdpsExtension::ET_Position).data())) {
 		ImGuiEx::EnumRadioButton(position, Position::Manual, settings.tables[tableIndex].position);
 
 		ImGuiEx::EnumRadioButton(position, Position::ScreenRelative, settings.tables[tableIndex].position);
@@ -262,7 +259,7 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		if (position == static_cast<int>(Position::WindowRelative)) {
 			ImGui::Indent(15.f);
 
-			ImGui::TextUnformatted(lang.translate(LangKey::SettingsFromAnchorPanelCorner).c_str());
+			ImGui::TextUnformatted(Localization::STranslate(ArcdpsExtension::ET_FromAnchorPanelCorner).data());
 			ImGui::PushID("anchorPanelCornerPositionRadioButton");
 			ImGuiEx::EnumRadioButton(anchorPanelCornerPosition, CornerPosition::TopLeft, settings.tables[tableIndex].anchor_panel_corner_position);
 			ImGuiEx::EnumRadioButton(anchorPanelCornerPosition, CornerPosition::TopRight, settings.tables[tableIndex].anchor_panel_corner_position);
@@ -270,7 +267,7 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 			ImGuiEx::EnumRadioButton(anchorPanelCornerPosition, CornerPosition::BottomRight, settings.tables[tableIndex].anchor_panel_corner_position);
 			ImGui::PopID();
 
-			ImGui::TextUnformatted(lang.translate(LangKey::SettingsToThisPanelCorner).c_str());
+			ImGui::TextUnformatted(Localization::STranslate(ArcdpsExtension::ET_ThisPanelCorner).data());
 			ImGui::PushID("selfPanelCornerPositionRadioButton");
 			ImGuiEx::EnumRadioButton(selfPanelCornerPosition, CornerPosition::TopLeft, settings.tables[tableIndex].self_panel_corner_position);
 			ImGuiEx::EnumRadioButton(selfPanelCornerPosition, CornerPosition::TopRight, settings.tables[tableIndex].self_panel_corner_position);
@@ -294,7 +291,7 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 				}
 			}
 
-			if (ImGui::BeginCombo(lang.translate(LangKey::SettingsFromWindowName).c_str(), selectedWindowName.c_str())) {
+			if (ImGui::BeginCombo(Localization::STranslate(ArcdpsExtension::ET_AnchorWindow).data(), selectedWindowName.c_str())) {
 				for (ImGuiWindow* window : GImGui->Windows) {
 					if (!window->Hidden) {
 						std::string windowName = window->Name;

@@ -25,6 +25,7 @@
 #include <ArcdpsExtension/UpdateChecker.h>
 #include <ArcdpsExtension/Widgets.h>
 #include <imgui/imgui_internal.h>
+#include <ArcdpsUnofficialExtras/Definitions.h>
 
 /* proto/globals */
 arcdps_exports arc_exports{};
@@ -47,9 +48,8 @@ typedef uint64_t(*arc_export_func_u64)();
 HMODULE arc_dll;
 HMODULE self_dll;
 LPVOID mapViewOfMumbleFile = nullptr;
-UINT directxVersion;
-IDirect3DDevice9* id3dd9 = nullptr;
 ID3D11Device* id3d11d = nullptr;
+bool initSucessful = false;
 
 std::unique_ptr<ArcdpsExtension::UpdateChecker::UpdateState> update_state = nullptr;
 ArcdpsExtension::EventSequencer sequencer = ArcdpsExtension::EventSequencer(ProcessEvent);
@@ -109,14 +109,8 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 	ImGuiEx::BigTable::RegisterSettingsHandler("BigTable-BoonTable");
 	static_cast<ImGuiContext*>(imguicontext)->SettingsLoaded = false;
 
-	if (dxver == 11) {
-		auto swapChain = static_cast<IDXGISwapChain*>(dxptr);
-		swapChain->GetDevice(__uuidof(id3d11d), reinterpret_cast<void**>(&id3d11d));
-		directxVersion = 11;
-	} else {
-		// id3dd9 = static_cast<IDirect3DDevice9*>(dxptr);
-		directxVersion = 9;
-	} 
+	auto swapChain = static_cast<IDXGISwapChain*>(dxptr);
+	swapChain->GetDevice(__uuidof(id3d11d), reinterpret_cast<void**>(&id3d11d));
 
 	return mod_init;
 }
@@ -139,7 +133,7 @@ arcdps_exports* mod_init()
 		settings.readFromFile();
 
 		// load translation
-		lang.readFromFile();
+		LoadTranslations();
 
 		// setup icon loader
 		ArcdpsExtension::IconLoader::init(self_dll, id3d11d);
@@ -185,6 +179,8 @@ arcdps_exports* mod_init()
 		arc_exports.imgui = mod_imgui;
 		arc_exports.options_end = mod_options;
 		arc_exports.options_windows = mod_options_windows;
+
+		initSucessful = true;
 	} else {
 		arc_exports.sig = 0;
 		const std::string::size_type size = error_message.size();
@@ -200,8 +196,6 @@ uintptr_t mod_release()
 {
 	// try {
 		settings.saveToFile();
-
-		lang.saveToFile();
 
 		update_state->FinishPendingTasks();
 		sequencer.Shutdown();
@@ -504,12 +498,10 @@ void mod_options()
 void mod_options_windows(const char* windowname) {
 	// try {
 		if (!windowname) {
-			ImGui::Checkbox(lang.translate(LangKey::ShowChart).c_str(), &settings.isShowChart(0));
-
-			for (int i = 1; i < MaxTableWindowAmount; ++i) {
+			for (int i = 0; i < MaxTableWindowAmount; ++i) {
 				std::string str = settings.getAppearAsInOption(i);
 				if (str.empty()) {
-					str = lang.translate(LangKey::ShowChart);
+					str = ArcdpsExtension::Localization::STranslate(BT_ShowChart);
 					str.append(" ");
 					str.append(std::to_string(i));
 				}
@@ -560,5 +552,27 @@ bool canMoveWindows()
 	else
 	{
 		return modsPressed();
+	}
+}
+
+void language_changed_callback(Language pNewLanguage) {
+	settings.setGameLanguage(static_cast<ArcdpsExtension::LanguageSetting>(pNewLanguage));
+}
+
+extern "C" __declspec(dllexport) void arcdps_unofficial_extras_subscriber_init(
+	const ExtrasAddonInfo* pExtrasInfo, void* pSubscriberInfo) {
+
+	// do not subscribe, if initialization called from arcdps failed.
+	if (!initSucessful) {
+		return;
+	}
+
+	// MaxInfoVersion has to be higher to have enough space to hold this object
+	if (pExtrasInfo->ApiVersion == 2 && pExtrasInfo->MaxInfoVersion >= 1) {
+		ExtrasSubscriberInfoV1* subscriberInfo = static_cast<ExtrasSubscriberInfoV1*>(pSubscriberInfo);
+
+		subscriberInfo->InfoVersion = 1;
+		subscriberInfo->SubscriberName = "Boon Table";
+		subscriberInfo->LanguageChangedCallback = language_changed_callback;
 	}
 }

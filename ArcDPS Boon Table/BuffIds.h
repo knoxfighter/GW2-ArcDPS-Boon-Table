@@ -6,6 +6,8 @@
 
 #include <ArcdpsExtension/IconLoader.h>
 
+#include "Lang.h"
+
 enum BoonType
 {
 	BoonType_boon,
@@ -33,7 +35,7 @@ enum StackingType
 struct BoonDef
 {
 	std::vector<uint32_t> ids = {};
-	std::string name;
+	LangKey name;
 	StackingType stacking_type = StackingType_duration;
 	bool is_relevant = false;
 	BoonType category = BoonType_None;
@@ -41,8 +43,16 @@ struct BoonDef
 	size_t iconTextureId = 0;
 	uint8_t max_stacks = 25; // Only used if StackingType == StackingType_intensity
 
-	BoonDef(std::string new_name) : name(std::move(new_name)) {}
-	BoonDef(std::vector<uint32_t> new_ids, std::string new_name, StackingType new_stacking_type, bool new_is_relevant, BoonType new_category, UINT new_icon, uint32_t new_max_stacks = 25);
+	template<typename T>
+	requires std::is_enum_v<T> or std::is_integral_v<T>
+	BoonDef(T new_name) : name(static_cast<LangKey>(new_name)) {}
+
+	template<typename T>
+	requires std::is_enum_v<T> or std::is_integral_v<T>
+	BoonDef(std::vector<uint32_t> new_ids, T new_name, StackingType new_stacking_type, bool new_is_relevant, BoonType new_category, UINT new_icon, uint32_t new_max_stacks = 25)
+		: ids(new_ids), name(static_cast<LangKey>(new_name)), stacking_type(new_stacking_type), is_relevant(new_is_relevant), category(new_category), icon(new_icon), max_stacks(new_max_stacks) {
+		
+	}
 
 	bool IsValid() const
 	{

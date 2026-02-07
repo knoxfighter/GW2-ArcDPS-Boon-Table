@@ -17,6 +17,7 @@
 AppChartsContainer charts;
 
 namespace Table = ImGuiEx::BigTable;
+using ArcdpsExtension::Localization;
 
 void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 	PRINT_LINE()
@@ -84,7 +85,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 	if (titleBarSet) {
 		titleBarStr = titleBarSet.value();
 	} else {
-		titleBarStr = lang.translate(LangKey::WindowHeader);
+		titleBarStr = Localization::STranslate(BT_WindowHeader);
 	}
 	titleBarStr.append("###Boon Table");
 	if (index > 0)
@@ -187,12 +188,12 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		/*
 		 * HEADER
 		 */
-		std::string charName = lang.translate(LangKey::NameColumnHeader);
-		std::string subgroupName = lang.translate(LangKey::SubgroupColumnHeader);
+		std::string_view charName = Localization::STranslate(BT_NameColumnHeader);
+		std::string_view subgroupName = Localization::STranslate(BT_SubgroupColumnHeader);
 
 		ImGuiTableColumnFlags columnFlags = ImGuiTableColumnFlags_WidthFixed;
-		Table::TableSetupColumn(charName.c_str(), columnFlags, 0, nameColumnId);
-		Table::TableSetupColumn(subgroupName.c_str(), columnFlags, 0, subgroupColumnId);
+		Table::TableSetupColumn(charName.data(), columnFlags, 0, nameColumnId);
+		Table::TableSetupColumn(subgroupName.data(), columnFlags, 0, subgroupColumnId);
 
 		float init_width = 80.f;
 		if (sizingPolicy == SizingPolicy::SizeToContent || sizingPolicy == SizingPolicy::ManualWindowSize) {
@@ -209,34 +210,34 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 				bufFlags |= ImGuiTableColumnFlags_DefaultSort;
 			}
 
-			Table::TableSetupColumn(trackedBuff.name.c_str(), bufFlags, init_width, i);
+			Table::TableSetupColumn(Localization::STranslate(trackedBuff.name).data(), bufFlags, init_width, i);
 
 			++i;
 		}
 
-		Table::TableSetupColumn(above90BoonDef->name.c_str(), ImGuiTableColumnFlags_NoResize | ImGuiTableColumnFlags_DefaultHide, init_width, above90ColumnId);
+		Table::TableSetupColumn(Localization::STranslate(above90BoonDef->name).data(), ImGuiTableColumnFlags_NoResize | ImGuiTableColumnFlags_DefaultHide, init_width, above90ColumnId);
 
 		Table::TableNextRow(ImGuiTableRowFlags_Headers);
 
 		// accountname header
 		if (Table::TableNextColumn())
-			Table::TableHeader(charName.c_str(), true, nullptr);
+			Table::TableHeader(charName.data(), true, nullptr);
 
 		// subgroup header
 		if (Table::TableNextColumn())
-			Table::TableHeader(subgroupName.c_str(), true, nullptr);
+			Table::TableHeader(subgroupName.data(), true, nullptr);
 
 		auto& iconLoader = ArcdpsExtension::IconLoader::instance();
 		// buff headers
 		for (const BoonDef& trackedBuff : tracked_buffs) {
 			if (Table::TableNextColumn()) {
-				Table::TableHeader(trackedBuff.name.c_str(), showLabel, iconLoader.Draw(trackedBuff.iconTextureId), alignment);
+				Table::TableHeader(Localization::STranslate(trackedBuff.name).data(), showLabel, iconLoader.Draw(trackedBuff.iconTextureId), alignment);
 			}
 		}
 
 		// above90 header
 		if (Table::TableNextColumn()) {
-			Table::TableHeader(above90BoonDef->name.c_str(), showLabel, iconLoader.Draw(above90BoonDef->iconTextureId), alignment);
+			Table::TableHeader(Localization::STranslate(above90BoonDef->name).data(), showLabel, iconLoader.Draw(above90BoonDef->iconTextureId), alignment);
 		}
 
 		std::lock_guard lockPlayerOrder(playerOrderMtx);
@@ -414,7 +415,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 			};
 
 			for (std::set<uint8_t> subgroups = tracker.getSubgroups(); uint8_t subgroup : subgroups | std::views::filter(group_filter)) {
-				DrawRow(alignment, lang.translate(LangKey::SubgroupNameColumnValue), std::to_string(subgroup).c_str(),
+				DrawRow(alignment, Localization::STranslate(BT_SubgroupNameColumnValue), std::to_string(subgroup).c_str(),
 						[&](const BoonDef& boonDef) {
 							return tracker.getSubgroupBoonUptime(boonDef, subgroup);
 						}, [&tracker, &subgroup]() {
@@ -427,7 +428,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 		 * TOTALS
 		 */
 		if (settings.isShowTotal(index)) {
-			DrawRow(alignment, lang.translate(LangKey::TotalNameColumnValue), lang.translate(LangKey::TotalSubgroupColumnValue).c_str(),
+			DrawRow(alignment, Localization::STranslate(BT_TotalNameColumnValue), Localization::STranslate(BT_TotalSubgroupColumnValue).data(),
 					[&](const BoonDef& boonDef) {
 						return tracker.getAverageBoonUptime(boonDef);
 					}, [&tracker]() {
@@ -455,7 +456,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 }
 
 
-void AppChart::DrawRow(Alignment alignment, const std::string& charnameText, const char* subgroupText, std::function<float(const BoonDef&)> uptimeFunc,
+void AppChart::DrawRow(Alignment alignment, std::string_view charnameText, const char* subgroupText, std::function<float(const BoonDef&)> uptimeFunc,
 					   std::function<float()> above90Func, bool hasEntity, const IEntity* const entity, bool hasColor, const ImVec4& color) {
 	Table::TableNextRow();
 

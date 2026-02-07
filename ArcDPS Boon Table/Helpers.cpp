@@ -4,6 +4,8 @@
 
 #include "Lang.h"
 
+using ArcdpsExtension::Localization;
+
 uint64_t getCurrentTime()
 {
 	return current_time;
@@ -39,16 +41,16 @@ bool floatCmp(float a, float b)
 	return aa < bb;
 }
 
-std::string to_string(ProgressBarColoringMode coloringMode) {
+std::string_view to_string(ProgressBarColoringMode coloringMode) {
 	switch (coloringMode) {
 	case ProgressBarColoringMode::Uncolored:
-		return lang.translate(LangKey::ColoringModeDefault);
+		return Localization::STranslate(BT_ColoringModeDefault);
 	case ProgressBarColoringMode::ByProfession:
-		return lang.translate(LangKey::ColoringModeByProfession);
+		return Localization::STranslate(BT_ColoringModeByProfession);
 	case ProgressBarColoringMode::ByPercentage:
-		return lang.translate(LangKey::ColoringModeByPercentage);
+		return Localization::STranslate(BT_ColoringModeByPercentage);
 	default:
-		return lang.translate(LangKey::Unknown);
+		return Localization::STranslate(ArcdpsExtension::ET_Unknown);
 	}
 }
 

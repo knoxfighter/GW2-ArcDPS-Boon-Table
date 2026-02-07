@@ -19,7 +19,7 @@ public:
 	AppChart(int new_index) : index(new_index) {};
 
 	void Draw(bool* p_open, ImGuiWindowFlags flags);
-	void DrawRow(Alignment alignment, const std::string& charnameText, const char* subgroupText, std::function<float(const BoonDef&)> uptimeFunc, std::function<float()>
+	void DrawRow(Alignment alignment, std::string_view charnameText, const char* subgroupText, std::function<float(const BoonDef&)> uptimeFunc, std::function<float()>
 	             above90Func, bool hasEntity = false, const IEntity* const entity = nullptr, bool hasColor = false, const ImVec4& color = ImVec4(0, 0, 0, 0));
 
 	void buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, ImVec4 color) const;

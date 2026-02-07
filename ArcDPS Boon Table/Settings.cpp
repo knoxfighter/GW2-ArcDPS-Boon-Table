@@ -172,6 +172,22 @@ int Settings::getFightsToKeep() const {
 	return fights_to_keep;
 }
 
+ArcdpsExtension::LanguageSetting Settings::getLanguage() const {
+	return language;
+}
+
+ArcdpsExtension::LanguageSetting Settings::getGameLanguage() const {
+	return gameLanguage;
+}
+
+void Settings::setGameLanguage(ArcdpsExtension::LanguageSetting newLanguage) {
+	gameLanguage = newLanguage;
+
+	if (settings.getLanguage() == ArcdpsExtension::LanguageSetting::LikeGame) {
+		ArcdpsExtension::Localization::instance().ChangeLanguage(static_cast<gwlanguage>(gameLanguage));
+	}
+}
+
 void Settings::setShowChart(int tableIndex, bool status) {
 	tables[tableIndex].show = status;
 }
