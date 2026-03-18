@@ -1,6 +1,8 @@
 #pragma once
+
 #include <compare>
 #include <cstdint>
+#include <limits>
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
@@ -41,7 +43,8 @@ namespace ImGuiEx::BigTable {
         ImU128& operator=(const ImU128& other) = default;
         ImU128& operator=(ImU128&& other) noexcept = default;
 
-		template<typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+		template<typename T>
+        requires std::is_arithmetic_v<T>
 		ImU128 operator<<(T num) {
             if (num >= 128) return ImU128();
             if (num == 0) return ImU128(a, b);

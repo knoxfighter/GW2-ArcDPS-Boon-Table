@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <optional>
+#include <string>
 
 #include <ArcdpsExtension/arcdps_structs.h>
 #include <imgui/imgui.h>
