@@ -7,5 +7,11 @@
     "arcdps-unofficial-extras",
     "imgui",
     "magic-enum"
+  ],
+  "overrides": [
+    {
+      "name": "imgui",
+      "version": "1.92.7"
+    }
   ]
 }
