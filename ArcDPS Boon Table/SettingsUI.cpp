@@ -85,7 +85,7 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 
 	ImGui::Separator();
 	if (ImGui::BeginMenu(Localization::STranslate(ArcdpsExtension::ET_ColumnSetup).data(), table != nullptr)) {
-		ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+		ImGui::PushItemFlag(ImGuiItemFlags_AutoClosePopups, false);
 
 		// username
 		Table::MenuItemTableColumnVisibility(table, 0);
