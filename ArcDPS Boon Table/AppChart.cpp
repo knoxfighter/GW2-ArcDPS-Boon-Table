@@ -100,7 +100,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 #endif
 
 	// add window titleBar to defined height
-	titleBarHeight = currentWindow->TitleBarHeight();
+	titleBarHeight = currentWindow->TitleBarHeight;
 	minHeight += titleBarHeight;
 	maxHeight += titleBarHeight;
 #if _DEBUG
@@ -221,23 +221,23 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 
 		// accountname header
 		if (Table::TableNextColumn())
-			Table::TableHeader(charName.data(), true, nullptr);
+			Table::TableHeader(charName.data(), true, ImTextureID_Invalid);
 
 		// subgroup header
 		if (Table::TableNextColumn())
-			Table::TableHeader(subgroupName.data(), true, nullptr);
+			Table::TableHeader(subgroupName.data(), true, ImTextureID_Invalid);
 
 		auto& iconLoader = ArcdpsExtension::IconLoader::instance();
 		// buff headers
 		for (const BoonDef& trackedBuff : tracked_buffs) {
 			if (Table::TableNextColumn()) {
-				Table::TableHeader(Localization::STranslate(trackedBuff.name).data(), showLabel, iconLoader.Draw(trackedBuff.iconTextureId), alignment);
+				Table::TableHeader(Localization::STranslate(trackedBuff.name).data(), showLabel, reinterpret_cast<ImTextureID>(iconLoader.Draw(trackedBuff.iconTextureId)), alignment);
 			}
 		}
 
 		// above90 header
 		if (Table::TableNextColumn()) {
-			Table::TableHeader(Localization::STranslate(above90BoonDef->name).data(), showLabel, iconLoader.Draw(above90BoonDef->iconTextureId), alignment);
+			Table::TableHeader(Localization::STranslate(above90BoonDef->name).data(), showLabel, reinterpret_cast<ImTextureID>(iconLoader.Draw(above90BoonDef->iconTextureId)), alignment);
 		}
 
 		std::lock_guard lockPlayerOrder(playerOrderMtx);
