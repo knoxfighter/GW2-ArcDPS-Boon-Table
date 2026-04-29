@@ -155,6 +155,9 @@
     <ClInclude Include="modernIni\modernIni\modernIni.h">
       <Filter>Header Files\modernIni</Filter>
     </ClInclude>
+    <ClInclude Include="KeysDown.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ArcDPS Boon Table.rc">

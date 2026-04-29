@@ -17,6 +17,7 @@
 #include "AppChart.h"
 #include "Helpers.h"
 #include "History.h"
+#include "KeysDown.h"
 #include "Lang.h"
 #include "Settings.h"
 #include "SettingsUIGlobal.h"
@@ -223,7 +224,7 @@ UINT mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case WM_SYSKEYUP:
 		{
 			const int vkey = (int)wParam;
-			io->KeysDown[vkey] = 0;
+			KeysDown::SetKeyDown(vkey, false);
 			if (vkey == VK_CONTROL)
 			{
 				io->KeyCtrl = false;
@@ -242,7 +243,7 @@ UINT mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case WM_SYSKEYDOWN:
 		{
 			const int vkey = (int)wParam;
-			io->KeysDown[vkey] = 1;
+			KeysDown::SetKeyDown(vkey, true);
 			if (vkey == VK_CONTROL)
 			{
 				io->KeyCtrl = true;
@@ -256,10 +257,10 @@ UINT mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				io->KeyShift = true;
 			}
 
-			if (io->KeysDown[arc_global_mod1] && io->KeysDown[arc_global_mod2])
+			if (KeysDown::IsKeyDown(arc_global_mod1) && KeysDown::IsKeyDown(arc_global_mod2))
 			{
 				for (const auto& shortcut : settings.getShortcuts()) {
-					if (shortcut && io->KeysDown[shortcut]) return 0;
+					if (shortcut && KeysDown::IsKeyDown(shortcut)) return 0;
 				}
 			}
 			break;
@@ -268,8 +269,8 @@ UINT mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 			if (!wParam)
 			{
-				io->KeysDown[arc_global_mod1] = false;
-				io->KeysDown[arc_global_mod2] = false;
+				KeysDown::SetKeyDown(arc_global_mod1, false);
+				KeysDown::SetKeyDown(arc_global_mod2, false);
 			}
 			break;
 		}
@@ -465,10 +466,10 @@ void mod_imgui(uint32_t not_charsel_or_loading, uint32_t hide_if_combat_or_ooc)
 
 		auto io = &ImGui::GetIO();
 
-		if (io->KeysDown[arc_global_mod1] && io->KeysDown[arc_global_mod2]) {
+		if (KeysDown::IsKeyDown(arc_global_mod1) && KeysDown::IsKeyDown(arc_global_mod2)) {
 			const auto& shortcuts = settings.getShortcuts();
 			for (size_t i = 0; i < MaxTableWindowAmount; ++i) {
-				if (shortcuts[i] && ImGui::IsKeyPressed(shortcuts[i])) {
+				if (shortcuts[i] && KeysDown::IsKeyPressed(shortcuts[i])) {
 					settings.setShowChart(i, !settings.isShowChart(i));
 				}
 			}
@@ -541,9 +542,7 @@ void readArcExports()
 
 bool modsPressed()
 {
-	auto io = &ImGui::GetIO();
-
-	return io->KeysDown[arc_global_mod1] && io->KeysDown[arc_global_mod2];
+	return KeysDown::IsKeyDown(arc_global_mod1) && KeysDown::IsKeyDown(arc_global_mod2);
 }
 
 bool canMoveWindows()
