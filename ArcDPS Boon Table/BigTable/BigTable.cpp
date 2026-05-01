@@ -2524,18 +2524,6 @@ namespace ImGuiEx::BigTable {
         table->IsSortSpecsDirty = true;
     }
 	
-    void SetTooltip(const char* fmt, ...)
-    {
-        va_list args;
-        va_start(args, fmt);
-        ImGui::BeginTooltipEx(0, ImGuiTooltipFlags_OverridePreviousTooltip);
-        ImGui::TextV(fmt, args);
-        // ImGui::EndTooltip();
-        IM_ASSERT(ImGui::GetCurrentWindowRead()->Flags & ImGuiWindowFlags_Tooltip);   // Mismatched BeginTooltip()/EndTooltip() calls
-        End();
-        va_end(args);
-    }
-
     // This is a copy of `ImGui::TableHeader(const char* label)`
     // I removed the line, where the header is printed, so i can use it with image only headers.
     // When "show_label" is true, the label will be printed, as in the default one.
@@ -2543,7 +2531,8 @@ namespace ImGuiEx::BigTable {
     // Emit a column header (text + optional sort order)
     // We cpu-clip text here so that all columns headers can be merged into a same draw call.
     // Note that because of how we cpu-clip and display sorting indicators, you _cannot_ use SameLine() after a TableHeader()
-    void TableHeader(const char* label, bool show_label, ImTextureID texture, Alignment alignment) {
+    void TableHeader(const char* label, bool show_label, ImTextureID texture, Alignment alignment)
+    {
         // TODO change eventually
         const float image_size = 16.f;
 
@@ -2744,17 +2733,6 @@ namespace ImGuiEx::BigTable {
         */
     }
 
-    void MenuItemTableColumnVisibility(ImGuiTable* table, int columnIdx) {
-        ImGuiTableColumn& column = table->Columns[columnIdx];
-        const char* columnName = TableGetColumnName(table, columnIdx);
-        // Make sure we can't hide the last active column
-        bool menu_item_active = (column.Flags & ImGuiTableColumnFlags_NoHide) ? false : true;
-        if (column.IsEnabled && table->ColumnsEnabledCount <= 1)
-            menu_item_active = false;
-        if (ImGui::MenuItem(columnName, NULL, column.IsEnabled, menu_item_active))
-            column.IsEnabledNextFrame = !column.IsEnabled;
-    }
-
     // Calculate next sort direction that would be set after clicking the column
 	// - If the PreferSortDescending flag is set, we will default to a Descending direction on the first click.
 	// - Note that the PreferSortAscending flag is never checked, it is essentially the default and therefore a no-op.
@@ -2799,39 +2777,6 @@ namespace ImGuiEx::BigTable {
         if (column_index < 0)
             column_index = columns->Current;
         return GetColumnOffsetFromNorm(columns, columns->Columns[column_index + 1].OffsetNorm - columns->Columns[column_index].OffsetNorm);
-    }
-
-    void AlignedTextColumn(Alignment alignment, const char* text, ...) {
-        va_list args;
-        va_start(args, text);
-        char buf[4096];
-        ImFormatStringV(buf, 4096, text, args);
-        va_end(args);
-
-        const float posX = ImGui::GetCursorPosX();
-        float newX = posX;
-        float textWidth = ImGui::CalcTextSize(buf).x;
-        float columnWidth = GetColumnWidth();
-
-        switch (alignment) {
-        case Alignment::Left:
-            break;
-        case Alignment::Center:
-            newX = posX + columnWidth / 2 - textWidth / 2;
-            break;
-        case Alignment::Right:
-            newX = posX + columnWidth - textWidth;
-            break;
-        }
-
-        // Clip to left, if text is bigger than current column
-        if (newX < posX) {
-            newX = posX;
-        }
-
-        ImGui::SetCursorPosX(newX);
-
-        ImGui::TextUnformatted(buf);
     }
 
     static void TableSettingsHandler_ClearAll(ImGuiContext*, ImGuiSettingsHandler*)
@@ -2937,19 +2882,6 @@ namespace ImGuiEx::BigTable {
         }
     }
 
-	void RegisterSettingsHandler(const char* name) {
-        ImGuiContext* context = ImGui::GetCurrentContext();
-        ImGuiSettingsHandler ini_handler;
-        ini_handler.TypeName = name;
-        ini_handler.TypeHash = ImHashStr(name);
-        ini_handler.ClearAllFn = TableSettingsHandler_ClearAll;
-        ini_handler.ReadOpenFn = TableSettingsHandler_ReadOpen;
-        ini_handler.ReadLineFn = TableSettingsHandler_ReadLine;
-        ini_handler.ApplyAllFn = TableSettingsHandler_ApplyAll;
-        ini_handler.WriteAllFn = TableSettingsHandler_WriteAll;
-        context->SettingsHandlers.push_back(ini_handler);
-    }
-
     int TableGetColumnIndex()
     {
         //ImGuiContext& g = *GImGui;
@@ -3003,4 +2935,78 @@ namespace ImGuiEx::BigTable {
 	    table->FreezeRowsCount = (table->InnerWindow->Scroll.y != 0.0f) ? table->FreezeRowsRequest : 0;
 	    table->IsUnfrozenRows = (table->FreezeRowsCount == 0); // Make sure this is set before TableUpdateLayout() so ImGuiListClipper can benefit from it.b
 	}
+
+    // Custom methods not present in ImGui
+
+    void SetTooltip(const char* fmt, ...)
+    {
+        va_list args;
+        va_start(args, fmt);
+        ImGui::BeginTooltipEx(0, ImGuiTooltipFlags_OverridePreviousTooltip);
+        ImGui::TextV(fmt, args);
+        // ImGui::EndTooltip();
+        IM_ASSERT(ImGui::GetCurrentWindowRead()->Flags & ImGuiWindowFlags_Tooltip);   // Mismatched BeginTooltip()/EndTooltip() calls
+        End();
+        va_end(args);
+    }
+
+    void MenuItemTableColumnVisibility(ImGuiTable* table, int columnIdx)
+    {
+        ImGuiTableColumn& column = table->Columns[columnIdx];
+        const char* columnName = TableGetColumnName(table, columnIdx);
+        // Make sure we can't hide the last active column
+        bool menu_item_active = (column.Flags & ImGuiTableColumnFlags_NoHide) ? false : true;
+        if (column.IsEnabled && table->ColumnsEnabledCount <= 1)
+            menu_item_active = false;
+        if (ImGui::MenuItem(columnName, NULL, column.IsEnabled, menu_item_active))
+            column.IsEnabledNextFrame = !column.IsEnabled;
+    }
+
+    void AlignedTextColumn(Alignment alignment, const char* text, ...)
+    {
+        va_list args;
+        va_start(args, text);
+        char buf[4096];
+        ImFormatStringV(buf, 4096, text, args);
+        va_end(args);
+
+        const float posX = ImGui::GetCursorPosX();
+        float newX = posX;
+        float textWidth = ImGui::CalcTextSize(buf).x;
+        float columnWidth = GetColumnWidth();
+
+        switch (alignment) {
+        case Alignment::Left:
+            break;
+        case Alignment::Center:
+            newX = posX + columnWidth / 2 - textWidth / 2;
+            break;
+        case Alignment::Right:
+            newX = posX + columnWidth - textWidth;
+            break;
+        }
+
+        // Clip to left, if text is bigger than current column
+        if (newX < posX) {
+            newX = posX;
+        }
+
+        ImGui::SetCursorPosX(newX);
+
+        ImGui::TextUnformatted(buf);
+    }
+
+    void RegisterSettingsHandler(const char* name)
+    {
+        ImGuiContext* context = ImGui::GetCurrentContext();
+        ImGuiSettingsHandler ini_handler;
+        ini_handler.TypeName = name;
+        ini_handler.TypeHash = ImHashStr(name);
+        ini_handler.ClearAllFn = TableSettingsHandler_ClearAll;
+        ini_handler.ReadOpenFn = TableSettingsHandler_ReadOpen;
+        ini_handler.ReadLineFn = TableSettingsHandler_ReadLine;
+        ini_handler.ApplyAllFn = TableSettingsHandler_ApplyAll;
+        ini_handler.WriteAllFn = TableSettingsHandler_WriteAll;
+        context->SettingsHandlers.push_back(ini_handler);
+    }
 }
