@@ -298,4 +298,5 @@ namespace ImGuiEx::BigTable {
     inline ImGuiID TableGetInstanceID(ImGuiTable* table, int instance_no) { return TableGetInstanceData(table, instance_no)->TableInstanceID; }
     float TableCalcMaxColumnWidth(const ImGuiTable* table, int column_n);
     void TableQueueSetColumnDisplayOrder(ImGuiTable* table, int column_n, int dst_order);
+    void SetTooltip(const char* fmt, ...);
 }
