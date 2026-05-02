@@ -209,8 +209,8 @@ ID_Writ_of_Masterful_Strength PNG               "icons\\Writ_of_Masterful_Streng
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,8,1,1
- PRODUCTVERSION 2,8,1,1
+ FILEVERSION 3,0,0,0
+ PRODUCTVERSION 3,0,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -225,12 +225,12 @@ BEGIN
     BEGIN
         BLOCK "000004b0"
         BEGIN
-            VALUE "FileVersion", "2.8.1.1"
+            VALUE "FileVersion", "3.0.0.0"
             VALUE "InternalName", "d3d9_arcdps_table.dll"
             VALUE "LegalCopyright", "Copyright (C) 2026"
             VALUE "OriginalFilename", "d3d9_arcdps_table.dll"
             VALUE "ProductName", "Arcdps Boon table plugin"
-            VALUE "ProductVersion", "2.8.1.1"
+            VALUE "ProductVersion", "3.0.0.0"
         END
     END
     BLOCK "VarFileInfo"
