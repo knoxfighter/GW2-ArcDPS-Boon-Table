@@ -1,5 +1,10 @@
 #include "BuffIds.h"
 
+#include <algorithm>
+#include <ArcdpsExtension/Localization.h>
+#include <ArcdpsExtension/ExtensionTranslations.h>
+#include <ArcdpsExtension/IconLoader.h>
+
 #include "Helpers.h"
 #include "Lang.h"
 #include "resource.h"
@@ -130,10 +135,10 @@ void init_tracked_buffs() {
 }
 
 BoonDef* getTrackedBoon(uint32_t new_id) {
-	for (auto current_buff = tracked_buffs.begin(); current_buff != tracked_buffs.end(); ++current_buff) {
-		for (auto current_id = current_buff->ids.cbegin(); current_id != current_buff->ids.cend(); ++current_id) {
-			if (*current_id == new_id) return &*current_buff;
-		}
+    for (auto& tracked_buff : tracked_buffs) {
+	    if (std::ranges::contains(tracked_buff.ids, new_id)) {
+	        return &tracked_buff;
+	    }
 	}
 	return nullptr;
 }

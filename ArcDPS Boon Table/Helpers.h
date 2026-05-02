@@ -39,8 +39,6 @@ enum class ProgressBarColoringMode {
 	Uncolored,
 	ByProfession,
 	ByPercentage,
-
-	LAST_ENTRY
 };
 
 std::string_view to_string(ProgressBarColoringMode coloringMode);

@@ -7,6 +7,7 @@
 #include "Settings.h"
 #include "SettingsUIGlobal.h"
 
+#include <ArcdpsExtension/Localization.h>
 #include <ArcdpsExtension/ExtensionTranslations.h>
 #include <ArcdpsExtension/Widgets.h>
 #include <magic_enum/magic_enum.hpp>
@@ -143,7 +144,7 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		ProgressBarColoringMode& show_colored = settings.tables[tableIndex].show_colored;
 		std::string_view showColoredText = Localization::STranslate(BT_SettingsColoringMode);
 		ImGui::PushItemWidth(120);
-		ImGuiEx::EnumCombo(std::format("{}###ShowColored", showColoredText).c_str(), show_colored, ProgressBarColoringMode::LAST_ENTRY);
+		ImGuiEx::EnumCombo(std::format("{}###ShowColored", showColoredText).c_str(), show_colored, magic_enum::enum_values<ProgressBarColoringMode>());
 		ImGui::PopItemWidth();
 
 		ImGui::EndMenu();

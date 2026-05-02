@@ -1,6 +1,7 @@
 #include "Helpers.h"
 
 #include <sstream>
+#include <ArcdpsExtension/Localization.h>
 
 #include "Lang.h"
 

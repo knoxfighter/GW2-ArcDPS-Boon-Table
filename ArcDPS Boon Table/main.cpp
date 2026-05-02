@@ -423,34 +423,36 @@ uintptr_t ProcessEvent(cbtevent* ev, ag* src, ag* dst, const char* skillname, ui
 						break;
 					}
 				}
-			}
-			/* activation */
-			else if (ev->is_activation) {
-			}
-
-			/* buff remove */
-			else if (ev->is_buffremove) {
-				if (ev->is_buffremove == CBTB_MANUAL) { //TODO: move to tracker
-					Entity* entity = liveTracker.getEntity(src->id);
-					if (entity) {
-						entity->removeBoon(ev);
-						charts.sortNeeded();
+				/* buff remove */
+				else if (ev->is_statechange == CBTS_BUFFREMOVE_SINGLE) {
+					if (ev->is_buffremove == CBTB_MANUAL) {
+						Entity* entity = liveTracker.getEntity(src->id);
+						if (entity) {
+							entity->removeBoon(ev);
+							charts.sortNeeded();
+						}
 					}
 				}
-			}
-			/* buff */
-			else if (ev->buff) {
-				/* damage */
-				if (ev->buff_dmg) {
-
+				/* buff extend */
+				else if (ev->is_statechange == CBTS_BUFFCHANGE) {
+					liveTracker.applyBoon(src, dst, ev);
 				}
-				/* application */
-				else {
+				/* buff */
+				else if (ev->is_statechange == CBTS_BUFFAPPLY) {
 					liveTracker.applyBoon(src, dst, ev);
 					charts.sortNeeded();
 				}
 			}
-			/* physical */
+			/* activation */
+			else if (ev->is_activation) {
+			}
+			/* buff remove */
+			else if (ev->is_buffremove) {
+			}
+			/* buff */
+			else if (ev->buff) {
+			}
+			/* strike */
 			else {
 				// read out if players are above 90% health
 				liveTracker.dealtDamage(src, ev);

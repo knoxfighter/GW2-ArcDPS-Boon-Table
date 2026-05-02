@@ -1,5 +1,7 @@
 #include "Tracker.h"
 
+#include <ranges>
+
 #include "AppChart.h"
 
 Tracker liveTracker(0);
