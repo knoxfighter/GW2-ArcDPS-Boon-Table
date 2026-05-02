@@ -16,15 +16,21 @@ void History::LogStart(cbtevent* event) {
 		return;
 	}
 
-	if (isWvW && event->src_agent == 1) {
+	// 2 if map log, 3 if boss log
+	if (event->dst_agent != 3) {
+		return;
+	}
+
+	// if we are in wvw, we can skip everything and start wvw logging
+	if (isWvW) {
 		status = Status::NameAcquired;
 		currentName = Localization::STranslate(BT_Wvw);
-	} else if (event->src_agent == 1) {
+	}
+	// if not, we have to wait for the LogNpcUpdate Event, which contains the actual id.
+	// that event might be called immediately or delayed, depending on the fight.
+	else {
 		// id for pre-events (e.g. Deimos)
 		status = Status::WaitingForReset;
-	} else {
-		status = Status::WaitingForName;
-		currentID = event->src_agent;
 	}
 
 	std::chrono::seconds seconds(event->value);
@@ -53,7 +59,7 @@ void History::LogEnd(cbtevent* event) {
 }
 
 void History::Event(ag* dst) {
-	std::lock_guard<std::mutex> guard(historyMutex);
+	std::lock_guard guard(historyMutex);
 	
 	if (status != Status::WaitingForName) {
 		return;
@@ -65,7 +71,7 @@ void History::Event(ag* dst) {
 	}
 }
 
-/// Called on `STATRESET`. Contains actual boss ID if not given in `LOGSTART`.
+/// Called on `CBTS_LOGNPCUPDATE`. Contains actual boss ID.
 void History::Reset(cbtevent* event) {
 	if (status != Status::WaitingForReset) {
 		return;

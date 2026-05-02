@@ -317,11 +317,7 @@ uintptr_t ProcessEvent(cbtevent* ev, ag* src, ag* dst, const char* skillname, ui
 							charts.sortNeeded();
 
 							if (dst->self) {
-								// this is yourself, check your map and see active "one-logging" if it is WvW
-								if (mapViewOfMumbleFile) {
-									LinkedMem* linkedMem = static_cast<LinkedMem*>(mapViewOfMumbleFile);
-									isWvW = linkedMem->getMumbleContext()->uiState & 1 << 4; // Bit 5 = Is in Competitive game mode
-								}
+								// this is yourself
 							}
 						}
 					}
@@ -394,20 +390,38 @@ uintptr_t ProcessEvent(cbtevent* ev, ag* src, ag* dst, const char* skillname, ui
 						// }
 					}
 				}
-				else if (ev->is_statechange == CBTS_STATRESET) {
+				else if (ev->is_statechange == CBTS_LOGNPCUPDATE) {
 					history.Reset(ev);
 					
-					std::lock_guard<std::mutex> guard(liveTracker.players_mtx);
-					for (auto& pair : liveTracker.getPlayers()) {
-						Player& player = pair.second;
-						player.combatExit(ev);
-						// do not call combatEnter on Player, cause ev->dst_agent (subgroup) is not set
-						player.Entity::combatEnter(ev);
-					}
-				} else if (ev->is_statechange == CBTS_LOGSTART) {
+					// 02.05.26: Arcdps does not reset anymore, so neither do we
+					// std::lock_guard guard(liveTracker.players_mtx);
+					// for (auto& pair : liveTracker.getPlayers()) {
+					// 	Player& player = pair.second;
+					// 	player.combatExit(ev);
+					// 	// do not call combatEnter on Player, cause ev->dst_agent (subgroup) is not set
+					// 	player.Entity::combatEnter(ev);
+					// }
+				} else if (ev->is_statechange == CBTS_SQCOMBATSTART) {
 					history.LogStart(ev);
-				} else if (ev->is_statechange == CBTS_LOGEND) {
+				} else if (ev->is_statechange == CBTS_SQCOMBATEND) {
 					history.LogEnd(ev);
+				} else if (ev->is_statechange == CBTS_MAPCHANGE) {
+					// Check the new map id if it is one of the wvw maps
+					// TODO: deltaconnected might add the wvw check as flag to `ev->value`
+					switch (ev->src_agent)
+					{
+					case 38: // Eternal Battlegrounds
+					case 1099: // Desert Borderland
+					case 96: // Alpine Borderland 1
+					case 95: // Alpine Borderland 2
+					case 899: // Obsidian Sanctum
+					case 968: // Edge of the Mists
+						isWvW = true;
+						break;
+					default:
+						isWvW = false;
+						break;
+					}
 				}
 			}
 			/* activation */

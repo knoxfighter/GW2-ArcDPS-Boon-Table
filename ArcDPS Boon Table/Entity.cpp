@@ -1,6 +1,7 @@
 #include "Entity.h"
 
 #include <algorithm>
+#include <ArcdpsExtension/arcdps_structs_slim.h>
 
 std::mutex boons_mtx;
 
