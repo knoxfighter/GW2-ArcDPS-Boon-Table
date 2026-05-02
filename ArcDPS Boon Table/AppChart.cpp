@@ -132,7 +132,7 @@ void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 	 * Settings UI
 	 */
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {4.f, 4.f});
-	if (ImGuiEx::BeginPopupContextWindow(nullptr, 1, ImGuiHoveredFlags_ChildWindows)) {
+	if (ImGuiEx::BeginPopupContextWindow(nullptr, ImGuiPopupFlags_MouseButtonRight, ImGuiHoveredFlags_ChildWindows)) {
 		settingsUi.Draw(imGuiTable, index, currentWindow);
 
 		ImGui::EndPopup();
