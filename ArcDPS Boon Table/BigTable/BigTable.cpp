@@ -3071,12 +3071,38 @@ namespace ImGuiEx::BigTable {
         SettingsTables.clear();
     }
 
+    static ImGuiID MapImGuiIDFrom180to1927(ImGuiID id)
+    {
+        switch (id)
+        {
+        // BoonTable0
+        case 0xD996DADD:
+            return 0x25A12B20;
+        // BoonTable1
+        case 0x5D689877:
+            return 0x3D98DA78;
+        // BoonTable2
+        case 0x5D83AFCC:
+            return 0x92B6473E;
+        // BoonTable3
+        case 0xEB0A409A:
+            return 0xF7AC33FC;
+        // BoonTable4
+        case 0x5C55C0BA:
+            return 0xC9070B43;
+        default:
+            return id;
+        }
+    }
+
     static void* TableSettingsHandler_ReadOpen(ImGuiContext*, ImGuiSettingsHandler*, const char* name)
     {
         ImGuiID id = 0;
         int columns_count = 0;
         if (sscanf(name, "0x%08X,%d", &id, &columns_count) < 2)
             return NULL;
+
+        id = MapImGuiIDFrom180to1927(id);
 
         if (ImGuiTableSettings* settings = TableSettingsFindByID(id))
         {
