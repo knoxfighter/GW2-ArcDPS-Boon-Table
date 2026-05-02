@@ -467,11 +467,19 @@ void mod_imgui(uint32_t not_charsel_or_loading, uint32_t hide_if_combat_or_ooc)
 		auto io = &ImGui::GetIO();
 
 		if (KeysDown::IsKeyDown(arc_global_mod1) && KeysDown::IsKeyDown(arc_global_mod2)) {
+			std::vector<int> keysPressed;
+
 			const auto& shortcuts = settings.getShortcuts();
 			for (size_t i = 0; i < MaxTableWindowAmount; ++i) {
 				if (shortcuts[i] && KeysDown::IsKeyPressed(shortcuts[i])) {
 					settings.setShowChart(i, !settings.isShowChart(i));
+					keysPressed.push_back(shortcuts[i]);
 				}
+			}
+
+			// Mark the keys as already pressed to prevent repeated toggling while the keys are held down
+			for (int key : keysPressed) {
+				KeysDown::MarkKeysAsAlreadyPressed(key);
 			}
 		}
 
