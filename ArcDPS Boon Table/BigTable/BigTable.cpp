@@ -3087,7 +3087,7 @@ namespace ImGuiEx::BigTable {
             }
             settings->ID = 0; // Invalidate storage, we won't fit because of a count change
         }
-        return ImGui::TableSettingsCreate(id, columns_count);
+        return TableSettingsCreate(id, columns_count);
     }
 
     static void TableSettingsHandler_ReadLine(ImGuiContext*, ImGuiSettingsHandler*, void* entry, const char* line)
