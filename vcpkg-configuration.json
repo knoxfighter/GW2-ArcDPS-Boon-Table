@@ -9,7 +9,7 @@
     {
       "kind": "git",
       "repository": "https://github.com/Zinn-o-Matics/vcpkg-registry",
-      "baseline": "f0ff83d633e71424ab595ce872a7555ff70813c0",
+      "baseline": "8bbfa41fafed691587defeae4e04835c2ea281b9",
       "packages": [
         "arcdps-extension",
         "arcdps-unofficial-extras",
