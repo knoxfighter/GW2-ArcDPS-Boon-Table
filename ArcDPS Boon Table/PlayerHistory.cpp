@@ -12,9 +12,16 @@ Prof PlayerHistory::getProfession() const {
 	return prof;
 }
 
-ImVec4 PlayerHistory::getColor() const {
+ImVec4 PlayerHistory::getBaseColor() const {
 	ImVec4* arc_colors[5];
     arc_export_e5(arc_colors);
 
     return arc_colors[1][prof];
+}
+
+ImVec4 PlayerHistory::getHighlightColor() const {
+	ImVec4* arc_colors[5];
+    arc_export_e5(arc_colors);
+
+    return arc_colors[2][prof];
 }

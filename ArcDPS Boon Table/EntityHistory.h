@@ -30,7 +30,8 @@ public:
 	uintptr_t getId() const override;
 	const std::string& getName() const override;
 	float getOver90() const override;
-	ImVec4 getColor() const override;
+	ImVec4 getBaseColor() const override;
+	ImVec4 getHighlightColor() const override;
 	uint64_t getCombatDuration() const override;
 	float getBoonUptime(const BoonDef& boon) const override;
 };

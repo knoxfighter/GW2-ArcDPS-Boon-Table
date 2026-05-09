@@ -27,7 +27,8 @@ public:
 	[[nodiscard]] Prof getProfession() const override;
 	
 	void combatEnter(cbtevent* ev) override;
-	ImVec4 getColor() const override;
+	ImVec4 getBaseColor() const override;
+	ImVec4 getHighlightColor() const override;
 
 	bool operator==(uintptr_t other_id) const override;
 	bool operator==(std::string other_name) const override;

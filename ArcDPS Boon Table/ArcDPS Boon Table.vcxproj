@@ -164,7 +164,6 @@
     <ClCompile Include="Lang.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="modernIni\modernIni\modernIni.cpp" />
-    <ClCompile Include="NPC.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerHistory.cpp" />
     <ClCompile Include="Settings.cpp" />
@@ -189,7 +188,6 @@
     <ClInclude Include="modernIni\modernIni\map.h" />
     <ClInclude Include="modernIni\modernIni\modernIni.h" />
     <ClInclude Include="modernIni\modernIni\modernIniMacros.h" />
-    <ClInclude Include="NPC.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerHistory.h" />
     <ClInclude Include="resource.h" />

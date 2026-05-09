@@ -47,7 +47,7 @@ void Player::combatEnter(cbtevent* ev) {
     Entity::combatEnter(ev);
 }
 
-ImVec4 Player::getColor() const {
+ImVec4 Player::getBaseColor() const {
     /* e5 writes out colour array ptrs, sizeof(out) == sizeof(ImVec4*) * 5.  [ void e5(ImVec4** out) ]
        out[0] = core cols
                    enum n_colours_core {
@@ -74,4 +74,11 @@ ImVec4 Player::getColor() const {
     arc_export_e5(arc_colors);
 
     return arc_colors[1][profession];
+}
+
+ImVec4 Player::getHighlightColor() const {
+	ImVec4* arc_colors[5];
+    arc_export_e5(arc_colors);
+
+    return arc_colors[2][profession];
 }

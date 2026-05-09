@@ -9,7 +9,6 @@
 #include "ITracker.h"
 #include <ArcdpsExtension/arcdps_structs.h>
 #include "Player.h"
-#include "NPC.h"
 
 class Tracker : public ITracker {
 protected:

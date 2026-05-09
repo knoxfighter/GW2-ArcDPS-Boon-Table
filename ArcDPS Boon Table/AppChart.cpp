@@ -517,7 +517,8 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 	if (color.w == 0.f) hidden_color = true;
 
 	if (settings.isShowBoonAsProgressBar(index)) {
-		if (show_colored != ProgressBarColoringMode::Uncolored && !hidden_color) ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
+		if (show_colored != ProgressBarColoringMode::Uncolored && !hidden_color) 
+			ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
 
 		char label[10];
 		if (current_buff.stacking_type == StackingType_intensity) {
@@ -573,7 +574,9 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, const IEntity& entity) const {
 	switch (settings.getShowColored(index)) {
 		case ProgressBarColoringMode::ByProfession:
-			buffProgressBar(current_buff, current_boon_uptime, width, entity.getColor());
+			ImGui::PushStyleColor(ImGuiCol_FrameBg, entity.getBaseColor());
+			buffProgressBar(current_buff, current_boon_uptime, width, entity.getHighlightColor());
+			ImGui::PopStyleColor();
 			break;
 		case ProgressBarColoringMode::ByPercentage: {
 			float percentage = 0;

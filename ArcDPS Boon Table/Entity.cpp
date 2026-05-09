@@ -254,7 +254,7 @@ float Entity::getOver90() const {
 	return float(damageEventsOver90) / float(damageEvents);
 }
 
-ImVec4 Entity::getColor() const {
+ImVec4 Entity::getBaseColor() const {
 	/* e5 writes out colour array ptrs, sizeof(out) == sizeof(ImVec4*) * 5.  [ void e5(ImVec4** out) ]
 	   out[0] = core cols
 				   enum n_colours_core {
@@ -280,6 +280,12 @@ ImVec4 Entity::getColor() const {
 	ImVec4* arc_colors[5];
 	arc_export_e5(arc_colors);
 
-	//all unknown entities are mesmers now!
-	return arc_colors[1][PROF_MESMER];
+	return arc_colors[1][PROF_UNKNOWN];
+}
+
+ImVec4 Entity::getHighlightColor() const {
+	ImVec4* arc_colors[5];
+	arc_export_e5(arc_colors);
+
+	return arc_colors[2][PROF_UNKNOWN];
 }

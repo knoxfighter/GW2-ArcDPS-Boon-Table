@@ -18,11 +18,18 @@ float EntityHistory::getOver90() const {
 	return over90;
 }
 
-ImVec4 EntityHistory::getColor() const {
+ImVec4 EntityHistory::getBaseColor() const {
 	ImVec4* arc_colors[5];
 	arc_export_e5(arc_colors);
 
 	return arc_colors[1][PROF_UNKNOWN];
+}
+
+ImVec4 EntityHistory::getHighlightColor() const {
+	ImVec4* arc_colors[5];
+	arc_export_e5(arc_colors);
+
+	return arc_colors[2][PROF_UNKNOWN];
 }
 
 uint64_t EntityHistory::getCombatDuration() const {

@@ -21,5 +21,6 @@ public:
 	[[nodiscard]] uint8_t getSubgroup() const override;
 	[[nodiscard]] bool isSelf() const override;
 	[[nodiscard]] Prof getProfession() const override;
-	ImVec4 getColor() const override;
+	ImVec4 getBaseColor() const override;
+	ImVec4 getHighlightColor() const override;
 };

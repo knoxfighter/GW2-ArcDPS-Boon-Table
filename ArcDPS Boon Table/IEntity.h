@@ -13,6 +13,7 @@ public:
 	virtual float getOver90() const = 0;
 	virtual float getBoonUptime(const BoonDef& boon) const = 0;
 
-	virtual ImVec4 getColor() const = 0;
+	virtual ImVec4 getBaseColor() const = 0;
+	virtual ImVec4 getHighlightColor() const = 0;
 };
 

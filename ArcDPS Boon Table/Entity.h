@@ -79,5 +79,6 @@ public:
 	std::atomic_uint32_t damageEventsOver90 = 0;
 	float getOver90() const override;
 
-	ImVec4 getColor() const override;
+	ImVec4 getBaseColor() const override;
+	ImVec4 getHighlightColor() const override;
 };
