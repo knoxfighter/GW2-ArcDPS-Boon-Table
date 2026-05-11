@@ -216,8 +216,6 @@ uintptr_t mod_release()
 UINT mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	// try {
-		auto const io = &ImGui::GetIO();
-
 		switch (uMsg)
 		{
 		case WM_KEYUP:
@@ -225,18 +223,6 @@ UINT mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 			const int vkey = (int)wParam;
 			KeysDown::SetKeyDown(vkey, false);
-			if (vkey == VK_CONTROL)
-			{
-				io->KeyCtrl = false;
-			}
-			else if (vkey == VK_MENU)
-			{
-				io->KeyAlt = false;
-			}
-			else if (vkey == VK_SHIFT)
-			{
-				io->KeyShift = false;
-			}
 			break;
 		}
 		case WM_KEYDOWN:
@@ -244,18 +230,6 @@ UINT mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 			const int vkey = (int)wParam;
 			KeysDown::SetKeyDown(vkey, true);
-			if (vkey == VK_CONTROL)
-			{
-				io->KeyCtrl = true;
-			}
-			else if (vkey == VK_MENU)
-			{
-				io->KeyAlt = true;
-			}
-			else if (vkey == VK_SHIFT)
-			{
-				io->KeyShift = true;
-			}
 
 			if (KeysDown::IsKeyDown(arc_global_mod1) && KeysDown::IsKeyDown(arc_global_mod2))
 			{
