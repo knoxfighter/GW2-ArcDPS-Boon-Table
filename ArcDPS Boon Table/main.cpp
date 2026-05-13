@@ -31,9 +31,9 @@
 /* proto/globals */
 arcdps_exports arc_exports{};
 extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* imguicontext, void* dxptr, HMODULE arcdll, void* mallocfn, void* freefn, UINT dxVer);
-extern "C" __declspec(dllexport) void* get_release_addr();
+extern "C" __declspec(dllexport) void* get_release_addr(uint32_t reason);
 arcdps_exports* mod_init();
-uintptr_t mod_release();
+void mod_release();
 UINT mod_wnd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 void mod_combat(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision);
 void mod_imgui(uint32_t not_charsel_or_loading, uint32_t hide_if_combat_or_ooc); /* id3dd9::present callback, before imgui::render, fn(uint32_t not_charsel_or_loading) */
@@ -107,7 +107,7 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 	ImGui::SetAllocatorFunctions((void* (*)(size_t, void*))mallocfn, (void (*)(void*, void*))freefn);
 
 	// load my table loader into imgui
-	ImGuiEx::BigTable::RegisterSettingsHandler("BigTable-BoonTable");
+	ImGuiEx::BigTable::RegisterSettingsHandler("BigTable-BoonTable", self_dll);
 	static_cast<ImGuiContext*>(imguicontext)->SettingsLoaded = false;
 
 	auto swapChain = static_cast<IDXGISwapChain*>(dxptr);
@@ -117,7 +117,7 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 }
 
 /* export -- arcdps looks for this exported function and calls the address it returns */
-extern "C" __declspec(dllexport) void* get_release_addr() {
+extern "C" __declspec(dllexport) void* get_release_addr(uint32_t reason) {
 	return mod_release;
 }
 
@@ -193,7 +193,7 @@ arcdps_exports* mod_init()
 }
 
 /* release mod -- return ignored */
-uintptr_t mod_release()
+void mod_release()
 {
 	// try {
 		settings.saveToFile();
@@ -204,12 +204,12 @@ uintptr_t mod_release()
 		}
 		sequencer.Shutdown();
 		ArcdpsExtension::g_singletonManagerInstance.Shutdown();
+
+		ImGuiEx::BigTable::UnregisterSettingsHandler("BigTable-BoonTable", self_dll);
 	// } catch(const std::exception& e) {
 	// 	arc_log_file("error in mod_release!");
 	// 	arc_log_file(e.what());
 	// }
-
-	return 0;
 }
 
 /* window callback -- return is assigned to umsg (return zero to not be processed by arcdps or game) */
