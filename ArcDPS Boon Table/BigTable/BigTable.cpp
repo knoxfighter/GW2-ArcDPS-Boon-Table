@@ -3399,7 +3399,7 @@ namespace ImGuiEx::BigTable {
         ImGui::TextUnformatted(buf);
     }
 
-    void RegisterSettingsHandler(const char* name)
+    void RegisterSettingsHandler(const char* name, void* data)
     {
         ImGuiContext* context = ImGui::GetCurrentContext();
         ImGuiSettingsHandler ini_handler;
@@ -3410,6 +3410,22 @@ namespace ImGuiEx::BigTable {
         ini_handler.ReadLineFn = TableSettingsHandler_ReadLine;
         ini_handler.ApplyAllFn = TableSettingsHandler_ApplyAll;
         ini_handler.WriteAllFn = TableSettingsHandler_WriteAll;
+        ini_handler.UserData = data;
         context->SettingsHandlers.push_back(ini_handler);
+    }
+
+    void UnregisterSettingsHandler(const char* name, void* data)
+    {
+        ImGuiContext* context = ImGui::GetCurrentContext();
+        ImGuiID type_hash = ImHashStr(name);
+
+        for (ImGuiSettingsHandler& handler : context->SettingsHandlers)
+        {
+            if (handler.TypeHash == type_hash && handler.UserData == data)
+            {
+                context->SettingsHandlers.erase(&handler);
+                break;
+            }
+        }
     }
 }

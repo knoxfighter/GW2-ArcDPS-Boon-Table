@@ -7,6 +7,7 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 #include <ArcdpsExtension/arcdps_structs.h>
+#include <Windows.h>
 
 #define IM_COL32_DISABLE                IM_COL32(0,0,0,1)    // Special sentinel code which cannot be used as a regular color.
 #define IMGUI_TABLE_MAX_COLUMNS         512                 // Arbitrary "safety" maximum, may be lifted in the future if needed. Must fit in ImGuiTableColumnIdx/ImGuiTableDrawChannelIdx.
@@ -286,7 +287,8 @@ namespace ImGuiEx::BigTable {
     ImGuiSortDirection TableGetColumnNextSortDirection(ImGuiTableColumn* column);
     float GetColumnWidth(int column_index = -1);
     void AlignedTextColumn(Alignment alignment, const char* text, ...);
-    void RegisterSettingsHandler(const char* name);
+    void RegisterSettingsHandler(const char* name, void* data);
+    void UnregisterSettingsHandler(const char* name, void* data);
     void MenuItemTableColumnVisibility(ImGuiTable* table, int columnIdx);
     ImRect TableGetCellBgRect(const ImGuiTable* table, int column_n);
     int TableGetColumnIndex();
