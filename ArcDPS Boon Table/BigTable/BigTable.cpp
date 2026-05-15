@@ -1,6 +1,7 @@
 #include "BigTable.h"
 
 #include <ArcdpsExtension/ImGui_Math.h>
+#include <filesystem>
 
 using namespace ImGui;
 
@@ -12,6 +13,12 @@ namespace ImGuiEx::BigTable {
 	ImVector<float>                   TablesLastTimeActive;             // Last used timestamp of each tables (SOA, for efficient GC)
 	ImVector<ImDrawChannel>           DrawChannelsTempMergeBuffer;
 	ImChunkStream<ImGuiTableSettings> SettingsTables;                   // ImGuiTable .ini settings entries
+    bool                              SettingsLoaded;
+    bool                              SettingsHandlerRemovedFromImGui;
+    float                             SettingsDirtyTimer;
+    ImGuiTextBuffer                   SettingsIniData;
+    ImGuiSettingsHandler              SettingsHandler;
+    const char*                       SettingsFilePath;
     ImVector<char>                    TempBuffer;                       // Temporary text buffer
     ImGuiNextWindowData               NextWindowData;                   // Storage for SetNextWindow** functions
     int                               TablesTempDataStacked;            // Temporary table data size (because we leave previous instances undestructed, we generally don't use TablesTempData.Size)
@@ -2483,6 +2490,13 @@ namespace ImGuiEx::BigTable {
         return settings;
     }
 
+    void MarkIniSettingsDirty()
+    {
+        ImGuiContext& g = *GImGui;
+        if (SettingsDirtyTimer <= 0.0f)
+            SettingsDirtyTimer = g.IO.IniSavingRate;
+    }
+
     void TableSaveSettings(ImGuiTable* table)
     {
         table->IsSettingsDirty = false;
@@ -3399,10 +3413,10 @@ namespace ImGuiEx::BigTable {
         ImGui::TextUnformatted(buf);
     }
 
-    void RegisterSettingsHandler(const char* name, void* data)
+    // Backward compatibility settings loader
+    void RegisterSettingsHandler(const char* name, void* data, const char* newSettingsFilePath)
     {
-        ImGuiContext* context = ImGui::GetCurrentContext();
-        ImGuiSettingsHandler ini_handler;
+        ImGuiSettingsHandler& ini_handler = SettingsHandler;
         ini_handler.TypeName = name;
         ini_handler.TypeHash = ImHashStr(name);
         ini_handler.ClearAllFn = TableSettingsHandler_ClearAll;
@@ -3411,20 +3425,190 @@ namespace ImGuiEx::BigTable {
         ini_handler.ApplyAllFn = TableSettingsHandler_ApplyAll;
         ini_handler.WriteAllFn = TableSettingsHandler_WriteAll;
         ini_handler.UserData = data;
+
+        SettingsFilePath = newSettingsFilePath;
+
+        // The settings have already been migrated to the new file, nothing to do
+        if (std::filesystem::exists(SettingsFilePath))
+        {
+            SettingsHandlerRemovedFromImGui = true;
+            return;
+        }
+
+        ImGuiContext* context = ImGui::GetCurrentContext();
         context->SettingsHandlers.push_back(ini_handler);
     }
 
-    void UnregisterSettingsHandler(const char* name, void* data)
+    void UnregisterSettingsHandler()
     {
+        if (SettingsHandlerRemovedFromImGui)
+            return;
+
         ImGuiContext* context = ImGui::GetCurrentContext();
-        ImGuiID type_hash = ImHashStr(name);
 
         for (ImGuiSettingsHandler& handler : context->SettingsHandlers)
         {
-            if (handler.TypeHash == type_hash && handler.UserData == data)
+            if (handler.TypeHash == SettingsHandler.TypeHash && handler.UserData == SettingsHandler.UserData)
             {
                 context->SettingsHandlers.erase(&handler);
                 break;
+            }
+        }
+
+        SettingsHandlerRemovedFromImGui = true;
+    }
+
+    ImGuiSettingsHandler* FindSettingsHandler(const char* type_name)
+    {
+        const ImGuiID type_hash = ImHashStr(type_name);
+        if (type_hash == SettingsHandler.TypeHash)
+            return &SettingsHandler;
+        return nullptr;
+    }
+
+    void LoadIniSettingsFromMemory(const char* ini_data, size_t ini_size)
+    {
+        //ImGuiContext& g = *GImGui;
+        //IM_ASSERT(g.Initialized);
+        //IM_ASSERT(!g.WithinFrameScope && "Cannot be called between NewFrame() and EndFrame()");
+        //IM_ASSERT(g.SettingsLoaded == false && g.FrameCount == 0);
+
+        // For user convenience, we allow passing a non zero-terminated string (hence the ini_size parameter).
+        // For our convenience and to make the code simpler, we'll also write zero-terminators within the buffer. So let's create a writable copy..
+        if (ini_size == 0)
+            ini_size = ImStrlen(ini_data);
+        SettingsIniData.Buf.resize((int)ini_size + 1);
+        char* const buf = SettingsIniData.Buf.Data;
+        char* const buf_end = buf + ini_size;
+        memcpy(buf, ini_data, ini_size);
+        buf_end[0] = 0;
+
+        // Call pre-read handlers
+        // Some types will clear their data (e.g. dock information) some types will allow merge/override (window)
+        {
+            ImGuiSettingsHandler& handler = SettingsHandler;
+            if (handler.ReadInitFn != NULL)
+                handler.ReadInitFn(NULL, &handler);
+        }
+
+        void* entry_data = NULL;
+        ImGuiSettingsHandler* entry_handler = NULL;
+
+        char* line_end = NULL;
+        for (char* line = buf; line < buf_end; line = line_end + 1)
+        {
+            // Skip new lines markers, then find end of the line
+            while (*line == '\n' || *line == '\r')
+                line++;
+            line_end = line;
+            while (line_end < buf_end && *line_end != '\n' && *line_end != '\r')
+                line_end++;
+            line_end[0] = 0;
+            if (line[0] == ';')
+                continue;
+            if (line[0] == '[' && line_end > line && line_end[-1] == ']')
+            {
+                // Parse "[Type][Name]". Note that 'Name' can itself contains [] characters, which is acceptable with the current format and parsing code.
+                line_end[-1] = 0;
+                const char* name_end = line_end - 1;
+                const char* type_start = line + 1;
+                char* type_end = (char*)(void*)ImStrchrRange(type_start, name_end, ']');
+                const char* name_start = type_end ? ImStrchrRange(type_end + 1, name_end, '[') : NULL;
+                if (!type_end || !name_start)
+                    continue;
+                *type_end = 0; // Overwrite first ']'
+                name_start++;  // Skip second '['
+                entry_handler = FindSettingsHandler(type_start);
+                entry_data = entry_handler ? entry_handler->ReadOpenFn(NULL, entry_handler, name_start) : NULL;
+            }
+            else if (entry_handler != NULL && entry_data != NULL)
+            {
+                // Let type handler parse the line
+                entry_handler->ReadLineFn(NULL, entry_handler, entry_data, line);
+            }
+        }
+        SettingsLoaded = true;
+
+        // [DEBUG] Restore untouched copy so it can be browsed in Metrics (not strictly necessary)
+        memcpy(buf, ini_data, ini_size);
+
+        // Call post-read handlers
+        {
+            ImGuiSettingsHandler& handler = SettingsHandler;
+            if (handler.ApplyAllFn != NULL)
+                handler.ApplyAllFn(NULL, &handler);
+        }
+    }
+
+    void LoadIniSettingsFromDisk(const char* fileName)
+    {
+        size_t file_data_size = 0;
+        char* file_data = (char*)ImFileLoadToMemory(fileName, "rb", &file_data_size);
+        if (!file_data)
+            return;
+        if (file_data_size > 0)
+            LoadIniSettingsFromMemory(file_data, (size_t)file_data_size);
+        IM_FREE(file_data);
+    }
+
+    const char* SaveIniSettingsToMemory(size_t* out_size)
+    {
+        //ImGuiContext& g = *GImGui;
+        SettingsDirtyTimer = 0.0f;
+        SettingsIniData.Buf.resize(0);
+        SettingsIniData.Buf.push_back(0);
+        {
+            ImGuiSettingsHandler& handler = SettingsHandler;
+            handler.WriteAllFn(NULL, &handler, &SettingsIniData);
+        }
+        if (out_size)
+            *out_size = (size_t)SettingsIniData.size();
+        return SettingsIniData.c_str();
+    }
+
+    void SaveIniSettingsToDisk(const char* fileName)
+    {
+        //ImGuiContext& g = *GImGui;
+        SettingsDirtyTimer = 0.0f;
+        if (!fileName)
+            return;
+
+        size_t ini_data_size = 0;
+        const char* ini_data = SaveIniSettingsToMemory(&ini_data_size);
+        ImFileHandle f = ImFileOpen(fileName, "wt");
+        if (!f)
+            return;
+        ImFileWrite(ini_data, sizeof(char), ini_data_size, f);
+        ImFileClose(f);
+    }
+
+    // Called by NewFrame()
+    void UpdateSettings()
+    {
+        // Load settings on first frame (if not explicitly loaded manually before)
+        ImGuiContext& g = *GImGui;
+        if (!SettingsLoaded)
+        {
+            if (SettingsFilePath)
+                LoadIniSettingsFromDisk(SettingsFilePath);
+            SettingsLoaded = true;
+        }
+
+        if (!SettingsHandlerRemovedFromImGui)
+        {
+            SaveIniSettingsToDisk(SettingsFilePath);
+            UnregisterSettingsHandler();
+        }
+
+        // Save settings (with a delay after the last modification, so we don't spam disk too much)
+        if (SettingsDirtyTimer > 0.0f)
+        {
+            SettingsDirtyTimer -= g.IO.DeltaTime;
+            if (SettingsDirtyTimer <= 0.0f)
+            {
+                if (SettingsFilePath != NULL)
+                    SaveIniSettingsToDisk(SettingsFilePath);
+                SettingsDirtyTimer = 0.0f;
             }
         }
     }

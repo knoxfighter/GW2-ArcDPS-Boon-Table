@@ -72,6 +72,9 @@ bool arc_movelock_altui = false;
 bool arc_clicklock_altui = false;
 bool arc_window_fastclose = false;
 
+// settings
+const char* settings_file_path = "addons\\arcdps\\arcdps_table_imgui.ini";
+
 /* dll main -- winapi */
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved) {
 	switch (ulReasonForCall) {
@@ -107,7 +110,7 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 	ImGui::SetAllocatorFunctions((void* (*)(size_t, void*))mallocfn, (void (*)(void*, void*))freefn);
 
 	// load my table loader into imgui
-	ImGuiEx::BigTable::RegisterSettingsHandler("BigTable-BoonTable", self_dll);
+	ImGuiEx::BigTable::RegisterSettingsHandler("BigTable-BoonTable", self_dll, settings_file_path);
 	static_cast<ImGuiContext*>(imguicontext)->SettingsLoaded = false;
 
 	auto swapChain = static_cast<IDXGISwapChain*>(dxptr);
@@ -205,7 +208,7 @@ void mod_release()
 		sequencer.Shutdown();
 		ArcdpsExtension::g_singletonManagerInstance.Shutdown();
 
-		ImGuiEx::BigTable::UnregisterSettingsHandler("BigTable-BoonTable", self_dll);
+		ImGuiEx::BigTable::UnregisterSettingsHandler();
 	// } catch(const std::exception& e) {
 	// 	arc_log_file("error in mod_release!");
 	// 	arc_log_file(e.what());
@@ -449,6 +452,7 @@ void mod_imgui(uint32_t not_charsel_or_loading, uint32_t hide_if_combat_or_ooc)
 		// ImGui::ShowDemoWindow();
 		
 		readArcExports();
+		ImGuiEx::BigTable::UpdateSettings();
 
 		if (!not_charsel_or_loading) return;
 
