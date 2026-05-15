@@ -290,6 +290,7 @@ namespace ImGuiEx::BigTable {
     void RegisterSettingsHandler(const char* name, void* data, const char* newSettingsFilePath);
     void UpdateSettings();
     void UnregisterSettingsHandler();
+    void Shutdown();
     void MenuItemTableColumnVisibility(ImGuiTable* table, int columnIdx);
     ImRect TableGetCellBgRect(const ImGuiTable* table, int column_n);
     int TableGetColumnIndex();

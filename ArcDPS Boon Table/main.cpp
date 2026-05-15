@@ -208,7 +208,7 @@ void mod_release()
 		sequencer.Shutdown();
 		ArcdpsExtension::g_singletonManagerInstance.Shutdown();
 
-		ImGuiEx::BigTable::UnregisterSettingsHandler();
+		ImGuiEx::BigTable::Shutdown();
 	// } catch(const std::exception& e) {
 	// 	arc_log_file("error in mod_release!");
 	// 	arc_log_file(e.what());

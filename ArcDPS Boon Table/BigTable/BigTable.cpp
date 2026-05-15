@@ -3612,4 +3612,10 @@ namespace ImGuiEx::BigTable {
             }
         }
     }
+
+    void Shutdown()
+    {
+        SaveIniSettingsToDisk(SettingsFilePath);
+        UnregisterSettingsHandler();
+    }
 }
