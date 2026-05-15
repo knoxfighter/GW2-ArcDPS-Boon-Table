@@ -287,8 +287,9 @@ namespace ImGuiEx::BigTable {
     ImGuiSortDirection TableGetColumnNextSortDirection(ImGuiTableColumn* column);
     float GetColumnWidth(int column_index = -1);
     void AlignedTextColumn(Alignment alignment, const char* text, ...);
-    void RegisterSettingsHandler(const char* name, void* data);
-    void UnregisterSettingsHandler(const char* name, void* data);
+    void RegisterSettingsHandler(const char* name, void* data, const char* newSettingsFilePath);
+    void UpdateSettings();
+    void UnregisterSettingsHandler();
     void MenuItemTableColumnVisibility(ImGuiTable* table, int columnIdx);
     ImRect TableGetCellBgRect(const ImGuiTable* table, int column_n);
     int TableGetColumnIndex();
