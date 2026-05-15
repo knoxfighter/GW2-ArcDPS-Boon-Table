@@ -3589,14 +3589,15 @@ namespace ImGuiEx::BigTable {
         ImGuiContext& g = *GImGui;
         if (!SettingsLoaded)
         {
-            if (SettingsFilePath)
+            if (SettingsFilePath != NULL)
                 LoadIniSettingsFromDisk(SettingsFilePath);
             SettingsLoaded = true;
         }
 
         if (!SettingsHandlerRemovedFromImGui)
         {
-            SaveIniSettingsToDisk(SettingsFilePath);
+            if (SettingsFilePath != NULL)
+                SaveIniSettingsToDisk(SettingsFilePath);
             UnregisterSettingsHandler();
         }
 
@@ -3615,7 +3616,9 @@ namespace ImGuiEx::BigTable {
 
     void Shutdown()
     {
-        SaveIniSettingsToDisk(SettingsFilePath);
+        if (SettingsLoaded && SettingsFilePath != NULL)
+            SaveIniSettingsToDisk(SettingsFilePath);
+
         UnregisterSettingsHandler();
     }
 }
