@@ -5,14 +5,14 @@
 #include <string>
 #include <cstdint>
 #include <ArcdpsExtension/Localization.h>
+#include <modernIni/modernIni.h>
+#include <modernIni/modernIniMacros.h>
 
 #include "Helpers.h"
 #include "ITracker.h"
-#include "modernIni/modernIni/modernIniMacros.h"
-#include "modernIni/modernIni/modernIni.h"
 
-MODERN_INI_DEFINE_TYPE_NON_INTRUSIVE_NO_EXCEPT(ImVec2, x, y)
-MODERN_INI_DEFINE_TYPE_NON_INTRUSIVE_NO_EXCEPT(ImVec4, x, y, z, w)
+MODERN_INI_DEFINE_TYPE(ImVec2, x, y)
+MODERN_INI_DEFINE_TYPE(ImVec4, x, y, z, w)
 
 class SettingsUI;
 class SettingsUIGlobal;
@@ -114,7 +114,7 @@ private:
 		bool scrollbar = true;
 		bool table_padding_x = false;
 
-		MODERN_INI_DEFINE_TYPE_INTRUSIVE_NO_EXCEPT(Table, show, show_self_on_top, show_players, show_npcs, show_subgroups, show_total, 
+		MODERN_INI_DEFINE_TYPE_INTRUSIVE(Table, show, show_self_on_top, show_players, show_npcs, show_subgroups, show_total, 
 			show_uptime_as_progress_bar, show_colored, alternating_row_bg, show_label, alignment, hide_header, sizing_policy, boon_column_width,
 			show_only_subgroup, show_background, position, corner_position, corner_vector, anchor_panel_corner_position, self_panel_corner_position,
 			from_window_id, max_displayed, window_padding, max_player_length, shortcut, appear_as_in_option, title_bar, scrollbar, table_padding_x)
@@ -132,7 +132,7 @@ private:
 
 	void convertFromSimpleIni(modernIni::Ini& ini);
 
-	MODERN_INI_DEFINE_TYPE_INTRUSIVE_NO_EXCEPT(Settings, self_color, _100_color, _0_color, fights_to_keep, tables, language)
+	MODERN_INI_DEFINE_TYPE_INTRUSIVE(Settings, self_color, _100_color, _0_color, fights_to_keep, tables, language)
 };
 
 extern Settings settings;

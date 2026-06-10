@@ -6,7 +6,8 @@
     "arcdps-extension",
     "arcdps-unofficial-extras",
     "imgui",
-    "magic-enum"
+    "magic-enum",
+	"modern-ini"
   ],
   "overrides": [
     {
