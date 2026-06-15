@@ -139,6 +139,8 @@ arcdps_exports* mod_init()
 		// load translation
 		LoadTranslations();
 
+		ArcdpsExtension::Localization::instance().ChangeLanguage(static_cast<gwlanguage>(settings.getLanguage()));
+
 		// setup icon loader
 		ArcdpsExtension::IconLoader::init(self_dll, id3d11d);
 
