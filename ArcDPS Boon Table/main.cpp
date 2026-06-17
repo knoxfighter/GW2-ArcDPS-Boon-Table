@@ -133,11 +133,11 @@ arcdps_exports* mod_init()
 	std::expected<ArcdpsExtension::UpdateCheckerBase::Version, std::string> currentVersion = std::unexpected("Not initialized");
 	
 	try {
-		// load settings
-		settings.readFromFile();
-
 		// load translation
 		LoadTranslations();
+
+		// load settings
+		settings.readFromFile();
 
 		// setup icon loader
 		ArcdpsExtension::IconLoader::init(self_dll, id3d11d);
@@ -199,16 +199,20 @@ arcdps_exports* mod_init()
 void mod_release()
 {
 	// try {
-		settings.saveToFile();
+#ifdef _DEBUG
+	SaveTranslationFile();
+#endif
 
-		if (update_state)
-		{
-			update_state->FinishPendingTasks();
-		}
-		sequencer.Shutdown();
-		ArcdpsExtension::g_singletonManagerInstance.Shutdown();
+	settings.saveToFile();
 
-		ImGuiEx::BigTable::Shutdown();
+	if (update_state)
+	{
+		update_state->FinishPendingTasks();
+	}
+	sequencer.Shutdown();
+	ArcdpsExtension::g_singletonManagerInstance.Shutdown();
+
+	ImGuiEx::BigTable::Shutdown();
 	// } catch(const std::exception& e) {
 	// 	arc_log_file("error in mod_release!");
 	// 	arc_log_file(e.what());
@@ -559,8 +563,8 @@ bool canMoveWindows()
 	}
 }
 
-void language_changed_callback(Language pNewLanguage) {
-	settings.setGameLanguage(static_cast<ArcdpsExtension::LanguageSetting>(pNewLanguage));
+extern "C" void language_changed_callback(Language pNewLanguage) {
+	settings.setGameLanguage(ArcdpsExtension::Localization::ToLangCode(pNewLanguage));
 }
 
 extern "C" __declspec(dllexport) void arcdps_unofficial_extras_subscriber_init(

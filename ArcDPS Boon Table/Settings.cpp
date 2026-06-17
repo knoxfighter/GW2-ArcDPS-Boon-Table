@@ -172,19 +172,25 @@ int Settings::getFightsToKeep() const {
 	return fights_to_keep;
 }
 
-ArcdpsExtension::LanguageSetting Settings::getLanguage() const {
-	return language;
+const std::string& Settings::getLanguage() const {
+	return language2;
 }
 
-ArcdpsExtension::LanguageSetting Settings::getGameLanguage() const {
+const std::string& Settings::getGameLanguage() const {
 	return gameLanguage;
 }
 
-void Settings::setGameLanguage(ArcdpsExtension::LanguageSetting newLanguage) {
-	gameLanguage = newLanguage;
+void Settings::setLanguage(std::string newLanguage) {
+	language2 = std::move(newLanguage);
 
-	if (settings.getLanguage() == ArcdpsExtension::LanguageSetting::LikeGame) {
-		ArcdpsExtension::Localization::instance().ChangeLanguage(static_cast<gwlanguage>(gameLanguage));
+	ArcdpsExtension::Localization::instance().ChangeLanguage(language2 == Lang::LikeGame ? getGameLanguage() : language2);
+}
+
+void Settings::setGameLanguage(std::string newLanguage) {
+	gameLanguage = std::move(newLanguage);
+
+	if (settings.getLanguage() == Lang::LikeGame) {
+		ArcdpsExtension::Localization::instance().ChangeLanguage(gameLanguage);
 	}
 }
 
@@ -192,6 +198,15 @@ void Settings::setShowChart(int tableIndex, bool status) {
 	tables[tableIndex].show = status;
 }
 
+// Only here for migrating from the old system to the new one
+enum class LanguageSetting {
+	English = 0,
+	LikeGame = 1,
+	French = 2,
+	German = 3,
+	Spanish = 4,
+	Chinese = 5,
+};
 void Settings::readFromFile() {
 	std::ifstream stream("addons\\arcdps\\arcdps_table.ini");
 
@@ -208,28 +223,7 @@ void Settings::readFromFile() {
 
 	stream >> ini;
 
-	ini.get_to(*this);
-
-	convertFromSimpleIni(ini);
-
-	// convertion/defaults for shortcuts
-	if (ini.has("table_key")) {
-		ini.at("table_key").get_to(tables[0].shortcut);
-	} else {
-		if (!ini.has("tables")) {
-			tables[0].shortcut = 66;
-		} else {
-			auto& iniTables = ini.at("tables");
-			if (!iniTables.has("0")) {
-				tables[0].shortcut = 66;
-			} else {
-				auto& zero = iniTables.at("0");
-				if (!zero.has("shortcut")) {
-					tables[0].shortcut = 66;
-				}
-			}
-		}
-	}
+	std::ignore = ini.get_to(*this);
 
 	// fix for 0-value
 	if (self_color) {
@@ -237,61 +231,34 @@ void Settings::readFromFile() {
 			self_color.reset();
 		}
 	}
-}
 
-void Settings::convertFromSimpleIni(modernIni::Ini& ini) {
-	if (ini.has("general")) {
-		auto& general = ini.at("general");
-		if (general.has("key")) {
-			general.at("key").get_to(tables[0].shortcut);
+	// migrate to new Language Codes
+	if (ini.contains("language")) {
+		auto lang = ini.at("language");
+		if (lang) {
+			auto set = lang.value().get().get<LanguageSetting>();
+			if (set) {
+				switch (set.value()) {
+				case LanguageSetting::LikeGame:
+					language2 = Lang::LikeGame;
+					break;
+				default:
+					language2 = ArcdpsExtension::Localization::ToLangCode(static_cast<Language>(set.value()));
+				}
+			}
 		}
 	}
 
-	if (ini.has("colors")) {
-		auto& colors = ini.at("colors");
-		if (colors.has("self_color")) {
-			const std::string self_color_str = colors.at("self_color").get<std::string>();
-			self_color = ImVec4_color_from_string(self_color_str);
-		}
-		if (colors.has("100%color")) {
-			const std::string _100_color_str = colors.at("100%color").get<std::string>();
-			_100_color = ImVec4_color_from_string(_100_color_str);
-		}
-		if (colors.has("0%color")) {
-			const std::string _0_color_str = colors.at("0%color").get<std::string>();
-			_0_color = ImVec4_color_from_string(_0_color_str);
+	// At the end, check if the current translation is even allowed
+	if (language2 != Lang::LikeGame) {
+		if (!ArcdpsExtension::Localization::instance().GetLanguages().contains(language2)) {
+			ARC_LOG(std::format("language '{}' not available, resetting to Default", language2).c_str());
+			ARC_LOG_FILE(std::format("language '{}' not available, resetting to Default", language2).c_str());
+			language2 = Lang::LikeGame;
 		}
 	}
-
-	if (ini.has("table")) {
-		auto& table = ini.at("table");
-		Table& t = tables[0];
-		table.get_to(t);
-	}
-
-	if (ini.has("table1")) {
-		auto& table = ini.at("table1");
-		Table& t = tables[1];
-		table.get_to(t);
-	}
-
-	if (ini.has("table2")) {
-		auto& table = ini.at("table2");
-		Table& t = tables[2];
-		table.get_to(t);
-	}
-
-	if (ini.has("table3")) {
-		auto& table = ini.at("table3");
-		Table& t = tables[3];
-		table.get_to(t);
-	}
-
-	if (ini.has("table4")) {
-		auto& table = ini.at("table4");
-		Table& t = tables[4];
-		table.get_to(t);
-	}
+	// and activate the saved language
+	setLanguage(language2);
 }
 
 void Settings::saveToFile() {

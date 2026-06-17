@@ -1,11 +1,12 @@
 #pragma once
 
 #include <cstdint>
+#include <format>
 #include <optional>
 #include <string>
-
 #include <ArcdpsExtension/arcdps_structs.h>
 #include <imgui/imgui.h>
+#include <magic_enum/magic_enum.hpp>
 
 // #define PRINT_LINE() arc_log_file(std::format("{}:{}#{}", __FILE__, __FUNCTION__, __LINE__).c_str());
 #define PRINT_LINE();
@@ -65,3 +66,25 @@ static void HelpMarker(const char* desc)
         ImGui::EndTooltip();
     }
 }
+
+template<typename E>
+requires std::is_enum_v<E>
+struct std::formatter<E>
+{
+	template<typename ParseContext>
+	constexpr auto parse(ParseContext& pContext)
+	{
+		return pContext.begin();
+	}
+
+	template<typename FormatContext>
+	auto format(E const& pEnum, FormatContext& pContext) const
+	{
+		auto name = magic_enum::enum_name(pEnum);
+		if (name.empty())
+		{
+			return std::format_to(pContext.out(), "{}", magic_enum::enum_underlying(pEnum));
+		}
+		return std::format_to(pContext.out(), "{}", name);
+	}
+};

@@ -9,12 +9,12 @@
     {
       "kind": "git",
       "repository": "https://github.com/Zinn-o-Matics/vcpkg-registry",
-      "baseline": "76d89eb6f99b372a5adb7c7825c790f671d273a4",
+      "baseline": "5aac7d4562da59207c909f5404f87a7eac22c546",
       "packages": [
         "arcdps-extension",
         "arcdps-unofficial-extras",
         "imgui",
-		"modern-ini"
+        "modern-ini"
       ]
     }
   ]

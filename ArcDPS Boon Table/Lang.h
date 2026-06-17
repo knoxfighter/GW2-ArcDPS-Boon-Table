@@ -6,6 +6,10 @@
 
 constexpr auto enumMax = magic_enum::detail::max_v<ArcdpsExtension::ExtensionTranslation, magic_enum::as_common<>>;
 
+namespace Lang {
+	static std::string LikeGame = "LikeGame";
+}
+
 enum LangKey {
 	BT_SettingsHistory = enumMax + 1,
 	BT_SettingsHistoryCurrent,
@@ -136,3 +140,4 @@ enum LangKey {
 };
 
 void LoadTranslations();
+void SaveTranslationFile();

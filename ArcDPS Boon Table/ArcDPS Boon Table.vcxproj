@@ -95,11 +95,12 @@
       <Optimization>Disabled</Optimization>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <PreprocessorDefinitions>MAGIC_ENUM_RANGE_MAX=256;_DEBUG;%(PreprocessorDefinitions);IMGUI_DEFINE_MATH_OPERATORS;NOMINMAX</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MAGIC_ENUM_RANGE_MAX=256;ARCDPS_EXTENSION_UNOFFICIAL_EXTRAS;_DEBUG;%(PreprocessorDefinitions);IMGUI_DEFINE_MATH_OPERATORS;NOMINMAX</PreprocessorDefinitions>
       <EnableModules>false</EnableModules>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <BuildStlModules>false</BuildStlModules>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <PostBuildEvent>
       <Command>
@@ -114,11 +115,12 @@
       <Optimization>Disabled</Optimization>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <PreprocessorDefinitions>MAGIC_ENUM_RANGE_MAX=256;_DEBUG;%(PreprocessorDefinitions);IMGUI_DEFINE_MATH_OPERATORS;NOMINMAX</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MAGIC_ENUM_RANGE_MAX=256;ARCDPS_EXTENSION_UNOFFICIAL_EXTRAS;_DEBUG;%(PreprocessorDefinitions);IMGUI_DEFINE_MATH_OPERATORS;NOMINMAX</PreprocessorDefinitions>
       <EnableModules>false</EnableModules>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <BuildStlModules>false</BuildStlModules>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <PostBuildEvent>
       <Command>
@@ -135,12 +137,13 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <PreprocessorDefinitions>MAGIC_ENUM_RANGE_MAX=256;NDEBUG;%(PreprocessorDefinitions);IMGUI_DEFINE_MATH_OPERATORS;NOMINMAX</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MAGIC_ENUM_RANGE_MAX=256;ARCDPS_EXTENSION_UNOFFICIAL_EXTRAS;NDEBUG;%(PreprocessorDefinitions);IMGUI_DEFINE_MATH_OPERATORS;NOMINMAX</PreprocessorDefinitions>
       <EnableModules>false</EnableModules>
       <ExceptionHandling>Async</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <BuildStlModules>false</BuildStlModules>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

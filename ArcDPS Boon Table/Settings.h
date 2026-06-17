@@ -27,6 +27,12 @@ public:
 	Settings() = default;
 	~Settings() = default;
 
+	// delete copy/move
+	Settings(const Settings& other) = delete;
+	Settings(Settings&& other) noexcept = delete;
+	Settings& operator=(const Settings& other) = delete;
+	Settings& operator=(Settings&& other) noexcept = delete;
+
 	void readFromFile();
 	void saveToFile();
 
@@ -66,18 +72,13 @@ public:
 	[[nodiscard]] ImVec4 get100Color() const;
 	[[nodiscard]] ImVec4 get0Color() const;
 	[[nodiscard]] int getFightsToKeep() const;
-	[[nodiscard]] ArcdpsExtension::LanguageSetting getLanguage() const;
-	[[nodiscard]] ArcdpsExtension::LanguageSetting getGameLanguage() const;
-	void setGameLanguage(ArcdpsExtension::LanguageSetting newLanguage);
+	[[nodiscard]] const std::string& getLanguage() const;
+	[[nodiscard]] const std::string& getGameLanguage() const;
+	void setLanguage(std::string newLanguage);
+	void setGameLanguage(std::string newLanguage);
 
 	void setShowChart(int tableIndex, bool status);
 	void setCurrentHistory(int tableIndex, uint8_t currentHistory);
-
-	// delete copy/move
-	Settings(const Settings& other) = delete;
-	Settings(Settings&& other) noexcept = delete;
-	Settings& operator=(const Settings& other) = delete;
-	Settings& operator=(Settings&& other) noexcept = delete;
 
 private:
 	struct Table {
@@ -124,15 +125,13 @@ private:
 	std::optional<ImVec4> _100_color;
 	std::optional<ImVec4> _0_color;
 	int fights_to_keep = 10;
-	ArcdpsExtension::LanguageSetting language = ArcdpsExtension::LanguageSetting::LikeGame;
-	ArcdpsExtension::LanguageSetting gameLanguage = ArcdpsExtension::LanguageSetting::English;
+	std::string language2 = Lang::LikeGame;
+	std::string gameLanguage = ArcdpsExtension::Lang::English;
 	
 	// Table tables[MaxTableWindowAmount]{};
 	std::array<Table, MaxTableWindowAmount> tables;
 
-	void convertFromSimpleIni(modernIni::Ini& ini);
-
-	MODERN_INI_DEFINE_TYPE_INTRUSIVE(Settings, self_color, _100_color, _0_color, fights_to_keep, tables, language)
+	MODERN_INI_DEFINE_TYPE_INTRUSIVE(Settings, self_color, _100_color, _0_color, fights_to_keep, tables, language2)
 };
 
 extern Settings settings;
