@@ -1,0 +1,46 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "deploy-base",
+      "hidden": true,
+      "cacheVariables": {
+        "GAME_DIR": "<Gw2Path>"
+      }
+    },
+    {
+      "name": "debug-windows-deploy",
+      "inherits": ["debug-windows", "deploy-base"]
+    },
+    {
+      "name": "release-windows-deploy",
+      "inherits": ["release-windows", "deploy-base"]
+    },
+    {
+      "name": "debug-windows-clang-deploy",
+      "inherits": ["debug-windows-clang", "deploy-base"]
+    },
+    {
+      "name": "release-windows-clang-deploy",
+      "inherits": ["release-windows-clang", "deploy-base"]
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "debug-windows-deploy",
+      "configurePreset": "debug-windows-deploy"
+    },
+    {
+      "name": "release-windows-deploy",
+      "configurePreset": "release-windows-deploy"
+    },
+    {
+      "name": "debug-windows-clang-deploy",
+      "configurePreset": "debug-windows-clang-deploy"
+    },
+    {
+      "name": "release-windows-clang-deploy",
+      "configurePreset": "release-windows-clang-deploy"
+    }
+  ]
+}

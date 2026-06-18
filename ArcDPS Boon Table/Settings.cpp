@@ -1,6 +1,7 @@
 #include "Settings.h"
 
 #include <fstream>
+#include <ArcdpsUnofficialExtras/Definitions.h>
 
 #include "Lang.h"
 #include "Helpers.h"

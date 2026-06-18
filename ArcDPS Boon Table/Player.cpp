@@ -1,20 +1,17 @@
 #include "Player.h"
 
-Player::Player(uintptr_t new_id = 0,
-	const std::string& new_name = "",
-	const std::string& new_account_name = "",
-	uint8_t new_subgroup = 1,
-	Prof new_profession = PROF_UNKNOWN,
-    bool new_self = false)
-{
+Player::Player(
+		uintptr_t new_id,
+		const std::string& new_name,
+		const std::string& new_account_name,
+		uint8_t new_subgroup,
+		Prof new_profession,
+		bool new_self
+) : account_name(new_account_name), subgroup(new_subgroup), profession(new_profession), self(new_self) {
 	id = new_id;
 	name = new_name;
-	account_name = new_account_name;
 	enter_combat_time = getCurrentTime();
 	in_combat = false;
-	subgroup = new_subgroup;
-	profession = new_profession;
-	self = new_self;
 }
 
 uint8_t Player::getSubgroup() const {
@@ -30,12 +27,12 @@ Prof Player::getProfession() const {
 }
 
 bool Player::operator==(uintptr_t other_id) const {
-    return Entity::operator==(other_id);
+	return Entity::operator==(other_id);
 }
 
 bool Player::operator==(std::string other_name) const {
 	return name == other_name
-		|| account_name == other_name;
+		   || account_name == other_name;
 }
 
 bool Player::operator==(const Entity& other) const {
@@ -43,12 +40,12 @@ bool Player::operator==(const Entity& other) const {
 }
 
 void Player::combatEnter(cbtevent* ev) {
-    subgroup = ev->dst_agent;
-    Entity::combatEnter(ev);
+	subgroup = ev->dst_agent;
+	Entity::combatEnter(ev);
 }
 
 ImVec4 Player::getBaseColor() const {
-    /* e5 writes out colour array ptrs, sizeof(out) == sizeof(ImVec4*) * 5.  [ void e5(ImVec4** out) ]
+	/* e5 writes out colour array ptrs, sizeof(out) == sizeof(ImVec4*) * 5.  [ void e5(ImVec4** out) ]
        out[0] = core cols
                    enum n_colours_core {
                      CCOL_TRANSPARENT,
@@ -70,15 +67,15 @@ ImVec4 Player::getBaseColor() const {
        out[4] = subgroup colours highlight
                    subgroup colours match subgroup, up to game max, out[3][15]
      */
-    ImVec4* arc_colors[5];
-    arc_export_e5(arc_colors);
+	ImVec4* arc_colors[5];
+	arc_export_e5(arc_colors);
 
-    return arc_colors[1][profession];
+	return arc_colors[1][profession];
 }
 
 ImVec4 Player::getHighlightColor() const {
 	ImVec4* arc_colors[5];
-    arc_export_e5(arc_colors);
+	arc_export_e5(arc_colors);
 
-    return arc_colors[2][profession];
+	return arc_colors[2][profession];
 }

@@ -1,0 +1,153 @@
+#include "resource.h"
+
+ID_Might                PNG                     "icons\\Might.png"
+
+ID_Fury                 PNG                     "icons\\Fury.png"
+
+ID_Regeneration         PNG                     "icons\\Regeneration.png"
+
+ID_Protection           PNG                     "icons\\Protection.png"
+
+ID_Quickness            PNG                     "icons\\Quickness.png"
+
+ID_Alacrity             PNG                     "icons\\Alacrity.png"
+
+ID_Vigor                PNG                     "icons\\Vigor.png"
+
+ID_Stability            PNG                     "icons\\Stability.png"
+
+ID_Aegis                PNG                     "icons\\Aegis.png"
+
+ID_Swiftness            PNG                     "icons\\Swiftness.png"
+
+ID_Resistance           PNG                     "icons\\Resistance.png"
+
+ID_Soothing_Mist        PNG                     "icons\\Soothing_Mist.png"
+
+ID_Vampiric_Presence    PNG                     "icons\\Vampiric_Presence.png"
+
+ID_Signet_of_Inspiration2 PNG                   "icons\\Signet_of_Inspiration2.png"
+
+ID_Stealth2             PNG                     "icons\\Stealth2.png"
+
+ID_Super_Speed2         PNG                     "icons\\Super_Speed2.png"
+
+ID_Rune_Scholar         PNG                     "icons\\Rune_of_the_Scholar.png"
+
+ID_Signet_Resolve       PNG                     "icons\\Signet_of_Resolve.png"
+
+ID_Signet_Bane          PNG                     "icons\\Bane_Signet.png"
+
+ID_Signet_Judgment      PNG                     "icons\\Signet_Judgment.png"
+
+ID_Signet_Mercy         PNG                     "icons\\Signet_Mercy.png"
+
+ID_Signet_Wrath         PNG                     "icons\\Signet_Wrath.png"
+
+ID_Signet_Courage       PNG                     "icons\\Signet_of_Courage.png"
+
+ID_Unbroken_Lines       PNG                     "icons\\Unbroken_Lines.png"
+
+ID_Dolyak_Stance        PNG                     "icons\\Dolyak_Stance.png"
+
+ID_Griffon_Stance       PNG                     "icons\\Griffon_Stance.png"
+
+ID_Moa_Stance           PNG                     "icons\\Moa_Stance.png"
+
+ID_Vulture_Stance       PNG                     "icons\\Vulture_Stance.png"
+
+ID_Bear_Stance          PNG                     "icons\\Bear_Stance.png"
+
+ID_One_Wolf_Pack        PNG                     "icons\\One_Wolf_Pack.png"
+
+ID_Soulcleaves_Summit   PNG                     "icons\\Soulcleaves_Summit.png"
+
+ID_Razorclaws_Rage      PNG                     "icons\\Razorclaws_Rage.png"
+
+ID_Breakrazors_Bastion  PNG                     "icons\\Breakrazors_Bastion.png"
+
+ID_Chaos_Aura           PNG                     "icons\\Chaos_Aura.png"
+
+ID_Dark_Aura            PNG                     "icons\\Dark_Aura.png"
+
+ID_Fire_Aura            PNG                     "icons\\Fire_Aura.png"
+
+ID_Frost_Aura           PNG                     "icons\\Frost_Aura.png"
+
+ID_Light_Aura           PNG                     "icons\\Light_Aura.png"
+
+ID_Magnetic_Aura        PNG                     "icons\\Magnetic_Aura.png"
+
+ID_Shocking_Aura        PNG                     "icons\\Shocking_Aura.png"
+
+ID_Soul_Barbs           PNG                     "icons\\Soul_Barbs.png"
+
+ID_Spectral_Armor       PNG                     "icons\\Spectral_Armor.png"
+
+ID_Inspiring_Virtue     PNG                     "icons\\Inspiring_Virtue.png"
+
+ID_Eternal_Oasis        PNG                     "icons\\Eternal_Oasis.png"
+
+ID_Rite_of_the_Great_Dwarf PNG                  "icons\\Rite_of_the_Great_Dwarf.png"
+
+ID_Symbolic_Avenger     PNG                     "icons\\Symbolic_Avenger.png"
+
+ID_Invigorated_Bulwark  PNG                     "icons\\Invigorated_Bulwark.png"
+
+ID_Sticking_Together    PNG                     "icons\\Sticking_Together.png"
+
+ID_Rigorous_Certainty   PNG                     "icons\\Rigorous_Certainty.png"
+
+ID_Resolution           PNG                     "icons\\Resolution.png"
+
+ID_Relic_Aristocracy    PNG                     "icons\\Relic_Aristocracy.png"
+
+ID_Relic_Monk           PNG                     "icons\\Relic_Monk.png"
+
+ID_Relic_Brawler        PNG                     "icons\\Relic_Brawler.png"
+
+ID_Relic_Thief          PNG                     "icons\\Relic_Thief.png"
+
+ID_Relic_Fireworks      PNG                     "icons\\Relic_Fireworks.png"
+
+ID_Relic_Daredevil      PNG                     "icons\\Relic_Daredevil.png"
+
+ID_Relic_Deadeye        PNG                     "icons\\Relic_Deadeye.png"
+
+ID_Relic_Firebrand      PNG                     "icons\\Relic_Firebrand.png"
+
+ID_Relic_Herald         PNG                     "icons\\Relic_Herald.png"
+
+ID_Relic_Scourge        PNG                     "icons\\Relic_Scourge.png"
+
+ID_Relic_Weaver         PNG                     "icons\\Relic_Weaver.png"
+
+ID_Relic_Zephyrite      PNG                     "icons\\Relic_Zephyrite.png"
+
+ID_Relic_Lyhr           PNG                     "icons\\Relic_Lyhr.png"
+
+ID_Relic_Mabon          PNG                     "icons\\Relic_Mabon.png"
+
+ID_Relic_Vass           PNG                     "icons\\Relic_Vass.png"
+
+ID_Relic_Nourys         PNG                     "icons\\Relic_Nourys.png"
+
+ID_Relic_Stormsinger    PNG                     "icons\\Relic_Stormsinger.png"
+
+ID_Relic_Sorrow         PNG                     "icons\\Relic_Sorrow.png"
+
+ID_Relic_Blightbringer  PNG                     "icons\\Relic_Blightbringer.png"
+
+ID_Relic_Claw           PNG                     "icons\\Relic_Claw.png"
+
+ID_Relic_MountBalrior   PNG                     "icons\\Relic_MountBalrior.png"
+
+ID_Relic_Thorns         PNG                     "icons\\Relic_Thorns.png"
+
+ID_Relic_SoulOfTheTitan PNG                     "icons\\SoulOfTheTitan.png"
+
+ID_Relic_TitanicPotential PNG                   "icons\\Relic_TitanicPotential.png"
+
+ID_Relic_Bloodstone     PNG                     "icons\\Relic_Bloodstone.png"
+
+ID_Writ_of_Masterful_Strength PNG               "icons\\Writ_of_Masterful_Strength.png"

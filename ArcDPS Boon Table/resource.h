@@ -1,7 +1,3 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by ArcDPS Boon Table.rc
-//
 #define ID_Might                        101
 #define ID_Fury                         102
 #define ID_Regeneration                 103
@@ -82,14 +78,3 @@
 #define ID_Relic_TitanicPotential		212
 #define ID_Relic_Bloodstone				213
 #define ID_Writ_of_Masterful_Strength   214
-
-// Next default values for new objects
-// 
-#ifdef APSTUDIO_INVOKED
-#ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        215
-#define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1001
-#define _APS_NEXT_SYMED_VALUE           101
-#endif
-#endif
