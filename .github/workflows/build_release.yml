@@ -13,14 +13,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Add msbuild
-        uses: microsoft/setup-msbuild@v3
-
-      - name: Install Ninja
-        run: choco install ninja -y
+      - name: Set up MSVC dev environment
+        uses: ilammy/msvc-dev-cmd@v1
 
       - name: Configure
         run: cmake --preset release-windows
 
       - name: Build
         run: cmake --build --preset release-windows
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: release-windows
+          path: |
+            cmake-build/**/*.dll
+            cmake-build/**/*.pdb
