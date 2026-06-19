@@ -16,6 +16,9 @@ jobs:
       - name: Add msbuild
         uses: microsoft/setup-msbuild@v3
 
+      - name: Install Ninja
+        run: choco install ninja -y
+
       - name: Configure
         run: cmake --preset release-windows
 
