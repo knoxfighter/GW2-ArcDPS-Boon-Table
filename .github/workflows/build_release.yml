@@ -1,0 +1,23 @@
+on:
+  push:
+    branches:
+      - '**'
+#    tags:
+#      - '**'
+
+jobs:
+  build:
+    runs-on: windows-2025-vs2026
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Add msbuild
+        uses: microsoft/setup-msbuild@v3
+
+      - name: Configure
+        run: cmake --preset release-windows
+
+      - name: Build
+        run: cmake --build --preset release-windows
