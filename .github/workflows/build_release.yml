@@ -34,4 +34,4 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           draft: true
-          files: build/*/*.dll
+          files: cmake-build/*/*.dll
