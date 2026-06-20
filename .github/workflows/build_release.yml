@@ -27,5 +27,11 @@ jobs:
         with:
           name: release-windows
           path: |
-            cmake-build/**/*.dll
-            cmake-build/**/*.pdb
+            cmake-build/*/*.dll
+            cmake-build/*/*.pdb
+
+      - name: Create draft release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: build/*/*.dll
