@@ -1,0 +1,35 @@
+on:
+  push:
+    tags:
+      - '**'
+
+jobs:
+  build:
+    runs-on: windows-2025-vs2026
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up MSVC dev environment
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Configure
+        run: cmake --preset release-windows
+
+      - name: Build
+        run: cmake --build --preset release-windows
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: release-windows
+          path: |
+            cmake-build/*/*.dll
+            cmake-build/*/*.pdb
+
+      - name: Create draft release
+        uses: softprops/action-gh-release@v3
+        with:
+          draft: true
+          files: cmake-build/*/*.dll
