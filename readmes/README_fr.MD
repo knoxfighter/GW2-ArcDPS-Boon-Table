@@ -59,6 +59,10 @@ Pour trier les données d'une colonne, cliquez sur son en-tête. Par défaut, le
 ## Traduction
 Le plugin est traduit en anglais, français, allemand, espagnol et chinois simplifié. La traduction en espagnol n'est qu'une traduction approximative ; merci de signaler tout problème que vous pourriez rencontrer.
 
+Pour apporter une modification ou une correction sur l'une des traductions disponibles au sein de Boon table les fichiers contenant les textes sont les suivants :
+* [Lang.cpp](https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/blob/master/ArcDPS%20Boon%20Table/Lang.cpp)
+* [ExtensionTranslations.h](https://github.com/Zinn-o-Matics/arcdps-extension/blob/main/ExtensionTranslations.h)
+
 Il est également possible d'ajouter des traductions à l'aide de fichiers. Si vous souhaitez ajouter une traduction, créez un fichier au format `arcdps_table_lang_<langCode>.ini` et placez-le dans le répertoire `addons/arcdps/`.
 Le code « langCode » sert d'identifiant et est également utilisé dans le fichier de sauvegarde pour conserver la langue sélectionnée. Dans les paramètres, la clé de traduction « LangageName » est utilisée pour afficher le nom. La traduction en anglais est disponible sous le modèle suivant « arcdps_table_lang_en.ini ». Les commentaires commencent par « ; » et en l'absence de traduction le texte s'affichera par défaut en anglais.
 
