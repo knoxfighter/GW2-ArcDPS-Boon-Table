@@ -57,7 +57,7 @@ Sort by column by clicking on the header, it is sorted by character name by defa
     - Self Color: Change the color of yourself in the list. (Default: arcdps CCOL_YELLOW)
 
 ## Translations
-The plugin is translated to English, French, German, Spanish, and simplified Chinese. French and Spanish Translations are only roughly, so please report any problems with them.
+The plugin is translated to English, French, German, Spanish, and simplified Chinese. Spanish Translation is only roughly, so please report any problems with it.
 
 It is also possible to add translations with files. If you want to add a translation, create a file in the format `arcdps_table_lang_<langCode>.ini` and place it into `addons/arcdps/`.
 The langCode is used as ID and also used in the save file to preserve the selected language.
