@@ -296,7 +296,7 @@ constexpr auto BOONTABLE_TRANSLATION_FRENCH = std::to_array<std::pair<LangKey, c
 	{BT_SettingsTablePaddingX, u8"Ajouter une marge extérieure (axe x)"},
 	{BT_SettingsAlignment, u8"Alignement"},
 	{BT_SettingsBoonColumnWidth, u8"Largeur des colonnes"},
-	{BT_SettingsWidthSlideTooltip, u8"Appuyez sur CTRL+Clic gauche pour saisir manuellement le numéro."},
+	{BT_SettingsWidthSlideTooltip, u8"Appuyez sur CTRL + clic gauche pour saisir manuellement le numéro."},
 	{BT_SettingsKeyNotSetText, u8"(non défini)"},
 	{BT_Wvw, u8"McM"},
 	{BT_WindowHeader, u8"Tableau des avantages"},
