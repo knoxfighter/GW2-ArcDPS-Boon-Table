@@ -70,7 +70,7 @@ The english translation is available as a template `arcdps_table_lang_en.ini`.
 Comments start with `;` and if translations are missing, it falls back to english.
 
 ## LICENSE
-This project is Licensed with the MIT License.
+This project is Licensed with the [MIT License](https://en.wikipedia.org/wiki/MIT_License).
 
 ### Dear ImGui
 [Dear ImGui](https://github.com/ocornut/imgui) is licensed with the MIT License.
