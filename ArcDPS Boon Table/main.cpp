@@ -165,7 +165,7 @@ arcdps_exports* mod_init()
 	std::string version;
 	if (currentVersion.has_value())
 	{
-		version = ArcdpsExtension::UpdateChecker::instance().GetVersionAsString(*currentVersion);
+		version = ArcdpsExtension::UpdateChecker::GetVersionAsString(*currentVersion);
 	}
 	else
 	{
@@ -461,8 +461,6 @@ void mod_imgui(uint32_t not_charsel_or_loading, uint32_t hide_if_combat_or_ooc)
 		if (!not_charsel_or_loading) return;
 
 		PRINT_LINE()
-
-		auto io = &ImGui::GetIO();
 
 		if (KeysDown::IsKeyDown(arc_global_mod1) && KeysDown::IsKeyDown(arc_global_mod2)) {
 			std::vector<int> keysPressed;

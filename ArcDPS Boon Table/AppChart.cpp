@@ -22,6 +22,9 @@ using ArcdpsExtension::Localization;
 void AppChart::Draw(bool* p_open, ImGuiWindowFlags flags = 0) {
 	PRINT_LINE()
 
+	// set default window padding
+	settings.setDefaultWindowPadding(index, ImGui::GetStyle().WindowPadding);
+
 	const std::optional<ImVec2>& windowPadding = settings.getWindowPadding(index);
 	bool windowPaddingActive = windowPadding.has_value();
 	if (windowPadding) {

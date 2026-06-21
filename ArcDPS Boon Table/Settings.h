@@ -79,6 +79,7 @@ public:
 
 	void setShowChart(int tableIndex, bool status);
 	void setCurrentHistory(int tableIndex, uint8_t currentHistory);
+	void setDefaultWindowPadding(int tableIndex, ImVec2 defaultWindowPadding);
 
 private:
 	struct Table {
@@ -106,6 +107,7 @@ private:
 		ImGuiID from_window_id;
 		int max_displayed = 0;
 		std::optional<ImVec2> window_padding;
+		ImVec2 window_padding_default = { 0.0f, 0.0f };
 		int max_player_length = 0;
 		WPARAM shortcut = 0;
 		std::string appear_as_in_option;

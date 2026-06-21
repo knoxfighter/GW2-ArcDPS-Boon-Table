@@ -8,7 +8,6 @@ public:
 	void Draw(ImGuiEx::BigTable::ImGuiTable* table, int tableIndex, ImGuiWindow* currentRootWindow);
 
 private:
-	float windowPadding[2]{};
 	char appearAsInOption[128]{};
 	char titleBar[128]{};
 	

@@ -1,10 +1,10 @@
 #include "Settings.h"
 
-#include <fstream>
 #include <ArcdpsUnofficialExtras/Definitions.h>
+#include <fstream>
 
-#include "Lang.h"
 #include "Helpers.h"
+#include "Lang.h"
 
 Settings settings;
 
@@ -18,8 +18,8 @@ Alignment Settings::getAlignment(int tableIndex) const {
 
 bool Settings::isShowSubgroups(const ITracker& tracker, int tableIndex) const {
 	return tables[tableIndex].show_subgroups
-		&& tracker.isSquad()
-		&& tracker.getSubgroups().size() > 1;
+		   && tracker.isSquad()
+		   && tracker.getSubgroups().size() > 1;
 }
 
 bool Settings::isShowSelfOnTop(int tableIndex) const {
@@ -122,6 +122,10 @@ void Settings::setCurrentHistory(int tableIndex, uint8_t currentHistory) {
 	tables[tableIndex].current_history = currentHistory;
 }
 
+void Settings::setDefaultWindowPadding(int tableIndex, ImVec2 defaultWindowPadding) {
+	tables[tableIndex].window_padding_default = std::move(defaultWindowPadding);
+}
+
 int Settings::getMaxPlayerLength(int tableIndex) const {
 	return tables[tableIndex].max_player_length;
 }
@@ -155,17 +159,15 @@ ImVec4 Settings::getSelfColor() const {
 ImVec4 Settings::get100Color() const {
 	if (_100_color) {
 		return _100_color.value();
-	}
-	else {
-		return ImVec4(0, 1, 0, (float)125 / 255);
+	} else {
+		return ImVec4(0, 1, 0, (float) 125 / 255);
 	}
 }
 ImVec4 Settings::get0Color() const {
 	if (_0_color) {
 		return _0_color.value();
-	}
-	else {
-		return ImVec4(1,0,0, (float)125 / 255);
+	} else {
+		return ImVec4(1, 0, 0, (float) 125 / 255);
 	}
 }
 
@@ -199,15 +201,6 @@ void Settings::setShowChart(int tableIndex, bool status) {
 	tables[tableIndex].show = status;
 }
 
-// Only here for migrating from the old system to the new one
-enum class LanguageSetting {
-	English = 0,
-	LikeGame = 1,
-	French = 2,
-	German = 3,
-	Spanish = 4,
-	Chinese = 5,
-};
 void Settings::readFromFile() {
 	std::ifstream stream("addons\\arcdps\\arcdps_table.ini");
 
@@ -216,10 +209,10 @@ void Settings::readFromFile() {
 
 		// load defaults
 		tables[0].shortcut = 66;
-		
+
 		return;
 	}
-	
+
 	modernIni::Ini ini;
 
 	stream >> ini;
@@ -237,14 +230,14 @@ void Settings::readFromFile() {
 	if (ini.contains("language")) {
 		auto lang = ini.at("language");
 		if (lang) {
-			auto set = lang.value().get().get<LanguageSetting>();
+			auto set = lang.value().get().get<uint32_t>();
 			if (set) {
 				switch (set.value()) {
-				case LanguageSetting::LikeGame:
-					language2 = Lang::LikeGame;
-					break;
-				default:
-					language2 = ArcdpsExtension::Localization::ToLangCode(static_cast<Language>(set.value()));
+					case 1:
+						language2 = Lang::LikeGame;
+						break;
+					default:
+						language2 = ArcdpsExtension::Localization::ToLangCode(static_cast<Language>(set.value()));
 				}
 			}
 		}
