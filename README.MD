@@ -1,8 +1,29 @@
-# [Click Here to Download](/../../releases)
+<p align="center">
+ <h2 align="center">ArcDPS Boon Table</h2>
+</p>
 
-# ArcDPS Boon Table
+<p align="center">
+    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/releases"><img alt="Github Release" src="https://img.shields.io/github/v/release/knoxfighter/GW2-ArcDPS-Boon-Table" /></a>
+    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/graphs/contributors"><img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/knoxfighter/GW2-ArcDPS-Boon-Table" /></a>
+    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/issues"><img alt="Github Issues" src="https://img.shields.io/github/issues/knoxfighter/GW2-ArcDPS-Boon-Table?color=0088ff" /></a>
+    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/pulls"><img alt="GitHub Pull Requests" src="https://img.shields.io/github/issues-pr/knoxfighter/GW2-ArcDPS-Boon-Table?color=0088ff" /></a>
+</p>
 
-![preview](Screenshot.png)
+<p align="center">
+    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/releases">Download</a>
+    ·
+    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/issues/new?template=bug_report.yml">Report Bug</a>
+</p>
+
+<p align="center">
+    English
+    ·
+    <a href="./readmes/README_fr.MD">Français</a>
+</p>
+
+<p align="center">
+    <img src="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/blob/master/Screenshot.png" />
+</p>
 
 ## Usage
 
@@ -63,4 +84,4 @@ This project is Licensed with the MIT License.
 [modernIni](https://github.com/knoxfighter/modernIni) is licensed with the MIT License.
 
 ### Game Graphics
-© 2021 NCSOFT Corporation. All rights reserved. NCSOFT, ArenaNet, the interlocking NC logo, Aion, Lineage II, Guild Wars, Guild Wars 2: Heart of Thorns, Guild Wars 2: Path of Fire, Blade & Soul, and all associated logos, designs, and composite marks are trademarks or registered trademarks of NCSOFT Corporation. All other trademarks are the property of their respective owners. 
+© 2026 ArenaNet LLC. All rights reserved. NCSOFT, ArenaNet, Guild Wars, Guild Wars 2, GW2, Heart of Thorns, Path of Fire, End of Dragons, Secrets of the Obscure, Janthir Wilds, Visions of Eternity, and all associated logos, designs, and composite marks are trademarks or registered trademarks of NCSOFT Corporation. All other trademarks are the property of their respective owners.
