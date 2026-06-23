@@ -3,16 +3,16 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/releases"><img alt="Github Release" src="https://img.shields.io/github/v/release/knoxfighter/GW2-ArcDPS-Boon-Table" /></a>
-    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/graphs/contributors"><img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/knoxfighter/GW2-ArcDPS-Boon-Table" /></a>
-    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/issues"><img alt="Github Issues" src="https://img.shields.io/github/issues/knoxfighter/GW2-ArcDPS-Boon-Table?color=0088ff" /></a>
-    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/pulls"><img alt="GitHub Pull Requests" src="https://img.shields.io/github/issues-pr/knoxfighter/GW2-ArcDPS-Boon-Table?color=0088ff" /></a>
+    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/releases"><img alt="Releases" src="https://img.shields.io/github/v/release/knoxfighter/GW2-ArcDPS-Boon-Table" /></a>
+    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/graphs/contributors"><img alt="Contributors" src="https://img.shields.io/github/contributors/knoxfighter/GW2-ArcDPS-Boon-Table" /></a>
+    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/issues"><img alt="Issues" src="https://img.shields.io/github/issues/knoxfighter/GW2-ArcDPS-Boon-Table?color=0088ff" /></a>
+    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/pulls"><img alt="Pull Requests" src="https://img.shields.io/github/issues-pr/knoxfighter/GW2-ArcDPS-Boon-Table?color=0088ff" /></a>
 </p>
 
 <p align="center">
     <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/releases">Download</a>
     ·
-    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/issues/new?template=bug_report.yml">Report Bug</a>
+    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/issues/new?template=bug_report.yml">Report a Bug</a>
 </p>
 
 <p align="center">
@@ -22,7 +22,7 @@
 </p>
 
 <p align="center">
-    <img src="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/blob/master/Screenshot.png" />
+    <img src="https://raw.githubusercontent.com/knoxfighter/GW2-ArcDPS-Boon-Table/master/Screenshot.png" />
 </p>
 
 ## Usage
