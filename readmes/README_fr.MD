@@ -3,10 +3,10 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/releases"><img alt="Github Release" src="https://img.shields.io/github/v/release/knoxfighter/GW2-ArcDPS-Boon-Table" /></a>
-    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/graphs/contributors"><img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/knoxfighter/GW2-ArcDPS-Boon-Table" /></a>
-    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/issues"><img alt="Github Issues" src="https://img.shields.io/github/issues/knoxfighter/GW2-ArcDPS-Boon-Table?color=0088ff" /></a>
-    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/pulls"><img alt="GitHub Pull Requests" src="https://img.shields.io/github/issues-pr/knoxfighter/GW2-ArcDPS-Boon-Table?color=0088ff" /></a>
+    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/releases"><img alt="Versions" src="https://img.shields.io/github/v/release/knoxfighter/GW2-ArcDPS-Boon-Table?label=Version" /></a>
+    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/graphs/contributors"><img alt="Contributeurs" src="https://img.shields.io/github/contributors/knoxfighter/GW2-ArcDPS-Boon-Table?label=Contributeurs" /></a>
+    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/issues"><img alt="Tickets" src="https://img.shields.io/github/issues/knoxfighter/GW2-ArcDPS-Boon-Table?color=0088ff&label=Tickets" /></a>
+    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/pulls"><img alt="Demandes d'ajout" src="https://img.shields.io/github/issues-pr/knoxfighter/GW2-ArcDPS-Boon-Table?color=0088ff&label=Demandes%20d%27ajout" /></a>
 </p>
 
 <p align="center">
@@ -22,7 +22,7 @@
 </p>
 
 <p align="center">
-    <img src="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/blob/master/Screenshot.png" />
+    <img src="https://raw.githubusercontent.com/knoxfighter/GW2-ArcDPS-Boon-Table/master/Screenshot.png" />
 </p>
 
 ## Utilisation
