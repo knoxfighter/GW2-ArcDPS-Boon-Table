@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/releases"><img alt="Releases" src="https://img.shields.io/github/v/release/knoxfighter/GW2-ArcDPS-Boon-Table" /></a>
+    <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/releases"><img alt="Release" src="https://img.shields.io/github/v/release/knoxfighter/GW2-ArcDPS-Boon-Table" /></a>
     <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/graphs/contributors"><img alt="Contributors" src="https://img.shields.io/github/contributors/knoxfighter/GW2-ArcDPS-Boon-Table" /></a>
     <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/issues"><img alt="Issues" src="https://img.shields.io/github/issues/knoxfighter/GW2-ArcDPS-Boon-Table?color=0088ff" /></a>
     <a href="https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/pulls"><img alt="Pull Requests" src="https://img.shields.io/github/issues-pr/knoxfighter/GW2-ArcDPS-Boon-Table?color=0088ff" /></a>
