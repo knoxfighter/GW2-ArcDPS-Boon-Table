@@ -460,7 +460,7 @@ void mod_imgui(uint32_t not_charsel_or_loading, uint32_t hide_if_combat_or_ooc)
 
 		ArcdpsExtension::UpdateChecker::instance().Draw(update_state, "BoonTable", "https://github.com/knoxfighter/GW2-ArcDPS-Boon-Table/releases/latest");
 
-		if (!not_charsel_or_loading) return;
+		if (!not_charsel_or_loading || hide_if_combat_or_ooc) return;
 
 		PRINT_LINE()
 
