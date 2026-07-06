@@ -42,6 +42,7 @@ void mod_options_windows(const char* windowname); // fn(char* windowname)
 void readArcExports();
 bool modsPressed();
 bool canMoveWindows();
+void GetD3DDevice(void* dxptr);
 uintptr_t ProcessEvent(cbtevent* ev, ag* src, ag* dst, const char* skillname, uint64_t id, uint64_t revision);
 
 typedef uint64_t(*arc_export_func_u64)();
@@ -113,8 +114,7 @@ extern "C" __declspec(dllexport) void* get_init_addr(char* arcversionstr, void* 
 	ImGuiEx::BigTable::RegisterSettingsHandler("BigTable-BoonTable", self_dll, settings_file_path);
 	static_cast<ImGuiContext*>(imguicontext)->SettingsLoaded = false;
 
-	auto swapChain = static_cast<IDXGISwapChain*>(dxptr);
-	swapChain->GetDevice(__uuidof(id3d11d), reinterpret_cast<void**>(&id3d11d));
+	GetD3DDevice(dxptr);
 
 	return mod_init;
 }
@@ -558,6 +558,31 @@ bool canMoveWindows()
 	else
 	{
 		return modsPressed();
+	}
+}
+
+void GetD3DDevice(void* dxptr) {
+	auto swapChain = static_cast<IDXGISwapChain*>(dxptr);
+	if (FAILED(swapChain->GetDevice(__uuidof(id3d11d), reinterpret_cast<void**>(&id3d11d)))) {
+		arc_log("Boon Table: Failed to get D3D device");
+		arc_log_file("Boon Table: Failed to get D3D device");
+		id3d11d = nullptr;
+	}
+
+	ID3D11Texture2D* backBuffer = nullptr;
+	if (FAILED(swapChain->GetBuffer(0, __uuidof(backBuffer), reinterpret_cast<void**>(&backBuffer)))) {
+		arc_log("Boon Table: Failed to get backbuffer");
+		arc_log_file("Boon Table: Failed to get backbuffer");
+		return;
+	}
+
+	ID3D11Device* bbid3d11d = nullptr;
+	backBuffer->GetDevice(&bbid3d11d);
+
+	if (bbid3d11d && id3d11d != bbid3d11d) {
+		arc_log("Boon Table: SmoothMotion workaround");
+		arc_log_file("Boon Table: SmoothMotion workaround");
+		id3d11d = bbid3d11d;
 	}
 }
 
