@@ -584,6 +584,8 @@ void GetD3DDevice(void* dxptr) {
 		arc_log_file("Boon Table: SmoothMotion workaround");
 		id3d11d = bbid3d11d;
 	}
+
+	backBuffer->Release();
 }
 
 extern "C" void language_changed_callback(Language pNewLanguage) {
