@@ -50,7 +50,7 @@ typedef uint64_t(*arc_export_func_u64)();
 HMODULE arc_dll;
 HMODULE self_dll;
 LPVOID mapViewOfMumbleFile = nullptr;
-ID3D11Device* id3d11d = nullptr;
+CComPtr<ID3D11Device> id3d11d = nullptr;
 bool initSucessful = false;
 
 std::unique_ptr<ArcdpsExtension::UpdateChecker::UpdateState> update_state = nullptr;
@@ -563,20 +563,20 @@ bool canMoveWindows()
 
 void GetD3DDevice(void* dxptr) {
 	auto swapChain = static_cast<IDXGISwapChain*>(dxptr);
-	if (FAILED(swapChain->GetDevice(__uuidof(id3d11d), reinterpret_cast<void**>(&id3d11d)))) {
+	if (FAILED(swapChain->GetDevice(IID_PPV_ARGS(&id3d11d)))) {
 		arc_log("Boon Table: Failed to get D3D device");
 		arc_log_file("Boon Table: Failed to get D3D device");
 		id3d11d = nullptr;
 	}
 
-	ID3D11Texture2D* backBuffer = nullptr;
-	if (FAILED(swapChain->GetBuffer(0, __uuidof(backBuffer), reinterpret_cast<void**>(&backBuffer)))) {
+	CComPtr<ID3D11Texture2D> backBuffer = nullptr;
+	if (FAILED(swapChain->GetBuffer(0, IID_PPV_ARGS(&backBuffer)))) {
 		arc_log("Boon Table: Failed to get backbuffer");
 		arc_log_file("Boon Table: Failed to get backbuffer");
 		return;
 	}
 
-	ID3D11Device* bbid3d11d = nullptr;
+	CComPtr<ID3D11Device> bbid3d11d = nullptr;
 	backBuffer->GetDevice(&bbid3d11d);
 
 	if (bbid3d11d && id3d11d != bbid3d11d) {
@@ -584,8 +584,6 @@ void GetD3DDevice(void* dxptr) {
 		arc_log_file("Boon Table: SmoothMotion workaround");
 		id3d11d = bbid3d11d;
 	}
-
-	backBuffer->Release();
 }
 
 extern "C" void language_changed_callback(Language pNewLanguage) {
