@@ -1,4 +1,4 @@
-#include "Lang.h"
+﻿#include "Lang.h"
 
 #include "Helpers.h"
 
