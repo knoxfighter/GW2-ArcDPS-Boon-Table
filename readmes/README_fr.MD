@@ -34,27 +34,27 @@ Vous pouvez réorganiser les colonnes du tableau en faisant glisser leur en-têt
 Pour trier les données d'une colonne, cliquez sur son en-tête. Par défaut, le tri s'effectue par nom de personnage.
 
 ### Options
-- Joueurs : afficher/masquer tous les joueurs du tableau (par défaut : Activé)
-- Sous-groupes : afficher/masquer la moyenne des sous-groupes (par défaut : Activé)
-- Total : afficher/masquer la moyenne du groupe/de l'escouade (par défaut : Activé)
-- PNJ : afficher/masquer les avantages des PNJs (par défaut : Activé)
-    - disponible uniquement pour 3 rencontres (Deimos, Escorte et Rivière des âmes)
+- Joueurs : afficher/masquer tous les joueurs du tableau (par défaut : activé).
+- Sous-groupes : afficher/masquer la moyenne des sous-groupes (par défaut : activé).
+- Total : afficher/masquer la moyenne du groupe/de l'escouade (par défaut : activé).
+- PNJs : afficher/masquer les avantages des PNJs (par défaut : activé).
+    - Disponible uniquement pour 3 rencontres (Deimos, Escorte et Rivière des âmes).
 - Configuration des colonnes : afficher/masquer les colonnes du tableau.
-- Style : option de mise en forme pour cette fenêtre
-    - Afficher la valeur sous forme de barre de progression : affiche les valeurs sous forme de barre de progression en plus du nombre réel. (par défaut : Activé)
-    - Couleur lignes en alternance : affiche/masque la couleur de l'arrière-plan pour mieux distinguer les lignes. (par défaut : Activé)
-    - Afficher l'en-tête avec du texte au lieu d'icônes : remplace les icônes de l'en-tête par du texte (par défaut : Désactivé)
-    - Masquer l'en-tête de la fenêtre : Masque l'en-tête de la fenêtre imgui. L'en-tête du tableau restera visible (par défaut : Désactivé)
-    - Afficher uniquement votre sous-groupe : Dans la section des joueurs, n'affiche que les joueurs qui font partie de votre sous-groupe. (Par défaut : Désactivé)
-    - Afficher uniquement vous-même : Dans la section des joueurs, n'affiche que vous-même (Par défaut : Désactivé)
-    - Mode de couleur : mode de coloration du texte et des barres de progression. Peut-être réglé sur « Défaut » (gris), « Par pourcentage » (du rouge au vert) ou « Par profession ». (Par défaut : Défaut)
-    - Alignement : aligne le texte sur la colonne. Peut-être réglé sur Gauche, Droite, Centre et Non aligné. « Non aligné » signifie qu’il est placé le plus à gauche possible, sans chevaucher la barre de progression. (Par défaut : Droite)
-    - Règlage de la taille : modifie la manière dont la fenêtre est redimensionnée.
-        - Automatique : cette option redimensionne automatiquement la fenêtre à chaque fois. Les colonnes « Nom » et « Groupe » peuvent être redimensionnées en glissant les bordures.
+- Style : option de mise en forme pour cette fenêtre.
+    - Afficher la valeur sous forme de barre de progression : affiche les valeurs sous forme de barre de progression en plus du nombre réel (par défaut : activé).
+    - Couleur des lignes en alternance : affiche/masque la couleur de l'arrière-plan pour mieux distinguer les lignes (par défaut : activé).
+    - Afficher l'en-tête avec du texte au lieu d'icônes : remplace les icônes de l'en-tête par du texte (par défaut : désactivé).
+    - Masquer l'en-tête de la fenêtre : masque l'en-tête de la fenêtre ImGui. L'en-tête du tableau restera visible (par défaut : désactivé).
+    - Afficher uniquement votre sous-groupe : dans la section des joueurs, n'affiche que les joueurs qui font partie de votre sous-groupe (par défaut : désactivé).
+    - Afficher soi-même uniquement : dans la section des joueurs, n'affiche que votre personnage (par défaut : désactivé).
+    - Mode de couleur : mode de coloration du texte et des barres de progression. Peut être réglé sur « Défaut » (gris), « Par pourcentage » (du rouge au vert) ou « Par profession » (par défaut : Par défaut).
+    - Alignement : aligne le texte sur la colonne. Peut-être réglé sur Gauche, Droite, Centre et Non aligné. « Non aligné » signifie qu’il est placé le plus à gauche possible, sans chevaucher la barre de progression (par défaut : droite).
+    - Réglage de la taille : modifie la manière dont la fenêtre est redimensionnée.
+        - Automatique : cette option redimensionne automatiquement la fenêtre à chaque fois. Les colonnes « Nom » et « Groupe » peuvent être redimensionnées en faisant glisser les bordures.
         - Adapter le contenu : pour modifier la taille de la fenêtre en faisant glisser le coin inférieur gauche ou droit. Les colonnes s'ajusteront automatiquement pour s'adapter à la fenêtre.
         - Manuelle : pour modifier la taille de la fenêtre en faisant glisser le coin inférieur gauche ou droit. Lorsque le tableau dépasse la taille de la fenêtre, une barre de défilement s'affiche.
-    - Largeur des colonnes : modifie la largeur des colonnes « Avantages », toutes les colonnes « Avantages » ont la même largeur. Cette option n'est pas disponible lorsque l'option « Ajuster le contenu » est activée. (Par défaut : 80)
-    - Couleur personnelle : modifier la couleur de votre nom dans la liste. (Par défaut : arcdps CCOL_YELLOW)
+    - Largeur des colonnes : modifie la largeur des colonnes « Avantages » (toutes les colonnes ont la même largeur). Cette option n'est pas disponible lorsque l'option « Adapter le contenu » est activée (par défaut : 80).
+    - Couleur personnelle : modifier la couleur de votre nom dans la liste (par défaut : arcdps CCOL_YELLOW).
 
 ## Traduction
 Le plugin est traduit en anglais, français, allemand, espagnol et chinois simplifié. La traduction en espagnol n'est qu'une traduction approximative ; merci de signaler tout problème que vous pourriez rencontrer.
