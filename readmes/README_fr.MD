@@ -40,7 +40,7 @@ Pour trier les données d'une colonne, cliquez sur son en-tête. Par défaut, le
 - PNJs : afficher/masquer les avantages des PNJs (par défaut : activé).
     - Disponible uniquement pour 3 rencontres (Deimos, Escorte et Rivière des âmes).
 - Configuration des colonnes : afficher/masquer les colonnes du tableau.
-- Style : option de mise en forme pour cette fenêtre.
+- Style : options de mise en forme pour cette fenêtre.
     - Afficher la valeur sous forme de barre de progression : affiche les valeurs sous forme de barre de progression en plus du nombre réel (par défaut : activé).
     - Couleur des lignes en alternance : affiche/masque la couleur de l'arrière-plan pour mieux distinguer les lignes (par défaut : activé).
     - Afficher l'en-tête avec du texte au lieu d'icônes : remplace les icônes de l'en-tête par du texte (par défaut : désactivé).
