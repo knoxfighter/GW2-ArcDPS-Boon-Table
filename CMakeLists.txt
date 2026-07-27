@@ -21,6 +21,7 @@ find_package(ArcdpsExtension CONFIG REQUIRED)
 find_package(ArcdpsUnofficialExtras CONFIG REQUIRED)
 
 set(VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/VersionInfo.rc")
+string(TIMESTAMP CURRENT_YEAR "%Y" UTC)
 # add custom target to regenerate version info on every build
 add_custom_target(VersionInfo ALL
 		COMMAND ${CMAKE_COMMAND}
@@ -33,6 +34,7 @@ add_custom_target(VersionInfo ALL
 		-DORIGINAL_FILENAME=d3d9_arcdps_table.dll
 		-DPRODUCT_NAME=Arcdps Boon table plugin
 		-DDESCRIPTION=Arcdps Boon table plugin
+		"-DCOPYRIGHT=Copyright (C) ${CURRENT_YEAR} knoxfighter"
 		-P ${ArcdpsExtension_DIR}/generate-version.cmake
 		BYPRODUCTS ${VERSION_FILE}
 		COMMENT "Generating VersionInfo.rc"
