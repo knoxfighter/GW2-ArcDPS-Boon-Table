@@ -681,31 +681,30 @@ void LoadTranslationFiles() {
 			modernIni::Ini ini;
 			input >> ini;
 
-			auto extTransRes = ini.at("extensionTranslations");
-			if (!extTransRes) {
-				ARC_LOG(std::format("Error ({}) loading extensionTranslations from file '{}'", extTransRes.error(), entry.path().string()).c_str());
-				ARC_LOG_FILE(std::format("Error ({}) loading extensionTranslations from file '{}'", extTransRes.error(), entry.path().string()).c_str());
-				continue;
-			}
-			auto extTransValueRes = extTransRes.value().get().get_to(extensionTranslations);
-			if (!extTransValueRes) {
-				ARC_LOG(std::format("Error ({}) loading extensionTranslations from file '{}'", extTransValueRes.error(), entry.path().string()).c_str());
-				ARC_LOG_FILE(std::format("Error ({}) loading extensionTranslations from file '{}'", extTransValueRes.error(), entry.path().string()).c_str());
-				continue;
-			}
-        	
-        	auto btTransRes = ini.at("boonTableTranslations");
-			if (!btTransRes) {
-				ARC_LOG(std::format("Error ({}) loading boonTableTranslations from file '{}'", btTransRes.error(), entry.path().string()).c_str());
-				ARC_LOG_FILE(std::format("Error ({}) loading boonTableTranslations from file '{}'", btTransRes.error(), entry.path().string()).c_str());
-				continue;
-			}
-			auto btTransValueRes = btTransRes.value().get().get_to(boonTableTranslations);
-			if (!btTransValueRes) {
-				ARC_LOG(std::format("Error ({}) loading boonTableTranslations from file '{}'", btTransValueRes.error(), entry.path().string()).c_str());
-				ARC_LOG_FILE(std::format("Error ({}) loading boonTableTranslations from file '{}'", btTransValueRes.error(), entry.path().string()).c_str());
-				continue;
-			}
+        	auto load = [&entry](const modernIni::Ini& ini, const std::string& key, auto& out) -> modernIni::Result<void> {
+        		auto transRes = ini.at(key);
+        		if (!transRes) {
+        			ARC_LOG(std::format("Error ({}) loading {} from file '{}'", transRes.error(), key, entry.path().string()).c_str());
+        			ARC_LOG_FILE(std::format("Error ({}) loading {} from file '{}'", transRes.error(), key, entry.path().string()).c_str());
+        			return std::unexpected(transRes.error());
+        		}
+        		auto valueRes = transRes.value().get().get_to(out);
+        		if (!valueRes) {
+        			ARC_LOG(std::format("Error ({}) loading {} from file '{}'", valueRes.error(), key, entry.path().string()).c_str());
+        			ARC_LOG_FILE(std::format("Error ({}) loading {} from file '{}'", valueRes.error(), key, entry.path().string()).c_str());
+        			return std::unexpected(transRes.error());
+        		}
+        		return std::expected<void, modernIni::Error>(std::in_place);
+        	};
+
+        	auto extRes = load(ini, "extensionTranslations", extensionTranslations);
+        	if (!extRes) {
+        		continue;
+        	}
+        	auto btRes = load(ini, "boonTableTranslations", boonTableTranslations);
+        	if (!btRes) {
+        		continue;
+        	}
 
 			auto& localization = ArcdpsExtension::Localization::instance();
 			localization.Load(id, extensionTranslations);
