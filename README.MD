@@ -38,23 +38,23 @@ Sort by column by clicking on the header, it is sorted by character name by defa
 - Subgroups: Show/Hide subgroup average (Default: ON)
 - Total: Show/Hide group/squad average (Default: ON)
 - NPCs: Show/Hide boons of NPCs (Default: ON)
-    - only available for 3 encounters (Deimos, Escort, and River of souls)
+    - only available for 3 encounters (Deimos, Escort, and River of Souls)
 - Column Setup: Show/Hide the columns of the table.
-- Style: Styling option for this window
-    - Show value as progress bar: Show the values as progressbar additional to the actual number. (Default: ON)
-    - Alternating Row Background: Show/Hide background colors, to better distinguish rows. (Default: ON)
-    - Show header with text instead of images: Change the header images back into normal text (Default: OFF)
-    - Hide window header: Hider the header of the imgui window. The table header will still be there (Default: OFF)
-    - Show only your subgroup: In the player section show only the players that are in your subgroup. (Default: OFF)
-    - SHow only yourself: In the player section show only yourself (Default: OFF)
-    - Coloring Mode: How to color the text/progress bars. Can be Default (Gray), By percentage (red to green) and By Profession. (Default: Default)
-    - Alignment: Align the text to the column. Can be Left, Right, Center, and Unaligned. Unaligned means, that it is most left as possible, without beeing on top of the progress bar. (Default: Right)
+- Style: Styling options for this window.
+    - Show value as progress bar: Shows values as a progress bar in addition to the actual number (Default: ON).
+    - Alternating Row Background: Show/Hide background colors to better distinguish rows (Default: ON).
+    - Show header with text instead of images: Change the header images back into normal text (Default: OFF).
+    - Hide window header: Hide the header of the ImGui window. The table header will still be there (Default: OFF).
+    - Show only your subgroup: In the player section, show only the players that are in your subgroup (Default: OFF).
+    - Show only yourself: In the player section, show only yourself (Default: OFF).
+    - Coloring Mode: How to color the text/progress bars. Can be Default (Gray), By percentage (red to green) and By Profession (Default: Default).
+    - Alignment: Align the text to the column. Can be Left, Right, Center, and Unaligned. Unaligned means that it is as far left as possible, without being on top of the progress bar (Default: Right).
     - Sizing Policy: Change how the window is resized.
-        - Autoresize window to content: This will automatically resize the window all the times, Name and Subgroup colomns can be resized by dragging.
+        - Autoresize window to content: This will automatically resize the window all the time. Name and Subgroup columns can be resized by dragging.
         - Size content to window: Change the window size by dragging the bottom left/right corner. The columns will automatically resize to fit into the window.
         - Manual window resizing: Change the window size by dragging the bottom left/right corner. When the table is larger than the window allows, a scrollbar will be added.
-    - Boon column width: Change the width of boon columns, all boon columns have the same width. Not available when "Size content to window" is active. (Default: 80)
-    - Self Color: Change the color of yourself in the list. (Default: arcdps CCOL_YELLOW)
+    - Boon column width: Change the width of boon columns. All boon columns have the same width. Not available when "Size content to window" is active (Default: 80).
+    - Self Color: Change the color of yourself in the list (Default: arcdps CCOL_YELLOW).
 
 ## Translations
 The plugin is translated to English, French, German, Spanish, and simplified Chinese. Spanish Translation is only roughly, so please report any problems with it.
