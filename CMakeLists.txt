@@ -32,8 +32,8 @@ add_custom_target(VersionInfo ALL
 		-DVERSION_REF_STR=${VERSION_REF_STR}
 		-DINTERNAL_NAME=d3d9_arcdps_table.dll
 		-DORIGINAL_FILENAME=d3d9_arcdps_table.dll
-		-DPRODUCT_NAME=Arcdps Boon table plugin
-		-DDESCRIPTION=Arcdps Boon table plugin
+		"-DPRODUCT_NAME=Arcdps Boon table plugin"
+		"-DDESCRIPTION=Arcdps Boon table plugin"
 		"-DCOPYRIGHT=Copyright (C) ${CURRENT_YEAR} knoxfighter"
 		-P ${ArcdpsExtension_DIR}/generate-version.cmake
 		BYPRODUCTS ${VERSION_FILE}
