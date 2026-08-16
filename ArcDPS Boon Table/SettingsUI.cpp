@@ -149,6 +149,13 @@ void SettingsUI::Draw(Table::ImGuiTable* table, int tableIndex, ImGuiWindow* cur
 		ImGuiEx::EnumCombo(std::format("{}###ShowColored", showColoredText).c_str(), show_colored, magic_enum::enum_values<ProgressBarColoringMode>());
 		ImGui::PopItemWidth();
 
+		if (show_colored == ProgressBarColoringMode::ByProfession) {
+			ImGui::Indent(20.f);
+			// Use Default background colour
+			ImGui::Checkbox(std::format("{}##defaultBackgroundColour", localization.Translate(BT_SettingsColoringDefaultBg)).c_str(), &settings.tables[tableIndex].default_bg_coloring);
+			ImGui::Unindent(20.f);
+		}
+
 		ImGui::EndMenu();
 	}
 

@@ -576,11 +576,17 @@ void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_u
 
 void AppChart::buffProgressBar(const BoonDef& current_buff, float current_boon_uptime, float width, const IEntity& entity) const {
 	switch (settings.getShowColored(index)) {
-		case ProgressBarColoringMode::ByProfession:
-			ImGui::PushStyleColor(ImGuiCol_FrameBg, entity.getBaseColor());
+		case ProgressBarColoringMode::ByProfession: {
+			bool isDefaultBgColour = settings.isDefaultBgColour(index);
+			if (!isDefaultBgColour) {
+				ImGui::PushStyleColor(ImGuiCol_FrameBg, entity.getBaseColor());
+			}
 			buffProgressBar(current_buff, current_boon_uptime, width, entity.getHighlightColor());
-			ImGui::PopStyleColor();
+			if (!isDefaultBgColour) {
+				ImGui::PopStyleColor();
+			}
 			break;
+		}
 		case ProgressBarColoringMode::ByPercentage: {
 			float percentage = 0;
 			if (current_buff.stacking_type == StackingType_intensity) {

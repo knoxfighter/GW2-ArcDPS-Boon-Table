@@ -45,6 +45,7 @@ public:
 	[[nodiscard]] bool isShowTotal(int tableIndex) const;
 	[[nodiscard]] bool isShowBoonAsProgressBar(int tableIndex) const;
 	[[nodiscard]] ProgressBarColoringMode getShowColored(int tableIndex) const;
+	[[nodiscard]] bool isDefaultBgColour(int tableIndex) const;
 	[[nodiscard]] bool isAlternatingRowBg(int tableIndex) const;
 	[[nodiscard]] bool isShowLabel(int tableIndex) const;
 	[[nodiscard]] bool isHideHeader(int tableIndex) const;
@@ -91,6 +92,7 @@ private:
 		bool show_total = true;
 		bool show_uptime_as_progress_bar = true;
 		ProgressBarColoringMode show_colored = ProgressBarColoringMode::Uncolored;
+		bool default_bg_coloring = false;
 		bool alternating_row_bg = true;
 		bool show_label = false;
 		Alignment alignment = Alignment::Right;
@@ -118,7 +120,7 @@ private:
 		bool table_padding_x = false;
 
 		MODERN_INI_DEFINE_TYPE_INTRUSIVE(Table, show, show_self_on_top, show_players, show_npcs, show_subgroups, show_total, 
-			show_uptime_as_progress_bar, show_colored, alternating_row_bg, show_label, alignment, hide_header, sizing_policy, boon_column_width,
+			show_uptime_as_progress_bar, show_colored, default_bg_coloring, alternating_row_bg, show_label, alignment, hide_header, sizing_policy, boon_column_width,
 			show_only_subgroup, show_background, position, corner_position, corner_vector, anchor_panel_corner_position, self_panel_corner_position,
 			from_window_id, max_displayed, window_padding, max_player_length, shortcut, appear_as_in_option, title_bar, scrollbar, table_padding_x)
 	};

@@ -54,6 +54,10 @@ ProgressBarColoringMode Settings::getShowColored(int tableIndex) const {
 	return tables[tableIndex].show_colored;
 }
 
+bool Settings::isDefaultBgColour(int tableIndex) const{
+	return tables[tableIndex].default_bg_coloring;
+}
+
 bool Settings::isAlternatingRowBg(int tableIndex) const {
 	return tables[tableIndex].alternating_row_bg;
 }

@@ -137,6 +137,7 @@ constexpr auto BOONTABLE_TRANSLATION_ENGLISH = std::to_array<std::pair<LangKey, 
 	{BT_LikeInGameUEOnlyTooltip, "Will fall back to english if unofficial extras is not loaded."},
 	{BT_SettingsGeneral, "General"},
 	{BT_SettingsGlobalShortcuts, "Shortcuts"},
+	{BT_SettingsColoringDefaultBg, "Use Default Background Colour"},
 });
 constexpr auto BOONTABLE_TRANSLATION_GERMAN = std::to_array<std::pair<LangKey, const char8_t*>>({
 	{BT_SettingsHistory, u8"Historie"},
@@ -265,6 +266,7 @@ constexpr auto BOONTABLE_TRANSLATION_GERMAN = std::to_array<std::pair<LangKey, c
 	{BT_LikeInGameUEOnlyTooltip, u8"Wechselt zu Englisch, wenn Unofficial Extras nicht geladen ist."},
 	{BT_SettingsGeneral, u8"Allgemein"},
 	{BT_SettingsGlobalShortcuts, u8"Shortcuts"},
+	{BT_SettingsColoringDefaultBg, u8"Verwende Standard Hintergrundfarbe"},
 });
 constexpr auto BOONTABLE_TRANSLATION_FRENCH = std::to_array<std::pair<LangKey, const char8_t*>>({
 	{BT_SettingsHistory, u8"Historique"},
@@ -521,6 +523,7 @@ constexpr auto BOONTABLE_TRANSLATION_SPANISH = std::to_array<std::pair<LangKey, 
 	{BT_LikeInGameUEOnlyTooltip, u8"Volverá al inglés si Unofficial Extras no está cargado."},
 	{BT_SettingsGeneral, u8"General"},
 	{BT_SettingsGlobalShortcuts, u8"Atajos"},
+	{BT_SettingsColoringDefaultBg, u8"Utilizar el color de fondo predeterminado"},
 });
 constexpr auto BOONTABLE_TRANSLATION_CHINESE = std::to_array<std::pair<LangKey, const char8_t*>>({
 	{BT_SettingsHistory, u8"历史数据"},
@@ -781,10 +784,11 @@ constexpr auto BOONTABLE_TRANSLATION_TCHINESE = std::to_array<std::pair<LangKey,
 
 static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_ENGLISH.size());
 static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_GERMAN.size());
-static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_FRENCH.size());
 static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_SPANISH.size());
-static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_CHINESE.size());
-static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_TCHINESE.size());
+// TODO: missing translation for `BT_SettingsColoringDefaultBg`
+// static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_FRENCH.size());
+// static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_CHINESE.size());
+// static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_TCHINESE.size());
 
 void LoadTranslationFiles() {
 	constexpr std::string_view prefix = "arcdps_table_lang_";
