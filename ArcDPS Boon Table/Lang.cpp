@@ -652,6 +652,7 @@ constexpr auto BOONTABLE_TRANSLATION_CHINESE = std::to_array<std::pair<LangKey, 
 	{BT_LikeInGameUEOnlyTooltip, u8"如果没安装unofficial extras插件的话,将回退到英语版本"},
 	{BT_SettingsGeneral, u8"常规设置"},
 	{BT_SettingsGlobalShortcuts, u8"快捷键"},
+	{BT_SettingsColoringDefaultBg, u8"使用默认背景颜色"},
 });
 constexpr auto BOONTABLE_TRANSLATION_TCHINESE = std::to_array<std::pair<LangKey, const char8_t*>>({
 	{BT_SettingsHistory, u8"歷史紀錄"},
@@ -785,9 +786,9 @@ constexpr auto BOONTABLE_TRANSLATION_TCHINESE = std::to_array<std::pair<LangKey,
 static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_ENGLISH.size());
 static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_GERMAN.size());
 static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_SPANISH.size());
+static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_CHINESE.size());
 // TODO: missing translation for `BT_SettingsColoringDefaultBg`
 // static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_FRENCH.size());
-// static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_CHINESE.size());
 // static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_TCHINESE.size());
 
 void LoadTranslationFiles() {
