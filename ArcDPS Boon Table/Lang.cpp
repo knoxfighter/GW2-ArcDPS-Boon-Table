@@ -395,6 +395,7 @@ constexpr auto BOONTABLE_TRANSLATION_FRENCH = std::to_array<std::pair<LangKey, c
 	{BT_LikeInGameUEOnlyTooltip, u8"Reviendra à l'anglais si Unofficial Extras n'est pas chargé."},
 	{BT_SettingsGeneral, u8"Général"},
 	{BT_SettingsGlobalShortcuts, u8"Raccourcis"},
+	{BT_SettingsColoringDefaultBg, u8"Utiliser la couleur de fond par défaut"},
 });
 constexpr auto BOONTABLE_TRANSLATION_SPANISH = std::to_array<std::pair<LangKey, const char8_t*>>({
 	{BT_SettingsHistory, u8"Historial"},
