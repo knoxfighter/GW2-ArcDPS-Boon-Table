@@ -134,6 +134,7 @@ constexpr auto BOONTABLE_TRANSLATION_ENGLISH = std::to_array<std::pair<LangKey, 
 	{BT_BuffRelicSoulOfTheTitan, "Soul of the Titan"},
 	{BT_BuffRelicBloodstoneVolatility, "Relic of Bloodstone - Volatility"},
 	{BT_BuffRelicBloodstoneFervor, "Relic of Bloodstone - Fervor"},
+	{BT_BuffRelicScoundrel, "Relic of the Scoundrel"},
 	{BT_LikeInGameUEOnlyTooltip, "Will fall back to english if unofficial extras is not loaded."},
 	{BT_SettingsGeneral, "General"},
 	{BT_SettingsGlobalShortcuts, "Shortcuts"},
@@ -263,6 +264,7 @@ constexpr auto BOONTABLE_TRANSLATION_GERMAN = std::to_array<std::pair<LangKey, c
 	{BT_BuffRelicSoulOfTheTitan, u8"Seele des Titanen"},
 	{BT_BuffRelicBloodstoneVolatility, u8"Relikt des Blutsteins - Flüchtigkeit"},
 	{BT_BuffRelicBloodstoneFervor, u8"Relikt des Blutsteins - Inbrunst"},
+	{BT_BuffRelicScoundrel, u8"Relikt des Gauners"},
 	{BT_LikeInGameUEOnlyTooltip, u8"Wechselt zu Englisch, wenn Unofficial Extras nicht geladen ist."},
 	{BT_SettingsGeneral, u8"Allgemein"},
 	{BT_SettingsGlobalShortcuts, u8"Shortcuts"},
@@ -392,6 +394,7 @@ constexpr auto BOONTABLE_TRANSLATION_FRENCH = std::to_array<std::pair<LangKey, c
 	{BT_BuffRelicSoulOfTheTitan, u8"Âme du Titan"},
 	{BT_BuffRelicBloodstoneVolatility, u8"Relique de la pierre de sang - Volatilité"},
 	{BT_BuffRelicBloodstoneFervor, u8"Relique de la pierre de sang - Ferveur"},
+	{BT_BuffRelicScoundrel, u8"Relique du vaurien"},
 	{BT_LikeInGameUEOnlyTooltip, u8"Reviendra à l'anglais si Unofficial Extras n'est pas chargé."},
 	{BT_SettingsGeneral, u8"Général"},
 	{BT_SettingsGlobalShortcuts, u8"Raccourcis"},
@@ -521,11 +524,14 @@ constexpr auto BOONTABLE_TRANSLATION_SPANISH = std::to_array<std::pair<LangKey, 
 	{BT_BuffRelicSoulOfTheTitan, u8"Potencial titánico"},
 	{BT_BuffRelicBloodstoneVolatility, u8"Reliquia de hematites - Volatilidad"},
 	{BT_BuffRelicBloodstoneFervor, u8"Reliquia de hematites - Fervor"},
+	{BT_BuffRelicScoundrel, u8"Reliquia del bribón"},
 	{BT_LikeInGameUEOnlyTooltip, u8"Volverá al inglés si Unofficial Extras no está cargado."},
 	{BT_SettingsGeneral, u8"General"},
 	{BT_SettingsGlobalShortcuts, u8"Atajos"},
 	{BT_SettingsColoringDefaultBg, u8"Utilizar el color de fondo predeterminado"},
 });
+
+// To translate items etc. to chinese: https://gw2.wishingstarmoye.com/admin/gw2_itemdbs
 constexpr auto BOONTABLE_TRANSLATION_CHINESE = std::to_array<std::pair<LangKey, const char8_t*>>({
 	{BT_SettingsHistory, u8"历史数据"},
 	{BT_SettingsHistoryCurrent, u8"当前"},
@@ -650,6 +656,7 @@ constexpr auto BOONTABLE_TRANSLATION_CHINESE = std::to_array<std::pair<LangKey, 
 	{BT_BuffRelicSoulOfTheTitan, u8"泰坦之魂"},
 	{BT_BuffRelicBloodstoneVolatility, u8"血石波动"},
 	{BT_BuffRelicBloodstoneFervor, u8"血石狂热"},
+	{BT_BuffRelicScoundrel, u8"恶棍古物"},
 	{BT_LikeInGameUEOnlyTooltip, u8"如果没安装unofficial extras插件的话,将回退到英语版本"},
 	{BT_SettingsGeneral, u8"常规设置"},
 	{BT_SettingsGlobalShortcuts, u8"快捷键"},
@@ -779,6 +786,7 @@ constexpr auto BOONTABLE_TRANSLATION_TCHINESE = std::to_array<std::pair<LangKey,
 	{BT_BuffRelicSoulOfTheTitan, u8"泰坦之魂(Soul of the Titan)"},
 	{BT_BuffRelicBloodstoneVolatility, u8"血石波動(Relic of Bloodstone - Volatility)"},
 	{BT_BuffRelicBloodstoneFervor, u8"血石狂熱(Relic of Bloodstone - Fervor)"},
+	{BT_BuffRelicScoundrel, u8"惡棍古物(Relic of the Scoundrel)"},
 	{BT_LikeInGameUEOnlyTooltip, u8"如果沒安裝 unofficial extras 插件，將回退到英文版本"},
 	{BT_SettingsGeneral, u8"通用設置"},
 	{BT_SettingsGlobalShortcuts, u8"快捷鍵"},
@@ -788,8 +796,8 @@ constexpr auto BOONTABLE_TRANSLATION_TCHINESE = std::to_array<std::pair<LangKey,
 static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_ENGLISH.size());
 static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_GERMAN.size());
 static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_SPANISH.size());
-static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_CHINESE.size());
 static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_FRENCH.size());
+static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_CHINESE.size());
 static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_TCHINESE.size());
 
 void LoadTranslationFiles() {

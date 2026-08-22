@@ -78,3 +78,4 @@
 #define ID_Relic_TitanicPotential		212
 #define ID_Relic_Bloodstone				213
 #define ID_Writ_of_Masterful_Strength   214
+#define ID_Relic_Scoundrel				215
