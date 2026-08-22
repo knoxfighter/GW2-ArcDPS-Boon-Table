@@ -782,6 +782,7 @@ constexpr auto BOONTABLE_TRANSLATION_TCHINESE = std::to_array<std::pair<LangKey,
 	{BT_LikeInGameUEOnlyTooltip, u8"如果沒安裝 unofficial extras 插件，將回退到英文版本"},
 	{BT_SettingsGeneral, u8"通用設置"},
 	{BT_SettingsGlobalShortcuts, u8"快捷鍵"},
+	{BT_SettingsColoringDefaultBg, u8"使用預設背景顏色"},
 });
 
 static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_ENGLISH.size());
@@ -789,8 +790,7 @@ static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_GERMAN.
 static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_SPANISH.size());
 static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_CHINESE.size());
 static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_FRENCH.size());
-// TODO: missing translation for `BT_SettingsColoringDefaultBg`
-// static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_TCHINESE.size());
+static_assert(magic_enum::enum_count<LangKey>() == BOONTABLE_TRANSLATION_TCHINESE.size());
 
 void LoadTranslationFiles() {
 	constexpr std::string_view prefix = "arcdps_table_lang_";
