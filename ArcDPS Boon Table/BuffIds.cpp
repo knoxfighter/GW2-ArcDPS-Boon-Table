@@ -83,7 +83,7 @@ void init_tracked_buffs() {
     tracked_buffs.emplace_back(std::vector<uint32_t>{59592}, BT_BuffInspiringVirtue, StackingType_single, false, BoonType_Guardian, ID_Inspiring_Virtue);
     tracked_buffs.emplace_back(std::vector<uint32_t>{44871}, BT_BuffEternalOasis, StackingType_single, false, BoonType_Guardian, ID_Eternal_Oasis);
     tracked_buffs.emplace_back(std::vector<uint32_t>{43194}, BT_BuffUnbrokenLines, StackingType_single, false, BoonType_Guardian, ID_Unbroken_Lines);
-	tracked_buffs.emplace_back(std::vector<uint32_t>{26596, 33330}, BT_BuffRiteOfTheGreatDwarf, StackingType_single, false, BoonType_Revenant, ID_Rite_of_the_Great_Dwarf);
+	tracked_buffs.emplace_back(std::vector<uint32_t>{26596, 33330, 80245}, BT_BuffRiteOfTheGreatDwarf, StackingType_single, false, BoonType_Revenant, ID_Rite_of_the_Great_Dwarf);
     tracked_buffs.emplace_back(ArcdpsExtension::ET_Unknown); // "Bulwark Gyro (legacy)"
 	tracked_buffs.emplace_back(std::vector<uint32_t>{56890}, BT_BuffSymbolicAvenger, StackingType_single, false, BoonType_Guardian, ID_Symbolic_Avenger);
 	tracked_buffs.emplace_back(std::vector<uint32_t>{30207}, BT_BuffInvigoratedBulwark, StackingType_single, false, BoonType_Guardian, ID_Invigorated_Bulwark);

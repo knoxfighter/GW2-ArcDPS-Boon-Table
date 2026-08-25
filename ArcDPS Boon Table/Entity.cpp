@@ -33,12 +33,13 @@ void Entity::applyBoon(cbtevent* ev)
 
 	BoonDef* current_def = getTrackedBoon(ev->skillid);
 	if (!current_def) return;
+	const uint32_t canonical_id = current_def->ids[0];
 
 	auto current_boon_list = in_combat ? &boons_uptime : &boons_uptime_initial;
 
 	std::lock_guard<std::mutex> lock(boons_mtx);
 
-	auto it = current_boon_list->find(ev->skillid);
+	auto it = current_boon_list->find(canonical_id);
 
 	if (it != current_boon_list->end())
 	{
@@ -46,7 +47,7 @@ void Entity::applyBoon(cbtevent* ev)
 	}
 	else
 	{
-		current_boon_list->insert({ current_def->ids[0],Boon(current_def, getBuffApplyDuration(ev)) });
+		current_boon_list->insert({ canonical_id,Boon(current_def, getBuffApplyDuration(ev)) });
 	}
 }
 
@@ -55,7 +56,9 @@ void Entity::removeBoon(cbtevent* ev)
 	if (!ev) return;
 	if (ev->value == 0) return;
 	//	if (ev->value <= ev->overstack_value) return;
-	if (!getTrackedBoon(ev->skillid)) return;
+	BoonDef* current_def = getTrackedBoon(ev->skillid);
+	if (!current_def) return;
+	const uint32_t canonical_id = current_def->ids[0];
 
 	auto current_boon_list = &boons_uptime;
 	if (!in_combat)
@@ -63,7 +66,7 @@ void Entity::removeBoon(cbtevent* ev)
 
 	std::lock_guard<std::mutex> lock(boons_mtx);
 
-	auto it = current_boon_list->find(ev->skillid);
+	auto it = current_boon_list->find(canonical_id);
 
 	if (it != current_boon_list->end())
 	{
@@ -79,12 +82,13 @@ void Entity::gaveBoon(cbtevent* ev)
 
 	BoonDef* current_def = getTrackedBoon(ev->skillid);
 	if (!current_def) return;
+	const uint32_t canonical_id = current_def->ids[0];
 
 	auto current_boon_list = in_combat ? &boons_generation : &boons_generation_initial;
 
 	std::lock_guard<std::mutex> lock(boons_mtx);
 
-	auto it = current_boon_list->find(ev->skillid);
+	auto it = current_boon_list->find(canonical_id);
 
 	if (it != current_boon_list->end())
 	{
@@ -92,7 +96,7 @@ void Entity::gaveBoon(cbtevent* ev)
 	}
 	else
 	{
-		current_boon_list->insert({ current_def->ids[0],Boon(current_def, getBuffApplyDuration(ev)) });
+		current_boon_list->insert({ canonical_id,Boon(current_def, getBuffApplyDuration(ev)) });
 	}
 }
 
